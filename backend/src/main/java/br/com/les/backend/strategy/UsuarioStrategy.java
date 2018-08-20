@@ -1,14 +1,13 @@
 package br.com.les.backend.strategy;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import br.com.les.backend.Utils.Resultado;
 import br.com.les.backend.entity.EntidadeDominio;
 import br.com.les.backend.strategy.usuario.IUsuarioStrategy;
+import br.com.les.backend.utils.Resultado;
 
 @Component( "Usuario" )
 public class UsuarioStrategy implements IStrategy {

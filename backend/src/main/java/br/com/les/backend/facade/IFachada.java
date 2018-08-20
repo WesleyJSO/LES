@@ -1,7 +1,7 @@
 package br.com.les.backend.facade;
 
-import br.com.les.backend.Utils.Resultado;
 import br.com.les.backend.entity.EntidadeDominio;
+import br.com.les.backend.utils.Resultado;
 
 
 /**
@@ -12,13 +12,13 @@ import br.com.les.backend.entity.EntidadeDominio;
  */
 public interface IFachada{
 
-    Resultado save(EntidadeDominio entidade );
+    Resultado save( EntidadeDominio entidade );
 
-    Resultado update(EntidadeDominio entidade);
+    Resultado update( EntidadeDominio entidade );
 
-    void delete(EntidadeDominio entidade);
+    Resultado delete( EntidadeDominio entidade );
 
     Resultado findAll( EntidadeDominio entidade );
 
-    Resultado findByEntidade(EntidadeDominio entidade);
+    Resultado findByEntidadeDominio( EntidadeDominio entidade );
 }

@@ -8,7 +8,7 @@ import javax.persistence.criteria.Root;
 import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.EntidadeDominio;
-import br.com.les.backend.entity.Usuario;
+import br.com.les.backend.entity.Funcionario;
 
 /**
  * 
@@ -22,11 +22,11 @@ import br.com.les.backend.entity.Usuario;
 public class UsuarioDAO extends AbstractDAO {
 	
 	@SuppressWarnings("unchecked")
-	public List< EntidadeDominio > dinamicSearch ( Usuario usuario ) {
+	public List< EntidadeDominio > dinamicSearch ( Funcionario usuario ) {
 		
 		criteriaQuery = createCriteria();
 		
-		Root< Usuario > usuarios = criteriaQuery.from( Usuario.class );
+		Root< Funcionario > usuarios = criteriaQuery.from( Funcionario.class );
 		
 		criteriaQuery.select( usuarios );
 		criteriaQuery.where( 

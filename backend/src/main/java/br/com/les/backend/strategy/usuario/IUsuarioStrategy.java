@@ -1,7 +1,7 @@
 package br.com.les.backend.strategy.usuario;
 
-import br.com.les.backend.Utils.Resultado;
 import br.com.les.backend.entity.EntidadeDominio;
+import br.com.les.backend.utils.Resultado;
 
 public interface IUsuarioStrategy {
 

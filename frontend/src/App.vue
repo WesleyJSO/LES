@@ -20,6 +20,7 @@
       
       </v-list>
     </v-navigation-drawer>
+    
     <v-toolbar dense dark fixed app class="elevation-10">
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title v-text="title" />

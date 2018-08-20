@@ -1,4 +1,4 @@
-package br.com.les.backend.Utils;
+package br.com.les.backend.utils;
 
 public enum Actions {
 	

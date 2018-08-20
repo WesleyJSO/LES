@@ -1,4 +1,4 @@
-package br.com.les.backend.Utils;
+package br.com.les.backend.utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,17 +15,17 @@ public class Resultado {
     
     private List< EntidadeDominio > listaResultado = new ArrayList<>();
 
-    public void  setSucesso( String mensagem ) {
+    public void setSucesso( String mensagem ) {
         sucesso = true;
         this.mensagem.append( mensagem );
     }
 
-    public void  setErro( String mensagem ) {
+    public void setErro( String mensagem ) {
         sucesso = false;
         this.mensagem.append(mensagem );
     }
 
-    public boolean  isSucesso() {
+    public boolean isSucesso() {
        return sucesso;
     }
 

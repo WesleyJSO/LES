@@ -1,7 +1,7 @@
 package br.com.les.backend.strategy;
 
-import br.com.les.backend.Utils.Resultado;
 import br.com.les.backend.entity.EntidadeDominio;
+import br.com.les.backend.utils.Resultado;
 /**
  * 
  * @author José Wesley

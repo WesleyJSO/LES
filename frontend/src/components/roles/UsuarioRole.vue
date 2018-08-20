@@ -1,5 +1,6 @@
 <template>
   <v-app>
+
     <v-list-tile>
       <v-list-tile-action>
         <v-icon>contact_mail</v-icon>
@@ -10,6 +11,7 @@
         </router-link>
       </v-list-tile-content>
     </v-list-tile>
+    
   </v-app>
 </template>
 

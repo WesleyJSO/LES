@@ -1,9 +1,9 @@
 package br.com.les.backend.facade;
 
-import br.com.les.backend.Utils.Actions;
-import br.com.les.backend.Utils.Resultado;
 import br.com.les.backend.entity.EntidadeDominio;
 import br.com.les.backend.service.IService;
+import br.com.les.backend.utils.Actions;
+import br.com.les.backend.utils.Resultado;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,16 +13,16 @@ import org.springframework.stereotype.Component;
 public class Fachada extends AbstractFachada {
 
     @Autowired
-    Resultado resultado;
+    private Resultado resultado;
     
-    IService service;
+    private IService service;
 
     @Override
     protected void validar( EntidadeDominio entidade, String action ) {
 
     	String nomeEntidade = entidade.getClass().getSimpleName();
     	
-    	for ( IService s : mapServices )
+    	for ( IService s : listServices )
 			if ( s.getClass().getName().contains( nomeEntidade ) ) {
 				service = s;
 				break;
@@ -46,9 +46,9 @@ public class Fachada extends AbstractFachada {
     }
 
     @Override
-    public void delete( EntidadeDominio entidade ) {
+    public Resultado delete( EntidadeDominio entidade ) {
 
-    	
+    	return null;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class Fachada extends AbstractFachada {
     }
 
     @Override
-    public Resultado findByEntidade( EntidadeDominio entidade ) {
+    public Resultado findByEntidadeDominio( EntidadeDominio entidade ) {
         
     	validar( entidade, Actions.SEARCH.getValue() );
     	resultado.getListaResultado().addAll( service.findByParameters( entidade ) );

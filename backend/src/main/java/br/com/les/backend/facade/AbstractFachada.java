@@ -21,7 +21,7 @@ import br.com.les.backend.strategy.IStrategy;
 public  abstract class AbstractFachada implements IFachada {
 
 	@Autowired
-	protected List< IService > mapServices;
+	protected List< IService > listServices;
 	
     @Autowired
     protected Map< String, IStrategy > mapStrategies;

@@ -1,83 +1,57 @@
 package br.com.les.backend.entity;
- 
+
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.OneToMany;
 
 import org.springframework.stereotype.Component;
 
 @Component
 @Entity
-public class Usuario extends EntidadeDominio {
+public class Usuario extends Pessoa {
 
-	private static final long serialVersionUID = 7031669546742429620L;
+	private static final long serialVersionUID = -2053120971761794871L;
 
-	@Id
-	@GeneratedValue( strategy=GenerationType.SEQUENCE, generator="usuario_sequence" )
-	@SequenceGenerator( name="usuario_sequence", sequenceName="USUARIO_SEQ", allocationSize=0 )
-	private Long idUsuario;
-	private String nome;
-	private String email;
-	
-	@OneToOne( cascade=CascadeType.ALL )
-	@JoinColumn( nullable=false )
+	@Embedded
 	private Login login;
 	
-	@ManyToMany( cascade=CascadeType.ALL )
-	List< Role > roles;
+	@Embedded
+	private Role role;
 	
-	public Usuario() {}
+	@OneToMany( mappedBy="usuario", cascade={ CascadeType.MERGE, CascadeType.PERSIST }, orphanRemoval=true )
+	private List< LogAcao > listaLogAcao;
 	
-	public Usuario( String nome, List< Role > roles ) {
-		this.nome = nome;
-		this.roles = roles;
-	}
+	@OneToMany( cascade=CascadeType.ALL, orphanRemoval=true )
+	@JoinColumn(name = "idUsuario")
+	private List< Telefone > listaTelefone;
 
-	public Long getIdUsuario() {
-		return idUsuario;
-	}
-
-	public void setIdUsuario( Long idUsuario ) {
-		this.idUsuario = idUsuario;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome( String nome ) {
-		this.nome = nome;
-	}
-
-	public List<Role> getRoles() {
-		return roles;
-	}
-
-	public void setRoles( List<Role> roles ) {
-		this.roles = roles;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail( String email ) {
-		this.email = email;
-	}
 
 	public Login getLogin() {
 		return login;
 	}
-
 	public void setLogin(Login login) {
 		this.login = login;
+	}
+	public Role getRole() {
+		return role;
+	}
+	public void setRole(Role role) {
+		this.role = role;
+	}
+	public List<Telefone> getListaTelefone() {
+		return listaTelefone;
+	}
+	public void setListaTelefone(List<Telefone> listaTelefone) {
+		this.listaTelefone = listaTelefone;
+	}
+	public List< LogAcao > getListaLogAcao() {
+		return listaLogAcao;
+	}
+	public void setListaLogAcao(List< LogAcao > listaLogAcao) {
+		this.listaLogAcao = listaLogAcao;
 	}
 }
