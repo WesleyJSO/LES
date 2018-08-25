@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.les.backend.entity.EntidadeDominio;
 import br.com.les.backend.entity.Funcionario;
+import br.com.les.backend.entity.Usuario;
 import br.com.les.backend.service.UsuarioService;
 
 
@@ -22,7 +23,7 @@ import br.com.les.backend.service.UsuarioService;
 public class UsuarioController extends AbstractController {
 
 	@Autowired
-	Funcionario usuario;
+	Usuario usuario;
 	
 	@Autowired
 	private UsuarioService usuarioService;
@@ -34,7 +35,7 @@ public class UsuarioController extends AbstractController {
 		return resultado.getListaResultado();
 	}
 	
-	@PostMapping( value="/usuarioFiltro" )
+	@PostMapping( value="/usuarioConsulta" )
 	public List< EntidadeDominio > findByUsuario( @RequestBody Funcionario usuario ) {
 		
 		resultado = fachada.findByEntidadeDominio( usuario );		

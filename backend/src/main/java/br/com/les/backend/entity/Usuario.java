@@ -16,13 +16,14 @@ public class Usuario extends Pessoa {
 
 	private static final long serialVersionUID = -2053120971761794871L;
 
+	
 	@Embedded
 	private Login login;
 	
-	@Embedded
-	private Role role;
+	@OneToMany( cascade=CascadeType.ALL, orphanRemoval=true )
+	private List< Role > listaRole;
 	
-	@OneToMany( mappedBy="usuario", cascade={ CascadeType.MERGE, CascadeType.PERSIST }, orphanRemoval=true )
+	@OneToMany( mappedBy="usuario", cascade=CascadeType.ALL, orphanRemoval=true )
 	private List< LogAcao > listaLogAcao;
 	
 	@OneToMany( cascade=CascadeType.ALL, orphanRemoval=true )
@@ -36,12 +37,6 @@ public class Usuario extends Pessoa {
 	public void setLogin(Login login) {
 		this.login = login;
 	}
-	public Role getRole() {
-		return role;
-	}
-	public void setRole(Role role) {
-		this.role = role;
-	}
 	public List<Telefone> getListaTelefone() {
 		return listaTelefone;
 	}
@@ -53,5 +48,11 @@ public class Usuario extends Pessoa {
 	}
 	public void setListaLogAcao(List< LogAcao > listaLogAcao) {
 		this.listaLogAcao = listaLogAcao;
+	}
+	public List<Role> getListaRole() {
+		return listaRole;
+	}
+	public void setListaRole(List<Role> listaRole) {
+		this.listaRole = listaRole;
 	}
 }

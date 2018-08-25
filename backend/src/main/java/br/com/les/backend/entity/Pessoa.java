@@ -7,14 +7,13 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Transient;
 
 @MappedSuperclass
 @Inheritance( strategy=InheritanceType.TABLE_PER_CLASS )
-public class Pessoa extends EntidadeDominio {
+public abstract class Pessoa extends EntidadeDominio {
 	
-	@Transient
 	private static final long serialVersionUID = -7587779564393226610L;
+	
 	
 	@Id
 	@GeneratedValue( strategy=GenerationType.SEQUENCE, generator="pessoa_sequence" )
