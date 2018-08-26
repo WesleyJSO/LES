@@ -30,7 +30,15 @@ public class Usuario extends Pessoa {
 	@JoinColumn(name = "idUsuario")
 	private List< Telefone > listaTelefone;
 
+	
+	// constructors
+	public Usuario () {}
 
+	public Usuario(Long idUsuario) {
+		this.setId( idUsuario );
+	}
+	
+	
 	public Login getLogin() {
 		return login;
 	}

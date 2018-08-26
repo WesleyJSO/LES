@@ -14,4 +14,8 @@ public  abstract class AbstractController {
     
     @Autowired
     Resultado resultado;
+    
+    protected String getMethodName( Object o ) {
+		return o.getClass().getEnclosingMethod().getName();
+	}
 }

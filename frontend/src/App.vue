@@ -18,10 +18,10 @@
 
         <admin-role v-if="isAdminAtivo"></admin-role>
         <usuario-role v-else-if="isUsuarioAtivo"></usuario-role>
-      
+
       </v-list>
     </v-navigation-drawer>
-    
+
     <v-toolbar dense dark fixed app class="elevation-10">
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title v-text="title" />
@@ -39,12 +39,12 @@
       <v-container fluid>
         <v-slide-y-transition mode="out-in">
             <v-flex xs12 sm10 offset-sm1 pa-5>
-              <router-view @message="setUsuarioLogado" />
+              <router-view @emittedUsuario="setUsuarioLogado" />
             </v-flex>
         </v-slide-y-transition>
       </v-container>
     </v-content>
-    
+
     <v-footer :fixed="fixed" app dark>
       <span>&copy; LES 2018 - 2º semestre</span>
     </v-footer>
@@ -78,11 +78,11 @@ export default {
     UsuarioRole
   },
   methods: {
-    setUsuarioLogado (login) {
+    setUsuarioLogado (usuario) {
       this.lblLogin = 'LOGOUT'
-      this.login = login
       this.drawer = false
-      this.roles = login.usuario.roles
+      this.login = usuario.login
+      this.roles = usuario.roles
       this.account_circle = 'account_circle'
       this.roles.forEach(role => {
         if (role.nome.toUpperCase() === 'ADMIN') {
@@ -112,7 +112,8 @@ export default {
   name: 'App'
 }
 </script>
-
-<style scoped>
-
+<style>
+li {
+  list-style: none
+}
 </style>

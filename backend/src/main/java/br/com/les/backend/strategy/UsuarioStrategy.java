@@ -16,7 +16,7 @@ public class UsuarioStrategy implements IStrategy {
 	List< IUsuarioStrategy > actionStrategies;
 	
 	@Override
-	public Resultado execute(EntidadeDominio entidade, String action ) {
+	public Resultado execute( EntidadeDominio entidade, String action, String callerMethod ) {
 		
 		IUsuarioStrategy strategyToBeExecuted = null;
 		
@@ -24,7 +24,7 @@ public class UsuarioStrategy implements IStrategy {
 			if ( s.getClass().getSimpleName().contains( action ) )
 				strategyToBeExecuted = s;
 		
-		return strategyToBeExecuted.execute( entidade );
+		return strategyToBeExecuted.execute( entidade, callerMethod );
 	}
 
 }

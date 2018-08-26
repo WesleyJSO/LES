@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.les.backend.dao.UsuarioDAO;
 import br.com.les.backend.entity.EntidadeDominio;
-import br.com.les.backend.entity.Funcionario;
+import br.com.les.backend.entity.Usuario;
 import br.com.les.backend.repository.UsuarioRepository;
 
 /**
@@ -26,7 +26,7 @@ public class UsuarioService implements IService {
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
-
+	
 	@Autowired
 	private UsuarioDAO usuarioDAO;
 	
@@ -35,7 +35,7 @@ public class UsuarioService implements IService {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List< Funcionario > findAll() {
+	public List< Usuario > findAll() {
 		return usuarioRepository.findAll();
 	}
 	
@@ -47,11 +47,12 @@ public class UsuarioService implements IService {
 	@Override
 	public EntidadeDominio save( EntidadeDominio entidade ) {
 
-		return usuarioRepository.save( ( Funcionario ) entidade );
+		return usuarioRepository.save( ( Usuario ) entidade );
 	}
 
 	@Override
 	public List< EntidadeDominio > findByParameters( EntidadeDominio entidade ) {
-		return usuarioDAO.dinamicSearch( ( Funcionario ) entidade );
+
+		return usuarioDAO.findByLoginAndSenha( ( Usuario ) entidade );
 	}
 }
