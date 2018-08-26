@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 
 export default {
   data: () => ({
@@ -54,8 +54,23 @@ export default {
           this.msgErro = 'Senha deve conter no mínimo 3 caracteres!'
         }
       } else {
-        let login = {nomeLogin: this.nome, senha: this.senha}
-        axios.post('http://localhost:8080/login', login).then(response => {
+        // let login = {nomeLogin: this.nome, senha: this.senha}
+        /* MOCK */
+        this.login = {
+          nomeLogin: 'zeller',
+          senha: '123',
+          dataCriacao: 'null',
+          ativo: true,
+          usuario: {
+            nome: 'JoZeller',
+            email: 'teste@teste.com',
+            roles: [
+              {nome: 'ADMIN'}
+            ]
+          }
+        }
+        this.$emit('message', this.login)
+        /* axios.post('http://localhost:8080/login', login).then(response => {
           if (response.data === '') {
             this.isErro = true
             this.msgCor = 'warning'
@@ -73,7 +88,7 @@ export default {
           this.msgCor = 'error'
           this.msgErro = 'Erro durante execução do serviço!'
           console.log(response.data)
-        })
+        }) */
       }
     }
   }

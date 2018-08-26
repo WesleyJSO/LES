@@ -1,9 +1,10 @@
 <template>
   <v-app id="inspire">
-
-    <v-navigation-drawer v-model="drawer" fixed app >
+    <v-navigation-drawer v-model="drawer" 
+                         :clipped="clipped"
+                         fixed 
+                         app >
       <v-list dense>
-
         <v-list-tile>
           <v-list-tile-action>
             <v-icon>home</v-icon>
@@ -61,14 +62,15 @@ export default {
       lblLogin: 'LOGIN',
       isAdminAtivo: false,
       isUsuarioAtivo: false,
-      title: 'LES',
+      title: 'Apontamento de Horas',
       fixed: false,
       login: [],
       notifications: '',
       account_circle: '',
       avatar: '',
       roles: [],
-      drawer: null
+      drawer: false,
+      clipped: true
     }
   },
   components: {
@@ -79,6 +81,7 @@ export default {
     setUsuarioLogado (login) {
       this.lblLogin = 'LOGOUT'
       this.login = login
+      this.drawer = false
       this.roles = login.usuario.roles
       this.account_circle = 'account_circle'
       this.roles.forEach(role => {
@@ -102,7 +105,7 @@ export default {
       this.account_circle = ''
       this.avatar = ''
       this.roles = []
-      this.drawer = null
+      this.drawer = false
       this.$router.go({path: '/Index'}) // não funciona quando está em outra tela que não seja a de login
     }
   },
@@ -110,6 +113,6 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
 </style>
