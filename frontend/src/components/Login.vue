@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 
 export default {
   data: () => ({
@@ -99,7 +99,7 @@ export default {
           this.msgCor = 'error'
           this.msgErro = ['Erro durante execução do serviço!']
           console.log(response.data)
-        })
+        }) */
       }
     }
   }
