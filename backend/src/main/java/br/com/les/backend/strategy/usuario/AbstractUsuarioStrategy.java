@@ -6,6 +6,5 @@ import br.com.les.backend.utils.Resultado;
 
 public abstract class AbstractUsuarioStrategy implements IUsuarioStrategy {
 
-	@Autowired
 	protected Resultado resultado;
 }

@@ -1,8 +1,5 @@
 package br.com.les.backend.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,45 +12,48 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.les.backend.entity.EntidadeDominio;
 import br.com.les.backend.entity.Funcionario;
 import br.com.les.backend.entity.Usuario;
-import br.com.les.backend.service.UsuarioService;
+import br.com.les.backend.utils.Resultado;
 
 
 @CrossOrigin
 @RestController
 public class UsuarioController extends AbstractController {
-
-	@Autowired
-	Usuario usuario;
-	
-	@Autowired
-	private UsuarioService usuarioService;
 	
 	@GetMapping( value="/usuario" )
-	public List< EntidadeDominio > findAll() {
+	public Resultado findAll() {
 		
-		resultado = fachada.findAll( usuario );
-		return resultado.getListaResultado();
+		return fachada.find( new Usuario(), getMethodName( new Object() {} ) );
 	}
 	
-	@PostMapping( value="/usuarioConsulta" )
-	public List< EntidadeDominio > findByUsuario( @RequestBody Funcionario usuario ) {
+	@GetMapping( value="/usuarioConsulta" )
+	public Resultado findByUsuario( @RequestBody Usuario usuario ) {
 		
-		resultado = fachada.findByEntidadeDominio( usuario );		
-		return resultado.getListaResultado();
+		return fachada.find( usuario, getMethodName( new Object() {} ) );
+	}
+	
+	// waiting for a user with a login filled by nomeLogin and senha
+	@PostMapping( value="/usuarioLogin" )
+	public Resultado findByLogin( @RequestBody Usuario usuario ) {
+		
+		return fachada.find( usuario, getMethodName( new Object() {} ) );
 	}
 	
 	@PostMapping( value="/usuario" )
-	public String[] save( @RequestBody Funcionario usuario ) {
-		return fachada.save( ( EntidadeDominio ) usuario ).getMensagem();
+	public Resultado save( @RequestBody Funcionario usuario ) {
+		
+		return fachada.save( ( EntidadeDominio ) usuario, getMethodName( new Object() {} ) );
 	}
 	
 	@PutMapping( value="/usuario" )
-	public void update( @RequestBody Funcionario usuario ) {
-		usuarioService.save( usuario );
+	public Resultado update( @RequestBody Funcionario usuario ) {
+		
+		return fachada.update( usuario, getMethodName( new Object() {} ) );
 	}
 	
+	
 	@DeleteMapping( value="/usuario/{id}" )
-	public void delete( @PathVariable( "id" ) Long idUsuario ) {
-		usuarioService.deleteById( idUsuario );
+	public Resultado delete( @PathVariable( "id" ) Long idUsuario ) {
+		
+		return fachada.delete( new Usuario( idUsuario ), getMethodName( new Object() {} ) );
 	}
 }

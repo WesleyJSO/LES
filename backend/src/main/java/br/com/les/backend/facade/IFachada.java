@@ -12,13 +12,13 @@ import br.com.les.backend.utils.Resultado;
  */
 public interface IFachada{
 
-    Resultado save( EntidadeDominio entidade );
+    Resultado save( EntidadeDominio entidade, String callerMethod );
 
-    Resultado update( EntidadeDominio entidade );
+    Resultado update( EntidadeDominio entidade, String callerMethod );
 
-    Resultado delete( EntidadeDominio entidade );
+    Resultado delete( EntidadeDominio entidade, String callerMethod );
 
-    Resultado findAll( EntidadeDominio entidade );
+    Resultado findAll( EntidadeDominio entidade, String callerMethod );
 
-    Resultado findByEntidadeDominio( EntidadeDominio entidade );
+    Resultado find( EntidadeDominio entidade, String callerMethod );
 }

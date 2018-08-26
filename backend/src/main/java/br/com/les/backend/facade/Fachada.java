@@ -5,20 +5,18 @@ import br.com.les.backend.service.IService;
 import br.com.les.backend.utils.Actions;
 import br.com.les.backend.utils.Resultado;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
 @Component
 public class Fachada extends AbstractFachada {
 
-    @Autowired
     private Resultado resultado;
     
     private IService service;
 
     @Override
-    protected void validar( EntidadeDominio entidade, String action ) {
+    protected void validar( EntidadeDominio entidade, String action, String callerMethod ) {
 
     	String nomeEntidade = entidade.getClass().getSimpleName();
     	
@@ -27,43 +25,49 @@ public class Fachada extends AbstractFachada {
 				service = s;
 				break;
 			}
-		
-    	resultado = mapStrategies.get( nomeEntidade ).execute( entidade, action );
+
+    	resultado = mapStrategies.get( nomeEntidade ).execute( entidade, action, callerMethod );
     }
 
     @Override
-    public Resultado save(EntidadeDominio entidade) {
+    public Resultado save( EntidadeDominio entidade, String callerMethod ) {
 
-    	validar( entidade, Actions.SAVE.getValue() );
+    	validar( entidade, Actions.SAVE.getValue(), callerMethod  );
     	if ( resultado.isSucesso() )
     		resultado.getListaResultado().add( service.save( entidade ) );
     	return resultado;
     }
 
     @Override
-    public Resultado update(EntidadeDominio entidade) {
+    public Resultado update(EntidadeDominio entidade, String callerMethod ) {
         return null;
     }
 
     @Override
-    public Resultado delete( EntidadeDominio entidade ) {
-
+    public Resultado delete( EntidadeDominio entidade, String callerMethod ) {
     	return null;
     }
 
     @Override
-    public Resultado findAll( EntidadeDominio entidade ) {
+    public Resultado findAll( EntidadeDominio entidade, String callerMethod ) {
     		
-    	validar( entidade, Actions.SEARCH.getValue() );
+    	validar( entidade, Actions.SEARCH.getValue(), callerMethod );
     	resultado.setListaResultado( service.findAll() );
     	return resultado;    	
     }
 
     @Override
-    public Resultado findByEntidadeDominio( EntidadeDominio entidade ) {
+    public Resultado find( EntidadeDominio entidade, String callerMethod ) {
         
-    	validar( entidade, Actions.SEARCH.getValue() );
-    	resultado.getListaResultado().addAll( service.findByParameters( entidade ) );
-    	return resultado;
+    	resultado = new Resultado();
+ 
+    	validar( entidade, Actions.SEARCH.getValue(), callerMethod  );
+    	
+    	if ( resultado.getMensagem() == null ) {
+    		resultado.getListaResultado().addAll( service.findByParameters( entidade ) );
+    		return resultado;
+    	} else 
+    		return resultado;
+    	
     }
 }

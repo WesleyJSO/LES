@@ -5,5 +5,5 @@ import br.com.les.backend.utils.Resultado;
 
 public interface IUsuarioStrategy {
 
-	Resultado execute( EntidadeDominio entidade );
+	Resultado execute( EntidadeDominio entidade, String callerMethod );
 }

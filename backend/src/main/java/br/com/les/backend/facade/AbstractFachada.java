@@ -26,6 +26,6 @@ public  abstract class AbstractFachada implements IFachada {
     @Autowired
     protected Map< String, IStrategy > mapStrategies;
 
-    protected abstract void validar(EntidadeDominio entidade, String action);
+    protected abstract void validar(EntidadeDominio entidade, String action, String callerMethod );
 
 }
