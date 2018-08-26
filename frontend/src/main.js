@@ -7,9 +7,13 @@ import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import moment from 'moment'
 import VeeValidate from 'vee-validate'
+import axios from 'axios'
 
 Vue.use(VeeValidate)
 Vue.use(Vuetify)
+
+Vue.prototype.$_axios = axios
+Vue.prototype.$_url = 'http://localhost:8080/'
 
 Vue.filter('dataFormatada', function (value) {
   if (value) {

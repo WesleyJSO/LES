@@ -3,6 +3,7 @@ package br.com.les.backend.entity;
 import java.util.Date;
 
 import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 
 @Embeddable
 public class Login extends EntidadeDominio {
@@ -11,9 +12,16 @@ public class Login extends EntidadeDominio {
 
 	private String nomeLogin;
 	private String senha;
+	
+	@Transient
+	private String senhaValidacao;
+	
 	private Date dataCriacao;
 	private Boolean ativo;
 
+	
+	
+	
 	public String getSenha() {
 		return senha;
 	}
@@ -37,5 +45,11 @@ public class Login extends EntidadeDominio {
 	}
 	public void setNomeLogin(String nomeLogin) {
 		this.nomeLogin = nomeLogin;
+	}
+	public String getSenhaValidacao() {
+		return senhaValidacao;
+	}
+	public void setSenhaValidacao(String senhaValidacao) {
+		this.senhaValidacao = senhaValidacao;
 	}
 }

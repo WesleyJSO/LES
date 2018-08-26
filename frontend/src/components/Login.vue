@@ -6,13 +6,26 @@
         <v-toolbar-title>Login</v-toolbar-title>
       </v-toolbar>
         <li v-for="error in msgErro" :key="error">
-          <v-alert :color="msgCor" :value="isErro" v-text="error" transition="scale-transition" />
+          <v-alert :color="msgCor"
+                   :value="isErro"
+                   v-text="error"
+                   transition="scale-transition" />
         </li>
-      <v-form v-model="valido" @submit.prevent="findByNomeAndSenha">
+      <v-form v-model="valido"
+              @submit.prevent="findByNomeAndSenha">
         <v-card-text>
           <text v-bind="login" />
-          <v-text-field prepend-icon="person" v-model="nome" :rules="nomeRegras" label="Nome" required />
-          <v-text-field prepend-icon="lock" v-model="senha" :rules="senhaRegras" label="Senha" type="password" required />
+          <v-text-field prepend-icon="person"
+                        v-model="nome"
+                        :rules="nomeRegras"
+                        label="Nome"
+                        required />
+          <v-text-field prepend-icon="lock"
+                        v-model="senha"
+                        :rules="senhaRegras"
+                        label="Senha"
+                        type="password"
+                        required />
         </v-card-text>
 
         <v-card-actions>
@@ -27,8 +40,6 @@
 </template>
 
 <script>
-// import axios from 'axios'
-
 export default {
   data: () => ({
     login: [],
@@ -62,7 +73,7 @@ export default {
             senha: this.senha
           }
         }
-        axios.post('http://localhost:8080/usuarioLogin', usuario).then(response => {
+        this.$_axios.post(`${this.$_url}usuarioLogin`, usuario).then((response) => {
           let resultado = response.data
           if (resultado.listaResultado.length !== 0) {
             this.usuario = response.data
@@ -99,7 +110,7 @@ export default {
           this.msgCor = 'error'
           this.msgErro = ['Erro durante execução do serviço!']
           console.log(response.data)
-        }) */
+        })
       }
     }
   }

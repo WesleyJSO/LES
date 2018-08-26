@@ -11,18 +11,32 @@ import br.com.les.backend.entity.EntidadeDominio;
 public class Resultado {
 
     private boolean sucesso;
-    private StringBuilder mensagem = new StringBuilder();
+    private List< String > mensagem = new ArrayList<>();
     
     private List< EntidadeDominio > listaResultado = new ArrayList<>();
 
     public void setSucesso( String mensagem ) {
-        sucesso = true;
-        this.mensagem.append( mensagem );
+    	
+        if ( mensagem != null && !mensagem.equals("") ) {
+        	
+        	if ( !sucesso )
+        		this.mensagem = new ArrayList<>();
+	        
+        	sucesso = true;
+	        this.mensagem.add( mensagem );
+        }
     }
 
     public void setErro( String mensagem ) {
-        sucesso = false;
-        this.mensagem.append(mensagem );
+    	
+        if ( mensagem != null && !mensagem.equals("") ) {
+        	
+        	if ( sucesso )
+        		this.mensagem = new ArrayList<>();
+	    	
+        	sucesso = false;
+	        this.mensagem.add( mensagem );
+        }
     }
 
     public boolean isSucesso() {
@@ -37,9 +51,12 @@ public class Resultado {
         return this.listaResultado;
     }
     
-    public String[] getMensagem() {
-    	String[] mensagens = mensagem.toString().split( "[/]" );
-    	return mensagens;
+    public List< String > getMensagem() {
+    	
+    	if ( mensagem.size() > 0 ) {
+	    	return mensagem;
+    	} else 
+    		return null;
     }
 }
 

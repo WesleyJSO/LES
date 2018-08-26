@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import Consultar from '@/components/usuario/Consultar'
-import Listar from '@/components/usuario/Listar'
+import Consultar from '@/components/admin/Consultar'
+import Listar from '@/components/admin/Listar'
 
 export default {
   components: {

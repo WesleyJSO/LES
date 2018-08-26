@@ -1,12 +1,18 @@
 <template>
     <v-app>
     <h1>Cadastro de Funcionário</h1>
+    <li v-for="(message, index) in messages" :key="index">
+      <v-alert :color="messageColor"
+               :value="haveMessage"
+               v-text="message"
+               transition="scale-transition" />
+    </li>
     <br/>
-    <v-form v-model="valid" @submit.prevent="findByNomeAndSenha">
-      <v-layout>          
+    <v-form v-model="valid" @submit.prevent="validateUser">
+      <v-layout>
       <!-- Row 1 -->
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field v-model="user.name"
+          <v-text-field v-model="nome"
                         type="text"
                         class="px-0"
                         prepend-icon="face"
@@ -17,7 +23,7 @@
           </v-text-field>
         </v-flex>
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field v-model="user.lastName"
+          <v-text-field v-model="ultimoNome"
                         type="text"
                         prepend-icon="face"
                         clearable
@@ -27,7 +33,7 @@
           </v-text-field>
         </v-flex>
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field v-model="user.email"
+          <v-text-field v-model="email"
                         type="email"
                         prepend-icon="email"
                         clearable
@@ -40,7 +46,7 @@
       <!-- Row 2 -->
       <v-layout>
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field v-model="user.salary"
+          <v-text-field v-model="salario"
                         type="number"
                         prepend-icon="monetization_on"
                         clearable
@@ -50,7 +56,7 @@
           </v-text-field>
         </v-flex>
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field v-model="user.pis"
+          <v-text-field v-model="pis"
                         type="number"
                         prepend-icon="credit_card"
                         clearable
@@ -60,7 +66,7 @@
           </v-text-field>
         </v-flex>
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field v-model="user.workload"
+          <v-text-field v-model="cargaHoraria"
                         type="number"
                         prepend-icon="timer"
                         clearable
@@ -72,61 +78,10 @@
       </v-layout>
       <!-- Row 3 -->
       <v-layout>
-        <v-flex xs12 sm9 md6 lg6 xl4 >
-          <v-menu ref="birthdate"
-                  :close-on-content-click="false"
-                  v-model="birthdate"
-                  :nudge-right="40"
-                  :return-value.sync="user.birthdate"
-                  lazy
-                  transition="scale-transition"
-                  offset-y
-                  full-width
-                  min-width="290px">
-          <v-text-field slot="activator"
-                        v-model="user.birthdate"
-                        label="Data de Nascimento"
-                        prepend-icon="event"
-                        readonly>
-          </v-text-field>
-          <v-date-picker v-model="user.birthdate"
-                          :reactive="reactive"
-                          header-color="primary"
-                          @input="$refs.birthdate.save(user.birthdate)">
-          </v-date-picker>
-          </v-menu>
-        </v-flex>
-        <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-menu ref="joiningDate"
-                  :close-on-content-click="false"
-                  v-model="joiningDate"
-                  :nudge-right="40"
-                  :return-value.sync="user.joiningDate"
-                  lazy
-                  transition="scale-transition"
-                  offset-y
-                  full-width
-                  min-width="290px">
-          <v-text-field slot="activator"
-                        v-model="user.joiningDate"
-                        label="Data de Ingresso na Empresa"
-                        prepend-icon="event"
-                        readonly>
-          </v-text-field>
-          <v-date-picker v-model="user.joiningDate"
-                          header-color="green" 
-                          :reactive="reactive"
-                          @input="$refs.joiningDate.save(user.joiningDate)">
-          </v-date-picker>
-          </v-menu>
-        </v-flex>
-      </v-layout>
-      <!-- Row 4 -->
-      <v-layout>
         <v-flex >
-          <v-combobox v-model="user.boss"
+          <v-combobox v-model="gestor"
                       prepend-icon="supervisor_account"
-                      :items="items.boss"
+                      :items="items.gestor"
                       label="Supervisor Imediato"
                       multiple
                       chips>
@@ -149,7 +104,7 @@
       <!-- Row 5 -->
       <v-layout xs12 sm9 md6 lg6 xl4>
         <v-flex>
-          <v-text-field v-model="user.phone1"
+          <v-text-field v-model="telefone1"
                           type="phone"
                           prepend-icon="phone"
                           clearable
@@ -159,16 +114,16 @@
             </v-text-field>
         </v-flex>
         <v-flex>
-          <v-text-field v-model="user.phone2"
+          <v-text-field v-model="telefone2"
                           type="phone"
                           prepend-icon="phone"
                           clearable
                           :rules="phoneRules"
                           label="Telefone">
-          </v-text-field> 
+          </v-text-field>
         </v-flex>
         <v-flex>
-          <v-text-field v-model="user.phone3"
+          <v-text-field v-model="telefone3"
                           type="phone"
                           prepend-icon="phone"
                           clearable
@@ -177,10 +132,72 @@
             </v-text-field>
         </v-flex>
       </v-layout>
-      <!-- Rown 5 -->
+      <!-- Row 4 -->
+      <v-layout>
+        <v-flex xs12 sm9 md6 lg6 xl4>
+          <v-text-field v-model="nomeLogin"
+                        type="text"
+                        class="px-0"
+                        prepend-icon="face"
+                        clearable
+                        :rules="nameRules"
+                        label="Login"
+                        required>
+          </v-text-field>
+        </v-flex>
+        <v-flex xs12 sm9 md6 lg6 xl4 >
+          <v-menu ref="dataNascimentoHelper"
+                  :close-on-content-click="false"
+                  v-model="dataNascimentoHelper"
+                  :nudge-right="40"
+                  :return-value.sync="dataNascimento"
+                  lazy
+                  transition="scale-transition"
+                  offset-y
+                  full-width
+                  min-width="290px">
+            <v-text-field slot="activator"
+                        v-model="dataNascimento"
+                        label="Data de Nascimento"
+                        prepend-icon="event"
+                        readonly>
+            </v-text-field>
+            <v-date-picker v-model="dataNascimento"
+                            :reactive="reactive"
+                            header-color="primary"
+                            @input="$refs.dataNascimentoHelper.save(dataNascimento)">
+            </v-date-picker>
+          </v-menu>
+        </v-flex>
+        <v-flex xs12 sm9 md6 lg6 xl4>
+          <v-menu ref="dataIngressoEmpresaHelper"
+                  :close-on-content-click="false"
+                  v-model="dataIngressoEmpresaHelper"
+                  :nudge-right="40"
+                  :return-value.sync="dataIngressoEmpresa"
+                  lazy
+                  transition="scale-transition"
+                  offset-y
+                  full-width
+                  min-width="290px">
+            <v-text-field slot="activator"
+                          v-model="dataIngressoEmpresa"
+                          label="Data de Ingresso na Empresa"
+                          prepend-icon="event"
+                          readonly>
+            </v-text-field>
+            <v-date-picker v-model="dataIngressoEmpresa"
+                            header-color="green"
+                            :reactive="reactive"
+                            @input="$refs.dataIngressoEmpresaHelper.save(dataIngressoEmpresa)">
+            </v-date-picker>
+          </v-menu>
+        </v-flex>
+      </v-layout>
+      <!-- Rown 6 -->
       <v-layout xs12 sm9 md6 lg6 xl4>
         <v-flex>
-          <v-text-field v-model="user.password"
+          <v-text-field v-model="senha"
                         color="cyan darken"
                         label="Senha"
                         type="password"
@@ -190,12 +207,12 @@
             <v-progress-linear slot="progress"
                               :value="progress"
                               :color="color"
-                              height="7"> 
+                              height="7">
             </v-progress-linear>
-          </v-text-field>    
+          </v-text-field>
         </v-flex>
         <v-flex>
-          <v-text-field v-model="user.password2"
+          <v-text-field v-model="senhaValidacao"
                         color="cyan darken"
                         label="Senha"
                         type="password"
@@ -206,46 +223,52 @@
             <v-progress-linear slot="progress"
                               :value="progress"
                               :color="color"
-                              height="7"> 
+                              height="7">
             </v-progress-linear>
-          </v-text-field>    
+          </v-text-field>
         </v-flex>
       </v-layout>
       <div>
         <v-btn type="submit" color="success">Salvar</v-btn>
-        <v-btn type="submit" color="error">Cancelar</v-btn>
+        <v-btn @click="clearForm" color="error">Cancelar</v-btn>
       </div>
     </v-form>
   </v-app>
 </template>
 
 <script>
-// import axios from 'axios'
+import Funcionario from '@/objects/Funcionario'
+import BaseCalculoHoras from '@/objects/BaseCalculoHoras'
+import Telefone from '@/objects/Telefone'
+import Login from '@/objects/Login'
+
 export default {
   data: () => ({
     valid: false,
     menu: false,
     reactive: true,
-    joiningDate: false,
-    birthdate: false,
-    user: {
-      name: '',
-      lastName: '',
-      email: '',
-      salary: '',
-      pis: '',
-      workload: '',
-      birthdate: '',
-      joiningDate: '',
-      boss: '',
-      phone1: '',
-      phone2: '',
-      phone3: '',
-      password: '',
-      password2: ''
-    },
+    dataIngressoEmpresaHelper: '',
+    dataNascimentoHelper: '',
+    dataIngressoEmpresa: null,
+    dataNascimento: null,
+    messages: [],
+    haveMessage: false,
+    messageColor: '',
+    nome: '',
+    ultimoNome: '',
+    email: '',
+    salario: 0,
+    pis: 0,
+    cargaHoraria: 0,
+    gestor: '',
+    nomeLogin: '',
+    senha: '',
+    senhaValidacao: '',
+    telefone1: '',
+    telefone2: '',
+    telefone3: '',
     items: {
-      boss: ['Bill Gates', 'Torvald Linux', 'Elon Musk']
+      gestor: ['Bill Gates', 'Torvald Linux', 'Elon Musk']
     },
     nameRules: [
       v => !!v || 'Informe o Nome do Funcionário!',
@@ -257,8 +280,7 @@ export default {
       v => /.+@.+/.test(v) || 'Informe um E-mail válido!'
     ],
     salaryRules: [
-      v => !!v || 'Informe um Salário!',
-      v => v === 0 || 'Informe um Salário!'
+      v => v >= 0 || 'Informe um Salário!'
     ],
     pisRoles: [
       v => !!v || 'Informe um número PIS/PASESP!',
@@ -280,10 +302,91 @@ export default {
   }),
   computed: {
     progress () {
-      return Math.min(100, this.user.password.length * 10)
+      return Math.min(100, this.senha.length * 10)
     },
     color () {
       return ['error', 'warning', 'success'][Math.floor(this.progress / 40)]
+    }
+  },
+  methods: {
+    validateUser () {
+      this.valid = true
+      if (this.valid) {
+        this.saveUser()
+      } else {
+        this.messages = ['Para realizar o cadastro de funcionário todos os campos abaixo devem ser preenchidos!']
+        this.haveMessage = true
+        this.messageColor = 'warning'
+      }
+    },
+    prepareUserObject () {
+      let listaTelefone = []
+      listaTelefone.push(new Telefone(this.telefone1), new Telefone(this.telefone2), new Telefone(this.telefone3))
+      let funcionario = new Funcionario(
+        this.id,
+        this.nome,
+        this.email,
+        this.ultimoNome,
+        this.dataNascimento,
+        new Login(this.senha, this.senhaValidacao, this.nomeLogin, this.ativo),
+        listaTelefone,
+        this.pis,
+        this.dataIngressoEmpresa,
+        new Funcionario(0, this.gestor),
+        new BaseCalculoHoras(0, this.tipoHora, this.cargaHoraria, null, this.salario)
+      )
+      return funcionario
+    },
+    saveUser () {
+      let funcionario = this.prepareUserObject()
+      alert(JSON.stringify(funcionario))
+      this.$_axios.post(`${this.$_url}funcionario`, funcionario).then((response) => {
+        let resultado = response.data
+        if (resultado.listaResultado.length !== 0) {
+          /* retorno ok */
+          this.funcionario = resultado.listaResultado
+        }
+        if (resultado.mensagem) {
+          this.messages = [...resultado.mensagem]
+          this.haveMessage = true
+          if (resultado.sucesso) {
+          /* retorno mensagem de sucesso */
+            this.messageColor = 'info'
+          } else {
+            /* retorno mensagem de erro */
+            this.messageColor = 'warning'
+          }
+        }
+      },
+      (response) => {
+        /* erro na requisição do serviço */
+        this.messages = ['Erro durante execução do serviço!']
+        this.haveMessage = true
+        this.messageColor = 'error'
+      })
+    },
+    clearForm () {
+      this.valid = false
+      this.menu = false
+      this.reactive = true
+      this.dataIngressoEmpresa = false
+      this.dataNascimento = false
+      this.funcionario = {
+        name: '',
+        ultimoNome: '',
+        email: '',
+        salario: '',
+        pis: '',
+        cargaHoraria: '',
+        dataNascimento: '',
+        dataIngressoEmpresa: '',
+        gestor: '',
+        phone1: '',
+        phone2: '',
+        phone3: '',
+        password: '',
+        password2: ''
+      }
     }
   }
 }
