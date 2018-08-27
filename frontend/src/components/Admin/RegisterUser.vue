@@ -1,6 +1,6 @@
 <template>
     <v-app>
-    <h1>Cadastro de Funcionário</h1>
+    <h1>{{title}}</h1>
     <br/>
     <v-form v-model="valid" @submit.prevent="findByNomeAndSenha">
       <v-layout>          
@@ -40,7 +40,7 @@
       <!-- Row 2 -->
       <v-layout>
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field v-model="user.salary"
+          <v-text-field v-model="user.salario"
                         type="number"
                         prepend-icon="monetization_on"
                         clearable
@@ -211,7 +211,7 @@
           </v-text-field>    
         </v-flex>
       </v-layout>
-      <div>
+      <div v-if="!this.edit">
         <v-btn type="submit" color="success">Salvar</v-btn>
         <v-btn type="submit" color="error">Cancelar</v-btn>
       </div>
@@ -222,28 +222,26 @@
 <script>
 // import axios from 'axios'
 export default {
+  props: {
+    user: {
+      type: Object,
+      default: {}
+    },
+    edit: {
+      type: Boolean,
+      default: false
+    },
+    message: {
+      type: String,
+      default: ''
+    }
+  },
   data: () => ({
     valid: false,
     menu: false,
     reactive: true,
     joiningDate: false,
     birthdate: false,
-    user: {
-      name: '',
-      lastName: '',
-      email: '',
-      salary: '',
-      pis: '',
-      workload: '',
-      birthdate: '',
-      joiningDate: '',
-      boss: '',
-      phone1: '',
-      phone2: '',
-      phone3: '',
-      password: '',
-      password2: ''
-    },
     items: {
       boss: ['Bill Gates', 'Torvald Linux', 'Elon Musk']
     },
@@ -278,13 +276,24 @@ export default {
       // v => /.[0-9]{1}+[a-z]{1}+[A-Z]{1}./.test(v) || 'Informe uma Senha válida!'
     ]
   }),
+  created () {
+  },
   computed: {
     progress () {
       return Math.min(100, this.user.password.length * 10)
     },
     color () {
       return ['error', 'warning', 'success'][Math.floor(this.progress / 40)]
+    },
+    title () {
+      if (!this.edit) {
+        return 'Cadastro de Funcionário'
+      } else {
+        return 'Alterar Funcionário'
+      }
     }
+  },
+  watch: {
   }
 }
 </script>
