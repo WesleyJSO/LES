@@ -20,8 +20,8 @@ public class Funcionario extends Usuario {
 	private static final long serialVersionUID = 7031669546742429620L;
 
 	
-	private Date dataIngressoEmpresa;
 	private String pis;
+	private Date dataIngressoEmpresa;
 	
 	@ManyToOne( fetch=FetchType.LAZY )
 	@JoinColumn( name="id_gestor" )
@@ -31,7 +31,7 @@ public class Funcionario extends Usuario {
 	private List< Solicitacao > listaSolicitacao;
 	
 	@ManyToMany( mappedBy="listaColaboradoresNotificados", fetch=FetchType.LAZY )
-	private List< Solicitacao > listaSolicitacoes;
+	private List< Solicitacao > listaSolicitacaoColaboradoresNotificados;
 	
 	@OneToMany( cascade=CascadeType.ALL )
 	private List< Apontamento > listaApontamento;
@@ -41,6 +41,12 @@ public class Funcionario extends Usuario {
 	
 	@OneToMany( cascade=CascadeType.ALL )
 	private List< BancoMensal > listaBancoMensal;
+
+	public Funcionario() {}
+	
+	public Funcionario(Long idFuncionario ) {
+		this.setId( idFuncionario );
+	}
 
 	public Date getDataIngressoEmpresa() {
 		return dataIngressoEmpresa;
@@ -74,14 +80,6 @@ public class Funcionario extends Usuario {
 		this.listaSolicitacao = listaSolicitacao;
 	}
 
-	public List<Solicitacao> getListaSolicitacoes() {
-		return listaSolicitacoes;
-	}
-
-	public void setListaSolicitacoes(List<Solicitacao> listaSolicitacoes) {
-		this.listaSolicitacoes = listaSolicitacoes;
-	}
-
 	public List<Apontamento> getListaApontamento() {
 		return listaApontamento;
 	}
@@ -104,5 +102,13 @@ public class Funcionario extends Usuario {
 
 	public void setListaBancoMensal(List<BancoMensal> listaBancoMensal) {
 		this.listaBancoMensal = listaBancoMensal;
+	}
+
+	public List< Solicitacao > getListaSolicitacaoColaboradoresNotificados() {
+		return listaSolicitacaoColaboradoresNotificados;
+	}
+
+	public void setListaSolicitacaoColaboradoresNotificados(List< Solicitacao > listaSolicitacaoColaboradoresNotificados) {
+		this.listaSolicitacaoColaboradoresNotificados = listaSolicitacaoColaboradoresNotificados;
 	}
 }

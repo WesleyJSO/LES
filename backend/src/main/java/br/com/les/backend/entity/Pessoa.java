@@ -1,5 +1,7 @@
 package br.com.les.backend.entity;
 
+import java.util.Date;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,6 +23,8 @@ public abstract class Pessoa extends EntidadeDominio {
 	private Long id;
 	private String nome;
 	private String email;
+	private String ultimoNome;
+	private Date dataNascimento;
 	
 	public String getNome() {
 		return nome;
@@ -39,6 +43,18 @@ public abstract class Pessoa extends EntidadeDominio {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	public String getUltimoNome() {
+		return ultimoNome;
+	}
+	public void setUltimoNome(String ultimoNome) {
+		this.ultimoNome = ultimoNome;
+	}
+	public Date getDataNascimento() {
+		return dataNascimento;
+	}
+	public void setDataNascimento(Date dataNascimento) {
+		this.dataNascimento = dataNascimento;
 	}
 
 }

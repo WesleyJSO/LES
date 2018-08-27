@@ -1,8 +1,8 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer v-model="drawer" 
+    <v-navigation-drawer v-model="drawer"
                          :clipped="clipped"
-                         fixed 
+                         fixed
                          app >
       <v-list dense>
         <v-list-tile>
@@ -80,7 +80,7 @@ export default {
   methods: {
     setUsuarioLogado (usuario) {
       this.lblLogin = 'LOGOUT'
-      this.drawer = false
+      this.drawer = true
       this.login = usuario.login
       this.roles = usuario.roles
       this.account_circle = 'account_circle'

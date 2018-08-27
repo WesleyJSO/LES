@@ -5,7 +5,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 import org.springframework.stereotype.Component;
@@ -20,14 +19,13 @@ public class Usuario extends Pessoa {
 	@Embedded
 	private Login login;
 	
-	@OneToMany( cascade=CascadeType.ALL, orphanRemoval=true )
+	@OneToMany( mappedBy="usuario", cascade=CascadeType.ALL, orphanRemoval=true )
 	private List< Role > listaRole;
 	
 	@OneToMany( mappedBy="usuario", cascade=CascadeType.ALL, orphanRemoval=true )
 	private List< LogAcao > listaLogAcao;
 	
-	@OneToMany( cascade=CascadeType.ALL, orphanRemoval=true )
-	@JoinColumn(name = "idUsuario")
+	@OneToMany( mappedBy="usuario", cascade=CascadeType.ALL, orphanRemoval=true )
 	private List< Telefone > listaTelefone;
 
 	
