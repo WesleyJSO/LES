@@ -39,17 +39,16 @@ public class UsuarioController extends AbstractController {
 	}
 	
 	@PostMapping( value="/usuario" )
-	public Resultado save( @RequestBody Funcionario usuario ) {
+	public Resultado save( @RequestBody Usuario usuario ) {
 		
 		return fachada.save( ( EntidadeDominio ) usuario, getMethodName( new Object() {} ) );
 	}
 	
 	@PutMapping( value="/usuario" )
-	public Resultado update( @RequestBody Funcionario usuario ) {
+	public Resultado update( @RequestBody Usuario usuario ) {
 		
 		return fachada.update( usuario, getMethodName( new Object() {} ) );
 	}
-	
 	
 	@DeleteMapping( value="/usuario/{id}" )
 	public Resultado delete( @PathVariable( "id" ) Long idUsuario ) {
