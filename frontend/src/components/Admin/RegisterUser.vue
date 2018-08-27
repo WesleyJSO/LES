@@ -1,6 +1,6 @@
 <template>
     <v-app>
-    <h1>Cadastro de Funcionário</h1>
+    <h1>{{title}}</h1>
     <li v-for="(message, index) in messages" :key="index">
       <v-alert :color="messageColor"
                :value="haveMessage"
@@ -46,7 +46,7 @@
       <!-- Row 2 -->
       <v-layout>
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field v-model="salario"
+          <v-text-field v-model="salario
                         type="number"
                         prepend-icon="monetization_on"
                         clearable
@@ -228,7 +228,7 @@
           </v-text-field>
         </v-flex>
       </v-layout>
-      <div>
+      <div v-if="!this.edit">
         <v-btn type="submit" color="success">Salvar</v-btn>
         <v-btn @click="clearForm" color="error">Cancelar</v-btn>
       </div>
@@ -243,6 +243,20 @@ import Telefone from '@/objects/Telefone'
 import Login from '@/objects/Login'
 
 export default {
+  props: {
+    user: {
+      type: Object,
+      default: {}
+    },
+    edit: {
+      type: Boolean,
+      default: false
+    },
+    message: {
+      type: String,
+      default: ''
+    }
+  },
   data: () => ({
     valid: false,
     menu: false,
@@ -300,12 +314,21 @@ export default {
       // v => /.[0-9]{1}+[a-z]{1}+[A-Z]{1}./.test(v) || 'Informe uma Senha válida!'
     ]
   }),
+  created () {
+  },
   computed: {
     progress () {
       return Math.min(100, this.senha.length * 10)
     },
     color () {
       return ['error', 'warning', 'success'][Math.floor(this.progress / 40)]
+    },
+    title () {
+      if (!this.edit) {
+        return 'Cadastro de Funcionário'
+      } else {
+        return 'Alterar Funcionário'
+      }
     }
   },
   methods: {
