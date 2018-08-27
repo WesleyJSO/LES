@@ -46,7 +46,7 @@
       <!-- Row 2 -->
       <v-layout>
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field v-model="salario
+          <v-text-field v-model="salario"
                         type="number"
                         prepend-icon="monetization_on"
                         clearable
@@ -83,7 +83,6 @@
                       prepend-icon="supervisor_account"
                       :items="items.gestor"
                       label="Supervisor Imediato"
-                      multiple
                       chips>
             <template slot="selection"
                       slot-scope="data">
@@ -228,7 +227,7 @@
           </v-text-field>
         </v-flex>
       </v-layout>
-      <div v-if="!this.edit">
+      <div>
         <v-btn type="submit" color="success">Salvar</v-btn>
         <v-btn @click="clearForm" color="error">Cancelar</v-btn>
       </div>
@@ -327,6 +326,7 @@ export default {
       if (!this.edit) {
         return 'Cadastro de Funcionário'
       } else {
+        this.parseUserObject(this.user)
         return 'Alterar Funcionário'
       }
     }
@@ -363,30 +363,52 @@ export default {
     saveUser () {
       let funcionario = this.prepareUserObject()
       alert(JSON.stringify(funcionario))
-      this.$_axios.post(`${this.$_url}funcionario`, funcionario).then((response) => {
-        let resultado = response.data
-        if (resultado.listaResultado.length !== 0) {
-          /* retorno ok */
-          this.funcionario = resultado.listaResultado
-        }
-        if (resultado.mensagem) {
-          this.messages = [...resultado.mensagem]
-          this.haveMessage = true
-          if (resultado.sucesso) {
-          /* retorno mensagem de sucesso */
-            this.messageColor = 'info'
-          } else {
-            /* retorno mensagem de erro */
-            this.messageColor = 'warning'
+      if (!this.edit) {
+        this.$_axios.post(`${this.$_url}funcionario`, funcionario).then((response) => {
+          let resultado = response.data
+          if (resultado.listaResultado.length !== 0) {
+            /* retorno ok */
+            this.funcionario = resultado.listaResultado
           }
-        }
-      },
-      (response) => {
-        /* erro na requisição do serviço */
-        this.messages = ['Erro durante execução do serviço!']
-        this.haveMessage = true
-        this.messageColor = 'error'
-      })
+          if (resultado.mensagem) {
+            this.messages = [...resultado.mensagem]
+            this.haveMessage = true
+            if (resultado.sucesso) {
+            /* retorno mensagem de sucesso */
+              this.messageColor = 'info'
+            } else {
+              /* retorno mensagem de erro */
+              this.messageColor = 'warning'
+            }
+          }
+        },
+        (response) => {
+          /* erro na requisição do serviço */
+          this.messages = ['Erro durante execução do serviço!']
+          this.haveMessage = true
+          this.messageColor = 'error'
+        })
+      } else {
+        this.$emit('save', funcionario)
+      }
+    },
+    parseUserObject (userObject) {
+      this.nome = userObject.nome
+      this.ultimoNome = userObject.ultimoNome
+      this.email = userObject.email
+      this.salario = userObject.salario
+      this.pis = userObject.pis
+      this.cargaHoraria = userObject.cargaHoraria
+      this.dataNascimento = userObject.dataNascimento
+      this.dataIngressoEmpresa = userObject.dataIngressoEmpresa
+      this.gestor = userObject.gestor
+      this.telefone1 = userObject.listaTelefone[0]
+      this.telefone2 = userObject.listaTelefone[1]
+      this.telefone3 = userObject.listaTelefone[2]
+      this.password = userObject.login.senha
+      this.password2 = userObject.login.senhaValidacao
+      this.ativo = userObject.login.ativo
+      this.nomeLogin = userObject.login.nomeLogin
     },
     clearForm () {
       this.valid = false
