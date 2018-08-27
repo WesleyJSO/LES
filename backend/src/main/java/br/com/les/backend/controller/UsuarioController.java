@@ -49,7 +49,6 @@ public class UsuarioController extends AbstractController {
 		return fachada.update( usuario, getMethodName( new Object() {} ) );
 	}
 	
-	
 	@DeleteMapping( value="/usuario/{id}" )
 	public Resultado delete( @PathVariable( "id" ) Long idUsuario ) {
 		

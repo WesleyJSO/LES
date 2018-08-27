@@ -14,6 +14,10 @@ public class Resultado {
     private List< String > mensagem = new ArrayList<>();
     
     private List< EntidadeDominio > listaResultado = new ArrayList<>();
+    
+    public Resultado() {
+    	sucesso = true;
+    }
 
     public void setSucesso( String mensagem ) {
     	
@@ -59,4 +63,3 @@ public class Resultado {
     		return null;
     }
 }
-
