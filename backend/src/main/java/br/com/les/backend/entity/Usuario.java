@@ -27,7 +27,7 @@ public class Usuario extends Pessoa {
 	private List< LogAcao > listaLogAcao;
 	
 	@OneToMany( cascade=CascadeType.ALL, orphanRemoval=true )
-	@JoinColumn(name = "idUsuario")
+	@JoinColumn(name = "id_usuario")
 	private List< Telefone > listaTelefone;
 
 	

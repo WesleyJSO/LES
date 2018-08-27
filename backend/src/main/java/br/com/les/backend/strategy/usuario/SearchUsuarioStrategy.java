@@ -1,5 +1,7 @@
 package br.com.les.backend.strategy.usuario;
 
+import java.util.Date;
+
 import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.EntidadeDominio;
