@@ -21,7 +21,7 @@ public class FuncionarioController extends AbstractController {
 	@GetMapping( value="/funcionario" )
 	public Resultado findAll() {
 		
-		return fachada.find( new Funcionario(), getMethodName( new Object() {} ) );
+		return fachada.findAll( new Funcionario(), getMethodName( new Object() {} ) );
 	}
 	
 	@GetMapping( value="/usuarioFuncionario" )

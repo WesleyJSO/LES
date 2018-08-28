@@ -11,6 +11,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -23,23 +25,28 @@ public class Funcionario extends Usuario {
 	private String pis;
 	private Date dataIngressoEmpresa;
 	
-	@ManyToOne( fetch=FetchType.LAZY )
+	@ManyToOne( cascade=CascadeType.ALL)
 	@JoinColumn( name="id_gestor" )
 	private Usuario gestor;
 
 	@OneToMany( cascade=CascadeType.ALL )
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List< Solicitacao > listaSolicitacao;
 	
 	@ManyToMany( mappedBy="listaColaboradoresNotificados", fetch=FetchType.LAZY )
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List< Solicitacao > listaSolicitacaoColaboradoresNotificados;
 	
 	@OneToMany( cascade=CascadeType.ALL )
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List< Apontamento > listaApontamento;
 	
 	@OneToMany( cascade=CascadeType.ALL )
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List< BaseCalculoHoras > listaBaseCalculoHoras;
 	
 	@OneToMany( cascade=CascadeType.ALL )
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List< BancoMensal > listaBancoMensal;
 
 	public Funcionario() {}

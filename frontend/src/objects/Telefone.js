@@ -1,5 +1,6 @@
 export default class Telefone {
-  constructor (numero) {
+  constructor (id, numero) {
+    this.id = id
     this.numero = numero
   }
 }

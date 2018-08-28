@@ -7,7 +7,11 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Component
 @Entity
@@ -20,12 +24,15 @@ public class Usuario extends Pessoa {
 	private Login login;
 	
 	@OneToMany( mappedBy="usuario", cascade=CascadeType.ALL, orphanRemoval=true )
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List< Role > listaRole;
 	
 	@OneToMany( mappedBy="usuario", cascade=CascadeType.ALL, orphanRemoval=true )
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List< LogAcao > listaLogAcao;
 	
 	@OneToMany( mappedBy="usuario", cascade=CascadeType.ALL, orphanRemoval=true )
+	@JsonManagedReference
 	private List< Telefone > listaTelefone;
 
 	

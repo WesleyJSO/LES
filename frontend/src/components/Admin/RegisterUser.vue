@@ -46,7 +46,7 @@
       <!-- Row 2 -->
       <v-layout>
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field v-model="salario
+          <v-text-field v-model="salario"
                         type="number"
                         prepend-icon="monetization_on"
                         clearable
@@ -79,7 +79,15 @@
       <!-- Row 3 -->
       <v-layout>
         <v-flex >
-          <v-combobox v-model="gestor"
+
+          <v-text-field v-model="gestor"
+                        type="text"
+                        prepend-icon="supervisor_account"
+                        clearable
+                        label="Gestor"
+                        required>
+          </v-text-field>
+          <!-- <v-combobox v-model="gestor"
                       prepend-icon="supervisor_account"
                       :items="items.gestor"
                       label="Supervisor Imediato"
@@ -98,7 +106,7 @@
                   {{ data.item }}
               </v-chip>
             </template>
-          </v-combobox>
+          </v-combobox> -->
         </v-flex>
       </v-layout>
       <!-- Row 5 -->
@@ -266,6 +274,7 @@ export default {
     dataIngressoEmpresa: null,
     dataNascimento: null,
     messages: [],
+    tipoHora: -1,
     haveMessage: false,
     messageColor: '',
     nome: '',
@@ -344,7 +353,7 @@ export default {
     },
     prepareUserObject () {
       let listaTelefone = []
-      listaTelefone.push(new Telefone(this.telefone1), new Telefone(this.telefone2), new Telefone(this.telefone3))
+      listaTelefone.push(new Telefone(null, this.telefone1), new Telefone(null, this.telefone2), new Telefone(null, this.telefone3))
       let funcionario = new Funcionario(
         this.id,
         this.nome,
@@ -355,38 +364,59 @@ export default {
         listaTelefone,
         this.pis,
         this.dataIngressoEmpresa,
-        new Funcionario(0, this.gestor),
-        new BaseCalculoHoras(0, this.tipoHora, this.cargaHoraria, null, this.salario)
+        new Funcionario(null, this.gestor),
+        [new BaseCalculoHoras(null, this.tipoHora, parseFloat(this.cargaHoraria), null, parseFloat(this.salario))]
       )
       return funcionario
     },
     saveUser () {
       let funcionario = this.prepareUserObject()
-      alert(JSON.stringify(funcionario))
-      this.$_axios.post(`${this.$_url}funcionario`, funcionario).then((response) => {
-        let resultado = response.data
-        if (resultado.listaResultado.length !== 0) {
-          /* retorno ok */
-          this.funcionario = resultado.listaResultado
-        }
-        if (resultado.mensagem) {
-          this.messages = [...resultado.mensagem]
-          this.haveMessage = true
-          if (resultado.sucesso) {
-          /* retorno mensagem de sucesso */
-            this.messageColor = 'info'
-          } else {
-            /* retorno mensagem de erro */
-            this.messageColor = 'warning'
+      if (!this.edit) {
+        this.$_axios.post(`${this.$_url}funcionario`, funcionario).then((response) => {
+          let resultado = response.data
+          if (resultado.listaResultado.length !== 0) {
+            // retorno ok /
+            this.funcionario = resultado.listaResultado
           }
-        }
-      },
-      (response) => {
-        /* erro na requisição do serviço */
-        this.messages = ['Erro durante execução do serviço!']
-        this.haveMessage = true
-        this.messageColor = 'error'
-      })
+          if (resultado.mensagem) {
+            this.messages = [...resultado.mensagem]
+            this.haveMessage = true
+            if (resultado.sucesso) {
+            // retorno mensagem de sucesso /
+              this.messageColor = 'info'
+            } else {
+              // retorno mensagem de erro /
+              this.messageColor = 'warning'
+            }
+          }
+        },
+        (response) => {
+          // erro na requisição do serviço /
+          this.messages = ['Erro durante execução do serviço!']
+          this.haveMessage = true
+          this.messageColor = 'error'
+        })
+      } else {
+        this.$emit('save', funcionario)
+      }
+    },
+    parseUserObject (userObject) {
+      this.nome = userObject.nome
+      this.ultimoNome = userObject.ultimoNome
+      this.email = userObject.email
+      this.salario = userObject.salario
+      this.pis = userObject.pis
+      this.cargaHoraria = userObject.cargaHoraria
+      this.dataNascimento = userObject.dataNascimento
+      this.dataIngressoEmpresa = userObject.dataIngressoEmpresa
+      this.gestor = userObject.gestor
+      this.telefone1 = userObject.listaTelefone[0]
+      this.telefone2 = userObject.listaTelefone[1]
+      this.telefone3 = userObject.listaTelefone[2]
+      this.password = userObject.login.senha
+      this.password2 = userObject.login.senhaValidacao
+      this.ativo = userObject.login.ativo
+      this.nomeLogin = userObject.login.nomeLogin
     },
     clearForm () {
       this.valid = false

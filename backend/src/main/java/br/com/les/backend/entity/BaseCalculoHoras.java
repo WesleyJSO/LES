@@ -19,21 +19,19 @@ public class BaseCalculoHoras extends EntidadeDominio {
 
 	private static final long serialVersionUID = 5309951868771462074L;
 
-	
 	@Id
-	@GeneratedValue( strategy=GenerationType.SEQUENCE, generator="base_calculo_horas_sequence" )
-	@SequenceGenerator( name="base_calculo_horas_sequence", sequenceName="BASE_CALCULO_HORAS_SEQ", allocationSize=0 ) 
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "base_calculo_horas_sequence")
+	@SequenceGenerator(name = "base_calculo_horas_sequence", sequenceName = "BASE_CALCULO_HORAS_SEQ", allocationSize = 0)
 	private Long idBaseCalculoHoras;
-	private short tipoHora; // 0 - comp time, 1 - extra time, 2 - both
-	private float cargaHoraria;
+	private Short tipoHora = -1; // 0 - comp time, 1 - extra time, 2 - both
+	private Double cargaHoraria;
 	private Date dataVigencia;
-	private float salario;
-	
-	@ManyToOne( fetch=FetchType.LAZY )
-	@JoinColumn( name="id_funcionario" )
+	private Double salario;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_funcionario")
 	private Funcionario funcionario;
 
-	
 	public short getTipoHora() {
 		return tipoHora;
 	}
@@ -42,11 +40,19 @@ public class BaseCalculoHoras extends EntidadeDominio {
 		this.tipoHora = tipoHora;
 	}
 
-	public float getCargaHoraria() {
+	public Long getIdBaseCalculoHoras() {
+		return idBaseCalculoHoras;
+	}
+
+	public void setIdBaseCalculoHoras(Long idBaseCalculoHoras) {
+		this.idBaseCalculoHoras = idBaseCalculoHoras;
+	}
+
+	public Double getCargaHoraria() {
 		return cargaHoraria;
 	}
 
-	public void setCargaHoraria(float cargaHoraria) {
+	public void setCargaHoraria(Double cargaHoraria) {
 		this.cargaHoraria = cargaHoraria;
 	}
 
@@ -58,11 +64,11 @@ public class BaseCalculoHoras extends EntidadeDominio {
 		this.dataVigencia = dataVigencia;
 	}
 
-	public float getSalario() {
+	public Double getSalario() {
 		return salario;
 	}
 
-	public void setSalario(float salario) {
+	public void setSalario(Double salario) {
 		this.salario = salario;
 	}
 
@@ -74,12 +80,8 @@ public class BaseCalculoHoras extends EntidadeDominio {
 		this.funcionario = funcionario;
 	}
 
-	public Long getIdBaseCalculoHoras() {
-		return idBaseCalculoHoras;
+	public void setTipoHora(Short tipoHora) {
+		this.tipoHora = tipoHora;
 	}
 
-	public void setIdBaseCalculoHoras(Long idBaseCalculoHoras) {
-		this.idBaseCalculoHoras = idBaseCalculoHoras;
-	}
-	
 }

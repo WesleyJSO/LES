@@ -1,19 +1,19 @@
-package br.com.les.backend.strategy.usuario;
+package br.com.les.backend.strategy.funcionario;
 
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.EntidadeDominio;
 import br.com.les.backend.entity.Funcionario;
-import br.com.les.backend.entity.Role;
 import br.com.les.backend.entity.Telefone;
-import br.com.les.backend.entity.Usuario;
+import br.com.les.backend.strategy.usuario.AbstractUsuarioStrategy;
 import br.com.les.backend.utils.Resultado;
 
 @Component
-public class SaveUsuarioStrategy extends AbstractUsuarioStrategy {
+public class SaveFuncionarioStrategy extends AbstractFuncionarioStrategy {
 
 	@Override
 	public Resultado execute(EntidadeDominio entidade, String callerMethod ) {
@@ -60,6 +60,17 @@ public class SaveUsuarioStrategy extends AbstractUsuarioStrategy {
 			if( funcionario.getListaTelefone().isEmpty() )
 				resultado.setErro( "Pelo menos um telefone deve ser cadastrado!" );
 			else {
+				List< Telefone > listaRemover = new ArrayList<>();
+				for( Telefone telefone : funcionario.getListaTelefone() ) {
+					telefone.setUsuario(funcionario);
+					if( telefone.getNumero().length() == 0 ) {
+						listaRemover.add(telefone);
+					}
+				}
+				
+				for( Telefone telefone : listaRemover )
+					funcionario.getListaTelefone().remove(telefone);
+
 				
 				for( Telefone telefone : funcionario.getListaTelefone() )
 					if( telefone.getNumero().length() < 8 ) {
