@@ -12,7 +12,6 @@ public class SolicitacaoTrocaApontamento extends Solicitacao {
 
 	private static final long serialVersionUID = -6495527335471584927L;
 
-	
 	private Date dataAntiga;
 	private Date dataNova;
 

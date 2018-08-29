@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import br.com.les.backend.entity.EntidadeDominio;
 import br.com.les.backend.entity.Login;
 import br.com.les.backend.entity.Usuario;
-import br.com.les.backend.strategy.usuario.AbstractUsuarioStrategy;
 import br.com.les.backend.utils.Resultado;
 
 @Component

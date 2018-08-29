@@ -2,12 +2,8 @@ package br.com.les.backend.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
 
 import org.springframework.stereotype.Component;
 
@@ -17,10 +13,6 @@ public class BancoMensal extends EntidadeDominio {
 
 	private static final long serialVersionUID = -6687722120215401938L;
 
-	@Id
-	@GeneratedValue( strategy=GenerationType.SEQUENCE, generator="banco_mensal_sequence" )
-	@SequenceGenerator( name="banco_mensal_sequence", sequenceName="BANCO_MENSAL_SEQ", allocationSize=0 ) 
-	private Long idBancoMensal;
 	private float saldo;
 	private float limiteHorasMensal;
 	private float limiteHorasDiario;
@@ -105,14 +97,5 @@ public class BancoMensal extends EntidadeDominio {
 	public void setFuncionario(Funcionario funcionario) {
 		this.funcionario = funcionario;
 	}
-
-	public Long getIdBancoMensal() {
-		return idBancoMensal;
-	}
-
-	public void setIdBancoMensal(Long idBancoMensal) {
-		this.idBancoMensal = idBancoMensal;
-	}
-	
 	
 }

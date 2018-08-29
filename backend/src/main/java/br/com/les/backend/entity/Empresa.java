@@ -3,11 +3,7 @@ package br.com.les.backend.entity;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.SequenceGenerator;
 
 import org.springframework.stereotype.Component;
 
@@ -17,10 +13,6 @@ public class Empresa extends EntidadeDominio {
 
 	private static final long serialVersionUID = 2623152606711154523L;
 
-	@Id
-	@GeneratedValue( strategy=GenerationType.SEQUENCE, generator="empresa_sequence" )
-	@SequenceGenerator( name="empresa_sequence", sequenceName="EMPRESA_SEQ", allocationSize=0 ) 
-	private Long idEmpresa;
 	private String razaoSocial;
 	private String nomeFatasia;
 	private String cnpj;
@@ -28,8 +20,6 @@ public class Empresa extends EntidadeDominio {
 	
 	@ManyToMany
 	private List< Funcionario > listaFuncionario;
-
-	
 	
 	public String getRazaoSocial() {
 		return razaoSocial;

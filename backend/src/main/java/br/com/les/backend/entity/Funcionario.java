@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -41,10 +42,17 @@ public class Funcionario extends Usuario {
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private List< Apontamento > listaApontamento;
 	
-	@OneToMany( cascade=CascadeType.ALL )
-	@LazyCollection(LazyCollectionOption.FALSE)
-	private List< BaseCalculoHoras > listaBaseCalculoHoras;
+	@OneToOne( mappedBy="funcionario", fetch=FetchType.LAZY )
+	private BaseCalculoHoras baseCalculoHoras;
 	
+	public BaseCalculoHoras getBaseCalculoHoras() {
+		return baseCalculoHoras;
+	}
+
+	public void setBaseCalculoHoras(BaseCalculoHoras baseCalculoHoras) {
+		this.baseCalculoHoras = baseCalculoHoras;
+	}
+
 	@OneToMany( cascade=CascadeType.ALL )
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private List< BancoMensal > listaBancoMensal;
@@ -93,14 +101,6 @@ public class Funcionario extends Usuario {
 
 	public void setListaApontamento(List<Apontamento> listaApontamento) {
 		this.listaApontamento = listaApontamento;
-	}
-
-	public List<BaseCalculoHoras> getListaBaseCalculoHoras() {
-		return listaBaseCalculoHoras;
-	}
-
-	public void setListaBaseCalculoHoras(List<BaseCalculoHoras> listaBaseCalculoHoras) {
-		this.listaBaseCalculoHoras = listaBaseCalculoHoras;
 	}
 
 	public List<BancoMensal> getListaBancoMensal() {

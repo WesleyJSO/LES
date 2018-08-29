@@ -1,5 +1,6 @@
 package br.com.les.backend.strategy.funcionario;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Component;
 import br.com.les.backend.entity.EntidadeDominio;
 import br.com.les.backend.entity.Funcionario;
 import br.com.les.backend.entity.Telefone;
-import br.com.les.backend.strategy.usuario.AbstractUsuarioStrategy;
 import br.com.les.backend.utils.Resultado;
 
 @Component
@@ -38,7 +38,7 @@ public class SaveFuncionarioStrategy extends AbstractFuncionarioStrategy {
 			/*if( funcionario.getListaRole().isEmpty() )
 				resultado.setErro( "Ao menos uma role deve ser selecionada!" ); 
 			*/
-			if( funcionario.getListaBaseCalculoHoras().get(0).getSalario() == 0 )
+			if( funcionario.getBaseCalculoHoras().getSalario() == BigDecimal.ZERO )
 				resultado.setErro("O salário deve ser preenchido!");
 			
 			if( funcionario.getPis() == null || funcionario.getPis().isEmpty() )
@@ -48,10 +48,10 @@ public class SaveFuncionarioStrategy extends AbstractFuncionarioStrategy {
 					resultado.setErro("Numero PIS inválido!");
 				
 			
-			if( funcionario.getListaBaseCalculoHoras().get(0).getCargaHoraria() == 0 )
+			if( funcionario.getBaseCalculoHoras().getCargaHoraria() == 0 )
 				resultado.setErro("A carga horária deve ser preenchida!");
 			else
-				if( funcionario.getListaBaseCalculoHoras().get(0).getCargaHoraria() >= 10)
+				if( funcionario.getBaseCalculoHoras().getCargaHoraria() >= 10)
 					resultado.setErro("Carga horária inválida!");
 			
 			if( funcionario.getGestor().getNome().equals("") )

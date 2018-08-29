@@ -4,12 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
 
 import org.springframework.stereotype.Component;
 
@@ -19,10 +15,6 @@ public class Apontamento extends EntidadeDominio {
 
 	private static final long serialVersionUID = -5608859856328862142L;
 
-	@Id
-	@GeneratedValue( strategy=GenerationType.SEQUENCE, generator="apontamento_sequence" )
-	@SequenceGenerator( name="apontamento_sequence", sequenceName="APONTAMENTO_SEQ", allocationSize=0 ) 
-	private Long idApontamento;
 	private String descricao;
 	private Date dataApontamentoUsuario;
 	private Date dataAcessoSistema;
@@ -62,13 +54,5 @@ public class Apontamento extends EntidadeDominio {
 
 	public void setDataAcessoSistema(Date dataAcessoSistema) {
 		this.dataAcessoSistema = dataAcessoSistema;
-	}
-
-	public Long getIdApontamento() {
-		return idApontamento;
-	}
-
-	public void setIdApontamento(Long idApontamento) {
-		this.idApontamento = idApontamento;
 	}
 }

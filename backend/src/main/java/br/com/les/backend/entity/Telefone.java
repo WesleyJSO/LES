@@ -2,9 +2,6 @@ package br.com.les.backend.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
@@ -18,9 +15,6 @@ public class Telefone extends EntidadeDominio {
 
 	private static final long serialVersionUID = 7779619258535476494L;
 
-	@Id
-	@GeneratedValue( strategy=GenerationType.SEQUENCE )	
-	private Long idTelefone;
 	private String tipo;
 	private String numero;
 	
@@ -28,14 +22,6 @@ public class Telefone extends EntidadeDominio {
 	@JoinColumn( name="id_usuario" )
 	@JsonBackReference
 	private Usuario usuario;
-
-	public Long getIdTelefone() {
-		return idTelefone;
-	}
-
-	public void setIdTelefone(Long idTelefone) {
-		this.idTelefone = idTelefone;
-	}
 
 	public String getTipo() {
 		return tipo;

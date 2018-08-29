@@ -16,23 +16,13 @@ public class Login extends EntidadeDominio {
 	@Transient
 	private String senhaValidacao;
 	
-	private Date dataCriacao;
 	private Boolean ativo;
 
-	
-	
-	
 	public String getSenha() {
 		return senha;
 	}
 	public void setSenha( String senha ) {
 		this.senha = senha;
-	}
-	public Date getDataCriacao() {
-		return dataCriacao;
-	}
-	public void setDataCriacao( Date dataCriacao ) {
-		this.dataCriacao = dataCriacao;
 	}
 	public Boolean getAtivo() {
 		return ativo;
