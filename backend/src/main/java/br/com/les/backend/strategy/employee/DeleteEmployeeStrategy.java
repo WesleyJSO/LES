@@ -1,7 +1,7 @@
-package br.com.les.backend.strategy.funcionario;
+package br.com.les.backend.strategy.employee;
 
 import br.com.les.backend.entity.EntidadeDominio;
-import br.com.les.backend.strategy.usuario.AbstractUsuarioStrategy;
+import br.com.les.backend.strategy.user.AbstractUserStrategy;
 import br.com.les.backend.utils.Result;
 
 public class DeleteEmployeeStrategy extends AbstractEmployeeStrategy {

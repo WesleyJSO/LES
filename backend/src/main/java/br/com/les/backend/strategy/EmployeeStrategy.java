@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.EntidadeDominio;
-import br.com.les.backend.strategy.funcionario.IEmployeeStrategy;
-import br.com.les.backend.strategy.funcionario.SearchFuncionarioStrategy;
+import br.com.les.backend.strategy.employee.IEmployeeStrategy;
+import br.com.les.backend.strategy.employee.SearchEmployeeStrategy;
 import br.com.les.backend.utils.Result;
 
 @Component( "Funcionario" )

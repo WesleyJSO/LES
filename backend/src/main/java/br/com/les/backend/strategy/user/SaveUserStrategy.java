@@ -1,8 +1,6 @@
-package br.com.les.backend.strategy.funcionario;
+package br.com.les.backend.strategy.user;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.stereotype.Component;
 
@@ -13,7 +11,7 @@ import br.com.les.backend.utils.Result;
 import br.com.les.backend.utils.Util;
 
 @Component
-public class SaveEmployeeStrategy extends AbstractEmployeeStrategy {
+public class SaveUserStrategy extends AbstractUserStrategy {
 
 	@Override
 	public Result execute(EntidadeDominio entity, String callerMethod ) {
@@ -39,13 +37,13 @@ public class SaveEmployeeStrategy extends AbstractEmployeeStrategy {
 				resultado.setErro( "Ao menos uma role deve ser selecionada!" ); 
 			*/
 			if( employee.getListaBaseCalculoHoras().get(0).getSalario() == 0 )
-				result.setErro(Util.ERROR_SALARY );
+				result.setErro( Util.ERROR_SALARY );
 			
 			if( employee.getPis() == null || employee.getPis().isEmpty() )
-				result.setErro( Util.ERROR_PIS );
+				result.setErro( Util.ERROR_PIS);
 			else
 				if( employee.getPis().length() < 11 )
-					result.setErro( Util.INVALID_PIS);
+					result.setErro( Util.INVALID_PIS );
 				
 			
 			if( employee.getListaBaseCalculoHoras().get(0).getCargaHoraria() == 0 )
@@ -55,26 +53,15 @@ public class SaveEmployeeStrategy extends AbstractEmployeeStrategy {
 					result.setErro( Util.INVALID_WORKLOAD );
 			
 			if( employee.getGestor().getNome().equals("") )
-				result.setErro("Gestor deve ser selecionado!");
+				result.setErro( Util.ERROR_MANAGER_NAME );
 			
 			if( employee.getListaTelefone().isEmpty() )
 				result.setErro( Util.ERROR_PHONE );
 			else {
-				List< Telefone > listaRemover = new ArrayList<>();
-				for( Telefone telefone : employee.getListaTelefone() ) {
-					telefone.setUsuario(employee);
-					if( telefone.getNumero().length() == 0 ) {
-						listaRemover.add(telefone);
-					}
-				}
-				
-				for( Telefone telefone : listaRemover )
-					employee.getListaTelefone().remove(telefone);
-
 				
 				for( Telefone telefone : employee.getListaTelefone() )
-					if( telefone.getNumero().length() < 8 ) {
-						result.setErro( Util.INVALID_PHONE.concat( telefone.toString() ) );
+					if( telefone.getNumero().length() < 9 ) {
+						result.setErro( Util.INVALID_PHONE );
 						break;
 					}
 				
@@ -95,15 +82,14 @@ public class SaveEmployeeStrategy extends AbstractEmployeeStrategy {
 				}
 			}
 			
-			if( employee.getDataIngressoEmpresa() == null || employee.getDataIngressoEmpresa().toString().isEmpty() ) {
-					result.setErro( Util.ERROR_JOINING_DATE );
-			}
+			if( employee.getDataIngressoEmpresa() == null || employee.getDataIngressoEmpresa().toString().isEmpty() )
+				result.setErro( Util.ERROR_JOINING_DATE );
 			
 			if( employee.getLogin().getSenha() == null || employee.getLogin().getSenha().isEmpty() )
-				result.setErro( Util.INVALID_PASSWORD );
+				result.setErro( Util.ERROR_PASSWORD );
 			
 			if( result.isSucesso() )
-				result.setSucesso( Util.SAVE_SUCCESSFUL );
+				result.setSucesso( Util.SAVE_SUCCESSFUL_USER );
 			
 			break;
 		}

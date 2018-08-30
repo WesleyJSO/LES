@@ -1,4 +1,4 @@
-package br.com.les.backend.strategy.funcionario;
+package br.com.les.backend.strategy.employee;
 
 import br.com.les.backend.utils.Result;
 

@@ -1,15 +1,16 @@
-package br.com.les.backend.strategy.funcionario;
+package br.com.les.backend.strategy.user;
+
+import java.util.Date;
 
 import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.EntidadeDominio;
 import br.com.les.backend.entity.Login;
 import br.com.les.backend.entity.Usuario;
-import br.com.les.backend.strategy.usuario.AbstractUsuarioStrategy;
 import br.com.les.backend.utils.Result;
 
 @Component
-public class SearchFuncionarioStrategy extends AbstractEmployeeStrategy {
+public class SearchUsuarioStrategy extends AbstractUserStrategy {
 
 	@Override
 	public Result execute( EntidadeDominio entidade, String callerMethod ) {

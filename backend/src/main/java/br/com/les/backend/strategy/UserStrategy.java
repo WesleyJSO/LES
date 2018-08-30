@@ -6,21 +6,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.EntidadeDominio;
-import br.com.les.backend.strategy.usuario.IUsuarioStrategy;
+import br.com.les.backend.strategy.user.IUserStrategy;
 import br.com.les.backend.utils.Result;
 
 @Component( "Usuario" )
 public class UserStrategy implements IStrategy {
 
 	@Autowired
-	List< IUsuarioStrategy > actionStrategies;
+	List< IUserStrategy > actionStrategies;
 	
 	@Override
 	public Result execute( EntidadeDominio entity, String action, String callerMethod ) {
 		
-		IUsuarioStrategy strategyToBeExecuted = null;
+		IUserStrategy strategyToBeExecuted = null;
 		
-		for ( IUsuarioStrategy s : actionStrategies )
+		for ( IUserStrategy s : actionStrategies )
 			if ( s.getClass().getSimpleName().contains( action ) )
 				strategyToBeExecuted = s;
 		
