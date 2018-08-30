@@ -55,7 +55,7 @@ public class SaveEmployeeStrategy extends AbstractEmployeeStrategy {
 					result.setErro( Util.INVALID_WORKLOAD );
 			
 			if( employee.getGestor().getNome().equals("") )
-				result.setErro("Gestor deve ser selecionado!");
+				result.setErro( Util.ERROR_MANAGER_NAME );
 			
 			if( employee.getListaTelefone().isEmpty() )
 				result.setErro( Util.ERROR_PHONE );
