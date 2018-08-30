@@ -7,10 +7,10 @@ import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Component;
 
-import br.com.les.backend.entity.EntidadeDominio;
-import br.com.les.backend.entity.Funcionario;
+import br.com.les.backend.entity.DomainEntity;
+import br.com.les.backend.entity.Employee;
 import br.com.les.backend.entity.Login;
-import br.com.les.backend.entity.Usuario;
+import br.com.les.backend.entity.User;
 
 @Component
 @SuppressWarnings("unchecked")
@@ -19,39 +19,39 @@ public class FuncionarioDAO extends AbstractDAO {
 	private StringBuilder hql;
 	private Query query;
 	
-	public List< EntidadeDominio > findByLoginAndSenha( Usuario usuario ) {
+	public List< DomainEntity > findByLoginAndSenha( User user ) {
 
-		Login l = usuario.getLogin();
+		Login l = user.getLogin();
 		hql = new StringBuilder();
 		
-		hql.append( "from Funcionario f "
-				+ "inner join Usuario u on f.id = u.id"
-				+ "where u.login.nomeLogin = :nomeLogin "
-				+ "and u.login.senha = :senha");
+		hql.append( "from Employee f "
+				+ "inner join User u on f.id = u.id"
+				+ "where u.email = :email "
+				+ "and u.login.password = :password");
 		
 		query = getEntityManager().createQuery( hql.toString() );
 		
-		query.setParameter("nomeLogin", l.getNomeLogin() );
-		query.setParameter("senha", l.getSenha() );
+		query.setParameter("email", user.getEmail() );
+		query.setParameter("password", l.getPassword() );
 		
-		return ( List< EntidadeDominio > ) query.getResultList();
+		return ( List< DomainEntity > ) query.getResultList();
 	}
 
 	
-	public List< EntidadeDominio > dinamicSearch ( Funcionario funcionario ) {
+	public List< DomainEntity > dinamicSearch ( Employee funcionario ) {
 		
 		criteriaQuery = createCriteria();
 		
-		Root< Funcionario > funcionarios = criteriaQuery.from( Funcionario.class );
+		Root< Employee > funcionarios = criteriaQuery.from( Employee.class );
 		
 		criteriaQuery.select( funcionarios );
 		criteriaQuery.where( 
-			criteriaBuilder.and( funcionarios.get( "nome" ), booleanParam )
+			criteriaBuilder.and( funcionarios.get( "name" ), booleanParam )
 		);
 		
 		
 		Query query = getEntityManager().createQuery( criteriaQuery );
-		return ( List< EntidadeDominio > ) query.getResultList();
+		return ( List< DomainEntity > ) query.getResultList();
 	}
 	
 }

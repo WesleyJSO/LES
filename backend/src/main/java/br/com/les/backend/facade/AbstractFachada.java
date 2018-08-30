@@ -6,7 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import br.com.les.backend.entity.EntidadeDominio;
+import br.com.les.backend.entity.DomainEntity;
 import br.com.les.backend.service.IService;
 import br.com.les.backend.strategy.IStrategy;
 
@@ -26,6 +26,6 @@ public  abstract class AbstractFachada implements IFachada {
     @Autowired
     protected Map< String, IStrategy > mapStrategies;
 
-    protected abstract void validar(EntidadeDominio entidade, String action, String callerMethod );
+    protected abstract void validar(DomainEntity entidade, String action, String callerMethod );
 
 }

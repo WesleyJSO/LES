@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.les.backend.dao.UsuarioDAO;
-import br.com.les.backend.entity.EntidadeDominio;
-import br.com.les.backend.entity.Usuario;
+import br.com.les.backend.entity.DomainEntity;
+import br.com.les.backend.entity.User;
 import br.com.les.backend.repository.UsuarioRepository;
 
 /**
@@ -35,7 +35,7 @@ public class UsuarioService implements IService {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List< Usuario > findAll() {
+	public List< User > findAll() {
 		return usuarioRepository.findAll();
 	}
 	
@@ -45,14 +45,14 @@ public class UsuarioService implements IService {
 	}
 
 	@Override
-	public EntidadeDominio save( EntidadeDominio entidade ) {
+	public DomainEntity save( DomainEntity entidade ) {
 
-		return usuarioRepository.save( ( Usuario ) entidade );
+		return usuarioRepository.save( ( User ) entidade );
 	}
 
 	@Override
-	public List< EntidadeDominio > findByParameters( EntidadeDominio entidade ) {
+	public List< DomainEntity > findByParameters( DomainEntity entidade ) {
 
-		return usuarioDAO.findByLoginAndSenha( ( Usuario ) entidade );
+		return usuarioDAO.findByLoginAndSenha( ( User ) entidade );
 	}
 }

@@ -10,10 +10,10 @@ import br.com.les.backend.utils.Resultado;
 public  abstract class AbstractController {
 
     @Autowired
-    IFachada fachada;
+    IFacade facade;
     
     @Autowired
-    Resultado resultado;
+    Result result;
     
     protected String getMethodName( Object o ) {
 		return o.getClass().getEnclosingMethod().getName();

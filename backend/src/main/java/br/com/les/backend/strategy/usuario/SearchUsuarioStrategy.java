@@ -4,20 +4,20 @@ import java.util.Date;
 
 import org.springframework.stereotype.Component;
 
-import br.com.les.backend.entity.EntidadeDominio;
+import br.com.les.backend.entity.DomainEntity;
 import br.com.les.backend.entity.Login;
-import br.com.les.backend.entity.Usuario;
+import br.com.les.backend.entity.User;
 import br.com.les.backend.utils.Resultado;
 
 @Component
 public class SearchUsuarioStrategy extends AbstractUsuarioStrategy {
 
 	@Override
-	public Resultado execute( EntidadeDominio entidade, String callerMethod ) {
+	public Resultado execute( DomainEntity entidade, String callerMethod ) {
 		
 		resultado = new Resultado();
 		
-		Usuario u = ( Usuario ) entidade;
+		User u = ( User ) entidade;
 		
 		if ( u != null ) {
 

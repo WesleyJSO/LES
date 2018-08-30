@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.les.backend.dao.FuncionarioDAO;
-import br.com.les.backend.entity.EntidadeDominio;
-import br.com.les.backend.entity.Funcionario;
+import br.com.les.backend.entity.DomainEntity;
+import br.com.les.backend.entity.Employee;
 import br.com.les.backend.repository.FuncionarioRepository;
 
 @Service
@@ -27,7 +27,7 @@ public class FuncionarioService implements IService {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List< Funcionario > findAll() {
+	public List< Employee > findAll() {
 		return funcionarioRepository.findAll();
 	}
 	
@@ -37,15 +37,15 @@ public class FuncionarioService implements IService {
 	}
 
 	@Override
-	public EntidadeDominio save( EntidadeDominio entidade ) {
+	public DomainEntity save( DomainEntity entidade ) {
 
-		return funcionarioRepository.save( ( Funcionario ) entidade );
+		return funcionarioRepository.save( ( Employee ) entidade );
 	}
 
 	@Override
-	public List< EntidadeDominio > findByParameters( EntidadeDominio entidade ) {
+	public List< DomainEntity > findByParameters( DomainEntity entidade ) {
 
-		return funcionarioDAO.findByLoginAndSenha( ( Funcionario ) entidade );
+		return funcionarioDAO.findByLoginAndSenha( ( Employee ) entidade );
 	}
 
 }

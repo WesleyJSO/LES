@@ -3,13 +3,12 @@ package br.com.les.backend.dao;
 import java.util.List;
 
 import javax.persistence.Query;
-import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Component;
 
-import br.com.les.backend.entity.EntidadeDominio;
+import br.com.les.backend.entity.DomainEntity;
 import br.com.les.backend.entity.Login;
-import br.com.les.backend.entity.Usuario;
+import br.com.les.backend.entity.User;
 
 /**
  * 
@@ -26,37 +25,20 @@ public class UsuarioDAO extends AbstractDAO {
 	private StringBuilder hql;
 	private Query query;
 	
-	public List< EntidadeDominio > findByLoginAndSenha( Usuario usuario ) {
+	public List< DomainEntity > findByEmailAndPassword( User user ) {
 
-		Login l = usuario.getLogin();
+		Login l = user.getLogin();
 		hql = new StringBuilder();
 		
-		hql.append( "from Usuario u "
-				+ "where u.login.nomeLogin = :nomeLogin "
-				+ "and u.login.senha = :senha");
+		hql.append( "from User u "
+				+ "where u.login.email = :email "
+				+ "and u.login.password = :password" );
 		
 		query = getEntityManager().createQuery( hql.toString() );
 		
-		query.setParameter("nomeLogin", l.getNomeLogin() );
-		query.setParameter("senha", l.getSenha() );
+		query.setParameter("email", user.getEmail() );
+		query.setParameter("password", l.getPassword() );
 		
-		return ( List< EntidadeDominio > ) query.getResultList();
+		return ( List< DomainEntity > ) query.getResultList();
 	}
-	
-	public List< EntidadeDominio > dinamicSearch ( Usuario usuario ) {
-		
-		criteriaQuery = createCriteria();
-		
-		Root< Usuario > usuarios = criteriaQuery.from( Usuario.class );
-		
-		criteriaQuery.select( usuarios );
-		criteriaQuery.where( 
-			criteriaBuilder.and( usuarios.get( "nome" ), booleanParam )
-		);
-		
-		
-		Query query = getEntityManager().createQuery( criteriaQuery );
-		return ( List< EntidadeDominio > ) query.getResultList();
-	}
-	
 }

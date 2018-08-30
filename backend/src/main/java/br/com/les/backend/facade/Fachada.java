@@ -1,6 +1,6 @@
 package br.com.les.backend.facade;
 
-import br.com.les.backend.entity.EntidadeDominio;
+import br.com.les.backend.entity.DomainEntity;
 import br.com.les.backend.service.IService;
 import br.com.les.backend.utils.Actions;
 import br.com.les.backend.utils.Resultado;
@@ -16,7 +16,7 @@ public class Fachada extends AbstractFachada {
     private IService service;
 
     @Override
-    protected void validar( EntidadeDominio entidade, String action, String callerMethod ) {
+    protected void validar( DomainEntity entidade, String action, String callerMethod ) {
 
     	String nomeEntidade = entidade.getClass().getSimpleName();
     	
@@ -30,7 +30,7 @@ public class Fachada extends AbstractFachada {
     }
 
     @Override
-    public Resultado save( EntidadeDominio entidade, String callerMethod ) {
+    public Resultado save( DomainEntity entidade, String callerMethod ) {
 
     	validar( entidade, Actions.SAVE.getValue(), callerMethod  );
     	if ( resultado.isSucesso() )
@@ -39,17 +39,17 @@ public class Fachada extends AbstractFachada {
     }
 
     @Override
-    public Resultado update(EntidadeDominio entidade, String callerMethod ) {
+    public Resultado update(DomainEntity entidade, String callerMethod ) {
         return null;
     }
 
     @Override
-    public Resultado delete( EntidadeDominio entidade, String callerMethod ) {
+    public Resultado delete( DomainEntity entidade, String callerMethod ) {
     	return null;
     }
 
     @Override
-    public Resultado findAll( EntidadeDominio entidade, String callerMethod ) {
+    public Resultado findAll( DomainEntity entidade, String callerMethod ) {
     		
     	validar( entidade, Actions.SEARCH.getValue(), callerMethod );
     	resultado.setListaResultado( service.findAll() );
@@ -57,7 +57,7 @@ public class Fachada extends AbstractFachada {
     }
 
     @Override
-    public Resultado find( EntidadeDominio entidade, String callerMethod ) {
+    public Resultado find( DomainEntity entidade, String callerMethod ) {
         
     	resultado = new Resultado();
  

@@ -5,18 +5,18 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import br.com.les.backend.entity.EntidadeDominio;
+import br.com.les.backend.entity.DomainEntity;
 import br.com.les.backend.strategy.usuario.IUsuarioStrategy;
 import br.com.les.backend.utils.Resultado;
 
-@Component( "Usuario" )
+@Component( "User" )
 public class UsuarioStrategy implements IStrategy {
 
 	@Autowired
 	List< IUsuarioStrategy > actionStrategies;
 	
 	@Override
-	public Resultado execute( EntidadeDominio entidade, String action, String callerMethod ) {
+	public Resultado execute( DomainEntity entidade, String action, String callerMethod ) {
 		
 		IUsuarioStrategy strategyToBeExecuted = null;
 		

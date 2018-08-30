@@ -2,7 +2,7 @@ package br.com.les.backend.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import br.com.les.backend.entity.Usuario;
+import br.com.les.backend.entity.User;
 
 /**
  * 
@@ -11,6 +11,6 @@ import br.com.les.backend.entity.Usuario;
  * Repository that extends from JpaRepository, It's store query methods,
  * and in more complex cases, queries in this class will use methods annotated with @Query.
  */
-public interface UsuarioRepository extends JpaRepository< Usuario, Long > { 
+public interface UsuarioRepository extends JpaRepository< User, Long > { 
 	
 }

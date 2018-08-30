@@ -9,30 +9,30 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Entity
-public class Role extends EntidadeDominio {
+public class Role extends DomainEntity {
 
 	private static final long serialVersionUID = -1322638493619055579L;
 
-	private String nomeRole;
+	private String roleName;
 
 	@ManyToOne( fetch=FetchType.LAZY )
-	@JoinColumn( name="id_usuario" )
-	private Usuario usuario;
-	
-	public String getNomeRole() {
-		return nomeRole;
+	@JoinColumn( name="user_id" )
+	private User user;
+
+	public String getRoleName() {
+		return roleName;
 	}
 
-	public void setNomeRole(String nomeRole) {
-		this.nomeRole = nomeRole;
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
 	}
 
-	public Usuario getUsuario() {
-		return usuario;
+	public User getUser() {
+		return user;
 	}
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
+	public void setUser(User user) {
+		this.user = user;
 	}
 }
 	

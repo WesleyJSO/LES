@@ -7,16 +7,16 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import br.com.les.backend.entity.EntidadeDominio;
-import br.com.les.backend.entity.Funcionario;
-import br.com.les.backend.entity.Telefone;
+import br.com.les.backend.entity.DomainEntity;
+import br.com.les.backend.entity.Employee;
+import br.com.les.backend.entity.Telephone;
 import br.com.les.backend.utils.Resultado;
 
 @Component
 public class SaveFuncionarioStrategy extends AbstractFuncionarioStrategy {
 
 	@Override
-	public Resultado execute(EntidadeDominio entidade, String callerMethod ) {
+	public Resultado execute(DomainEntity entidade, String callerMethod ) {
 		
 		resultado = new Resultado();
 		
@@ -24,7 +24,7 @@ public class SaveFuncionarioStrategy extends AbstractFuncionarioStrategy {
 		
 		case "save":
 			
-			Funcionario funcionario = ( Funcionario ) entidade;
+			Employee funcionario = ( Employee ) entidade;
 			
 			if( funcionario.getNome() == null || funcionario.getNome().isEmpty() )
 				resultado.setErro( "Nome deve ser preenchido!" );
@@ -60,21 +60,21 @@ public class SaveFuncionarioStrategy extends AbstractFuncionarioStrategy {
 			if( funcionario.getListaTelefone().isEmpty() )
 				resultado.setErro( "Pelo menos um telefone deve ser cadastrado!" );
 			else {
-				List< Telefone > listaRemover = new ArrayList<>();
-				for( Telefone telefone : funcionario.getListaTelefone() ) {
+				List< Telephone > listaRemover = new ArrayList<>();
+				for( Telephone telefone : funcionario.getListaTelefone() ) {
 					telefone.setUsuario(funcionario);
 					if( telefone.getNumero().length() == 0 ) {
 						listaRemover.add(telefone);
 					}
 				}
 				
-				for( Telefone telefone : listaRemover )
+				for( Telephone telefone : listaRemover )
 					funcionario.getListaTelefone().remove(telefone);
 
 				
-				for( Telefone telefone : funcionario.getListaTelefone() )
+				for( Telephone telefone : funcionario.getListaTelefone() )
 					if( telefone.getNumero().length() < 8 ) {
-						resultado.setErro("Telefone inválido!");
+						resultado.setErro("Telephone inválido!");
 						break;
 					}
 				

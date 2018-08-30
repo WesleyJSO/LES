@@ -6,19 +6,19 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import br.com.les.backend.entity.EntidadeDominio;
+import br.com.les.backend.entity.DomainEntity;
 import br.com.les.backend.strategy.funcionario.IFuncionarioStrategy;
 import br.com.les.backend.strategy.funcionario.SearchFuncionarioStrategy;
 import br.com.les.backend.utils.Resultado;
 
-@Component( "Funcionario" )
+@Component( "Employee" )
 public class FuncionarioStrategy implements IStrategy {
 
 	@Autowired
 	List< IFuncionarioStrategy > actionStrategies = new ArrayList<>();
 	
 	@Override
-	public Resultado execute( EntidadeDominio entidade, String action, String callerMethod ) {
+	public Resultado execute( DomainEntity entidade, String action, String callerMethod ) {
 		
 		IFuncionarioStrategy strategyToBeExecuted = null;
 		

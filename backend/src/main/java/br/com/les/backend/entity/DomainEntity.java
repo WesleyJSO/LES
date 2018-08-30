@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @Entity
 @Inheritance( strategy=InheritanceType.TABLE_PER_CLASS )
 @JsonInclude(Include.NON_NULL)
-public class EntidadeDominio implements Serializable {
+public class DomainEntity implements Serializable {
 
 	private static final long serialVersionUID = 6370123170646666841L;
 
@@ -28,15 +28,15 @@ public class EntidadeDominio implements Serializable {
 	@SequenceGenerator( allocationSize=0, name = "idGenerator" )
 	private Long id;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
-	private Calendar dataCriacao;
+	private Calendar creationDate;
 
-	public Calendar getDataCriacao() {
-		return dataCriacao;
+	public Calendar getCreationDate() {
+		return creationDate;
 	}
 
 	@PrePersist
-	public void setDataCriacao() {
-		this.dataCriacao = Calendar.getInstance();
+	public void setCreationDate() {
+		this.creationDate = Calendar.getInstance();
 	}
 
 	public Long getId() {

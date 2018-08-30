@@ -6,16 +6,18 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Entity
-public class TipoSolicitacao extends EntidadeDominio {
+public class RequestType extends DomainEntity {
 
 	private static final long serialVersionUID = 7549530991131057672L;
 
-	private String descricao;
+	private String description;
+
 	
-	public String getDescricao() {
-		return descricao;
+	public String getDescription() {
+		return description;
 	}
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }

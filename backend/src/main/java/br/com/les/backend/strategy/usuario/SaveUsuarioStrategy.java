@@ -5,16 +5,16 @@ import java.util.Date;
 
 import org.springframework.stereotype.Component;
 
-import br.com.les.backend.entity.EntidadeDominio;
-import br.com.les.backend.entity.Funcionario;
-import br.com.les.backend.entity.Telefone;
+import br.com.les.backend.entity.DomainEntity;
+import br.com.les.backend.entity.Employee;
+import br.com.les.backend.entity.Telephone;
 import br.com.les.backend.utils.Resultado;
 
 @Component
 public class SaveUsuarioStrategy extends AbstractUsuarioStrategy {
 
 	@Override
-	public Resultado execute(EntidadeDominio entidade, String callerMethod ) {
+	public Resultado execute(DomainEntity entidade, String callerMethod ) {
 		
 		resultado = new Resultado();
 		
@@ -22,7 +22,7 @@ public class SaveUsuarioStrategy extends AbstractUsuarioStrategy {
 		
 		case "save":
 			
-			Funcionario funcionario = ( Funcionario ) entidade;
+			Employee funcionario = ( Employee ) entidade;
 			
 			if( funcionario.getNome() == null || funcionario.getNome().isEmpty() )
 				resultado.setErro( "Nome deve ser preenchido!" );
@@ -59,9 +59,9 @@ public class SaveUsuarioStrategy extends AbstractUsuarioStrategy {
 				resultado.setErro( "Pelo menos um telefone deve ser cadastrado!" );
 			else {
 				
-				for( Telefone telefone : funcionario.getListaTelefone() )
+				for( Telephone telefone : funcionario.getListaTelefone() )
 					if( telefone.getNumero().length() < 8 ) {
-						resultado.setErro("Telefone inválido!");
+						resultado.setErro("Telephone inválido!");
 						break;
 					}
 				
