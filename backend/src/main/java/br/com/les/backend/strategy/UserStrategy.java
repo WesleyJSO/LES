@@ -7,16 +7,16 @@ import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.EntidadeDominio;
 import br.com.les.backend.strategy.usuario.IUsuarioStrategy;
-import br.com.les.backend.utils.Resultado;
+import br.com.les.backend.utils.Result;
 
 @Component( "Usuario" )
-public class UsuarioStrategy implements IStrategy {
+public class UserStrategy implements IStrategy {
 
 	@Autowired
 	List< IUsuarioStrategy > actionStrategies;
 	
 	@Override
-	public Resultado execute( EntidadeDominio entidade, String action, String callerMethod ) {
+	public Result execute( EntidadeDominio entity, String action, String callerMethod ) {
 		
 		IUsuarioStrategy strategyToBeExecuted = null;
 		
@@ -24,7 +24,7 @@ public class UsuarioStrategy implements IStrategy {
 			if ( s.getClass().getSimpleName().contains( action ) )
 				strategyToBeExecuted = s;
 		
-		return strategyToBeExecuted.execute( entidade, callerMethod );
+		return strategyToBeExecuted.execute( entity, callerMethod );
 	}
 
 }

@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import br.com.les.backend.entity.Funcionario;
 
-public interface FuncionarioRepository extends JpaRepository< Funcionario, Long > {
+public interface EmployeeRepository extends JpaRepository< Funcionario, Long > {
 
 }

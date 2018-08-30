@@ -1,7 +1,7 @@
 package br.com.les.backend.strategy;
 
 import br.com.les.backend.entity.EntidadeDominio;
-import br.com.les.backend.utils.Resultado;
+import br.com.les.backend.utils.Result;
 /**
  * 
  * @author José Wesley
@@ -10,5 +10,5 @@ import br.com.les.backend.utils.Resultado;
  */
 public interface IStrategy {
 
-    Resultado execute(EntidadeDominio entidade, String action, String callerMethod );
+    Result execute(EntidadeDominio entidade, String action, String callerMethod );
 }

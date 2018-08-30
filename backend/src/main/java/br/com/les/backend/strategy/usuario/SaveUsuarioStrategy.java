@@ -10,15 +10,15 @@ import br.com.les.backend.entity.Funcionario;
 import br.com.les.backend.entity.Role;
 import br.com.les.backend.entity.Telefone;
 import br.com.les.backend.entity.Usuario;
-import br.com.les.backend.utils.Resultado;
+import br.com.les.backend.utils.Result;
 
 @Component
 public class SaveUsuarioStrategy extends AbstractUsuarioStrategy {
 
 	@Override
-	public Resultado execute(EntidadeDominio entidade, String callerMethod ) {
+	public Result execute(EntidadeDominio entidade, String callerMethod ) {
 		
-		resultado = new Resultado();
+		resultado = new Result();
 		
 		switch ( callerMethod ) {
 		

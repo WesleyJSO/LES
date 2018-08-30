@@ -7,28 +7,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.EntidadeDominio;
-import br.com.les.backend.strategy.funcionario.IFuncionarioStrategy;
+import br.com.les.backend.strategy.funcionario.IEmployeeStrategy;
 import br.com.les.backend.strategy.funcionario.SearchFuncionarioStrategy;
-import br.com.les.backend.utils.Resultado;
+import br.com.les.backend.utils.Result;
 
 @Component( "Funcionario" )
-public class FuncionarioStrategy implements IStrategy {
+public class EmployeeStrategy implements IStrategy {
 
 	@Autowired
-	List< IFuncionarioStrategy > actionStrategies = new ArrayList<>();
+	List< IEmployeeStrategy > actionStrategies = new ArrayList<>();
 	
 	@Override
-	public Resultado execute( EntidadeDominio entidade, String action, String callerMethod ) {
+	public Result execute( EntidadeDominio entity, String action, String callerMethod ) {
 		
-		IFuncionarioStrategy strategyToBeExecuted = null;
+		IEmployeeStrategy strategyToBeExecuted = null;
 		
-		for ( IFuncionarioStrategy s : actionStrategies )
+		for ( IEmployeeStrategy s : actionStrategies )
 			if ( s.getClass().getSimpleName().contains( action ) )
 				strategyToBeExecuted = s;
 		//Resultado resultado = new Resultado();
 		//resultado.setSucesso("");
 		//return resultado;
-		return strategyToBeExecuted.execute( entidade, callerMethod );
+		return strategyToBeExecuted.execute( entity, callerMethod );
 	}
 
 }

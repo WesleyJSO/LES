@@ -3,17 +3,17 @@ package br.com.les.backend.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import br.com.les.backend.facade.IFachada;
-import br.com.les.backend.utils.Resultado;
+import br.com.les.backend.facade.IFacade;
+import br.com.les.backend.utils.Result;
 
 @Component
 public  abstract class AbstractController {
 
     @Autowired
-    IFachada fachada;
+    IFacade fachada;
     
     @Autowired
-    Resultado resultado;
+    Result result;
     
     protected String getMethodName( Object o ) {
 		return o.getClass().getEnclosingMethod().getName();

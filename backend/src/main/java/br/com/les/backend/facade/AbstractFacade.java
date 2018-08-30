@@ -18,7 +18,7 @@ import br.com.les.backend.strategy.IStrategy;
  *  they will be exposed for dinamic search in the methods of IFacade
  */
 @Component
-public  abstract class AbstractFachada implements IFachada {
+public  abstract class AbstractFacade implements IFacade {
 
 	@Autowired
 	protected List< IService > listServices;
@@ -26,6 +26,6 @@ public  abstract class AbstractFachada implements IFachada {
     @Autowired
     protected Map< String, IStrategy > mapStrategies;
 
-    protected abstract void validar(EntidadeDominio entidade, String action, String callerMethod );
+    protected abstract void validar(EntidadeDominio entity, String action, String callerMethod );
 
 }

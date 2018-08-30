@@ -7,15 +7,15 @@ import org.springframework.stereotype.Component;
 import br.com.les.backend.entity.EntidadeDominio;
 import br.com.les.backend.entity.Login;
 import br.com.les.backend.entity.Usuario;
-import br.com.les.backend.utils.Resultado;
+import br.com.les.backend.utils.Result;
 
 @Component
 public class SearchUsuarioStrategy extends AbstractUsuarioStrategy {
 
 	@Override
-	public Resultado execute( EntidadeDominio entidade, String callerMethod ) {
+	public Result execute( EntidadeDominio entidade, String callerMethod ) {
 		
-		resultado = new Resultado();
+		resultado = new Result();
 		
 		Usuario u = ( Usuario ) entidade;
 		

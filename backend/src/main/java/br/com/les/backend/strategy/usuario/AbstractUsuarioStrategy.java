@@ -1,8 +1,8 @@
 package br.com.les.backend.strategy.usuario;
 
-import br.com.les.backend.utils.Resultado;
+import br.com.les.backend.utils.Result;
 
 public abstract class AbstractUsuarioStrategy implements IUsuarioStrategy {
 
-	protected Resultado resultado;
+	protected Result resultado;
 }
