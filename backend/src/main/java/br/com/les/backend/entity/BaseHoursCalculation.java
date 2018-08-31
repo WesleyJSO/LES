@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Entity
-public class  BaseCalculationHours extends DomainEntity {
+public class  BaseHoursCalculation extends DomainEntity {
 
 	private static final long serialVersionUID = 5309951868771462074L;
 

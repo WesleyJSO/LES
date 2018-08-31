@@ -12,7 +12,7 @@
       <v-layout>
       <!-- Row 1 -->
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field v-model="nome"
+          <v-text-field v-model="name"
                         type="text"
                         class="px-0"
                         prepend-icon="face"
@@ -23,7 +23,7 @@
           </v-text-field>
         </v-flex>
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field v-model="ultimoNome"
+          <v-text-field v-model="lastName"
                         type="text"
                         prepend-icon="face"
                         clearable
@@ -46,7 +46,7 @@
       <!-- Row 2 -->
       <v-layout>
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field v-model="salario"
+          <v-text-field v-model="salary"
                         type="number"
                         prepend-icon="monetization_on"
                         clearable
@@ -66,7 +66,7 @@
           </v-text-field>
         </v-flex>
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field v-model="cargaHoraria"
+          <v-text-field v-model="workload"
                         type="number"
                         prepend-icon="timer"
                         clearable
@@ -80,16 +80,16 @@
       <v-layout>
         <v-flex >
 
-          <v-text-field v-model="gestor"
+          <v-text-field v-model="manager"
                         type="text"
                         prepend-icon="supervisor_account"
                         clearable
                         label="Gestor"
                         required>
           </v-text-field>
-          <!-- <v-combobox v-model="gestor"
+          <!-- <v-combobox v-model="manager"
                       prepend-icon="supervisor_account"
-                      :items="items.gestor"
+                      :items="items.manager"
                       label="Supervisor Imediato"
                       multiple
                       chips>
@@ -112,7 +112,7 @@
       <!-- Row 5 -->
       <v-layout xs12 sm9 md6 lg6 xl4>
         <v-flex>
-          <v-text-field v-model="telefone1"
+          <v-text-field v-model="telephone1"
                           type="phone"
                           prepend-icon="phone"
                           clearable
@@ -122,7 +122,7 @@
             </v-text-field>
         </v-flex>
         <v-flex>
-          <v-text-field v-model="telefone2"
+          <v-text-field v-model="telephone2"
                           type="phone"
                           prepend-icon="phone"
                           clearable
@@ -131,7 +131,7 @@
           </v-text-field>
         </v-flex>
         <v-flex>
-          <v-text-field v-model="telefone3"
+          <v-text-field v-model="telephone3"
                           type="phone"
                           prepend-icon="phone"
                           clearable
@@ -143,61 +143,26 @@
       <!-- Row 4 -->
       <v-layout>
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field v-model="nomeLogin"
-                        type="text"
-                        class="px-0"
-                        prepend-icon="face"
-                        clearable
-                        :rules="nameRules"
-                        label="Login"
-                        required>
-          </v-text-field>
-        </v-flex>
-        <v-flex xs12 sm9 md6 lg6 xl4 >
-          <v-menu ref="dataNascimentoHelper"
+          <v-menu ref="entryCompanyDateHelper"
                   :close-on-content-click="false"
-                  v-model="dataNascimentoHelper"
+                  v-model="entryCompanyDateHelper"
                   :nudge-right="40"
-                  :return-value.sync="dataNascimento"
+                  :return-value.sync="entryCompanyDate"
                   lazy
                   transition="scale-transition"
                   offset-y
                   full-width
                   min-width="290px">
             <v-text-field slot="activator"
-                        v-model="dataNascimento"
-                        label="Data de Nascimento"
-                        prepend-icon="event"
-                        readonly>
-            </v-text-field>
-            <v-date-picker v-model="dataNascimento"
-                            :reactive="reactive"
-                            header-color="primary"
-                            @input="$refs.dataNascimentoHelper.save(dataNascimento)">
-            </v-date-picker>
-          </v-menu>
-        </v-flex>
-        <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-menu ref="dataIngressoEmpresaHelper"
-                  :close-on-content-click="false"
-                  v-model="dataIngressoEmpresaHelper"
-                  :nudge-right="40"
-                  :return-value.sync="dataIngressoEmpresa"
-                  lazy
-                  transition="scale-transition"
-                  offset-y
-                  full-width
-                  min-width="290px">
-            <v-text-field slot="activator"
-                          v-model="dataIngressoEmpresa"
+                          v-model="entryCompanyDate"
                           label="Data de Ingresso na Empresa"
                           prepend-icon="event"
                           readonly>
             </v-text-field>
-            <v-date-picker v-model="dataIngressoEmpresa"
+            <v-date-picker v-model="entryCompanyDate"
                             header-color="green"
                             :reactive="reactive"
-                            @input="$refs.dataIngressoEmpresaHelper.save(dataIngressoEmpresa)">
+                            @input="$refs.entryCompanyDateHelper.save(entryCompanyDate)">
             </v-date-picker>
           </v-menu>
         </v-flex>
@@ -205,7 +170,7 @@
       <!-- Rown 6 -->
       <v-layout xs12 sm9 md6 lg6 xl4>
         <v-flex>
-          <v-text-field v-model="senha"
+          <v-text-field v-model="password"
                         color="cyan darken"
                         label="Senha"
                         type="password"
@@ -220,7 +185,7 @@
           </v-text-field>
         </v-flex>
         <v-flex>
-          <v-text-field v-model="senhaValidacao"
+          <v-text-field v-model="passwordValidator"
                         color="cyan darken"
                         label="Senha"
                         type="password"
@@ -269,34 +234,31 @@ export default {
     valid: false,
     menu: false,
     reactive: true,
-    dataIngressoEmpresaHelper: '',
-    dataNascimentoHelper: '',
-    dataIngressoEmpresa: null,
-    dataNascimento: null,
+    entryCompanyDateHelper: '',
+    entryCompanyDate: null,
     messages: [],
     tipoHora: -1,
     haveMessage: false,
     messageColor: '',
-    nome: '',
-    ultimoNome: '',
+    name: '',
+    lastName: '',
     email: '',
-    salario: 0,
+    salary: 0,
     pis: 0,
-    cargaHoraria: 0,
-    gestor: '',
-    nomeLogin: '',
-    senha: '',
-    senhaValidacao: '',
-    telefone1: '',
-    telefone2: '',
-    telefone3: '',
+    workload: 0,
+    manager: '',
+    password: '',
+    passwordValidator: '',
+    telephone1: '',
+    telephone2: '',
+    telephone3: '',
     items: {
-      gestor: ['Bill Gates', 'Torvald Linux', 'Elon Musk']
+      manager: ['Bill Gates', 'Torvald Linux', 'Elon Musk']
     },
     nameRules: [
       v => !!v || 'Informe o Nome do Funcionário!',
-      v => v.length <= 20 || 'Informe um nome váilido!',
-      v => /[^0-9]+[a-zA-Z]/.test(v) || 'Informe um nome váilido!'
+      v => v.length <= 20 || 'Informe um name váilido!',
+      v => /[^0-9]+[a-zA-Z]/.test(v) || 'Informe um name váilido!'
     ],
     emailRules: [
       v => !!v || 'Informe o E-mail!',
@@ -327,7 +289,7 @@ export default {
   },
   computed: {
     progress () {
-      return Math.min(100, this.senha.length * 10)
+      return Math.min(100, this.password.length * 10)
     },
     color () {
       return ['error', 'warning', 'success'][Math.floor(this.progress / 40)]
@@ -353,19 +315,19 @@ export default {
     },
     prepareUserObject () {
       let listaTelefone = []
-      listaTelefone.push(new Telefone(null, this.telefone1), new Telefone(null, this.telefone2), new Telefone(null, this.telefone3))
+      listaTelefone.push(new Telefone(null, this.telephone1), new Telefone(null, this.telephone2), new Telefone(null, this.telephone3))
       let funcionario = new Funcionario(
         this.id,
-        this.nome,
+        this.name,
         this.email,
-        this.ultimoNome,
-        this.dataNascimento,
-        new Login(this.senha, this.senhaValidacao, this.nomeLogin, this.ativo),
+        this.lastName,
+        this.,
+        new Login(this.password, this.passwordValidator, this., this.ativo),
         listaTelefone,
         this.pis,
-        this.dataIngressoEmpresa,
-        new Funcionario(null, this.gestor),
-        [new BaseCalculoHoras(null, this.tipoHora, parseFloat(this.cargaHoraria), null, parseFloat(this.salario))]
+        this.entryCompanyDate,
+        new Funcionario(null, this.manager),
+        [new BaseCalculoHoras(null, this.tipoHora, parseFloat(this.workload), null, parseFloat(this.salary))]
       )
       return funcionario
     },
@@ -401,39 +363,39 @@ export default {
       }
     },
     parseUserObject (userObject) {
-      this.nome = userObject.nome
-      this.ultimoNome = userObject.ultimoNome
+      this.name = userObject.name
+      this.lastName = userObject.lastName
       this.email = userObject.email
-      this.salario = userObject.salario
+      this.salary = userObject.salary
       this.pis = userObject.pis
-      this.cargaHoraria = userObject.cargaHoraria
-      this.dataNascimento = userObject.dataNascimento
-      this.dataIngressoEmpresa = userObject.dataIngressoEmpresa
-      this.gestor = userObject.gestor
-      this.telefone1 = userObject.listaTelefone[0]
-      this.telefone2 = userObject.listaTelefone[1]
-      this.telefone3 = userObject.listaTelefone[2]
-      this.password = userObject.login.senha
-      this.password2 = userObject.login.senhaValidacao
+      this.workload = userObject.workload
+      this. = userObject.
+      this.entryCompanyDate = userObject.entryCompanyDate
+      this.manager = userObject.manager
+      this.telephone1 = userObject.listaTelefone[0]
+      this.telephone2 = userObject.listaTelefone[1]
+      this.telephone3 = userObject.listaTelefone[2]
+      this.password = userObject.login.password
+      this.password2 = userObject.login.passwordValidator
       this.ativo = userObject.login.ativo
-      this.nomeLogin = userObject.login.nomeLogin
+      this. = userObject.login.
     },
     clearForm () {
       this.valid = false
       this.menu = false
       this.reactive = true
-      this.dataIngressoEmpresa = false
-      this.dataNascimento = false
+      this.entryCompanyDate = false
+      this. = false
       this.funcionario = {
         name: '',
-        ultimoNome: '',
+        lastName: '',
         email: '',
-        salario: '',
+        salary: '',
         pis: '',
-        cargaHoraria: '',
-        dataNascimento: '',
-        dataIngressoEmpresa: '',
-        gestor: '',
+        workload: '',
+        : '',
+        entryCompanyDate: '',
+        manager: '',
         phone1: '',
         phone2: '',
         phone3: '',

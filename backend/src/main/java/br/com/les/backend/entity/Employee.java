@@ -43,7 +43,7 @@ public class Employee extends DomainEntity {
 	private List< Appointments > appointmentList;
 	
 	@OneToOne( mappedBy="employee", fetch=FetchType.LAZY )
-	private BaseCalculationHours baseCalculationHours;
+	private BaseHoursCalculation baseCalculationHours;
 
 	@OneToMany( cascade=CascadeType.ALL )
 	@LazyCollection(LazyCollectionOption.FALSE)
@@ -103,11 +103,11 @@ public class Employee extends DomainEntity {
 		this.appointmentList = appointmentList;
 	}
 
-	public BaseCalculationHours getBaseCalculationHours() {
+	public BaseHoursCalculation getBaseCalculationHours() {
 		return baseCalculationHours;
 	}
 
-	public void setBaseCalculationHours(BaseCalculationHours baseCalculationHours) {
+	public void setBaseCalculationHours(BaseHoursCalculation baseCalculationHours) {
 		this.baseCalculationHours = baseCalculationHours;
 	}
 
