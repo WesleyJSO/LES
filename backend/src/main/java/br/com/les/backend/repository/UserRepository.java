@@ -11,6 +11,6 @@ import br.com.les.backend.entity.User;
  * Repository that extends from JpaRepository, It's store query methods,
  * and in more complex cases, queries in this class will use methods annotated with @Query.
  */
-public interface UsuarioRepository extends JpaRepository< User, Long > { 
+public interface UserRepository extends JpaRepository< Usuario, Long > { 
 	
 }

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import br.com.les.backend.dao.UsuarioDAO;
 import br.com.les.backend.entity.DomainEntity;
 import br.com.les.backend.entity.User;
-import br.com.les.backend.repository.UsuarioRepository;
+import br.com.les.backend.repository.UserRepository;
 
 /**
  * 
@@ -22,37 +22,37 @@ import br.com.les.backend.repository.UsuarioRepository;
  */
 @Service
 @Transactional
-public class UsuarioService implements IService {
+public class UserService implements IService {
 
 	@Autowired
-	private UsuarioRepository usuarioRepository;
+	private UserRepository userRepository;
 	
 	@Autowired
 	private UsuarioDAO usuarioDAO;
 	
 	public long count() {
-		return usuarioRepository.count();
+		return userRepository.count();
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List< User > findAll() {
-		return usuarioRepository.findAll();
+		return userRepository.findAll();
 	}
 	
-	public void deleteById( long idUsuario ) {
+	public void deleteById( long userId ) {
 		
-		usuarioRepository.deleteById( idUsuario );
+		userRepository.deleteById( userId );
 	}
 
 	@Override
-	public DomainEntity save( DomainEntity entidade ) {
+	public EntidadeDominio save( EntidadeDominio entidade ) {
 
-		return usuarioRepository.save( ( User ) entidade );
+		return usuarioRepository.save( ( Usuario ) entidade );
 	}
 
 	@Override
-	public List< DomainEntity > findByParameters( DomainEntity entidade ) {
+	public List< EntidadeDominio > findByParameters( EntidadeDominio entidade ) {
 
-		return usuarioDAO.findByLoginAndSenha( ( User ) entidade );
+		return usuarioDAO.findByLoginAndSenha( ( Usuario ) entidade );
 	}
 }

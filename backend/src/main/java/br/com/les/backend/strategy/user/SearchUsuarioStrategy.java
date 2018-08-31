@@ -1,19 +1,21 @@
-package br.com.les.backend.strategy.funcionario;
+package br.com.les.backend.strategy.user;
+
+import java.util.Date;
 
 import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.DomainEntity;
 import br.com.les.backend.entity.Login;
 import br.com.les.backend.entity.User;
-import br.com.les.backend.utils.Resultado;
+import br.com.les.backend.utils.Result;
 
 @Component
-public class SearchFuncionarioStrategy extends AbstractFuncionarioStrategy {
+public class SearchUsuarioStrategy extends AbstractUserStrategy {
 
 	@Override
-	public Resultado execute( DomainEntity entidade, String callerMethod ) {
+	public Resultado execute( EntidadeDominio entidade, String callerMethod ) {
 		
-		resultado = new Resultado();
+		result = new Result();
 		
 		User u = ( User ) entidade;
 		
@@ -30,17 +32,17 @@ public class SearchFuncionarioStrategy extends AbstractFuncionarioStrategy {
 				case "findByUsuario": // search for list of users
 					
 					if ( l != null && l.getNomeLogin() == null && l.getDataCriacao() != null && u.getEmail() == null && u.getNome() == null )
-						resultado.setErro( "Ao menos um dos campos deve ser preenchido!");
+						result.setErro( "Ao menos um dos campos deve ser preenchido!");
 					break;
 					
 				case "findByLogin": // search for logged user
 					
 					if ( l != null ) {
 						if ( l.getNomeLogin() == null || l.getNomeLogin().equals("") )
-							resultado.setErro( "Login deve ser preenchido!" );
+							result.setErro( "Login deve ser preenchido!" );
 							
 						if ( l.getSenha() == null || l.getSenha().equals("") )
-							resultado.setErro( "Senha deve ser preenchida!" );
+							result.setErro( "Senha deve ser preenchida!" );
 					
 					}
 					break;
@@ -49,6 +51,6 @@ public class SearchFuncionarioStrategy extends AbstractFuncionarioStrategy {
 		        break;
 			}
 		}
-		return resultado;
+		return result;
 	}
 }
