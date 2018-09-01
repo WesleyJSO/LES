@@ -39,7 +39,7 @@ public class EmployeeController extends AbstractController {
 	@PutMapping( value="/funcionario" )
 	public Result update( @RequestBody Employee employee ) {
 		
-		return fachada.update( employee, getMethodName( new Object() {} ) );
+		return facade.update( employee, getMethodName( new Object() {} ) );
 	}
 	
 	

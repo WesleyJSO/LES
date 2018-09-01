@@ -6,9 +6,9 @@ import br.com.les.backend.entity.DomainEntity;
 
 public interface IService {
 
-	EntidadeDominio save( EntidadeDominio entidade );
+	DomainEntity save( DomainEntity entity );
 	
 	< T > List< T > findAll();
 
-	List< EntidadeDominio > findByParameters(EntidadeDominio entidade);
+	List< DomainEntity > findByParameters( DomainEntity entity );
 }

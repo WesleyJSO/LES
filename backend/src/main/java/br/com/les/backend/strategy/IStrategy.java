@@ -10,5 +10,5 @@ import br.com.les.backend.utils.Result;
  */
 public interface IStrategy {
 
-    Result execute(EntidadeDominio entidade, String action, String callerMethod );
+    Result execute(DomainEntity entity, String action, String callerMethod );
 }

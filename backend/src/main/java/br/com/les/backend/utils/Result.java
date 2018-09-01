@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import br.com.les.backend.entity.EntidadeDominio;
+import br.com.les.backend.entity.DomainEntity;
 
 @Component
 public class Result {
@@ -13,7 +13,7 @@ public class Result {
     private boolean success;
     private List< String > message = new ArrayList<>();
     
-    private List< EntidadeDominio > resultList = new ArrayList<>();
+    private List< DomainEntity > resultList = new ArrayList<>();
     
     public Result() {
     	success = true;
@@ -47,11 +47,11 @@ public class Result {
        return success;
     }
 
-    public void setListaResultado( List<EntidadeDominio> resultList ) {
+    public void setListaResultado( List<DomainEntity> resultList ) {
         this.resultList = resultList;
     }
 
-    public List<EntidadeDominio> getListaResultado() {
+    public List<DomainEntity> getListaResultado() {
         return this.resultList;
     }
     

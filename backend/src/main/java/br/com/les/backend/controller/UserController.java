@@ -55,4 +55,3 @@ public class UserController extends AbstractController {
 		return facade.delete( new User( userId ), getMethodName( new Object() {} ) );
 	}
 }
-''

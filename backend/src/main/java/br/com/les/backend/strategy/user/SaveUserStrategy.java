@@ -4,9 +4,9 @@ import java.util.Date;
 
 import org.springframework.stereotype.Component;
 
-import br.com.les.backend.entity.EntidadeDominio;
-import br.com.les.backend.entity.Funcionario;
-import br.com.les.backend.entity.Telefone;
+import br.com.les.backend.entity.DomainEntity;
+import br.com.les.backend.entity.Employee;
+import br.com.les.backend.entity.Telephone;
 import br.com.les.backend.utils.Result;
 import br.com.les.backend.utils.Util;
 
@@ -14,7 +14,7 @@ import br.com.les.backend.utils.Util;
 public class SaveUserStrategy extends AbstractUserStrategy {
 
 	@Override
-	public Result execute(EntidadeDominio entity, String callerMethod ) {
+	public Result execute(DomainEntity entity, String callerMethod ) {
 		
 		result = new Result();
 		
@@ -22,12 +22,12 @@ public class SaveUserStrategy extends AbstractUserStrategy {
 		
 		case "save":
 			
-			Funcionario employee = ( Funcionario ) entity;
+			Employee employee = ( Employee ) entity;
 			
-			if( employee.getNome() == null || employee.getNome().isEmpty() )
+			if( employee.getName() == null || employee.getName().isEmpty() )
 				result.setErro( Util.ERROR_NAME );
 			
-			if( employee.getUltimoNome() == null || employee.getUltimoNome().isEmpty() )
+			if( employee.getLastName() == null || employee.getLastName().isEmpty() )
 				result.setErro( Util.ERROR_LAST_NAME );
 			
 			if( employee.getEmail() == null || employee.getEmail().isEmpty() )
@@ -36,7 +36,7 @@ public class SaveUserStrategy extends AbstractUserStrategy {
 			/*if( funcionario.getListaRole().isEmpty() )
 				resultado.setErro( "Ao menos uma role deve ser selecionada!" ); 
 			*/
-			if( employee.getListaBaseCalculoHoras().get(0).getSalario() == 0 )
+			if( employee.getBaseCalculationHours() == null )
 				result.setErro( Util.ERROR_SALARY );
 			
 			if( employee.getPis() == null || employee.getPis().isEmpty() )
@@ -46,46 +46,43 @@ public class SaveUserStrategy extends AbstractUserStrategy {
 					result.setErro( Util.INVALID_PIS );
 				
 			
-			if( employee.getListaBaseCalculoHoras().get(0).getCargaHoraria() == 0 )
+			if( employee.getBaseCalculationHours().getWorkload() == 0 )
 				result.setErro( Util.ERROR_WORKLOAD );
-			else
-				if( employee.getListaBaseCalculoHoras().get(0).getCargaHoraria() >= 10)
-					result.setErro( Util.INVALID_WORKLOAD );
 			
-			if( employee.getGestor().getNome().equals("") )
+			if( employee.getManager().getName().equals("") )
 				result.setErro( Util.ERROR_MANAGER_NAME );
 			
-			if( employee.getListaTelefone().isEmpty() )
+			if( employee.getThelephoneList().isEmpty() )
 				result.setErro( Util.ERROR_PHONE );
 			else {
 				
-				for( Telefone telefone : employee.getListaTelefone() )
-					if( telefone.getNumero().length() < 9 ) {
+				for( Telephone telephone: employee.getThelephoneList() )
+					if( telephone.getNumber().length() < 9 ) {
 						result.setErro( Util.INVALID_PHONE );
 						break;
 					}
 				
 			}
 			
-			if( employee.getLogin() == null || employee.getLogin().getNomeLogin().isEmpty() )
+			if( employee.getLogin() == null )
 				result.setErro( Util.ERROR_LOGIN );
 			
-			if( employee.getDataNascimento() == null || employee.getDataNascimento().toString().isEmpty() )
+			if( employee.getBirthDate() == null || employee.getBirthDate().toString().isEmpty() )
 				result.setErro( Util.ERROR_BIRTHDATE );
 			else {
 				Date dataAtual = new Date();
 				
-				Long milliseconds = dataAtual.getTime() - employee.getDataNascimento().getTime();
+				Long milliseconds = dataAtual.getTime() - employee.getBirthDate().getTime();
 				
 				if( milliseconds < 441504000000l ) {
 					result.setErro( Util.INVALID_BIRTHDATE );
 				}
 			}
 			
-			if( employee.getDataIngressoEmpresa() == null || employee.getDataIngressoEmpresa().toString().isEmpty() )
+			if( employee.getEntryDateInCompany() == null || employee.getEntryDateInCompany().toString().isEmpty() )
 				result.setErro( Util.ERROR_JOINING_DATE );
 			
-			if( employee.getLogin().getSenha() == null || employee.getLogin().getSenha().isEmpty() )
+			if( employee.getLogin().getPassword() == null || employee.getLogin().getPassword().isEmpty() )
 				result.setErro( Util.ERROR_PASSWORD );
 			
 			if( result.isSucesso() )

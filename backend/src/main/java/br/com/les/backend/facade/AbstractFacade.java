@@ -26,6 +26,6 @@ public  abstract class AbstractFacade implements IFacade {
     @Autowired
     protected Map< String, IStrategy > mapStrategies;
 
-    protected abstract void validar(DomainEntity entidade, String action, String callerMethod );
+    protected abstract void validate(DomainEntity entity, String action, String callerMethod );
 
 }

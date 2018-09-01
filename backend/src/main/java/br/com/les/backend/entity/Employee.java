@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Entity
-public class Employee extends DomainEntity {
+public class Employee extends User {
 
 	private static final long serialVersionUID = 7031669546742429620L;
 

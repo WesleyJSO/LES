@@ -20,7 +20,7 @@ import br.com.les.backend.entity.User;
  */
 @Component
 @SuppressWarnings("unchecked")
-public class UsuarioDAO extends AbstractDAO {
+public class UserDAO extends AbstractDAO {
 
 	private StringBuilder hql;
 	private Query query;

@@ -14,7 +14,7 @@ import br.com.les.backend.entity.User;
 
 @Component
 @SuppressWarnings("unchecked")
-public class FuncionarioDAO extends AbstractDAO {
+public class EmployeeDAO extends AbstractDAO {
 
 	private StringBuilder hql;
 	private Query query;

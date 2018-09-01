@@ -11,11 +11,11 @@ import br.com.les.backend.utils.Result;
 public class SearchEmployeeStrategy extends AbstractEmployeeStrategy {
 
 	@Override
-	public Resultado execute( DomainEntity entidade, String callerMethod ) {
+	public Result execute( DomainEntity entity, String callerMethod ) {
 		
-		resultado = new Resultado();
+		result = new Result();
 		
-		User u = ( User ) entidade;
+		User u = ( User ) entity;
 		
 		if ( u != null ) {
 
@@ -29,24 +29,20 @@ public class SearchEmployeeStrategy extends AbstractEmployeeStrategy {
 				
 				case "findByUsuario": // search for list of users
 					
-					if ( l != null && l.getNomeLogin() == null && l.getDataCriacao() != null && u.getEmail() == null && u.getNome() == null )
+					if ( l != null && l.getCreationDate() != null && u.getEmail() == null && u.getName() == null && u.getEmail() == null )
 						result.setErro( "Ao menos um dos campos deve ser preenchido!");
 					break;
 					
 				case "findByLogin": // search for logged user
 					
-					if ( l != null ) {
-						if ( l.getNomeLogin() == null || l.getNomeLogin().equals("") )
-							result.setErro( "Login deve ser preenchido!" );
 							
-						if ( l.getSenha() == null || l.getSenha().equals("") )
-							result.setErro( "Senha deve ser preenchida!" );
+					if ( l.getPassword() == null || l.getPassword().equals("") )
+						result.setErro( "Senha deve ser preenchida!" );
 					
-					}
 					break;
 					
 				default:
-		        break;
+					break;
 			}
 		}
 		return result;

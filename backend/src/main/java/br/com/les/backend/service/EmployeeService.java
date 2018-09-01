@@ -7,7 +7,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.les.backend.dao.FuncionarioDAO;
+import br.com.les.backend.dao.EmployeeDAO;
 import br.com.les.backend.entity.DomainEntity;
 import br.com.les.backend.entity.Employee;
 import br.com.les.backend.repository.EmployeeRepository;
@@ -20,7 +20,7 @@ public class EmployeeService implements IService {
 	private EmployeeRepository employeeRepository;
 	
 	@Autowired
-	private FuncionarioDAO employeeDAO;
+	private EmployeeDAO employeeDAO;
 	
 	public long count() {
 		return employeeRepository.count();
@@ -31,21 +31,21 @@ public class EmployeeService implements IService {
 		return employeeRepository.findAll();
 	}
 	
-	public void deleteById( long idUsuario ) {
+	public void deleteById( long employeeId ) {
 		
-		employeeRepository.deleteById( idUsuario );
+		employeeRepository.deleteById( employeeId );
 	}
 
 	@Override
-	public EntidadeDominio save( EntidadeDominio entidade ) {
+	public DomainEntity save( DomainEntity entity ) {
 
-		return funcionarioRepository.save( ( Funcionario ) entidade );
+		return employeeRepository.save( ( Employee ) entity );
 	}
 
 	@Override
-	public List< EntidadeDominio > findByParameters( EntidadeDominio entidade ) {
+	public List< DomainEntity > findByParameters( DomainEntity entity ) {
 
-		return funcionarioDAO.findByLoginAndSenha( ( Funcionario ) entidade );
+		return employeeDAO.findByLoginAndSenha( ( Employee ) entity );
 	}
 
 }
