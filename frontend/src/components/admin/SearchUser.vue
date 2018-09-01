@@ -38,7 +38,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import moment from 'moment'
 
 export default {
@@ -68,7 +67,7 @@ export default {
         this.msgCor = 'warning'
         this.msgErro = ['Para realizar a consulta ao menos um dos campos deve ser preenchido!']
       } else {
-        axios.post('http://localhost:8080/usuarioFiltro', this.usuario).then(response => {
+        this.$_axios.post(`${this.$_url}usuarioFiltro`, this.usuario).then(response => {
           alert(JSON.stringify(response))
         },
         reposnse => {

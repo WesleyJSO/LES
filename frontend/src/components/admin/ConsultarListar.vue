@@ -74,9 +74,9 @@
 // import Consultar from '@/components/usuario/Consultar'
 // import Listar from '@/components/usuario/Listar'
 import RegisterUser from '@/components/admin/RegisterUser'
-import Funcionario from '@/objects/Funcionario'
-import BaseCalculoHoras from '@/objects/BaseCalculoHoras'
-import Telefone from '@/objects/Telefone'
+import Employee from '@/objects/Employee'
+import BaseHourCalculation from '@/objects/BaseHourCalculation'
+import Telephone from '@/objects/Telephone'
 import Login from '@/objects/Login'
 
 export default {
@@ -92,7 +92,7 @@ export default {
       { text: 'Salário', value: 'salario' },
       { text: 'Tipo de Hora', value: 'tipoHora' },
       { text: 'Gestor', value: 'gestor' },
-      { text: 'Telefone', value: 'telefone1' },
+      { text: 'Telephone', value: 'telefone1' },
       { text: 'E-mail', align: 'center', value: 'email' },
       { text: 'Actions', value: 'name', sortable: false }
     ],
@@ -100,8 +100,8 @@ export default {
       { text: 'PIS/PASESP', value: 'pis', align: 'center', sortable: false },
       { text: 'Data de Nascimento', value: 'birthdate', align: 'center', sortable: false },
       { text: 'Data de Ingresso na Empresa', value: 'dataIngressoEmpresa', align: 'center', sortable: false },
-      { text: 'Telefone 2', value: 'telefone2', align: 'center', sortable: false },
-      { text: 'Telefone 3', value: 'telefone3', align: 'center', sortable: false }
+      { text: 'Telephone 2', value: 'telefone2', align: 'center', sortable: false },
+      { text: 'Telephone 3', value: 'telefone3', align: 'center', sortable: false }
     ],
     messages: [],
     haveMessage: false,
@@ -169,8 +169,8 @@ export default {
     },
     prepareUserObject (userObject) {
       let listaTelefone = []
-      listaTelefone.push(new Telefone(userObject.telefone1), new Telefone(userObject.telefone2), new Telefone(userObject.telefone3))
-      let funcionario = new Funcionario(
+      listaTelefone.push(new Telephone(userObject.telefone1), new Telephone(userObject.telefone2), new Telephone(userObject.telefone3))
+      let funcionario = new Employee(
         userObject.id,
         userObject.nome,
         userObject.email,
@@ -180,8 +180,8 @@ export default {
         listaTelefone,
         userObject.pis,
         userObject.dataIngressoEmpresa,
-        new Funcionario(0, userObject.gestor),
-        new BaseCalculoHoras(0, userObject.tipoHora, userObject.cargaHoraria, null, userObject.salario)
+        new Employee(0, userObject.gestor),
+        new BaseHourCalculation(0, userObject.tipoHora, userObject.cargaHoraria, null, userObject.salario)
       )
       return funcionario
     },

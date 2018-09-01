@@ -26,7 +26,7 @@ public class EmployeeStrategy implements IStrategy {
 			if ( s.getClass().getSimpleName().contains( action ) )
 				strategyToBeExecuted = s;
 		//Resultado resultado = new Resultado();
-		//resultado.setSucesso("");
+		//resultado.setSuccess("");
 		//return resultado;
 		return strategyToBeExecuted.execute( entity, callerMethod );
 	}

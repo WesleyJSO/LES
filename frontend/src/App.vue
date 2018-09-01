@@ -54,7 +54,7 @@
 
 <script>
 import AdminRole from '@/components/roles/AdminRole'
-import UsuarioRole from '@/components/roles/UsuarioRole'
+import UserRole from '@/components/roles/UserRole'
 
 export default {
   data () {
@@ -75,7 +75,7 @@ export default {
   },
   components: {
     AdminRole,
-    UsuarioRole
+    UserRole
   },
   methods: {
     setUsuarioLogado (usuario) {

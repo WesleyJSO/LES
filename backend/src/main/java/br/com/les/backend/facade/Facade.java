@@ -33,8 +33,8 @@ public class Facade extends AbstractFacade {
     public Result save( DomainEntity entity, String callerMethod ) {
 
     	validate( entity, Actions.SAVE.getValue(), callerMethod  );
-    	if ( result.isSucesso() )
-    		result.getListaResultado().add( service.save( entity ) );
+    	if ( result.isSuccess() )
+    		result.getResultList().add( service.save( entity ) );
     	return result;
     }
 
@@ -52,7 +52,7 @@ public class Facade extends AbstractFacade {
     public Result findAll( DomainEntity entity, String callerMethod ) {
     		
     	validate( entity, Actions.SEARCH.getValue(), callerMethod );
-    	result.setListaResultado( service.findAll() );
+    	result.setResultList( service.findAll() );
     	return result;    	
     }
 
@@ -63,8 +63,8 @@ public class Facade extends AbstractFacade {
  
     	validate( entity, Actions.SEARCH.getValue(), callerMethod  );
     	
-    	if ( result.getMensagem() == null ) {
-    		result.getListaResultado().addAll( service.findByParameters( entity ) );
+    	if ( result.getMessage() == null ) {
+    		result.getResultList().addAll( service.findByParameters( entity ) );
     		return result;
     	} else 
     		return result;

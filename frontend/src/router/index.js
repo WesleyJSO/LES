@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/components/Login'
 import ConsultarListar from '@/components/admin/ConsultarListar'
-import AlterarUsuario from '@/components/admin/Alterar'
+import UpdateUser from '@/components/admin/UpdateUser'
 import RegisterUser from '@/components/admin/RegisterUser'
 
 Vue.use(Router)
@@ -26,8 +26,8 @@ export default new Router({
     },
     {
       path: '/AlterarUsuario',
-      name: 'AlterarUsuario',
-      component: AlterarUsuario
+      name: 'UpdateUser',
+      component: UpdateUser
     },
     {
       path: '/CadastroUsuario',

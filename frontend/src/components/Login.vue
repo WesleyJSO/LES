@@ -43,7 +43,7 @@
 export default {
   data: () => ({
     login: [],
-    usuario: [],
+    user: [],
     valido: false,
     nome: '',
     senha: '',
@@ -67,31 +67,31 @@ export default {
           this.msgErro = ['Senha deve conter no mínimo 3 caracteres!']
         }
       } else {
-        let usuario = {
+        let user = {
+          email: this.nome,
           login: {
-            nomeLogin: this.nome,
-            senha: this.senha
+            password: this.senha
           }
         }
-        this.$_axios.post(`${this.$_url}usuarioLogin`, usuario).then((response) => {
-          let resultado = response.data
-          if (resultado.listaResultado.length !== 0) {
-            this.usuario = response.data
+        this.$_axios.post(`${this.$_url}UsuarioLogin`, user).then((response) => {
+          let result = response.data
+          if (result.resultList.length !== 0) {
+            this.user = response.data
             this.isErro = true
             this.msgCor = 'info'
-            this.msgErro = [`Bem vindo ${this.usuario.login.nomeLgin}.`]
-            this.$emit('login', this.usuario.login)
-          } else if (resultado.mensagem) {
+            this.msgErro = [`Bem vindo ${this.user.login.nomeLgin}.`]
+            this.$emit('login', this.user.login)
+          } else if (result.mensagem) {
             this.isErro = true
             this.msgCor = 'warning'
-            this.msgErro = [...resultado.mensagem]
+            this.msgErro = [...result.mensagem]
           } else {
             /* this.isErro = true
             this.msgCor = 'warning'
-            this.msgErro = [`Usuário ${usuario.login.nomeLogin} não encontrado!`] */
+            this.msgErro = [`Usuário ${user.login.nomeLogin} não encontrado!`] */
 
             /* USER MOCK */
-            this.usuario = {
+            this.user = {
               login: {
                 nomeLogin: 'wesley',
                 senha: '123',
@@ -102,7 +102,7 @@ export default {
                 {nome: 'ADMIN'}
               ]
             }
-            this.$emit('emittedUsuario', this.usuario)
+            this.$emit('emittedUsuario', this.user)
           }
         },
         response => {

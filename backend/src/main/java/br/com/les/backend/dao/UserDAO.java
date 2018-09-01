@@ -31,7 +31,7 @@ public class UserDAO extends AbstractDAO {
 		hql = new StringBuilder();
 		
 		hql.append( "from User u "
-				+ "where u.login.email = :email "
+				+ "where u.email = :email "
 				+ "and u.login.password = :password" );
 		
 		query = getEntityManager().createQuery( hql.toString() );

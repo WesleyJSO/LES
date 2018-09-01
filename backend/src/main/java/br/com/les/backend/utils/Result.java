@@ -19,7 +19,7 @@ public class Result {
     	success = true;
     }
 
-    public void setSucesso( String message ) {
+    public void setSuccess( String message ) {
     	
         if ( message != null && !message.equals("") ) {
         	
@@ -31,7 +31,7 @@ public class Result {
         }
     }
 
-    public void setErro( String message ) {
+    public void setError( String message ) {
     	
         if ( message != null && !message.equals("") ) {
         	
@@ -43,19 +43,19 @@ public class Result {
         }
     }
 
-    public boolean isSucesso() {
+    public boolean isSuccess() {
        return success;
     }
 
-    public void setListaResultado( List<DomainEntity> resultList ) {
+    public void setResultList( List<DomainEntity> resultList ) {
         this.resultList = resultList;
     }
 
-    public List<DomainEntity> getListaResultado() {
+    public List<DomainEntity> getResultList() {
         return this.resultList;
     }
     
-    public List< String > getMensagem() {
+    public List< String > getMessage() {
     	
     	if ( message.size() > 0 ) {
 	    	return message;

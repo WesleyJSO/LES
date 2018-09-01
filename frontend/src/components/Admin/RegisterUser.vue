@@ -117,7 +117,7 @@
                           prepend-icon="phone"
                           clearable
                           :rules="phoneRules"
-                          label="Telefone"
+                          label="Telephone"
                           required>
             </v-text-field>
         </v-flex>
@@ -127,7 +127,7 @@
                           prepend-icon="phone"
                           clearable
                           :rules="phoneRules"
-                          label="Telefone">
+                          label="Telephone">
           </v-text-field>
         </v-flex>
         <v-flex>
@@ -136,7 +136,7 @@
                           prepend-icon="phone"
                           clearable
                           :rules="phoneRules"
-                          label="Telefone">
+                          label="Telephone">
             </v-text-field>
         </v-flex>
       </v-layout>
@@ -210,9 +210,9 @@
 </template>
 
 <script>
-import Funcionario from '@/objects/Funcionario'
-import BaseCalculoHoras from '@/objects/BaseCalculoHoras'
-import Telefone from '@/objects/Telefone'
+import Employee from '@/objects/Employee'
+import BaseHourCalculation from '@/objects/BaseHourCalculation'
+import Telephone from '@/objects/Telephone'
 import Login from '@/objects/Login'
 
 export default {
@@ -276,9 +276,9 @@ export default {
       v => v.length <= 1 || 'Informe uma Carga Horária válida!'
     ],
     phoneRules: [
-      v => !!v || 'Informe pelo menos um Telefone!',
-      v => v.length <= 9 || 'Informe um número de Telefone válido!',
-      v => v.length >= 8 || 'Informe um número de Telefone válido!'
+      v => !!v || 'Informe pelo menos um Telephone!',
+      v => v.length <= 9 || 'Informe um número de Telephone válido!',
+      v => v.length >= 8 || 'Informe um número de Telephone válido!'
     ],
     passwordRules: [
       v => !!v || 'Informe uma Senha!'
@@ -315,19 +315,18 @@ export default {
     },
     prepareUserObject () {
       let listaTelefone = []
-      listaTelefone.push(new Telefone(null, this.telephone1), new Telefone(null, this.telephone2), new Telefone(null, this.telephone3))
-      let funcionario = new Funcionario(
+      listaTelefone.push(new Telephone(null, this.telephone1), new Telephone(null, this.telephone2), new Telephone(null, this.telephone3))
+      let funcionario = new Employee(
         this.id,
         this.name,
         this.email,
         this.lastName,
-        this.,
-        new Login(this.password, this.passwordValidator, this., this.ativo),
+        new Login(this.password, this.passwordValidator, this.ativo),
         listaTelefone,
         this.pis,
         this.entryCompanyDate,
-        new Funcionario(null, this.manager),
-        [new BaseCalculoHoras(null, this.tipoHora, parseFloat(this.workload), null, parseFloat(this.salary))]
+        new Employee(null, this.manager),
+        [new BaseHourCalculation(null, this.tipoHora, parseFloat(this.workload), null, parseFloat(this.salary))]
       )
       return funcionario
     },
@@ -369,7 +368,6 @@ export default {
       this.salary = userObject.salary
       this.pis = userObject.pis
       this.workload = userObject.workload
-      this. = userObject.
       this.entryCompanyDate = userObject.entryCompanyDate
       this.manager = userObject.manager
       this.telephone1 = userObject.listaTelefone[0]
@@ -378,14 +376,12 @@ export default {
       this.password = userObject.login.password
       this.password2 = userObject.login.passwordValidator
       this.ativo = userObject.login.ativo
-      this. = userObject.login.
     },
     clearForm () {
       this.valid = false
       this.menu = false
       this.reactive = true
       this.entryCompanyDate = false
-      this. = false
       this.funcionario = {
         name: '',
         lastName: '',
@@ -393,7 +389,6 @@ export default {
         salary: '',
         pis: '',
         workload: '',
-        : '',
         entryCompanyDate: '',
         manager: '',
         phone1: '',
