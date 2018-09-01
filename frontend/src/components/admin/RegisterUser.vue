@@ -12,32 +12,32 @@
       <v-layout>
       <!-- Row 1 -->
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field v-model="nome"
+          <v-text-field v-model="user.name"
                         type="text"
                         class="px-0"
                         prepend-icon="face"
                         clearable
-                        :rules="nameRules"
+                        :rules="nameRules()"
                         label="Nome"
                         required>
           </v-text-field>
         </v-flex>
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field v-model="ultimoNome"
+          <v-text-field v-model="user.lastName"
                         type="text"
                         prepend-icon="face"
                         clearable
-                        :rules="nameRules"
+                        :rules="lastNameRules()"
                         label="Sobrenome"
                         required>
           </v-text-field>
         </v-flex>
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field v-model="email"
+          <v-text-field v-model="user.email"
                         type="email"
                         prepend-icon="email"
                         clearable
-                        :rules="emailRules"
+                        :rules="emailRules()"
                         label="E-mail"
                         required>
           </v-text-field>
@@ -46,31 +46,31 @@
       <!-- Row 2 -->
       <v-layout>
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field v-model="salario"
+          <v-text-field v-model="user.salary"
                         type="number"
                         prepend-icon="monetization_on"
                         clearable
-                        :rules="salaryRules"
+                        :rules="salaryRules()"
                         label="Salário"
                         required>
           </v-text-field>
         </v-flex>
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field v-model="pis"
+          <v-text-field v-model="user.pis"
                         type="number"
                         prepend-icon="credit_card"
                         clearable
-                        :rules="pisRoles"
+                        :rules="pisRules()"
                         label="PIS/PASESP"
                         required>
           </v-text-field>
         </v-flex>
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field v-model="cargaHoraria"
+          <v-text-field v-model="user.workload"
                         type="number"
                         prepend-icon="timer"
                         clearable
-                        :rules="workloadRules"
+                        :rules="workloadRules()"
                         label="Carga Horária"
                         required>
           </v-text-field>
@@ -80,7 +80,7 @@
       <v-layout>
         <v-flex >
 
-          <v-text-field v-model="gestor"
+          <v-text-field v-model="user.manager"
                         type="text"
                         prepend-icon="supervisor_account"
                         clearable
@@ -112,30 +112,30 @@
       <!-- Row 5 -->
       <v-layout xs12 sm9 md6 lg6 xl4>
         <v-flex>
-          <v-text-field v-model="telefone1"
+          <v-text-field v-model="user.phone1"
                           type="phone"
                           prepend-icon="phone"
                           clearable
-                          :rules="phoneRules"
+                          :rules="phoneRule1()"
                           label="Telefone"
                           required>
             </v-text-field>
         </v-flex>
         <v-flex>
-          <v-text-field v-model="telefone2"
+          <v-text-field v-model="user.phone2"
                           type="phone"
                           prepend-icon="phone"
                           clearable
-                          :rules="phoneRules"
+                          :rules="phoneRule2()"
                           label="Telefone">
           </v-text-field>
         </v-flex>
         <v-flex>
-          <v-text-field v-model="telefone3"
+          <v-text-field v-model="user.phone3"
                           type="phone"
                           prepend-icon="phone"
                           clearable
-                          :rules="phoneRules"
+                          :rules="phoneRule3()"
                           label="Telefone">
             </v-text-field>
         </v-flex>
@@ -143,61 +143,61 @@
       <!-- Row 4 -->
       <v-layout>
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field v-model="nomeLogin"
+          <v-text-field v-model="user.login"
                         type="text"
                         class="px-0"
                         prepend-icon="face"
                         clearable
-                        :rules="nameRules"
+                        :rules="loginRules()"
                         label="Login"
                         required>
           </v-text-field>
         </v-flex>
         <v-flex xs12 sm9 md6 lg6 xl4 >
-          <v-menu ref="dataNascimentoHelper"
+          <v-menu ref="user.birthDateHelper"
                   :close-on-content-click="false"
-                  v-model="dataNascimentoHelper"
+                  v-model="user.birthDateHelper"
                   :nudge-right="40"
-                  :return-value.sync="dataNascimento"
+                  :return-value.sync="user.birthdate"
                   lazy
                   transition="scale-transition"
                   offset-y
                   full-width
                   min-width="290px">
             <v-text-field slot="activator"
-                        v-model="dataNascimento"
+                        v-model="user.birthdate"
                         label="Data de Nascimento"
                         prepend-icon="event"
                         readonly>
             </v-text-field>
-            <v-date-picker v-model="dataNascimento"
+            <v-date-picker v-model="user.birthdate"
                             :reactive="reactive"
                             header-color="primary"
-                            @input="$refs.dataNascimentoHelper.save(dataNascimento)">
+                            @input="$refs.user.birthDateHelper.save(user.birthdate)">
             </v-date-picker>
           </v-menu>
         </v-flex>
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-menu ref="dataIngressoEmpresaHelper"
+          <v-menu ref="user.joiningDateHelper"
                   :close-on-content-click="false"
-                  v-model="dataIngressoEmpresaHelper"
+                  v-model="user.joiningDateHelper"
                   :nudge-right="40"
-                  :return-value.sync="dataIngressoEmpresa"
+                  :return-value.sync="user.joiningDate"
                   lazy
                   transition="scale-transition"
                   offset-y
                   full-width
                   min-width="290px">
             <v-text-field slot="activator"
-                          v-model="dataIngressoEmpresa"
+                          v-model="user.joiningDate"
                           label="Data de Ingresso na Empresa"
                           prepend-icon="event"
                           readonly>
             </v-text-field>
-            <v-date-picker v-model="dataIngressoEmpresa"
+            <v-date-picker v-model="user.joiningDate"
                             header-color="green"
                             :reactive="reactive"
-                            @input="$refs.dataIngressoEmpresaHelper.save(dataIngressoEmpresa)">
+                            @input="$refs.user.joiningDateHelper.save(user.joiningDate)">
             </v-date-picker>
           </v-menu>
         </v-flex>
@@ -205,32 +205,33 @@
       <!-- Rown 6 -->
       <v-layout xs12 sm9 md6 lg6 xl4>
         <v-flex>
-          <v-text-field v-model="senha"
+          <v-text-field v-model="user.password"
                         color="cyan darken"
                         label="Senha"
                         type="password"
                         prepend-icon="fingerprint"
+                        :rules="passwordRule()"
                         placeholder="Informe a Senha do Funcionário"
                         loading >
             <v-progress-linear slot="progress"
-                              :value="progress"
+                              :value="progress()"
                               :color="color"
                               height="7">
             </v-progress-linear>
           </v-text-field>
         </v-flex>
         <v-flex>
-          <v-text-field v-model="senhaValidacao"
+          <v-text-field v-model="user.password2"
                         color="cyan darken"
                         label="Senha"
                         type="password"
                         prepend-icon="fingerprint"
-                        :rules="passwordRules"
+                        :rules="passwordValidationRule()"
                         placeholder="Confirme a Senha do Funcionário"
                         loading >
             <v-progress-linear slot="progress"
-                              :value="progress"
-                              :color="color"
+                              :value="progressValidation()"
+                              :color="colorValidation"
                               height="7">
             </v-progress-linear>
           </v-text-field>
@@ -245,92 +246,42 @@
 </template>
 
 <script>
-import Funcionario from '@/objects/Funcionario'
-import BaseCalculoHoras from '@/objects/BaseCalculoHoras'
-import Telefone from '@/objects/Telefone'
-import Login from '@/objects/Login'
-
+// import AdminService from '@/service/AdminService'
 export default {
   props: {
     user: {
       type: Object,
-      default: {}
+      default () {
+        return {
+          password: '',
+          password2: ''
+        }
+      }
     },
     edit: {
       type: Boolean,
       default: false
-    },
-    message: {
-      type: String,
-      default: ''
     }
   },
   data: () => ({
     valid: false,
     menu: false,
     reactive: true,
-    dataIngressoEmpresaHelper: '',
-    dataNascimentoHelper: '',
-    dataIngressoEmpresa: null,
-    dataNascimento: null,
-    messages: [],
-    tipoHora: -1,
     haveMessage: false,
-    messageColor: '',
-    nome: '',
-    ultimoNome: '',
-    email: '',
-    salario: 0,
-    pis: 0,
-    cargaHoraria: 0,
-    gestor: '',
-    nomeLogin: '',
-    senha: '',
-    senhaValidacao: '',
-    telefone1: '',
-    telefone2: '',
-    telefone3: '',
+    messages: [],
+    message: '',
     items: {
       gestor: ['Bill Gates', 'Torvald Linux', 'Elon Musk']
-    },
-    nameRules: [
-      v => !!v || 'Informe o Nome do Funcionário!',
-      v => v.length <= 20 || 'Informe um nome váilido!',
-      v => /[^0-9]+[a-zA-Z]/.test(v) || 'Informe um nome váilido!'
-    ],
-    emailRules: [
-      v => !!v || 'Informe o E-mail!',
-      v => /.+@.+/.test(v) || 'Informe um E-mail válido!'
-    ],
-    salaryRules: [
-      v => v >= 0 || 'Informe um Salário!'
-    ],
-    pisRoles: [
-      v => !!v || 'Informe um número PIS/PASESP!',
-      v => v.length <= 9 || 'Informe um número PIS/PASESP válido!'
-    ],
-    workloadRules: [
-      v => !!v || 'Informe uma Carga Horária!',
-      v => v.length <= 1 || 'Informe uma Carga Horária válida!'
-    ],
-    phoneRules: [
-      v => !!v || 'Informe pelo menos um Telefone!',
-      v => v.length <= 9 || 'Informe um número de Telefone válido!',
-      v => v.length >= 8 || 'Informe um número de Telefone válido!'
-    ],
-    passwordRules: [
-      v => !!v || 'Informe uma Senha!'
-      // v => /.[0-9]{1}+[a-z]{1}+[A-Z]{1}./.test(v) || 'Informe uma Senha válida!'
-    ]
+    }
   }),
   created () {
   },
   computed: {
-    progress () {
-      return Math.min(100, this.senha.length * 10)
-    },
     color () {
-      return ['error', 'warning', 'success'][Math.floor(this.progress / 40)]
+      return ['error', 'warning', 'success'][Math.floor(this.progress() / 40)]
+    },
+    colorValidation () {
+      return ['error', 'warning', 'success'][Math.floor(this.progressValidation() / 40)]
     },
     title () {
       if (!this.edit) {
@@ -340,7 +291,143 @@ export default {
       }
     }
   },
+  watch: {
+  },
   methods: {
+    progress () {
+      return Math.min(100, this.user.password.length * 10)
+    },
+    progressValidation () {
+      return Math.min(100, this.user.password2.length * 10)
+    },
+    nameRules () {
+      if (!this.user.name) {
+        return ['Informe um Nome!']
+      } else if (!/[^0-9]+[a-zA-Z]/.test(this.user.name)) {
+        return ['Informe um Nome Válido!']
+      } else if (this.user.name.length <= 3 || this.user.name.length >= 20) {
+        return ['Informe um nome Válido!']
+      }
+      return []
+    },
+    lastNameRules () {
+      if (!this.user.lastName) {
+        return ['Informe um Sobrenome!']
+      } else if (!/[^0-9]+[a-zA-Z]/.test(this.user.lastName)) {
+        return ['Informe um Sobrenome Válido!']
+      } else if (this.user.lastName.length <= 3 || this.user.lastName.length >= 20) {
+        return ['Informe um Sobrenome Válido!']
+      }
+      return []
+    },
+    emailRules () {
+      if (!this.user.email) {
+        return ['Informe um e-mail!']
+      } else if (!/.+@.+/.test(this.user.email)) {
+        return ['Informe um e-mail válido!!']
+      } else if (!/[^0-9]+[a-zA-Z]/.test(this.user.lastName)) {
+        return ['Informe um Sobrenome Válido!']
+      } else if (this.user.lastName.length <= 3 || this.user.lastName.length >= 20) {
+        return ['Informe um SObrenome Válido!']
+      }
+      return []
+    },
+    salaryRules () {
+      if (!this.user.salary) {
+        return ['Informe um Salário!']
+      } else if (this.user.salary.length <= 0) {
+        return ['Informe um salário Válido!']
+      }
+      return []
+    },
+    workloadRules () {
+      if (!this.user.workload) {
+        return ['Informe uma Carga Horária!']
+      } else if (this.user.workload > 8) {
+        return ['Informe uma Carga Horária Válida!']
+      }
+      return []
+    },
+    managerRules () {
+      if (!this.user.manager) {
+        return ['Informe um Gestor!']
+      } else if (this.user.manager.length <= 2 || this.user.manager.length >= 20) {
+        return ['Informe um Gestor Válido!']
+      }
+      return []
+    },
+    phoneRule1 () {
+      if (!this.user.phone1 && !this.user.phone2 && !this.user.phone3) {
+        return ['Informe pelo menos um Telefone!']
+      } else if (this.user.phone2 || this.user.phone3) {
+        return []
+      } else if (this.user.phone1.length >= 10) {
+        return ['Informe um Telefone Válido!']
+      } else if (this.user.phone1.length <= 7) {
+        return ['Informe um Telefone Válido']
+      }
+      return []
+    },
+    phoneRule2 () {
+      if (!this.user.phone1 && !this.user.phone2 && !this.user.phone3) {
+        return ['Informe pelo menos um Telefone!']
+      } else if (this.user.phone1 || this.user.phone3) {
+        return []
+      } else if (this.user.phone2.length >= 10) {
+        return ['Informe um Telefone Válido!']
+      } else if (this.user.phone2.length <= 7) {
+        return ['Informe um Telefone Válido']
+      }
+      return []
+    },
+    phoneRule3 () {
+      if (!this.user.phone1 && !this.user.phone2 && !this.user.phone3) {
+        return ['Informe pelo menos um Telefone!']
+      } else if (this.user.phone1 || this.user.phone2) {
+        return []
+      } else if (this.user.phone3.length >= 10) {
+        return ['Informe um Telefone Válido!']
+      } else if (this.user.phone3.length <= 7) {
+        return ['Informe um Telefone Válido']
+      }
+      return []
+    },
+    loginRules () {
+      if (!this.user.login) {
+        return ['Informe um Login!']
+      } else if (!/[^0-9]+[a-zA-Z]/.test(this.user.login)) {
+        return ['Informe um Login Válido!']
+      } else if (this.user.login.length <= 2 || this.user.login.length > 20) {
+        return ['Informe um Login com até 20 Carácteres!']
+      }
+      return []
+    },
+    pisRules () {
+      if (!this.user.pis) {
+        return ['Informe um número PIS/PASESP!']
+      } else if (this.user.pis.length !== 9) {
+        return ['Informe um número PIS/PASESP Válido!']
+      }
+      return []
+    },
+    passwordRule () {
+      if (!this.user.password && !this.user.password2) {
+        return ['Informe uma Senha!']
+      } else if ((!this.user.password && this.user.password2) || (this.user.password && !this.user.password2)) {
+        return ['As Senhas informadas são divergentes!']
+      }
+      return []
+    },
+    passwordValidationRule () {
+      if (!this.user.password && !this.user.password2) {
+        return ['Informe uma Senha!']
+      } else if ((!this.user.password && this.user.password1) || (this.user.password && !this.user.password2)) {
+        return ['As Senhas informadas são divergentes!']
+      } else if (this.user.password !== this.user.password2) {
+        return ['As Senhas informadas são divergentes!']
+      }
+      return []
+    },
     validateUser () {
       this.valid = true
       if (this.valid) {
@@ -351,27 +438,9 @@ export default {
         this.messageColor = 'warning'
       }
     },
-    prepareUserObject () {
-      let listaTelefone = []
-      listaTelefone.push(new Telefone(null, this.telefone1), new Telefone(null, this.telefone2), new Telefone(null, this.telefone3))
-      let funcionario = new Funcionario(
-        this.id,
-        this.nome,
-        this.email,
-        this.ultimoNome,
-        this.dataNascimento,
-        new Login(this.senha, this.senhaValidacao, this.nomeLogin, this.ativo),
-        listaTelefone,
-        this.pis,
-        this.dataIngressoEmpresa,
-        new Funcionario(null, this.gestor),
-        [new BaseCalculoHoras(null, this.tipoHora, parseFloat(this.cargaHoraria), null, parseFloat(this.salario))]
-      )
-      return funcionario
-    },
     saveUser () {
-      let funcionario = this.prepareUserObject()
       if (!this.edit) {
+        let funcionario = this.user
         this.$_axios.post(`${this.$_url}funcionario`, funcionario).then((response) => {
           let resultado = response.data
           if (resultado.listaResultado.length !== 0) {
@@ -397,49 +466,13 @@ export default {
           this.messageColor = 'error'
         })
       } else {
-        this.$emit('save', funcionario)
+        this.$emit('save', this.user)
       }
-    },
-    parseUserObject (userObject) {
-      this.nome = userObject.nome
-      this.ultimoNome = userObject.ultimoNome
-      this.email = userObject.email
-      this.salario = userObject.salario
-      this.pis = userObject.pis
-      this.cargaHoraria = userObject.cargaHoraria
-      this.dataNascimento = userObject.dataNascimento
-      this.dataIngressoEmpresa = userObject.dataIngressoEmpresa
-      this.gestor = userObject.gestor
-      this.telefone1 = userObject.listaTelefone[0]
-      this.telefone2 = userObject.listaTelefone[1]
-      this.telefone3 = userObject.listaTelefone[2]
-      this.password = userObject.login.senha
-      this.password2 = userObject.login.senhaValidacao
-      this.ativo = userObject.login.ativo
-      this.nomeLogin = userObject.login.nomeLogin
     },
     clearForm () {
       this.valid = false
       this.menu = false
-      this.reactive = true
-      this.dataIngressoEmpresa = false
-      this.dataNascimento = false
-      this.funcionario = {
-        name: '',
-        ultimoNome: '',
-        email: '',
-        salario: '',
-        pis: '',
-        cargaHoraria: '',
-        dataNascimento: '',
-        dataIngressoEmpresa: '',
-        gestor: '',
-        phone1: '',
-        phone2: '',
-        phone3: '',
-        password: '',
-        password2: ''
-      }
+      this.user = {}
     }
   }
 }

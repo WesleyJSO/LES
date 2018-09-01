@@ -26,7 +26,7 @@
         </v-card>
       </v-dialog>
     </v-toolbar>
-    <v-data-table :headers="headers"
+    <v-data-table :headers="getHeaders"
                   :items="users"
                   item-key="pis"
                   hide-actions
@@ -52,7 +52,7 @@
         </tr>
       </template>
       <template slot="expand" slot-scope="props">
-        <v-data-table :headers="subHeaders"
+        <v-data-table :headers="getSubHeaders"
                       :items="[...props.item].splice(0, 6)"
                       hide-actions
                       dark
@@ -78,59 +78,35 @@ import Funcionario from '@/objects/Funcionario'
 import BaseCalculoHoras from '@/objects/BaseCalculoHoras'
 import Telefone from '@/objects/Telefone'
 import Login from '@/objects/Login'
+import AdminService from '@/service/AdminService'
 
 export default {
   props: {
     users: {
-      type: Object
+      type: Object,
+      default: {}
+    },
+    editedItem: {
+      type: Object,
+      default: {}
     }
   },
   data: () => ({
-    headers: [
-      { text: 'Nome', align: 'center', sortable: false, value: 'nome' },
-      { text: 'Carga Horária', align: 'center', value: 'cargaHoraria' },
-      { text: 'Salário', value: 'salario' },
-      { text: 'Tipo de Hora', value: 'tipoHora' },
-      { text: 'Gestor', value: 'gestor' },
-      { text: 'Telefone', value: 'telefone1' },
-      { text: 'E-mail', align: 'center', value: 'email' },
-      { text: 'Actions', value: 'name', sortable: false }
-    ],
-    subHeaders: [
-      { text: 'PIS/PASESP', value: 'pis', align: 'center', sortable: false },
-      { text: 'Data de Nascimento', value: 'birthdate', align: 'center', sortable: false },
-      { text: 'Data de Ingresso na Empresa', value: 'dataIngressoEmpresa', align: 'center', sortable: false },
-      { text: 'Telefone 2', value: 'telefone2', align: 'center', sortable: false },
-      { text: 'Telefone 3', value: 'telefone3', align: 'center', sortable: false }
-    ],
     messages: [],
     haveMessage: false,
     messageColor: '',
-    defaultItem: {
-      nome: '',
-      ultimoNome: '',
-      cargaHoraria: '',
-      salario: '',
-      tipoHora: '',
-      pis: '',
-      dataNascimento: '',
-      dataIngressoEmpresa: '',
-      telefone1: '',
-      telefone2: '',
-      telefone3: '',
-      gestor: '',
-      email: '',
-      senha: '',
-      senhaValidacao: '',
-      nomeLogin: ''
-    },
     searchFilter: '',
     editedIndex: -1,
     dialog: false,
-    editedItem: {},
     isEditing: false
   }),
   computed: {
+    getHeaders () {
+      return AdminService.HEADERS
+    },
+    getSubHeaders () {
+      return AdminService.SUB_HEADERS
+    }
   },
   watch: {
     dialog (val) {
