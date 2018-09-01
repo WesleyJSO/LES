@@ -17,7 +17,7 @@
         </v-list-tile>
 
         <admin-role v-if="isAdminAtivo"></admin-role>
-        <usuario-role v-else-if="isUsuarioAtivo"></usuario-role>
+        <user-role v-else-if="isUsuarioAtivo"></user-role>
 
       </v-list>
     </v-navigation-drawer>
@@ -78,14 +78,14 @@ export default {
     UserRole
   },
   methods: {
-    setUsuarioLogado (usuario) {
+    setUsuarioLogado (user) {
       this.lblLogin = 'LOGOUT'
       this.drawer = true
-      this.login = usuario.login
-      this.roles = usuario.roles
+      this.login = user.login
+      this.roles = user.roles
       this.account_circle = 'account_circle'
       this.roles.forEach(role => {
-        if (role.nome.toUpperCase() === 'ADMIN') {
+        if (role.name.toUpperCase() === 'ADMIN') {
           this.isAdminAtivo = true
           this.isUsuarioAtivo = false
         } else if (role.nome.toUpperCase() === 'USUARIO') {

@@ -12,17 +12,17 @@
                    transition="scale-transition" />
         </li>
       <v-form v-model="valido"
-              @submit.prevent="findByNomeAndSenha">
+              @submit.prevent="findByEmailAndPassword">
         <v-card-text>
           <text v-bind="login" />
           <v-text-field prepend-icon="person"
-                        v-model="nome"
-                        :rules="nomeRegras"
-                        label="Nome"
+                        v-model="email"
+                        :rules="emailRules"
+                        label="E-mail"
                         required />
           <v-text-field prepend-icon="lock"
-                        v-model="senha"
-                        :rules="senhaRegras"
+                        v-model="password"
+                        :rules="passwordRules"
                         label="Senha"
                         type="password"
                         required />
@@ -45,32 +45,39 @@ export default {
     login: [],
     user: [],
     valido: false,
-    nome: '',
-    senha: '',
+    email: '',
+    password: '',
     isErro: false,
     msgErro: [],
     msgCor: '',
-    nomeRegras: [v => !!v || 'Nome obrigatório!'],
-    senhaRegras: [
+    emailRules: [
+      v => !!v || 'E-mail obrigatório!',
+      v => /.+@.+.+\..+/.test(v) || 'E-mail inválido válido!'
+    ],
+    passwordRules: [
       v => !!v || 'Senha obrigatória!',
       v => v.length >= 3 || 'Senha deve conter no mínimo 3 caracteres'
     ]
   }),
   methods: {
-    findByNomeAndSenha () {
-      if ((!this.nome && !this.senha) || this.senha < 3) {
+    findByEmailAndPassword () {
+      let error = []
+      error = this.$v_user.email(this.email)
+      if (error) {
+        this.msgErro = [...error]
+      }
+      error = this.$v_user.password(this.password)
+      if (error) {
+        this.msgErro = [...this.msgErro, ...error]
+      }
+      if (this.msgErro.length > 0) {
         this.isErro = true
         this.msgCor = 'warning'
-        if (!this.nome && !this.senha) {
-          this.msgErro = ['Nome e Senha devem ser preenchidos!']
-        } else {
-          this.msgErro = ['Senha deve conter no mínimo 3 caracteres!']
-        }
       } else {
         let user = {
-          email: this.nome,
+          email: this.email,
           login: {
-            password: this.senha
+            password: this.password
           }
         }
         this.$_axios.post(`${this.$_url}UsuarioLogin`, user).then((response) => {
@@ -94,14 +101,16 @@ export default {
             this.user = {
               login: {
                 nomeLogin: 'wesley',
-                senha: '123',
+                password: '123',
                 ativo: true,
                 dataCriacao: 'null'
               },
               roles: [
-                {nome: 'ADMIN'}
+                {name: 'ADMIN'}
               ]
             }
+            this.msgCor = 'info'
+            this.msgErro = [`Bem vindo ${this.user.login.nomeLgin}.`]
             this.$emit('emittedUsuario', this.user)
           }
         },
