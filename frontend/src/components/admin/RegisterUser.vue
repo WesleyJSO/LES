@@ -254,15 +254,7 @@ export default {
         return {
           thelephoneList: ['46784571'],
           password: '',
-          passwordValidation: '',
-          name: 'José',
-          lastName: 'Zeller',
-          email: 'jose@zeller.com',
-          salary: 1200,
-          pis: 123456789,
-          workload: 6,
-          login: 'Zeller',
-          manager: 'Bill Gates'
+          passwordValidation: ''
         }
       }
     },
