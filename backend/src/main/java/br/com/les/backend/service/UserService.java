@@ -7,9 +7,9 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.les.backend.dao.UsuarioDAO;
-import br.com.les.backend.entity.EntidadeDominio;
-import br.com.les.backend.entity.Usuario;
+import br.com.les.backend.dao.UserDAO;
+import br.com.les.backend.entity.DomainEntity;
+import br.com.les.backend.entity.User;
 import br.com.les.backend.repository.UserRepository;
 
 /**
@@ -28,14 +28,14 @@ public class UserService implements IService {
 	private UserRepository userRepository;
 	
 	@Autowired
-	private UsuarioDAO usuarioDAO;
+	private UserDAO userDAO;
 	
 	public long count() {
 		return userRepository.count();
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List< Usuario > findAll() {
+	public List< User > findAll() {
 		return userRepository.findAll();
 	}
 	
@@ -45,14 +45,14 @@ public class UserService implements IService {
 	}
 
 	@Override
-	public EntidadeDominio save( EntidadeDominio entity ) {
+	public DomainEntity save( DomainEntity entity ) {
 
-		return userRepository.save( ( Usuario ) entity );
+		return userRepository.save( ( User ) entity );
 	}
 
 	@Override
-	public List< EntidadeDominio > findByParameters( EntidadeDominio entity ) {
+	public List< DomainEntity > findByParameters( DomainEntity entity ) {
 
-		return usuarioDAO.findByLoginAndSenha( ( Usuario ) entity );
+		return userDAO.findByEmailAndPassword( ( User ) entity );
 	}
 }

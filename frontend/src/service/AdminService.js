@@ -15,6 +15,9 @@ export const SUB_HEADERS = [
   { text: 'Telefone 2', value: 'telefone2', align: 'center', sortable: false },
   { text: 'Telefone 3', value: 'telefone3', align: 'center', sortable: false }
 ]
+export const items = [
+  'Bill Gates', 'Torvald Linux', 'Elon Musk'
+]
 export default class AdminService {
   static getHeaders () {
     return HEADERS

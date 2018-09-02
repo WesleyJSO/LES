@@ -1,6 +1,6 @@
 package br.com.les.backend.strategy;
 
-import br.com.les.backend.entity.EntidadeDominio;
+import br.com.les.backend.entity.DomainEntity;
 import br.com.les.backend.utils.Result;
 /**
  * 
@@ -10,5 +10,5 @@ import br.com.les.backend.utils.Result;
  */
 public interface IStrategy {
 
-    Result execute(EntidadeDominio entidade, String action, String callerMethod );
+    Result execute(DomainEntity entity, String action, String callerMethod );
 }

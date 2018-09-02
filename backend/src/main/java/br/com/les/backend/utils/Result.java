@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import br.com.les.backend.entity.EntidadeDominio;
+import br.com.les.backend.entity.DomainEntity;
 
 @Component
 public class Result {
@@ -13,13 +13,13 @@ public class Result {
     private boolean success;
     private List< String > message = new ArrayList<>();
     
-    private List< EntidadeDominio > resultList = new ArrayList<>();
+    private List< DomainEntity > resultList = new ArrayList<>();
     
     public Result() {
     	success = true;
     }
 
-    public void setSucesso( String message ) {
+    public void setSuccess( String message ) {
     	
         if ( message != null && !message.equals("") ) {
         	
@@ -31,7 +31,7 @@ public class Result {
         }
     }
 
-    public void setErro( String message ) {
+    public void setError( String message ) {
     	
         if ( message != null && !message.equals("") ) {
         	
@@ -43,19 +43,19 @@ public class Result {
         }
     }
 
-    public boolean isSucesso() {
+    public boolean isSuccess() {
        return success;
     }
 
-    public void setListaResultado( List<EntidadeDominio> resultList ) {
+    public void setResultList( List<DomainEntity> resultList ) {
         this.resultList = resultList;
     }
 
-    public List<EntidadeDominio> getListaResultado() {
+    public List<DomainEntity> getResultList() {
         return this.resultList;
     }
     
-    public List< String > getMensagem() {
+    public List< String > getMessage() {
     	
     	if ( message.size() > 0 ) {
 	    	return message;

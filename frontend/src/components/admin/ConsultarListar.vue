@@ -74,9 +74,9 @@
 // import Consultar from '@/components/usuario/Consultar'
 // import Listar from '@/components/usuario/Listar'
 import RegisterUser from '@/components/admin/RegisterUser'
-import Funcionario from '@/objects/Funcionario'
-import BaseCalculoHoras from '@/objects/BaseCalculoHoras'
-import Telefone from '@/objects/Telefone'
+import Employee from '@/objects/Employee'
+import BaseHourCalculation from '@/objects/BaseHourCalculation'
+import Telephone from '@/objects/Telephone'
 import Login from '@/objects/Login'
 import AdminService from '@/service/AdminService'
 
@@ -84,11 +84,31 @@ export default {
   props: {
     users: {
       type: Object,
-      default: {}
+      default () {
+        return {
+          thelephoneList: ['46784571'],
+          password: '',
+          passwordValidation: '',
+          name: 'José',
+          lastName: 'Zeller',
+          email: 'jose@zeller.com',
+          salary: 1200,
+          pis: 123456789,
+          workload: 6,
+          login: 'Zeller',
+          manager: 'Bill Gates'
+        }
+      }
     },
     editedItem: {
       type: Object,
-      default: {}
+      default () {
+        return {
+          thelephoneList: [],
+          password: '',
+          passwordValidation: ''
+        }
+      }
     }
   },
   data: () => ({
@@ -114,7 +134,7 @@ export default {
     }
   },
   created () {
-    this.$_axios.get(`${this.$_url}funcionario`).then((response) => {
+    /* this.$_axios.get(`${this.$_url}funcionario`).then((response) => {
       let resultado = response.data
       if (resultado.listaResultado.length !== 0) {
         // retorno ok
@@ -138,15 +158,15 @@ export default {
       this.messages = ['Erro durante execução do serviço!']
       this.haveMessage = true
       this.messageColor = 'error'
-    })
+    }) */
   },
   methods: {
     initialize () {
     },
     prepareUserObject (userObject) {
       let listaTelefone = []
-      listaTelefone.push(new Telefone(userObject.telefone1), new Telefone(userObject.telefone2), new Telefone(userObject.telefone3))
-      let funcionario = new Funcionario(
+      listaTelefone.push(new Telephone(userObject.telefone1), new Telephone(userObject.telefone2), new Telephone(userObject.telefone3))
+      let funcionario = new Employee(
         userObject.id,
         userObject.nome,
         userObject.email,
@@ -156,8 +176,8 @@ export default {
         listaTelefone,
         userObject.pis,
         userObject.dataIngressoEmpresa,
-        new Funcionario(0, userObject.gestor),
-        new BaseCalculoHoras(0, userObject.tipoHora, userObject.cargaHoraria, null, userObject.salario)
+        new Employee(0, userObject.gestor),
+        new BaseHourCalculation(0, userObject.tipoHora, userObject.cargaHoraria, null, userObject.salario)
       )
       return funcionario
     },

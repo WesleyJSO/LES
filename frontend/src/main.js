@@ -8,12 +8,15 @@ import 'vuetify/dist/vuetify.min.css'
 import moment from 'moment'
 import VeeValidate from 'vee-validate'
 import axios from 'axios'
+import UserValidator from './validators/UserValidators'
 
 Vue.use(VeeValidate)
 Vue.use(Vuetify)
 
 Vue.prototype.$_axios = axios
 Vue.prototype.$_url = 'http://localhost:8080/'
+
+Vue.prototype.$v_user = new UserValidator()
 
 Vue.filter('dataFormatada', function (value) {
   if (value) {

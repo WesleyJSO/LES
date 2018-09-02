@@ -1,55 +1,35 @@
 package br.com.les.backend.entity;
 
-import java.util.Date;
-
 import javax.persistence.Embeddable;
 import javax.persistence.Transient;
 
 @Embeddable
-public class Login extends EntidadeDominio {
+public class Login extends DomainEntity {
 
 	private static final long serialVersionUID = 2225388166302371888L;
 
-	private String nomeLogin;
-	private String senha;
-	
 	@Transient
-	private String senhaValidacao;
-	
-	private Date dataCriacao;
-	private Boolean ativo;
-
+	private String passwordValidator;
+	private String password;
+	private Boolean active;
 	
 	
-	
-	public String getSenha() {
-		return senha;
+	public String getPasswordValidator() {
+		return passwordValidator;
 	}
-	public void setSenha( String senha ) {
-		this.senha = senha;
+	public void setPasswordValidator(String passwordValidator) {
+		this.passwordValidator = passwordValidator;
 	}
-	public Date getDataCriacao() {
-		return dataCriacao;
+	public String getPassword() {
+		return password;
 	}
-	public void setDataCriacao( Date dataCriacao ) {
-		this.dataCriacao = dataCriacao;
+	public void setPassword(String password) {
+		this.password = password;
 	}
-	public Boolean getAtivo() {
-		return ativo;
+	public Boolean getActive() {
+		return active;
 	}
-	public void setAtivo( Boolean ativo ) {
-		this.ativo = ativo;
-	}
-	public String getNomeLogin() {
-		return nomeLogin;
-	}
-	public void setNomeLogin(String nomeLogin) {
-		this.nomeLogin = nomeLogin;
-	}
-	public String getSenhaValidacao() {
-		return senhaValidacao;
-	}
-	public void setSenhaValidacao(String senhaValidacao) {
-		this.senhaValidacao = senhaValidacao;
+	public void setActive(Boolean active) {
+		this.active = active;
 	}
 }

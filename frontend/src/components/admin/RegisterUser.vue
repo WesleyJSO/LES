@@ -17,7 +17,7 @@
                         class="px-0"
                         prepend-icon="face"
                         clearable
-                        :rules="nameRules()"
+                        :rules="$v_user.nameRules(this.user.name)"
                         label="Nome"
                         required>
           </v-text-field>
@@ -27,7 +27,7 @@
                         type="text"
                         prepend-icon="face"
                         clearable
-                        :rules="lastNameRules()"
+                        :rules="$v_user.lastNameRules(this.user.lastName)"
                         label="Sobrenome"
                         required>
           </v-text-field>
@@ -37,7 +37,7 @@
                         type="email"
                         prepend-icon="email"
                         clearable
-                        :rules="emailRules()"
+                        :rules="$v_user.emailRules(user.email)"
                         label="E-mail"
                         required>
           </v-text-field>
@@ -50,7 +50,7 @@
                         type="number"
                         prepend-icon="monetization_on"
                         clearable
-                        :rules="salaryRules()"
+                        :rules="$v_user.salaryRules(user.salary)"
                         label="Salário"
                         required>
           </v-text-field>
@@ -60,7 +60,7 @@
                         type="number"
                         prepend-icon="credit_card"
                         clearable
-                        :rules="pisRules()"
+                        :rules="$v_user.pisRules(user.pis)"
                         label="PIS/PASESP"
                         required>
           </v-text-field>
@@ -70,7 +70,7 @@
                         type="number"
                         prepend-icon="timer"
                         clearable
-                        :rules="workloadRules()"
+                        :rules="$v_user.workloadRules(user.workload)"
                         label="Carga Horária"
                         required>
           </v-text-field>
@@ -79,7 +79,6 @@
       <!-- Row 3 -->
       <v-layout>
         <v-flex >
-
           <v-text-field v-model="user.manager"
                         type="text"
                         prepend-icon="supervisor_account"
@@ -87,9 +86,9 @@
                         label="Gestor"
                         required>
           </v-text-field>
-          <!-- <v-combobox v-model="gestor"
+          <!-- <v-combobox v-model="manager"
                       prepend-icon="supervisor_account"
-                      :items="items.gestor"
+                      :items="items.manager"
                       label="Supervisor Imediato"
                       multiple
                       chips>
@@ -112,30 +111,30 @@
       <!-- Row 5 -->
       <v-layout xs12 sm9 md6 lg6 xl4>
         <v-flex>
-          <v-text-field v-model="user.phone1"
+          <v-text-field v-model="user.thelephoneList[0]"
                           type="phone"
                           prepend-icon="phone"
                           clearable
-                          :rules="phoneRule1()"
+                          :rules="$v_user.phoneRule1(user.thelephoneList)"
                           label="Telefone"
                           required>
             </v-text-field>
         </v-flex>
         <v-flex>
-          <v-text-field v-model="user.phone2"
+          <v-text-field v-model="user.thelephoneList[1]"
                           type="phone"
                           prepend-icon="phone"
                           clearable
-                          :rules="phoneRule2()"
+                          :rules="$v_user.phoneRule2(user.thelephoneList)"
                           label="Telefone">
           </v-text-field>
         </v-flex>
         <v-flex>
-          <v-text-field v-model="user.phone3"
+          <v-text-field v-model="user.thelephoneList[2]"
                           type="phone"
                           prepend-icon="phone"
                           clearable
-                          :rules="phoneRule3()"
+                          :rules="$v_user.phoneRule3(user.thelephoneList)"
                           label="Telefone">
             </v-text-field>
         </v-flex>
@@ -148,7 +147,7 @@
                         class="px-0"
                         prepend-icon="face"
                         clearable
-                        :rules="loginRules()"
+                        :rules="$v_user.loginRules(this.user.login)"
                         label="Login"
                         required>
           </v-text-field>
@@ -210,7 +209,7 @@
                         label="Senha"
                         type="password"
                         prepend-icon="fingerprint"
-                        :rules="passwordRule()"
+                        :rules="$v_user.passwordRule(user.password, user.passwordValidation)"
                         placeholder="Informe a Senha do Funcionário"
                         loading >
             <v-progress-linear slot="progress"
@@ -221,12 +220,12 @@
           </v-text-field>
         </v-flex>
         <v-flex>
-          <v-text-field v-model="user.password2"
+          <v-text-field v-model="user.passwordValidation"
                         color="cyan darken"
                         label="Senha"
                         type="password"
                         prepend-icon="fingerprint"
-                        :rules="passwordValidationRule()"
+                        :rules="$v_user.passwordValidationRule(user.password, user.passwordValidation)"
                         placeholder="Confirme a Senha do Funcionário"
                         loading >
             <v-progress-linear slot="progress"
@@ -246,15 +245,24 @@
 </template>
 
 <script>
-// import AdminService from '@/service/AdminService'
+import AdminService from '@/service/AdminService'
 export default {
   props: {
     user: {
       type: Object,
       default () {
         return {
+          thelephoneList: ['46784571'],
           password: '',
-          password2: ''
+          passwordValidation: '',
+          name: 'José',
+          lastName: 'Zeller',
+          email: 'jose@zeller.com',
+          salary: 1200,
+          pis: 123456789,
+          workload: 6,
+          login: 'Zeller',
+          manager: 'Bill Gates'
         }
       }
     },
@@ -269,10 +277,7 @@ export default {
     reactive: true,
     haveMessage: false,
     messages: [],
-    message: '',
-    items: {
-      gestor: ['Bill Gates', 'Torvald Linux', 'Elon Musk']
-    }
+    message: ''
   }),
   created () {
   },
@@ -289,6 +294,9 @@ export default {
       } else {
         return 'Alterar Funcionário'
       }
+    },
+    getItems () {
+      return AdminService.ITEMS
     }
   },
   watch: {
@@ -298,135 +306,7 @@ export default {
       return Math.min(100, this.user.password.length * 10)
     },
     progressValidation () {
-      return Math.min(100, this.user.password2.length * 10)
-    },
-    nameRules () {
-      if (!this.user.name) {
-        return ['Informe um Nome!']
-      } else if (!/[^0-9]+[a-zA-Z]/.test(this.user.name)) {
-        return ['Informe um Nome Válido!']
-      } else if (this.user.name.length <= 3 || this.user.name.length >= 20) {
-        return ['Informe um nome Válido!']
-      }
-      return []
-    },
-    lastNameRules () {
-      if (!this.user.lastName) {
-        return ['Informe um Sobrenome!']
-      } else if (!/[^0-9]+[a-zA-Z]/.test(this.user.lastName)) {
-        return ['Informe um Sobrenome Válido!']
-      } else if (this.user.lastName.length <= 3 || this.user.lastName.length >= 20) {
-        return ['Informe um Sobrenome Válido!']
-      }
-      return []
-    },
-    emailRules () {
-      if (!this.user.email) {
-        return ['Informe um e-mail!']
-      } else if (!/.+@.+/.test(this.user.email)) {
-        return ['Informe um e-mail válido!!']
-      } else if (!/[^0-9]+[a-zA-Z]/.test(this.user.lastName)) {
-        return ['Informe um Sobrenome Válido!']
-      } else if (this.user.lastName.length <= 3 || this.user.lastName.length >= 20) {
-        return ['Informe um SObrenome Válido!']
-      }
-      return []
-    },
-    salaryRules () {
-      if (!this.user.salary) {
-        return ['Informe um Salário!']
-      } else if (this.user.salary.length <= 0) {
-        return ['Informe um salário Válido!']
-      }
-      return []
-    },
-    workloadRules () {
-      if (!this.user.workload) {
-        return ['Informe uma Carga Horária!']
-      } else if (this.user.workload > 8) {
-        return ['Informe uma Carga Horária Válida!']
-      }
-      return []
-    },
-    managerRules () {
-      if (!this.user.manager) {
-        return ['Informe um Gestor!']
-      } else if (this.user.manager.length <= 2 || this.user.manager.length >= 20) {
-        return ['Informe um Gestor Válido!']
-      }
-      return []
-    },
-    phoneRule1 () {
-      if (!this.user.phone1 && !this.user.phone2 && !this.user.phone3) {
-        return ['Informe pelo menos um Telefone!']
-      } else if (this.user.phone2 || this.user.phone3) {
-        return []
-      } else if (this.user.phone1.length >= 10) {
-        return ['Informe um Telefone Válido!']
-      } else if (this.user.phone1.length <= 7) {
-        return ['Informe um Telefone Válido']
-      }
-      return []
-    },
-    phoneRule2 () {
-      if (!this.user.phone1 && !this.user.phone2 && !this.user.phone3) {
-        return ['Informe pelo menos um Telefone!']
-      } else if (this.user.phone1 || this.user.phone3) {
-        return []
-      } else if (this.user.phone2.length >= 10) {
-        return ['Informe um Telefone Válido!']
-      } else if (this.user.phone2.length <= 7) {
-        return ['Informe um Telefone Válido']
-      }
-      return []
-    },
-    phoneRule3 () {
-      if (!this.user.phone1 && !this.user.phone2 && !this.user.phone3) {
-        return ['Informe pelo menos um Telefone!']
-      } else if (this.user.phone1 || this.user.phone2) {
-        return []
-      } else if (this.user.phone3.length >= 10) {
-        return ['Informe um Telefone Válido!']
-      } else if (this.user.phone3.length <= 7) {
-        return ['Informe um Telefone Válido']
-      }
-      return []
-    },
-    loginRules () {
-      if (!this.user.login) {
-        return ['Informe um Login!']
-      } else if (!/[^0-9]+[a-zA-Z]/.test(this.user.login)) {
-        return ['Informe um Login Válido!']
-      } else if (this.user.login.length <= 2 || this.user.login.length > 20) {
-        return ['Informe um Login com até 20 Carácteres!']
-      }
-      return []
-    },
-    pisRules () {
-      if (!this.user.pis) {
-        return ['Informe um número PIS/PASESP!']
-      } else if (this.user.pis.length !== 9) {
-        return ['Informe um número PIS/PASESP Válido!']
-      }
-      return []
-    },
-    passwordRule () {
-      if (!this.user.password && !this.user.password2) {
-        return ['Informe uma Senha!']
-      } else if ((!this.user.password && this.user.password2) || (this.user.password && !this.user.password2)) {
-        return ['As Senhas informadas são divergentes!']
-      }
-      return []
-    },
-    passwordValidationRule () {
-      if (!this.user.password && !this.user.password2) {
-        return ['Informe uma Senha!']
-      } else if ((!this.user.password && this.user.password1) || (this.user.password && !this.user.password2)) {
-        return ['As Senhas informadas são divergentes!']
-      } else if (this.user.password !== this.user.password2) {
-        return ['As Senhas informadas são divergentes!']
-      }
-      return []
+      return Math.min(100, this.user.passwordValidation.length * 10)
     },
     validateUser () {
       this.valid = true

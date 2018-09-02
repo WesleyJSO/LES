@@ -7,9 +7,9 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.les.backend.dao.FuncionarioDAO;
-import br.com.les.backend.entity.EntidadeDominio;
-import br.com.les.backend.entity.Funcionario;
+import br.com.les.backend.dao.EmployeeDAO;
+import br.com.les.backend.entity.DomainEntity;
+import br.com.les.backend.entity.Employee;
 import br.com.les.backend.repository.EmployeeRepository;
 
 @Service
@@ -20,32 +20,32 @@ public class EmployeeService implements IService {
 	private EmployeeRepository employeeRepository;
 	
 	@Autowired
-	private FuncionarioDAO employeeDAO;
+	private EmployeeDAO employeeDAO;
 	
 	public long count() {
 		return employeeRepository.count();
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List< Funcionario > findAll() {
+	public List< Employee > findAll() {
 		return employeeRepository.findAll();
 	}
 	
-	public void deleteById( long idUsuario ) {
+	public void deleteById( long employeeId ) {
 		
-		employeeRepository.deleteById( idUsuario );
+		employeeRepository.deleteById( employeeId );
 	}
 
 	@Override
-	public EntidadeDominio save( EntidadeDominio entity ) {
+	public DomainEntity save( DomainEntity entity ) {
 
-		return employeeRepository.save( ( Funcionario ) entity );
+		return employeeRepository.save( ( Employee ) entity );
 	}
 
 	@Override
-	public List< EntidadeDominio > findByParameters( EntidadeDominio entity ) {
+	public List< DomainEntity > findByParameters( DomainEntity entity ) {
 
-		return employeeDAO.findByLoginAndSenha( ( Funcionario ) entity );
+		return employeeDAO.findByLoginAndSenha( ( Employee ) entity );
 	}
 
 }

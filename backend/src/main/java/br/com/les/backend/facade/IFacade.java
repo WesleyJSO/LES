@@ -1,6 +1,6 @@
 package br.com.les.backend.facade;
 
-import br.com.les.backend.entity.EntidadeDominio;
+import br.com.les.backend.entity.DomainEntity;
 import br.com.les.backend.utils.Result;
 
 
@@ -12,13 +12,13 @@ import br.com.les.backend.utils.Result;
  */
 public interface IFacade {
 
-    Result save( EntidadeDominio entity, String callerMethod );
+    Result save( DomainEntity entity, String callerMethod );
 
-    Result update( EntidadeDominio entity, String callerMethod );
+    Result update( DomainEntity entity, String callerMethod );
 
-    Result delete( EntidadeDominio entity, String callerMethod );
+    Result delete( DomainEntity entity, String callerMethod );
 
-    Result findAll( EntidadeDominio entity, String callerMethod );
+    Result findAll( DomainEntity entity, String callerMethod );
 
-    Result find( EntidadeDominio entity, String callerMethod );
+    Result find( DomainEntity entity, String callerMethod );
 }

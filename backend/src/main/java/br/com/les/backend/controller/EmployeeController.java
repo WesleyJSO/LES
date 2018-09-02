@@ -9,43 +9,43 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.les.backend.entity.EntidadeDominio;
-import br.com.les.backend.entity.Funcionario;
+import br.com.les.backend.entity.DomainEntity;
+import br.com.les.backend.entity.Employee;
 import br.com.les.backend.utils.Result;
 
 
 @CrossOrigin
 @RestController
-public class FuncionarioController extends AbstractController {
+public class EmployeeController extends AbstractController {
 		
 	@GetMapping( value="/funcionario" )
 	public Result findAll() {
 		
-		return fachada.findAll( new Funcionario(), getMethodName( new Object() {} ) );
+		return facade.findAll( new Employee(), getMethodName( new Object() {} ) );
 	}
 	
 	@GetMapping( value="/usuarioFuncionario" )
-	public Result findByUsuario( @RequestBody Funcionario funcionario ) {
+	public Result findByUsuario( @RequestBody Employee employee ) {
 		
-		return fachada.find( funcionario, getMethodName( new Object() {} ) );
+		return facade.find( employee, getMethodName( new Object() {} ) );
 	}
 	
 	@PostMapping( value="/funcionario" )
-	public Result save( @RequestBody Funcionario funcionario ) {
+	public Result save( @RequestBody Employee employee ) {
 		
-		return fachada.save( ( EntidadeDominio ) funcionario, getMethodName( new Object() {} ) );
+		return facade.save( ( DomainEntity ) employee, getMethodName( new Object() {} ) );
 	}
 	
 	@PutMapping( value="/funcionario" )
-	public Result update( @RequestBody Funcionario funcionario ) {
+	public Result update( @RequestBody Employee employee ) {
 		
-		return fachada.update( funcionario, getMethodName( new Object() {} ) );
+		return facade.update( employee, getMethodName( new Object() {} ) );
 	}
 	
 	
 	@DeleteMapping( value="/funcionario/{id}" )
-	public Result delete( @PathVariable( "id" ) Long idFuncionario ) {
+	public Result delete( @PathVariable( "id" ) Long employeeId ) {
 		
-		return fachada.delete( new Funcionario( idFuncionario ), getMethodName( new Object() {} ) );
+		return facade.delete( new Employee( employeeId ), getMethodName( new Object() {} ) );
 	}
 }

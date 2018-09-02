@@ -10,7 +10,7 @@ import br.com.les.backend.utils.Result;
 public  abstract class AbstractController {
 
     @Autowired
-    IFacade fachada;
+    IFacade facade;
     
     @Autowired
     Result result;

@@ -1,6 +1,6 @@
 package br.com.les.backend.facade;
 
-import br.com.les.backend.entity.EntidadeDominio;
+import br.com.les.backend.entity.DomainEntity;
 import br.com.les.backend.service.IService;
 import br.com.les.backend.utils.Actions;
 import br.com.les.backend.utils.Result;
@@ -16,7 +16,7 @@ public class Facade extends AbstractFacade {
     private IService service;
 
     @Override
-    protected void validar( EntidadeDominio entity, String action, String callerMethod ) {
+    protected void validate( DomainEntity entity, String action, String callerMethod ) {
 
     	String entityName = entity.getClass().getSimpleName();
     	
@@ -30,41 +30,41 @@ public class Facade extends AbstractFacade {
     }
 
     @Override
-    public Result save( EntidadeDominio entity, String callerMethod ) {
+    public Result save( DomainEntity entity, String callerMethod ) {
 
-    	validar( entity, Actions.SAVE.getValue(), callerMethod  );
-    	if ( result.isSucesso() )
-    		result.getListaResultado().add( service.save( entity ) );
+    	validate( entity, Actions.SAVE.getValue(), callerMethod  );
+    	if ( result.isSuccess() )
+    		result.getResultList().add( service.save( entity ) );
     	return result;
     }
 
     @Override
-    public Result update(EntidadeDominio entity, String callerMethod ) {
+    public Result update(DomainEntity entity, String callerMethod ) {
         return null;
     }
 
     @Override
-    public Result delete( EntidadeDominio entity, String callerMethod ) {
+    public Result delete( DomainEntity entity, String callerMethod ) {
     	return null;
     }
 
     @Override
-    public Result findAll( EntidadeDominio entity, String callerMethod ) {
+    public Result findAll( DomainEntity entity, String callerMethod ) {
     		
-    	validar( entity, Actions.SEARCH.getValue(), callerMethod );
-    	result.setListaResultado( service.findAll() );
+    	validate( entity, Actions.SEARCH.getValue(), callerMethod );
+    	result.setResultList( service.findAll() );
     	return result;    	
     }
 
     @Override
-    public Result find( EntidadeDominio entity, String callerMethod ) {
+    public Result find( DomainEntity entity, String callerMethod ) {
         
     	result = new Result();
  
-    	validar( entity, Actions.SEARCH.getValue(), callerMethod  );
+    	validate( entity, Actions.SEARCH.getValue(), callerMethod  );
     	
-    	if ( result.getMensagem() == null ) {
-    		result.getListaResultado().addAll( service.findByParameters( entity ) );
+    	if ( result.getMessage() == null ) {
+    		result.getResultList().addAll( service.findByParameters( entity ) );
     		return result;
     	} else 
     		return result;
