@@ -5,6 +5,7 @@ import ConsultarListar from '@/components/admin/ConsultarListar'
 import UpdateUser from '@/components/admin/UpdateUser'
 import RegisterUser from '@/components/admin/RegisterUser'
 import Appointments from '@/components/user/Appointments'
+import Request from '@/components/user/Request'
 
 Vue.use(Router)
 
@@ -21,17 +22,17 @@ export default new Router({
       component: Login
     },
     {
-      path: '/ConsultarListar',
+      path: '/List',
       name: 'ConsultarListar',
       component: ConsultarListar
     },
     {
-      path: '/AlterarUsuario',
+      path: '/EditUser',
       name: 'UpdateUser',
       component: UpdateUser
     },
     {
-      path: '/CadastrarUsuario',
+      path: '/SaveUser',
       name: 'RegisterUser',
       component: RegisterUser
     },
@@ -39,6 +40,11 @@ export default new Router({
       path: '/Appointments',
       name: 'Appointments',
       component: Appointments
+    },
+    {
+      path: '/Request',
+      name: 'Request',
+      component: Request
     }
   ]
 })
