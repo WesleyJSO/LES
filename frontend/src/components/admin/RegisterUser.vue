@@ -111,7 +111,7 @@
       <!-- Row 5 -->
       <v-layout xs12 sm9 md6 lg6 xl4>
         <v-flex>
-          <v-text-field v-model="user.thelephoneList[0]"
+          <v-text-field v-model="user.thelephoneList[1].number"
                           type="phone"
                           prepend-icon="phone"
                           clearable
@@ -121,7 +121,7 @@
             </v-text-field>
         </v-flex>
         <v-flex>
-          <v-text-field v-model="user.thelephoneList[1]"
+          <v-text-field v-model="user.thelephoneList[1].number"
                           type="phone"
                           prepend-icon="phone"
                           clearable
@@ -130,7 +130,7 @@
           </v-text-field>
         </v-flex>
         <v-flex>
-          <v-text-field v-model="user.thelephoneList[2]"
+          <v-text-field v-model="user.thelephoneList[2].number"
                           type="phone"
                           prepend-icon="phone"
                           clearable
@@ -153,9 +153,9 @@
           </v-text-field>
         </v-flex>
         <v-flex xs12 sm9 md6 lg6 xl4 >
-          <v-menu ref="user.birthDateHelper"
+          <v-menu ref="birhtDateMenu"
                   :close-on-content-click="false"
-                  v-model="user.birthDateHelper"
+                  v-model="birhtDateMenu"
                   :nudge-right="40"
                   :return-value.sync="user.birthdate"
                   lazy
@@ -171,15 +171,17 @@
             </v-text-field>
             <v-date-picker v-model="user.birthdate"
                             :reactive="reactive"
-                            header-color="primary"
-                            @input="$refs.user.birthDateHelper.save(user.birthdate)">
+                            no-title scrollable>
+              <v-spacer></v-spacer>
+              <v-btn flat color="primary" @click="birhtDateMenu = false">Cancel</v-btn>
+              <v-btn flat color="primary" @click="$refs.birhtDateMenu.save(user.birthdate)">Confirmar</v-btn>
             </v-date-picker>
           </v-menu>
         </v-flex>
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-menu ref="user.joiningDateHelper"
+          <v-menu ref="joiningDateMenu"
                   :close-on-content-click="false"
-                  v-model="user.joiningDateHelper"
+                  v-model="joiningDateMenu"
                   :nudge-right="40"
                   :return-value.sync="user.joiningDate"
                   lazy
@@ -196,7 +198,10 @@
             <v-date-picker v-model="user.joiningDate"
                             header-color="green"
                             :reactive="reactive"
-                            @input="$refs.user.joiningDateHelper.save(user.joiningDate)">
+                            no-title scrollable>
+              <v-spacer></v-spacer>
+              <v-btn flat color="primary" @click="joiningDateMenu = false">Cancel</v-btn>
+              <v-btn flat color="primary" @click="$refs.joiningDateMenu.save(user.joiningDate)">Confirmar</v-btn>
             </v-date-picker>
           </v-menu>
         </v-flex>
@@ -252,9 +257,21 @@ export default {
       type: Object,
       default () {
         return {
-          thelephoneList: ['46784571'],
+          thelephoneList: [
+            { type: 'Fixo', number: '46771435' },
+            { type: 'Móvel', number: '998679124' },
+            { type: 'Móvel', number: '998679124' }
+          ],
           password: '',
-          passwordValidation: ''
+          passwordValidation: '',
+          name: 'José',
+          lastName: 'Zeller',
+          email: 'jose@zeller.com',
+          salary: 1200,
+          pis: 123456789,
+          workload: 6,
+          login: 'Zeller',
+          manager: 'Bill Gates'
         }
       }
     },
@@ -265,7 +282,8 @@ export default {
   },
   data: () => ({
     valid: false,
-    menu: false,
+    joiningDateMenu: false,
+    birhtDateMenu: false,
     reactive: true,
     haveMessage: false,
     messages: [],
@@ -294,6 +312,9 @@ export default {
   watch: {
   },
   methods: {
+    parsedDate () {
+      return new Date().toLocaleString('pt-Br', {year: 'numeric', month: 'numeric', day: 'numeric'})
+    },
     progress () {
       return Math.min(100, this.user.password.length * 10)
     },
@@ -354,5 +375,7 @@ export default {
   h1 {
     font-size: 40px;
     text-align: center;
+    margin-top: -20px;
+    margin-bottom: 20px;
   }
 </style>

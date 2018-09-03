@@ -36,7 +36,7 @@ export default class UserValidators {
   emailRules (email) {
     if (!email) {
       return ['Informe um e-mail!']
-    } else if (!/.+@.+/.test(email)) {
+    } else if (!/.+@.+.+\..+/.test(email)) {
       return ['Informe um e-mail válido!!']
     }
     return []
@@ -66,37 +66,37 @@ export default class UserValidators {
     return []
   }
   phoneRule1 (thelephoneList) {
-    if (!thelephoneList[0] && !thelephoneList[1] && !thelephoneList[2]) {
+    if (!thelephoneList[0].number && !thelephoneList[1].number && !thelephoneList[2].number) {
       return ['Informe pelo menos um Telefone!']
-    } else if (thelephoneList[1] || thelephoneList[2]) {
+    } else if (thelephoneList[1].number || thelephoneList[2].number) {
       return []
-    } else if (thelephoneList[0].length >= 10) {
+    } else if (thelephoneList[0].number.length >= 10) {
       return ['Informe um Telefone Válido!']
-    } else if (thelephoneList[0].length <= 7) {
+    } else if (thelephoneList[0].number.length <= 7) {
       return ['Informe um Telefone Válido']
     }
     return []
   }
   phoneRule2 (thelephoneList) {
-    if (!thelephoneList[0] && !thelephoneList[1] && !thelephoneList[2]) {
+    if (!thelephoneList[0].number && !thelephoneList[1].number && !thelephoneList[2].number) {
       return ['Informe pelo menos um Telefone!']
-    } else if (thelephoneList[0] || thelephoneList[2]) {
+    } else if (thelephoneList[0].number || thelephoneList[2].number) {
       return []
-    } else if (thelephoneList[1].length >= 10) {
+    } else if (thelephoneList[1].number.length >= 10) {
       return ['Informe um Telefone Válido!']
-    } else if (thelephoneList[1].length <= 7) {
+    } else if (thelephoneList[1].number.length <= 7) {
       return ['Informe um Telefone Válido']
     }
     return []
   }
   phoneRule3 (thelephoneList) {
-    if (!thelephoneList[0] && !thelephoneList[1] && !thelephoneList[2]) {
+    if (!thelephoneList[0].number && !thelephoneList[1].number && !thelephoneList[2].number) {
       return ['Informe pelo menos um Telefone!']
-    } else if (thelephoneList[0] || thelephoneList[1]) {
+    } else if (thelephoneList[0].number || thelephoneList[1].number) {
       return []
-    } else if (thelephoneList[2].length >= 10) {
+    } else if (thelephoneList[2].number.length >= 10) {
       return ['Informe um Telefone Válido!']
-    } else if (thelephoneList[2].length <= 7) {
+    } else if (thelephoneList[2].number.length <= 7) {
       return ['Informe um Telefone Válido']
     }
     return []
