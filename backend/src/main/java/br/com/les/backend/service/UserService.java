@@ -53,6 +53,10 @@ public class UserService implements IService {
 	@Override
 	public List< DomainEntity > findByParameters( DomainEntity entity ) {
 
-		return userDAO.findByEmailAndPassword( ( User ) entity );
+		User u = ( User ) entity;
+		if ( u.getLogin() != null && u.getLogin().getPassword() != null )
+			return userDAO.findByEmailAndPassword( u );
+		else
+			return userDAO.findByEmail( u );
 	}
 }

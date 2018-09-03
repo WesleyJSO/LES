@@ -2,40 +2,44 @@
   <v-app>
 
     <v-card class="elevation-10">
+
       <v-toolbar dark>
         <v-toolbar-title>Login</v-toolbar-title>
       </v-toolbar>
-        <li v-for="error in msgErro" :key="error">
-          <v-alert :color="msgCor"
-                   :value="isErro"
-                   v-text="error"
-                   transition="scale-transition" />
+
+        <li v-for="(msg, index) in messages" :key="index">
+          <v-alert
+              :value="haveMessage"
+              :color="msgColor"
+              v-text="msg"
+              transition="scale-transition" />
         </li>
-      <v-form v-model="valido"
-              @submit.prevent="findByEmailAndPassword">
+      <v-form v-model="valid" @submit.prevent="findByEmailAndPassword">
+
         <v-card-text>
-          <text v-bind="login" />
-          <v-text-field prepend-icon="person"
-                        v-model="email"
-                        :rules="emailRules"
-                        label="E-mail"
-                        required />
-          <v-text-field prepend-icon="lock"
-                        v-model="password"
-                        :rules="passwordRules"
-                        label="Senha"
-                        type="password"
-                        required />
+          <v-text-field
+              prepend-icon="person"
+              v-model="email"
+              :rules="emailRules"
+              label="E-mail"
+              required />
+          <v-text-field
+              prepend-icon="lock"
+              v-model="password"
+              :rules="passwordRules"
+              label="Senha"
+              type="password"
+              required />
         </v-card-text>
 
         <v-card-actions>
+          <v-btn color="blue" depressed flat @click="sentForgotPasswordEmail()">Esqueci a senha</v-btn>
           <v-spacer />
           <v-btn color="info" type="submit">Login</v-btn>
         </v-card-actions>
+
       </v-form>
-
     </v-card>
-
   </v-app>
 </template>
 
@@ -44,12 +48,12 @@ export default {
   data: () => ({
     login: [],
     user: [],
-    valido: false,
+    valid: false,
     email: '',
     password: '',
-    isErro: false,
-    msgErro: [],
-    msgCor: '',
+    haveMessage: false,
+    messages: [],
+    msgColor: '',
     emailRules: [
       v => !!v || 'E-mail obrigatório!',
       v => /.+@.+.+\..+/.test(v) || 'E-mail inválido válido!'
@@ -60,20 +64,76 @@ export default {
     ]
   }),
   methods: {
-    findByEmailAndPassword () {
+    validateEmailPassword () {
       let error = []
       error = this.$v_user.email(this.email)
       if (error) {
-        this.msgErro = [...error]
+        this.messages = [...error]
       }
       error = this.$v_user.password(this.password)
       if (error) {
-        this.msgErro = [...this.msgErro, ...error]
+        this.messages = [...this.messages, ...error]
       }
-      if (this.msgErro.length > 0) {
-        this.isErro = true
-        this.msgCor = 'warning'
+      if (this.messages.length > 0) {
+        this.haveMessage = true
+        this.msgColor = 'warning'
+        return false
       } else {
+        return true
+      }
+    },
+    validateEmail () {
+      let error = []
+      this.messages = []
+      this.haveMessage = false
+      error = this.$v_user.email(this.email)
+      if (error) {
+        this.messages = [...error]
+      }
+      if (this.messages.length > 0) {
+        this.haveMessage = true
+        this.msgColor = 'warning'
+        return false
+      } else {
+        return true
+      }
+    },
+    sentForgotPasswordEmail () {
+      this.messages = []
+      this.haveMessage = false
+      if (this.validateEmail()) {
+        this.$_axios.get(`${this.$_url}UsuarioEmail`, {params: {email: this.email}}).then(response => {
+          let result = response.data
+          if (result.resultList.length !== 0) {
+            this.haveMessage = true
+            this.msgColor = 'info'
+            this.messages = [`Nova senha de acesso enviada para o e-mail ${this.email}!`]
+          } else {
+            this.haveMessage = true
+            this.msgColor = 'warning'
+            this.messages = ['Não existe usuário para o e-mail informado!']
+          }
+          if (result.message) {
+            this.haveMessage = true
+            this.messages = [...result.message]
+            if (result.success) {
+              this.msgColor = 'info'
+            } else {
+              this.msgColor = 'warning'
+            }
+          }
+        },
+        response => {
+          this.haveMessage = true
+          this.msgColor = 'error'
+          this.messages = ['Erro durante envio de e-mail']
+        })
+      }
+    },
+    findByEmailAndPassword () {
+      this.messages = []
+      this.haveMessage = false
+      if (this.validateEmailPassword()) {
         let user = {
           email: this.email,
           login: {
@@ -84,18 +144,18 @@ export default {
           let result = response.data
           if (result.resultList.length !== 0) {
             this.user = response.data
-            this.isErro = true
-            this.msgCor = 'info'
-            this.msgErro = [`Bem vindo ${this.user.login.nomeLgin}.`]
+            this.haveMessage = true
+            this.msgColor = 'info'
+            this.messages = [`Bem vindo ${this.user.login.nomeLgin}.`]
             this.$emit('login', this.user.login)
           } else if (result.mensagem) {
-            this.isErro = true
-            this.msgCor = 'warning'
-            this.msgErro = [...result.mensagem]
+            this.haveMessage = true
+            this.msgColor = 'warning'
+            this.messages = [...result.mensagem]
           } else {
-            /* this.isErro = true
-            this.msgCor = 'warning'
-            this.msgErro = [`Usuário ${user.login.nomeLogin} não encontrado!`] */
+            /* this.haveMessage = true
+            this.msgColor = 'warning'
+            this.messages = [`Usuário ${user.login.nomeLogin} não encontrado!`] */
 
             /* USER MOCK */
             this.user = {
@@ -109,15 +169,15 @@ export default {
                 {name: 'ADMIN'}
               ]
             }
-            this.msgCor = 'info'
-            this.msgErro = [`Bem vindo ${this.user.login.nomeLgin}.`]
-            this.$emit('emittedUsuario', this.user)
+            this.msgColor = 'info'
+            this.messages = [`Bem vindo ${this.user.login.nomeLgin}.`]
+            this.$emit('emittedUser', this.user)
           }
         },
         response => {
-          this.isErro = true
-          this.msgCor = 'error'
-          this.msgErro = ['Erro durante execução do serviço!']
+          this.haveMessage = true
+          this.msgColor = 'error'
+          this.messages = ['Erro durante execução do serviço!']
           console.log(response.data)
         })
       }

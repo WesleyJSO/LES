@@ -24,7 +24,7 @@ public class Employee extends User {
 
 	
 	private String pis;
-	private Date  entryDateInCompany;
+	private Date  joiningDate;
 	
 	@ManyToOne( cascade=CascadeType.ALL)
 	@JoinColumn( name="manager_id" )
@@ -43,7 +43,7 @@ public class Employee extends User {
 	private List< Appointments > appointmentList;
 	
 	@OneToOne( mappedBy="employee", fetch=FetchType.LAZY )
-	private BaseHoursCalculation baseCalculationHours;
+	private BaseHourCalculation baseHourCalculation;
 
 	@OneToMany( cascade=CascadeType.ALL )
 	@LazyCollection(LazyCollectionOption.FALSE)
@@ -61,14 +61,6 @@ public class Employee extends User {
 
 	public void setPis(String pis) {
 		this.pis = pis;
-	}
-
-	public Date getEntryDateInCompany() {
-		return entryDateInCompany;
-	}
-
-	public void setEntryDateInCompany(Date entryDateInCompany) {
-		this.entryDateInCompany = entryDateInCompany;
 	}
 
 	public User getManager() {
@@ -102,20 +94,28 @@ public class Employee extends User {
 	public void setAppointmentList(List<Appointments> appointmentList) {
 		this.appointmentList = appointmentList;
 	}
-
-	public BaseHoursCalculation getBaseCalculationHours() {
-		return baseCalculationHours;
-	}
-
-	public void setBaseCalculationHours(BaseHoursCalculation baseCalculationHours) {
-		this.baseCalculationHours = baseCalculationHours;
-	}
-
+	
 	public List<CompTime> getMonthlyCompTimeList() {
 		return monthlyCompTimeList;
 	}
 
 	public void setMonthlyCompTimeList(List<CompTime> monthlyCompTimeList) {
 		this.monthlyCompTimeList = monthlyCompTimeList;
+	}
+
+	public Date getJoiningDate() {
+		return joiningDate;
+	}
+
+	public void setJoiningDate(Date joiningDate) {
+		this.joiningDate = joiningDate;
+	}
+
+	public BaseHourCalculation getBaseHourCalculation() {
+		return baseHourCalculation;
+	}
+
+	public void setBaseHourCalculation(BaseHourCalculation baseHourCalculation) {
+		this.baseHourCalculation = baseHourCalculation;
 	}
 }

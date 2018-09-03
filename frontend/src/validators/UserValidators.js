@@ -1,18 +1,4 @@
 export default class UserValidators {
-  email (email) {
-    if (!email) {
-      return ['campo E-mail deve ser preenchido!']
-    } else if (!/.+@.+.+\..+/.test(email)) {
-      return ['Formato de e-mail inválido!']
-    }
-  }
-  password (password) {
-    if (!password) {
-      return ['campo Senha deve ser preenchido!']
-    } else if (password.length <= 3) {
-      return ['campo Senha deve conter no mínimo 3 caracteres!']
-    }
-  }
   nameRules (name) {
     if (!name) {
       return ['Informe um Nome!']
@@ -21,7 +7,6 @@ export default class UserValidators {
     } else if (name.length <= 3 || length >= 20) {
       return ['Informe um nome Válido!']
     }
-    return []
   }
   lastNameRules (lastName) {
     if (!lastName) {
@@ -31,15 +16,13 @@ export default class UserValidators {
     } else if (lastName.length <= 3 || lastName.length >= 20) {
       return ['Informe um Sobrenome Válido!']
     }
-    return []
   }
   emailRules (email) {
     if (!email) {
       return ['Informe um e-mail!']
-    } else if (!/.+@.+/.test(email)) {
+    } else if (!/.+@.+\..+/.test(email)) {
       return ['Informe um e-mail válido!!']
     }
-    return []
   }
   salaryRules (salary) {
     if (!salary) {
@@ -47,7 +30,6 @@ export default class UserValidators {
     } else if (salary.length <= 0) {
       return ['Informe um salário Válido!']
     }
-    return []
   }
   workloadRules (workload) {
     if (!workload) {
@@ -55,7 +37,6 @@ export default class UserValidators {
     } else if (workload > 8 || workload <= 0) {
       return ['Informe uma Carga Horária Válida!']
     }
-    return []
   }
   managerRules (manager) {
     if (!manager) {
@@ -63,43 +44,33 @@ export default class UserValidators {
     } else if (manager.length <= 2 || manager.length >= 20) {
       return ['Informe um Gestor Válido!']
     }
-    return []
   }
-  phoneRule1 (thelephoneList) {
-    if (!thelephoneList[0] && !thelephoneList[1] && !thelephoneList[2]) {
+  phoneRule1 (number1, number2, number3) {
+    if (!number1 && !number2 && !number3) {
       return ['Informe pelo menos um Telefone!']
-    } else if (thelephoneList[1] || thelephoneList[2]) {
-      return []
-    } else if (thelephoneList[0].length >= 10) {
+    } else if (number1.length >= 10) {
       return ['Informe um Telefone Válido!']
-    } else if (thelephoneList[0].length <= 7) {
+    } else if (number1.length <= 7) {
       return ['Informe um Telefone Válido']
     }
-    return []
   }
-  phoneRule2 (thelephoneList) {
-    if (!thelephoneList[0] && !thelephoneList[1] && !thelephoneList[2]) {
+  phoneRule2 (number1, number2, number3) {
+    if (!number1 && !number2 && !number3) {
       return ['Informe pelo menos um Telefone!']
-    } else if (thelephoneList[0] || thelephoneList[2]) {
-      return []
-    } else if (thelephoneList[1].length >= 10) {
+    } else if (number2.length >= 10) {
       return ['Informe um Telefone Válido!']
-    } else if (thelephoneList[1].length <= 7) {
+    } else if (number2.length <= 7) {
       return ['Informe um Telefone Válido']
     }
-    return []
   }
-  phoneRule3 (thelephoneList) {
-    if (!thelephoneList[0] && !thelephoneList[1] && !thelephoneList[2]) {
+  phoneRule3 (number1, number2, number3) {
+    if (!number1 && !number2 && !number3) {
       return ['Informe pelo menos um Telefone!']
-    } else if (thelephoneList[0] || thelephoneList[1]) {
-      return []
-    } else if (thelephoneList[2].length >= 10) {
+    } else if (number3.length >= 10) {
       return ['Informe um Telefone Válido!']
-    } else if (thelephoneList[2].length <= 7) {
+    } else if (number3.length <= 7) {
       return ['Informe um Telefone Válido']
     }
-    return []
   }
   loginRules (login) {
     if (!login) {
@@ -109,7 +80,6 @@ export default class UserValidators {
     } else if (login.length <= 2 || login.length > 20) {
       return ['Informe um Login com até 20 Carácteres!']
     }
-    return []
   }
   pisRules (pis) {
     if (!pis) {
@@ -117,24 +87,26 @@ export default class UserValidators {
     } else if (pis.length !== 9) {
       return ['Informe um número PIS/PASESP Válido!']
     }
-    return []
   }
-  passwordRule (password, passwordValidation) {
-    if (!password && !passwordValidation) {
-      return ['Informe uma Senha!']
-    } else if ((!password && passwordValidation) || (password && !passwordValidation)) {
-      return ['As Senhas informadas são divergentes!']
+  passwordRules (password) {
+    if (!password) {
+      return ['campo Senha deve ser preenchido!']
+    } else if (password.length <= 3) {
+      return ['campo Senha deve conter no mínimo 3 caracteres!']
     }
-    return []
   }
-  passwordValidationRule (password, passwordValidation) {
+  passwordValidationRules (password, passwordValidation) {
     if (!password && !passwordValidation) {
-      return ['Informe uma Senha!']
+      return ['campo Senha de Confirmação deve ser preenchido!']
     } else if ((!password && passwordValidation) || (password && !passwordValidation)) {
       return ['As Senhas informadas são divergentes!']
     } else if (password !== passwordValidation) {
       return ['As Senhas informadas são divergentes!']
     }
-    return []
+  }
+  joiningDateRules (joiningDate) {
+    if (!joiningDate) {
+      return ['Data de ingresso deve ser informada!']
+    }
   }
 }

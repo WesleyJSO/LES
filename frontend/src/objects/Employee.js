@@ -1,5 +1,5 @@
 export default class Employee {
-  constructor (id, name, email, lastName, login, telephoneList, pis, entryCompanyDate, manager, baseHourCalculationList) {
+  constructor (id, name, email, lastName, login, telephoneList, pis, joiningDate, manager, baseHourCalculation) {
     this.id = id
     this.name = name
     this.email = email
@@ -7,8 +7,8 @@ export default class Employee {
     this.login = login
     this.telephoneList = telephoneList
     this.pis = pis
-    this.entryCompanyDate = entryCompanyDate
+    this.joiningDate = joiningDate
     this.manager = manager
-    this.baseHourCalculationList = baseHourCalculationList
+    this.baseHourCalculation = baseHourCalculation
   }
 }

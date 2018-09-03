@@ -1,8 +1,6 @@
 package br.com.les.backend.strategy.employee;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -39,7 +37,7 @@ public class SaveEmployeeStrategy extends AbstractEmployeeStrategy {
 			/*if( funcionario.getListaRole().isEmpty() )
 				resultado.setError( "Ao menos uma role deve ser selecionada!" ); 
 			*/
-			if( employee.getBaseCalculationHours().getSalary() == BigDecimal.ZERO )
+			if( employee.getBaseHourCalculation().getSalary() == 0D )
 				result.setError(Util.ERROR_SALARY );
 			
 			if( employee.getPis() == null || employee.getPis().isEmpty() )
@@ -49,20 +47,20 @@ public class SaveEmployeeStrategy extends AbstractEmployeeStrategy {
 					result.setError( Util.INVALID_PIS);
 				
 			
-			if( employee.getBaseCalculationHours().getWorkload() == 0 )
+			if( employee.getBaseHourCalculation().getWorkload() == 0 )
 				result.setError( Util.ERROR_WORKLOAD );
 			else
-				if( employee.getBaseCalculationHours().getWorkload() >= 10)
+				if( employee.getBaseHourCalculation().getWorkload() >= 10)
 					result.setError( Util.INVALID_WORKLOAD );
 			
 			if( employee.getManager().getName().equals("") )
 				result.setError( Util.ERROR_MANAGER_NAME );
 			
-			if( employee.getThelephoneList().isEmpty() )
+			if( employee.getTelephoneList().isEmpty() )
 				result.setError( Util.ERROR_PHONE );
 			else {
 				List< Telephone > listToRemove = new ArrayList<>();
-				for( Telephone telephone: employee.getThelephoneList() ) {
+				for( Telephone telephone: employee.getTelephoneList() ) {
 					telephone.setUser(employee);
 					if( telephone.getNumber().length() == 0 ) {
 						listToRemove.add( telephone );
@@ -70,30 +68,17 @@ public class SaveEmployeeStrategy extends AbstractEmployeeStrategy {
 				}
 				
 				for( Telephone telephone : listToRemove )
-					employee.getThelephoneList().remove( telephone );
+					employee.getTelephoneList().remove( telephone );
 
 				
-				for( Telephone telephone : employee.getThelephoneList() )
+				for( Telephone telephone : employee.getTelephoneList() )
 					if( telephone.getNumber().length() < 8 ) {
 						result.setError( Util.INVALID_PHONE.concat( telephone.toString() ) );
 						break;
 					}
 				
-			}
-			
-			if( employee.getBirthDate() == null || employee.getBirthDate().toString().isEmpty() )
-				result.setError( Util.ERROR_BIRTHDATE );
-			else {
-				Date dataAtual = new Date();
-				
-				Long milliseconds = dataAtual.getTime() - employee.getBirthDate().getTime();
-				
-				if( milliseconds < 441504000000l ) {
-					result.setError( Util.INVALID_BIRTHDATE );
-				}
-			}
-			
-			if( employee.getBirthDate() == null || employee.getEntryDateInCompany().toString().isEmpty() ) {
+			}			
+			if( employee.getJoiningDate().toString().isEmpty() ) {
 					result.setError( Util.ERROR_JOINING_DATE );
 			}
 			

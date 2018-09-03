@@ -1,7 +1,5 @@
 package br.com.les.backend.strategy.user;
 
-import java.util.Date;
-
 import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.DomainEntity;
@@ -36,7 +34,7 @@ public class SaveUserStrategy extends AbstractUserStrategy {
 			/*if( funcionario.getListaRole().isEmpty() )
 				resultado.setError( "Ao menos uma role deve ser selecionada!" ); 
 			*/
-			if( employee.getBaseCalculationHours() == null )
+			if( employee.getBaseHourCalculation() == null )
 				result.setError( Util.ERROR_SALARY );
 			
 			if( employee.getPis() == null || employee.getPis().isEmpty() )
@@ -46,17 +44,17 @@ public class SaveUserStrategy extends AbstractUserStrategy {
 					result.setError( Util.INVALID_PIS );
 				
 			
-			if( employee.getBaseCalculationHours().getWorkload() == 0 )
+			if( employee.getBaseHourCalculation().getWorkload() == 0D )
 				result.setError( Util.ERROR_WORKLOAD );
 			
 			if( employee.getManager().getName().equals("") )
 				result.setError( Util.ERROR_MANAGER_NAME );
 			
-			if( employee.getThelephoneList().isEmpty() )
+			if( employee.getTelephoneList().isEmpty() )
 				result.setError( Util.ERROR_PHONE );
 			else {
 				
-				for( Telephone telephone: employee.getThelephoneList() )
+				for( Telephone telephone: employee.getTelephoneList() )
 					if( telephone.getNumber().length() < 9 ) {
 						result.setError( Util.INVALID_PHONE );
 						break;
@@ -66,20 +64,8 @@ public class SaveUserStrategy extends AbstractUserStrategy {
 			
 			if( employee.getLogin() == null )
 				result.setError( Util.ERROR_LOGIN );
-			
-			if( employee.getBirthDate() == null || employee.getBirthDate().toString().isEmpty() )
-				result.setError( Util.ERROR_BIRTHDATE );
-			else {
-				Date dataAtual = new Date();
-				
-				Long milliseconds = dataAtual.getTime() - employee.getBirthDate().getTime();
-				
-				if( milliseconds < 441504000000l ) {
-					result.setError( Util.INVALID_BIRTHDATE );
-				}
-			}
-			
-			if( employee.getEntryDateInCompany() == null || employee.getEntryDateInCompany().toString().isEmpty() )
+						
+			if( employee.getJoiningDate() == null || employee.getJoiningDate().toString().isEmpty() )
 				result.setError( Util.ERROR_JOINING_DATE );
 			
 			if( employee.getLogin().getPassword() == null || employee.getLogin().getPassword().isEmpty() )

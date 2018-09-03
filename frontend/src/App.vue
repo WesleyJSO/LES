@@ -1,9 +1,10 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer v-model="drawer"
-                         :clipped="clipped"
-                         fixed
-                         app >
+    <v-navigation-drawer
+        v-model="drawer"
+        :clipped="clipped"
+        fixed
+        app >
       <v-list dense>
         <v-list-tile>
           <v-list-tile-action>
@@ -39,7 +40,7 @@
       <v-container fluid>
         <v-slide-y-transition mode="out-in">
             <v-flex xs12 sm10 offset-sm1 pa-5>
-              <router-view @emittedUsuario="setUsuarioLogado" />
+              <router-view @emittedUser="setUsuarioLogado" />
             </v-flex>
         </v-slide-y-transition>
       </v-container>

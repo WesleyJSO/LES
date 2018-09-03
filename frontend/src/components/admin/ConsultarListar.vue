@@ -227,30 +227,30 @@ export default {
     },
     save (funcionario) {
       alert('Parent Save', JSON.stringify(funcionario, null, ' '))
-      /* this.$_axios.post(`${this.$_url}funcionario`, funcionario).then((response) => {
+      this.$_axios.post(`${this.$_url}funcionario`, funcionario).then((response) => {
         let resultado = response.data
         if (resultado.listaResultado.length !== 0) {
-          /* retorno ok
+          // retorno ok
           this.funcionario = resultado.listaResultado
         }
         if (resultado.mensagem) {
           this.messages = [...resultado.mensagem]
           this.haveMessage = true
           if (resultado.sucesso) {
-          /* retorno mensagem de sucesso
+          // retorno mensagem de sucesso
             this.messageColor = 'info'
           } else {
-            /* retorno mensagem de erro
+            // retorno mensagem de erro
             this.messageColor = 'warning'
           }
         }
       },
       (response) => {
-        /* erro na requisição do serviço
+        // erro na requisição do serviço
         this.messages = ['Erro durante execução do serviço!']
         this.haveMessage = true
         this.messageColor = 'error'
-      }) */
+      })
       if (this.editedIndex > -1) {
         Object.assign(this.users[this.editedIndex], funcionario)
       } else {

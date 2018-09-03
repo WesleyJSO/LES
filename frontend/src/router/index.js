@@ -30,7 +30,7 @@ export default new Router({
       component: UpdateUser
     },
     {
-      path: '/CadastroUsuario',
+      path: '/CadastrarUsuario',
       name: 'RegisterUser',
       component: RegisterUser
     }
