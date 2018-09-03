@@ -28,18 +28,18 @@
     </v-toolbar>
     <v-data-table :headers="getHeaders"
                   :items="users"
-                  item-key="pis"
+                  item-key="id"
                   hide-actions
                   :search="searchFilter"
                   class="elevation-2" >
       <template slot="items" slot-scope="props">
         <tr @click="props.expanded = !props.expanded">
-          <td>{{ props.item.nome }}</td>
-          <td class="text-xs-center">{{ props.item.listaBaseCalculoHoras[0].cargaHoraria }}</td>
-          <td class="text-xs-center">{{ props.item.listaBaseCalculoHoras[0].salario }}</td>
-          <td class="text-xs-center">{{ props.item.listaBaseCalculoHoras[0].tipoHora === -1 ? 'BANCO' : 'EXTRA' }}</td>
-          <td class="text-xs-center">{{ props.item.gestor.nome }}</td>
-          <td class="text-xs-center">{{ props.item.listaTelefone[0].numero }}</td>
+          <td>{{ props.item.name }}</td>
+          <td class="text-xs-center">{{ props.item.baseCalculationHours.workload }}</td>
+          <td class="text-xs-center">{{ props.item.baseCalculationHours.salary }}</td>
+          <td class="text-xs-center">{{ props.item.baseCalculationHours.hourType === -1 ? 'BANCO' : 'EXTRA' }}</td>
+          <td class="text-xs-center">{{ props.item.manager.name }}</td>
+          <td class="text-xs-center">{{ props.item.thelephoneList[0].number }}</td>
           <td class="text-xs-center">{{ props.item.email }}</td>
           <td class="justify-center layout px-0">
             <v-icon small
@@ -59,10 +59,10 @@
                       class="elevation-1" >
           <template slot="items" slot-scope="props">
             <td class="text-xs-center">{{ props.item.pis }}</td>
-            <td class="text-xs-center">{{ props.item.dataNascimento }}</td>
-            <td class="text-xs-center">{{ props.item.dataIngressoEmpresa }}</td>
-            <td class="text-xs-center">{{ props.item.listaTelefone[1].numero }}</td>
-            <td class="text-xs-center">{{ props.item.listaTelefone[2].numero }}</td>
+            <td class="text-xs-center">{{ props.item.birthDate }}</td>
+            <td class="text-xs-center">{{ props.item.entryDateInCompany }}</td>
+            <td class="text-xs-center">{{ props.item.thelephoneList[1].number }}</td>
+            <td class="text-xs-center">{{ props.item.thelephoneList[1].number }}</td>
           </template>
         </v-data-table>
       </template>
@@ -83,21 +83,99 @@ import AdminService from '@/service/AdminService'
 export default {
   props: {
     users: {
-      type: Object,
+      type: Array,
       default () {
-        return {
-          thelephoneList: ['46784571'],
-          password: '',
-          passwordValidation: '',
+        return [{
+          id: '001',
+          creationDate: '1/1/1990',
           name: 'José',
           lastName: 'Zeller',
-          email: 'jose@zeller.com',
-          salary: 1200,
-          pis: 123456789,
-          workload: 6,
-          login: 'Zeller',
-          manager: 'Bill Gates'
-        }
+          birthDate: '06/05/1998',
+          login: {
+            passwordValidation: 'zeller',
+            password: 'zeller',
+            active: true
+          },
+          email: 'josevictorzg@gmail.com',
+          roleList: [
+            { roleName: 'Super User ADM' },
+            { roleName: 'Funcionário' }
+          ],
+          logActionList: [
+            { action: 'Request abscence', actionDate: '22/12/2010' },
+            { action: 'Mark hours', actionDate: '22/12/2010' },
+            { action: 'Mark hours', actionDate: '22/12/2010' }
+          ],
+          thelephoneList: [
+            { type: 'Fixo', number: '46771435' },
+            { type: 'Móvel', number: '998679124' }
+          ],
+          pis: '123456789',
+          entryDateInCompany: '29/05/2018',
+          manager: {
+            id: '001',
+            creationDate: '1/1/1990',
+            name: 'José',
+            lastName: 'Zeller',
+            birthDate: '06/05/1998',
+            login: {
+              passwordValidation: 'zeller',
+              password: 'zeller',
+              active: true
+            },
+            email: 'josevictorzg@gmail.com',
+            roleList: [
+              { roleName: 'Super User ADM' },
+              { roleName: 'Funcionário' }
+            ],
+            logActionList: [
+              { action: 'Request abscence', actionDate: '22/12/2010' },
+              { action: 'Mark hours', actionDate: '22/12/2010' },
+              { action: 'Mark hours', actionDate: '22/12/2010' }
+            ],
+            thelephoneList: [
+              { type: 'Fixo', number: '46771435' },
+              { type: 'Móvel', number: '998679124' },
+              { type: 'Móvel', number: '955448899' }
+            ],
+            pis: '123456789'
+          },
+          requestList: [
+            {
+              description: 'Desc Solicitação',
+              agreed: true,
+              requestType: {
+                description: 'Falta, Troca de Dia...'
+              },
+              notificatedColaboratorsList: [
+                { id: '020', name: 'Chefe', lastName: 'Boss' }
+              ]
+            }
+          ],
+          appointmentList: [
+            {
+              description: 'APontamento normal',
+              userAppointmentDate: '22/08/2010 09:00',
+              userSystemAccessDate: '22/08/2010 09:04'
+            }
+          ],
+          baseCalculationHours: {
+            hourType: '-1',
+            workload: '6',
+            effectiveDate: '22/02/2010',
+            salary: 3000
+          },
+          monthlyCompTimeList: {
+            balance: '',
+            monthlyHoursLimit: '50',
+            dailyHoursLimit: '12',
+            monthlyHoursLimitActive: false,
+            thisMonthBalance: '45',
+            thisMonthBalanceDescription: 'Banco de Horas do Mês',
+            monthPaymentLimit: '15',
+            descriptionOfMontlyPaymentLimit: 'Limite Mensal de Banco'
+          }
+        }]
       }
     },
     editedItem: {

@@ -431,5 +431,7 @@ export default {
   h1 {
     font-size: 40px;
     text-align: center;
+    margin-top: -20px;
+    margin-bottom: 20px;
   }
 </style>
