@@ -19,10 +19,16 @@ export const ITEMS = [
   'Bill Gates', 'Torvald Linux', 'Elon Musk'
 ]
 export const DATE_FORMATS = [ {year: 'numeric', month: 'numeric', day: 'numeric'} ]
-
+export const GROUPS_HEADERS = [
+  { text: 'Nome', align: 'center', sortable: false, value: 'nome' },
+  { text: 'Data Criação', align: 'center', value: 'dataCriacao' },
+  { text: 'Centro de Custos', value: 'centroDeCusto' },
+  { text: 'Membros', value: 'tipoHora' }
+]
 export default class AdminService {
   static get HEADERS () { return HEADERS }
   static get SUB_HEADERS () { return SUB_HEADERS }
   static get DATE_FORMATS () { return SUB_HEADERS }
   static get ITEMS () { return ITEMS }
+  static get GROUPS_HEADERS () { return GROUPS_HEADERS }
 }

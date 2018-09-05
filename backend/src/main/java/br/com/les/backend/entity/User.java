@@ -33,7 +33,7 @@ public class User extends Person {
 	
 	@OneToMany( mappedBy="user", cascade=CascadeType.ALL, orphanRemoval=true )
 	@JsonManagedReference
-	private List< Telephone > thelephoneList;
+	private List< Telephone > telephoneList;
 
 	
 	// constructors
@@ -75,11 +75,11 @@ public class User extends Person {
 		this.logActionList = logActionList;
 	}
 
-	public List<Telephone> getThelephoneList() {
-		return thelephoneList;
+	public List< Telephone > getTelephoneList() {
+		return telephoneList;
 	}
 
-	public void setThelephoneList(List<Telephone> thelephoneList) {
-		this.thelephoneList = thelephoneList;
+	public void setTelephoneList(List< Telephone > telephoneList) {
+		this.telephoneList = telephoneList;
 	}
 }

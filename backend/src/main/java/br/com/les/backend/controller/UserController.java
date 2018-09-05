@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.les.backend.entity.DomainEntity;
@@ -30,6 +31,14 @@ public class UserController extends AbstractController {
 		return facade.find( user, getMethodName( new Object() {} ) );
 	}
 	
+	@GetMapping( value="/UsuarioEmail" )
+	public Result sentChangePasswordEmail( @RequestParam( "email" ) String email ) {
+		
+		User user = new User();
+		user.setEmail(email);
+		return facade.find( user, getMethodName( new Object() {} ) );
+	}
+	
 	// waiting for a user with a login filled by nomeLogin and senha
 	@PostMapping( value="/UsuarioLogin" )
 	public Result findByLogin( @RequestBody User user ) {
@@ -49,7 +58,7 @@ public class UserController extends AbstractController {
 		return facade.update( user, getMethodName( new Object() {} ) );
 	}
 	
-	@DeleteMapping( value="/user/{id}" )
+	@DeleteMapping( value="/Usuario/{id}" )
 	public Result delete( @PathVariable( "id" ) Long userId ) {
 		
 		return facade.delete( new User( userId ), getMethodName( new Object() {} ) );

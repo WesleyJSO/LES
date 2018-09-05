@@ -1,6 +1,6 @@
 <template>
     <v-app>
-    <h1>{{getItems.title}}</h1>
+    <h1>Realizar Solicitação</h1>
     <li v-for="(message, index) in messages" :key="index">
       <v-alert :color="messageColor"
                :value="haveMessage"

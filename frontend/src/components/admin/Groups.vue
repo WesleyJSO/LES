@@ -1,13 +1,14 @@
 <template>
   <v-app>
+      <h1>Gerenciar Grupos</h1>
     <li v-for="(message, index) in messages" :key="index">
       <v-alert :color="messageColor"
                :value="haveMessage"
                v-text="message"
                transition="scale-transition" />
     </li>
-    <v-toolbar flat color="white">
-      <v-toolbar-title>Funcionários</v-toolbar-title>
+    <v-toolbar flat color="dark">
+      <v-toolbar-title>Gerenciar Grupos</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-text-field v-model="searchFilter"
                     append-icon="search"
@@ -18,36 +19,97 @@
       <v-dialog v-model="dialog" max-width="1000px" max-height="300px" >
         <v-card>
           <v-card-text>
-            <register-user :user="editedItem"
-                           :edit="isEditing"
-                           @save="save">
-            </register-user>
+            <h3>Cadastrar Grupo</h3>
+            <br/>
+            <!--Add validate method <v-form v-model="valid" @submit.prevent="validateUser"> -->
+            <v-form>
+              <v-layout>
+              <!-- Row 1 -->
+              <v-flex xs12 sm9 md6 lg6 xl4>
+                  <v-text-field v-model="groups.name"
+                                type="text"
+                                class="px-0"
+                                prepend-icon="assignment"
+                                clearable
+                                label="Nome"
+                                required>
+                  </v-text-field>
+                </v-flex>
+                <v-flex>
+                  <v-combobox v-model="groups.members"
+                              prepend-icon="face"
+                              :items="members"
+                              label="Membros"
+                              chips>
+                    <template slot="selection"
+                              slot-scope="data">
+                      <v-chip :selected="data.selected"
+                              :disabled="data.disabled"
+                              :key="JSON.stringify(data.item)"
+                              class="v-chip--select-multi"
+                              @input="data.parent.selectItem(data.item)">
+                        <v-avatar class="accent white--text"
+                                  v-text="data.item.slice(0, 1).toUpperCase()">
+                        </v-avatar>
+                          {{ data.item }}
+                      </v-chip>
+                    </template>
+                  </v-combobox>
+                </v-flex>
+              </v-layout>
+              <v-layout>
+                <v-flex>
+                  <v-combobox v-model="groups.type"
+                              prepend-icon="check_circle"
+                              :items="members"
+                              label="Centro de Custo"
+                              chips>
+                    <template slot="selection"
+                              slot-scope="data">
+                      <v-chip :selected="data.selected"
+                              :disabled="data.disabled"
+                              :key="JSON.stringify(data.item)"
+                              class="v-chip--select-multi"
+                              @input="data.parent.selectItem(data.item)">
+                        <v-avatar class="accent white--text"
+                                  v-text="data.item.slice(0, 1).toUpperCase()">
+                        </v-avatar>
+                          {{ data.item }}
+                      </v-chip>
+                    </template>
+                  </v-combobox>
+                </v-flex>
+              </v-layout>
+            </v-form>
+            <v-spacer></v-spacer>
+            <v-btn @click="addAppoint" type="submit" color="success">Salvar</v-btn>
+            <v-btn color="error">Cancelar</v-btn>
           </v-card-text>
         </v-card>
       </v-dialog>
     </v-toolbar>
-    <v-data-table :headers="getHeaders"
+    <v-data-table :headers="getGroupHeaders"
                   :items="users"
-                  item-key="id"
+                  item-key="nome"
                   hide-actions
                   :search="searchFilter"
                   class="elevation-2" >
       <template slot="items" slot-scope="props">
         <tr @click="props.expanded = !props.expanded">
           <td>{{ props.item.name }}</td>
-          <td class="text-xs-center">{{ props.item.baseCalculationHours.workload }}</td>
-          <td class="text-xs-center">{{ props.item.baseCalculationHours.salary }}</td>
-          <td class="text-xs-center">{{ props.item.baseCalculationHours.hourType === -1 ? 'BANCO' : 'EXTRA' }}</td>
-          <td class="text-xs-center">{{ props.item.manager.name }}</td>
-          <td class="text-xs-center">{{ props.item.thelephoneList[0].number }}</td>
-          <td class="text-xs-center">{{ props.item.email }}</td>
+          <td class="text-xs-center">{{ props.item.data }}</td>
+          <td class="text-xs-center">{{ props.item.centroCusto }}</td>
+          <td class="text-xs-center">{{ props.item.membros }}</td>
           <td class="justify-center layout px-0">
-            <v-icon small
+            <v-icon 
                     class="mr-2"
-                    @click.stop="editItem(props.item)">edit</v-icon>
-            <v-icon small
-                    @click.stop="deleteItem(props.item)">delete
-            </v-icon>
+                    @click.stop="editItem(props.item)">person_add</v-icon>
+            <v-icon
+            class="mr-2"
+            @click.stop="editItem(props.item)">edit</v-icon>
+            <v-icon 
+            class="mr-2"
+            @click.stop="editItem(props.item)">delete</v-icon>
           </td>
         </tr>
       </template>
@@ -67,6 +129,22 @@
         </v-data-table>
       </template>
     </v-data-table>
+    <v-card>
+        <v-card-title></v-card-title>
+        <v-card-text style="height: 100px; position: absolute">
+        <v-fab-transition>
+            <v-btn @click="addAppointment()"
+                    color="blue"
+                    dark
+                    absolute
+                    top
+                    right
+                    fab>
+            <v-icon>add</v-icon>
+            </v-btn>
+        </v-fab-transition>
+        </v-card-text>
+    </v-card>
   </v-app>
 </template>
 
@@ -86,186 +164,10 @@ export default {
       type: Array,
       default () {
         return [{
-          id: '001',
-          creationDate: '1/1/1990',
-          name: 'José',
-          lastName: 'Zeller',
-          birthDate: '06/05/1998',
-          login: {
-            passwordValidation: 'zeller',
-            password: 'zeller',
-            active: true
-          },
-          email: 'josevictorzg@gmail.com',
-          roleList: [
-            { roleName: 'Super User ADM' },
-            { roleName: 'Funcionário' }
-          ],
-          logActionList: [
-            { action: 'Request abscence', actionDate: '22/12/2010' },
-            { action: 'Mark hours', actionDate: '22/12/2010' },
-            { action: 'Mark hours', actionDate: '22/12/2010' }
-          ],
-          thelephoneList: [
-            { type: 'Fixo', number: '46771435' },
-            { type: 'Móvel', number: '998679124' }
-          ],
-          pis: '123456789',
-          entryDateInCompany: '29/05/2018',
-          manager: {
-            id: '001',
-            creationDate: '1/1/1990',
-            name: 'José',
-            lastName: 'Zeller',
-            birthDate: '06/05/1998',
-            login: {
-              passwordValidation: 'zeller',
-              password: 'zeller',
-              active: true
-            },
-            email: 'josevictorzg@gmail.com',
-            roleList: [
-              { roleName: 'Super User ADM' },
-              { roleName: 'Funcionário' }
-            ],
-            logActionList: [
-              { action: 'Request abscence', actionDate: '22/12/2010' },
-              { action: 'Mark hours', actionDate: '22/12/2010' },
-              { action: 'Mark hours', actionDate: '22/12/2010' }
-            ],
-            thelephoneList: [
-              { type: 'Fixo', number: '46771435' },
-              { type: 'Móvel', number: '998679124' },
-              { type: 'Móvel', number: '955448899' }
-            ],
-            pis: '123456789'
-          },
-          requestList: [
-            {
-              description: 'Desc Solicitação',
-              agreed: true,
-              requestType: {
-                description: 'Falta, Troca de Dia...'
-              },
-              notificatedColaboratorsList: [
-                { id: '020', name: 'Chefe', lastName: 'Boss' }
-              ]
-            }
-          ],
-          appointmentList: [
-            {
-              description: 'APontamento normal',
-              userAppointmentDate: '22/08/2010 09:00',
-              userSystemAccessDate: '22/08/2010 09:04'
-            }
-          ],
-          baseCalculationHours: {
-            hourType: '-1',
-            workload: '6',
-            effectiveDate: '22/02/2010',
-            salary: 3000
-          },
-          monthlyCompTimeList: {
-            balance: '',
-            monthlyHoursLimit: '50',
-            dailyHoursLimit: '12',
-            monthlyHoursLimitActive: false,
-            thisMonthBalance: '45',
-            thisMonthBalanceDescription: 'Banco de Horas do Mês',
-            monthPaymentLimit: '15',
-            descriptionOfMontlyPaymentLimit: 'Limite Mensal de Banco'
-          }
-        },
-        {
-          id: '001',
-          creationDate: '1/1/1990',
-          name: 'Pedro',
-          lastName: 'Silva',
-          birthDate: '06/05/1998',
-          login: {
-            passwordValidation: 'zeller',
-            password: 'zeller',
-            active: true
-          },
-          email: 'pedro@gmail.com',
-          roleList: [
-            { roleName: 'Super User ADM' },
-            { roleName: 'Funcionário' }
-          ],
-          logActionList: [
-            { action: 'Request abscence', actionDate: '22/12/2010' },
-            { action: 'Mark hours', actionDate: '22/12/2010' },
-            { action: 'Mark hours', actionDate: '22/12/2010' }
-          ],
-          thelephoneList: [
-            { type: 'Fixo', number: '46771435' },
-            { type: 'Móvel', number: '987655432' }
-          ],
-          pis: '123456789',
-          entryDateInCompany: '29/05/2018',
-          manager: {
-            id: '001',
-            creationDate: '1/1/1990',
-            name: 'José',
-            lastName: 'Zeller',
-            birthDate: '06/05/1998',
-            login: {
-              passwordValidation: 'zeller',
-              password: 'zeller',
-              active: true
-            },
-            email: 'josevictorzg@gmail.com',
-            roleList: [
-              { roleName: 'Super User ADM' },
-              { roleName: 'Funcionário' }
-            ],
-            logActionList: [
-              { action: 'Request abscence', actionDate: '22/12/2010' },
-              { action: 'Mark hours', actionDate: '22/12/2010' },
-              { action: 'Mark hours', actionDate: '22/12/2010' }
-            ],
-            thelephoneList: [
-              { type: 'Fixo', number: '46771435' },
-              { type: 'Móvel', number: '998679124' },
-              { type: 'Móvel', number: '955448899' }
-            ],
-            pis: '123456789'
-          },
-          requestList: [
-            {
-              description: 'Desc Solicitação',
-              agreed: true,
-              requestType: {
-                description: 'Falta, Troca de Dia...'
-              },
-              notificatedColaboratorsList: [
-                { id: '020', name: 'Chefe', lastName: 'Boss' }
-              ]
-            }
-          ],
-          appointmentList: [
-            {
-              description: 'APontamento normal',
-              userAppointmentDate: '22/08/2010 09:00',
-              userSystemAccessDate: '22/08/2010 09:04'
-            }
-          ],
-          baseCalculationHours: {
-            hourType: '-1',
-            workload: '6',
-            effectiveDate: '22/02/2010',
-            salary: 2500
-          },
-          monthlyCompTimeList: {
-            balance: '',
-            monthlyHoursLimit: '50',
-            dailyHoursLimit: '12',
-            monthlyHoursLimitActive: false,
-            thisMonthBalance: '45',
-            thisMonthBalanceDescription: 'Banco de Horas do Mês',
-            monthPaymentLimit: '15',
-            descriptionOfMontlyPaymentLimit: 'Limite Mensal de Banco'
-          }
+          name: 'Projeto X',
+          data: '21/10/2010',
+          centroCusto: 'Projeto X',
+          membros: '5'
         }]
       }
     },
@@ -278,6 +180,12 @@ export default {
           passwordValidation: ''
         }
       }
+    },
+    groups: {
+      type: Object,
+      default () {
+        return {}
+      }
     }
   },
   data: () => ({
@@ -287,7 +195,8 @@ export default {
     searchFilter: '',
     editedIndex: -1,
     dialog: false,
-    isEditing: false
+    isEditing: false,
+    members: ['João', 'Maria', 'Laura']
   }),
   computed: {
     getHeaders () {
@@ -295,6 +204,9 @@ export default {
     },
     getSubHeaders () {
       return AdminService.SUB_HEADERS
+    },
+    getGroupHeaders () {
+      return AdminService.GROUPS_HEADERS
     }
   },
   watch: {
@@ -331,6 +243,9 @@ export default {
   },
   methods: {
     initialize () {
+    },
+    addAppointment () {
+      this.dialog = true
     },
     prepareUserObject (userObject) {
       let listaTelefone = []
@@ -435,3 +350,16 @@ export default {
   }
 }
 </script>
+<style scoped>
+  h1 {
+    font-size: 40px;
+    text-align: center;
+    margin-top: -20px;
+    margin-bottom: 20px;
+  }
+  h3 {
+    font-size: 35px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+</style>

@@ -41,4 +41,15 @@ public class UserDAO extends AbstractDAO {
 		
 		return ( List< DomainEntity > ) query.getResultList();
 	}
+
+	public List<DomainEntity> findByEmail( User user ) {
+		
+		hql = new StringBuilder();
+		hql.append( "from User u where u.email = :email" );
+		
+		query = getEntityManager().createQuery( hql.toString() );
+		
+		query.setParameter("email", user.getEmail());
+		return ( List< DomainEntity > ) query.getResultList();
+	}
 }
