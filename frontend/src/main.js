@@ -10,6 +10,10 @@ import moment from 'moment'
 import VeeValidate from 'vee-validate'
 import UserValidator from './validators/UserValidators'
 import BaseHourCalculationValidators from './validators/BaseHourCalculationValidators'
+import VueChartkick from 'vue-chartkick'
+import Chart from 'chart.js'
+
+Vue.use(VueChartkick, {adapter: Chart})
 
 Vue.use(VeeValidate)
 Vue.use(Vuetify)

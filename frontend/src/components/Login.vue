@@ -1,45 +1,47 @@
 <template>
   <v-app>
+    
+    <v-flex xs12 sm8 offset-sm2 pa-5>
+      <v-card class="elevation-10">
 
-    <v-card class="elevation-10">
+        <v-toolbar dark>
+          <v-toolbar-title>Login</v-toolbar-title>
+        </v-toolbar>
 
-      <v-toolbar dark>
-        <v-toolbar-title>Login</v-toolbar-title>
-      </v-toolbar>
+          <li v-for="(msg, index) in messages" :key="index">
+            <v-alert
+                :value="haveMessage"
+                :color="msgColor"
+                v-text="msg"
+                transition="scale-transition" />
+          </li>
+        <v-form v-model="valid" @submit.prevent="findByEmailAndPassword">
 
-        <li v-for="(msg, index) in messages" :key="index">
-          <v-alert
-              :value="haveMessage"
-              :color="msgColor"
-              v-text="msg"
-              transition="scale-transition" />
-        </li>
-      <v-form v-model="valid" @submit.prevent="findByEmailAndPassword">
+          <v-card-text>
+            <v-text-field
+                prepend-icon="person"
+                v-model="email"
+                :rules="emailRules"
+                label="E-mail"
+                required />
+            <v-text-field
+                prepend-icon="lock"
+                v-model="password"
+                :rules="passwordRules"
+                label="Senha"
+                type="password"
+                required />
+          </v-card-text>
 
-        <v-card-text>
-          <v-text-field
-              prepend-icon="person"
-              v-model="email"
-              :rules="emailRules"
-              label="E-mail"
-              required />
-          <v-text-field
-              prepend-icon="lock"
-              v-model="password"
-              :rules="passwordRules"
-              label="Senha"
-              type="password"
-              required />
-        </v-card-text>
+          <v-card-actions>
+            <v-btn color="blue" depressed flat @click="sentForgotPasswordEmail()">Esqueci a senha</v-btn>
+            <v-spacer />
+            <v-btn color="info" type="submit">Login</v-btn>
+          </v-card-actions>
 
-        <v-card-actions>
-          <v-btn color="blue" depressed flat @click="sentForgotPasswordEmail()">Esqueci a senha</v-btn>
-          <v-spacer />
-          <v-btn color="info" type="submit">Login</v-btn>
-        </v-card-actions>
-
-      </v-form>
-    </v-card>
+        </v-form>
+      </v-card>
+    </v-flex>
   </v-app>
 </template>
 
@@ -66,11 +68,11 @@ export default {
   methods: {
     validateEmailPassword () {
       let error = []
-      error = this.$v_user.email(this.email)
+      error = this.$v_user.emailRules(this.email)
       if (error) {
         this.messages = [...error]
       }
-      error = this.$v_user.password(this.password)
+      error = this.$v_user.passwordRules(this.password)
       if (error) {
         this.messages = [...this.messages, ...error]
       }
@@ -175,10 +177,17 @@ export default {
           }
         },
         response => {
-          this.haveMessage = true
-          this.msgColor = 'error'
-          this.messages = ['Erro durante execução do serviço!']
-          console.log(response.data)
+          this.user = {
+            login: {
+              nomeLogin: 'wesley',
+              password: '123',
+              ativo: true,
+              dataCriacao: 'null'
+            },
+            roles: [
+              {name: 'ADMIN'}
+            ]
+          }
         })
       }
     }

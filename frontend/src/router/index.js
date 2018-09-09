@@ -6,6 +6,10 @@ import UpdateUser from '@/components/admin/UpdateUser'
 import RegisterUser from '@/components/admin/RegisterUser'
 import Appointments from '@/components/user/Appointments'
 import Request from '@/components/user/Request'
+import RegisterCompany from '@/components/admin/RegisterCompany'
+import RequestView from '@/components/admin/RequestView'
+import Reports from '@/components/admin/Reports'
+import Groups from '@/components/admin/Groups'
 
 Vue.use(Router)
 
@@ -37,14 +41,34 @@ export default new Router({
       component: RegisterUser
     },
     {
-      path: '/Appointments',
+      path: '/Apontamentos',
       name: 'Appointments',
       component: Appointments
     },
     {
-      path: '/Request',
+      path: '/Solicitacao',
       name: 'Request',
       component: Request
+    },
+    {
+      path: '/CadastrarEmpresa',
+      name: 'RegisterCompany',
+      component: RegisterCompany
+    },
+    {
+      path: '/VisualizarSolicitacao',
+      name: 'RequestView',
+      component: RequestView
+    },
+    {
+      path: '/Reports',
+      name: 'Reports',
+      component: Reports
+    },
+    {
+      path: '/Grupos',
+      name: 'Groups',
+      component: Groups
     }
   ]
 })

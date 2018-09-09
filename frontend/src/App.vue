@@ -17,7 +17,7 @@
           </v-list-tile-content>
         </v-list-tile>
 
-        <admin-role v-if="isAdminAtivo"></admin-role>
+        <admin-role v-if="true"></admin-role>
         <user-role v-else-if="isUsuarioAtivo"></user-role>
 
       </v-list>

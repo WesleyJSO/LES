@@ -1,6 +1,6 @@
 <template>
     <v-app>
-    <h1>{{title}}</h1>
+    <h1>Dados da Empresa</h1>
     <li v-for="(message, index) in messages" :key="index">
       <v-alert :color="messageColor"
                :value="haveMessage"
@@ -9,195 +9,47 @@
     </li>
     <br/>
     <v-form @submit.prevent="saveUser">
-      <v-layout>
+      <v-layout row wrap>
       <!-- Row 1 -->
-        <v-flex xs12 sm9 md6 lg6 xl4>
+        <v-flex xs6>
           <v-text-field
-                v-model="name"
+                v-model="company.socialName"
                 type="text"
                 class="px-0"
-                prepend-icon="face"
+                prepend-icon="assignment"
                 clearable
-                :rules="$v_user.nameRules(name)"
-                label="Nome"
+                label="Razão Social"
                 required>
           </v-text-field>
         </v-flex>
-        <v-flex xs12 sm9 md6 lg6 xl4>
+        <v-flex xs6>
           <v-text-field
-                v-model="lastName"
+                v-model="company.fantasyName"
                 type="text"
-                prepend-icon="face"
+                prepend-icon="supervisor_account"
                 clearable
-                :rules="$v_user.lastNameRules(lastName)"
-                label="Sobrenome"
+                label="Nome Fantasia"
                 required>
           </v-text-field>
         </v-flex>
-        <v-flex xs12 sm9 md6 lg6 xl4>
+        <v-flex xs6>
           <v-text-field
-                v-model="email"
-                type="email"
+                v-model="company.cpnj"
+                type="text"
                 prepend-icon="email"
                 clearable
-                :rules="$v_user.emailRules(email)"
-                label="E-mail"
+                label="CNPJ"
                 required>
           </v-text-field>
         </v-flex>
-      </v-layout>
-
       <!-- Row 2 -->
-      <v-layout>
-        <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field v-model="salary"
-                        type="number"
-                        prepend-icon="monetization_on"
+        <v-flex xs6>
+          <v-text-field v-model="company.stateRegistration"
+                        type="text"
+                        prepend-icon="domain"
                         clearable
-                        :rules="$v_user.salaryRules(salary)"
-                        label="Salário"
+                        label="Inscrição Estadual"
                         required>
-          </v-text-field>
-        </v-flex>
-        <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field v-model="pis"
-                        type="number"
-                        prepend-icon="credit_card"
-                        clearable
-                        :rules="$v_user.pisRules(pis)"
-                        label="PIS/PASESP"
-                        required>
-          </v-text-field>
-        </v-flex>
-        <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field v-model="workload"
-                        type="number"
-                        prepend-icon="timer"
-                        clearable
-                        :rules="$v_user.workloadRules(workload)"
-                        label="Carga Horária"
-                        required>
-          </v-text-field>
-        </v-flex>
-      </v-layout>
-
-      <!-- Row 3 -->
-      <v-layout>
-        <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field v-model="number1"
-                          type="phone"
-                          prepend-icon="phone"
-                          clearable
-                          :rules="$v_user.phoneRule1(number1, number2, number3)"
-                          label="Telefone"
-                          required>
-            </v-text-field>
-        </v-flex>
-        <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field v-model="number2"
-                          type="phone"
-                          prepend-icon="phone"
-                          clearable
-                          :rules="$v_user.phoneRule2(number1, number2, number3)"
-                          label="Telefone">
-          </v-text-field>
-        </v-flex>
-        <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field v-model="number3"
-                          type="phone"
-                          prepend-icon="phone"
-                          clearable
-                          :rules="$v_user.phoneRule3(number1, number2, number3)"
-                          label="Telefone">
-            </v-text-field>
-        </v-flex>
-      </v-layout>
-
-      <!-- Row 4 -->
-      <v-layout>
-        <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field
-              label="Gestor"
-              v-model="managerName"
-              type="text"
-              prepend-icon="supervisor_account"
-              clearable
-              required>
-          </v-text-field>
-        </v-flex>
-        <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-menu
-              ref="joiningDateHelper"
-              :close-on-content-click="false"
-              v-model="joiningDateHelper"
-              :nudge-right="40"
-              :return-value.sync="joiningDate"
-              lazy
-              transition="scale-transition"
-              full-width>
-            <v-text-field
-                slot="activator"
-                v-model="joiningDate"
-                label="Data de Ingresso na Empresa"
-                prepend-icon="event"
-                readonly>
-            </v-text-field>
-            <v-date-picker
-                v-model="joiningDate"
-                header-color="green"
-                :reactive="reactive"
-                @input="$refs.joiningDateHelper.save(joiningDate)">
-            </v-date-picker>
-          </v-menu>
-        </v-flex>
-        <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field
-                v-model="hourType"
-                type="number"
-                prepend-icon="timer"
-                clearable
-                :rules="$v_baseHour.hourTypeRules(hourType)"
-                label="Tipo de Hora">
-          </v-text-field>
-        </v-flex>
-      </v-layout>
-
-      <!-- Row 5 -->
-      <v-layout xs12 sm9 md6 lg6 xl4>
-        <v-flex>
-          <v-text-field
-              v-model="password"
-              color="cyan darken"
-              label="Senha"
-              type="password"
-              prepend-icon="fingerprint"
-              :rules="$v_user.passwordRules(password)"
-              placeholder="Informe a Senha do Funcionário"
-              loading >
-            <v-progress-linear
-                slot="progress"
-                :value="progress()"
-                :color="color"
-                height="7">
-            </v-progress-linear>
-          </v-text-field>
-        </v-flex>
-        <v-flex>
-          <v-text-field
-              v-model="passwordValidator"
-              color="cyan darken"
-              label="Senha de Confirmação"
-              type="password"
-              prepend-icon="fingerprint"
-              :rules="$v_user.passwordValidationRules(password, passwordValidator)"
-              placeholder="Confirme a Senha do Funcionário"
-              loading >
-            <v-progress-linear
-                slot="progress"
-                :value="progressValidation()"
-                :color="colorValidation"
-                height="7">
-            </v-progress-linear>
           </v-text-field>
         </v-flex>
       </v-layout>
@@ -217,7 +69,44 @@ import Login from '../../objects/Login'
 import User from '../../objects/User'
 
 export default {
+  props: {
+    user: {
+      type: Object,
+      default () {
+        return {
+          thelephoneList: [
+            { type: 'Fixo', number: '46771435' },
+            { type: 'Móvel', number: '998679124' },
+            { type: 'Móvel', number: '998679124' }
+          ],
+          password: '',
+          passwordValidation: '',
+          name: 'José',
+          lastName: 'Zeller',
+          email: 'jose@zeller.com',
+          salary: 1200,
+          pis: 123456789,
+          workload: 6,
+          login: 'Zeller',
+          manager: 'Bill Gates'
+        }
+      }
+    },
+    edit: {
+      type: Boolean,
+      default: false
+    },
+    company: {
+      type: Object,
+      default () {
+        return {}
+      }
+    }
+  },
   data: () => ({
+    valid: false,
+    joiningDateMenu: false,
+    birhtDateMenu: false,
     employee: [],
     menu: false,
     reactive: true,
@@ -230,8 +119,6 @@ export default {
     lastName: '',
     email: '',
     pis: '',
-    joiningDateHelper: false,
-    joiningDate: '',
     // telephones
     number1: '',
     number2: '',
@@ -266,6 +153,9 @@ export default {
   watch: {
   },
   methods: {
+    parsedDate () {
+      return new Date().toLocaleString('pt-Br', {year: 'numeric', month: 'numeric', day: 'numeric'})
+    },
     progress () { return Math.min(100, this.password.length * 10) },
     progressValidation () { return Math.min(100, this.passwordValidator.length * 10) },
     createUser () {
@@ -354,7 +244,7 @@ export default {
         this.messageColor = 'warning'
         return false
       } else {
-        this.messages = ['Para realizar o cadastro de funcionário todos os campos abaixo devem ser preenchidos!']
+        this.messages = ['Para Salvar os Dados da Empresa, os campos deve ser Válidos!']
         this.haveMessage = true
         this.messageColor = 'warning'
         return false

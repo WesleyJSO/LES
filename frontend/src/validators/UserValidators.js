@@ -20,7 +20,6 @@ export default class UserValidators {
   emailRules (email) {
     if (!email) {
       return ['Informe um e-mail!']
-    } else if (!/.+@.+.+\..+/.test(email)) {
       return ['Informe um e-mail válido!!']
     }
   }
