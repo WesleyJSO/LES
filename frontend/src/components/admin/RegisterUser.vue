@@ -414,10 +414,10 @@ export default {
       }
     },
     saveUser () {
-      if (this.validateUser()) {
+      /* if (this.validateUser()) {
         let employee = this.createUser()
         this.callApi(employee).next().value
-      }
+      } */
     },
     clearForm () {
       this.menu = false

@@ -6,6 +6,7 @@ import UpdateUser from '@/components/admin/UpdateUser'
 import RegisterUser from '@/components/admin/RegisterUser'
 import Appointments from '@/components/user/Appointments'
 import Request from '@/components/user/Request'
+import Timeline from '@/components/user/Timeline'
 
 Vue.use(Router)
 
@@ -45,6 +46,11 @@ export default new Router({
       path: '/Request',
       name: 'Request',
       component: Request
+    },
+    {
+      path: '/Home',
+      name: 'Timeline',
+      component: Timeline
     }
   ]
 })
