@@ -1,6 +1,12 @@
 .DS_Store
-node_modules/
-/dist/
+.settings/*
+build/*
+config/*
+dist/*
+node/*
+node_modules/*
+target/*
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -15,3 +21,4 @@ selenium-debug.log
 *.njsproj
 *.sln
 /target/
+*.properties
