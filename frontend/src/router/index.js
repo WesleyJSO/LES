@@ -12,6 +12,8 @@ import Reports from '@/components/reports/Reports'
 import Groups from '@/components/admin/Groups'
 import RegisterSystemParameters from '@/components/admin/RegisterSystemParameters'
 import SystemParameters from '@/components/admin/SystemParameters'
+import ManageHours from '@/components/admin/ManageHours'
+import Timeline from '@/components/user/Timeline'
 
 Vue.use(Router)
 
@@ -81,6 +83,16 @@ export default new Router({
       path: '/Parametros',
       name: 'SystemParameters',
       component: SystemParameters
+    },
+    {
+      path: '/GerenciarBancoHoras',
+      name: 'GerenciarBancoHoras',
+      component: ManageHours
+    },
+    {
+      path: '/Home',
+      name: 'Timeline',
+      component: Timeline
     }
   ]
 })
