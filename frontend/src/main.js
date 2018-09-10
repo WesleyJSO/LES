@@ -20,6 +20,7 @@ Vue.use(Vuetify)
 
 Vue.prototype.$_axios = axios
 Vue.prototype.$_url = 'http://localhost:8080/'
+Vue.prototype.$_moment = moment
 
 Vue.prototype.$v_user = new UserValidator()
 Vue.prototype.$v_baseHour = new BaseHourCalculationValidators()

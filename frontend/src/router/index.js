@@ -8,7 +8,7 @@ import Appointments from '@/components/user/Appointments'
 import Request from '@/components/user/Request'
 import RegisterCompany from '@/components/admin/RegisterCompany'
 import RequestView from '@/components/admin/RequestView'
-import Reports from '@/components/admin/Reports'
+import Reports from '@/components/reports/Reports'
 import Groups from '@/components/admin/Groups'
 
 Vue.use(Router)
@@ -61,7 +61,7 @@ export default new Router({
       component: RequestView
     },
     {
-      path: '/Reports',
+      path: '/Relatorios',
       name: 'Reports',
       component: Reports
     },
