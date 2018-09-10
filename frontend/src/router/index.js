@@ -10,7 +10,6 @@ import RegisterCompany from '@/components/admin/RegisterCompany'
 import RequestView from '@/components/admin/RequestView'
 import Reports from '@/components/reports/Reports'
 import Groups from '@/components/admin/Groups'
-import RegisterSystemParameters from '@/components/admin/RegisterSystemParameters'
 import SystemParameters from '@/components/admin/SystemParameters'
 import ManageHours from '@/components/admin/ManageHours'
 import Timeline from '@/components/user/Timeline'
@@ -30,7 +29,7 @@ export default new Router({
       component: Login
     },
     {
-      path: '/ConsultarListar',
+      path: '/Consultar',
       name: 'ConsultarListar',
       component: ConsultarListar
     },
@@ -60,7 +59,7 @@ export default new Router({
       component: RegisterCompany
     },
     {
-      path: '/VisualizarSolicitacao',
+      path: '/Solicitacoes',
       name: 'RequestView',
       component: RequestView
     },
@@ -75,22 +74,17 @@ export default new Router({
       component: Groups
     },
     {
-      path: '/CadastroParametros',
-      name: 'RegisterSystemParameters',
-      component: RegisterSystemParameters
-    },
-    {
       path: '/Parametros',
       name: 'SystemParameters',
       component: SystemParameters
     },
     {
       path: '/GerenciarBancoHoras',
-      name: 'GerenciarBancoHoras',
+      name: 'ManageHours',
       component: ManageHours
     },
     {
-      path: '/Home',
+      path: '/LinhaDoTempo',
       name: 'Timeline',
       component: Timeline
     }

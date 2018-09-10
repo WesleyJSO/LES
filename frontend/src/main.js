@@ -13,6 +13,10 @@ import BaseHourCalculationValidators from './validators/BaseHourCalculationValid
 import VCalendar from 'v-calendar'
 import 'v-calendar/lib/v-calendar.min.css'
 import ParametersValidators from './validators/ParametersValidators'
+import VueChartkick from 'vue-chartkick'
+import Chart from 'chart.js'
+
+Vue.use(VueChartkick, {adapter: Chart})
 
 Vue.use(VCalendar, {
   formats: {

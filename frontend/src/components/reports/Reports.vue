@@ -4,7 +4,6 @@
     <v-container fluid>
       <v-layout wrap column >
 
-
         <v-layout >
           <v-combobox
             label="Funcionários"

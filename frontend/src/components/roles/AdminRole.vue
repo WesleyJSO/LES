@@ -102,6 +102,28 @@
       </v-list-tile-content>
     </v-list-tile>
 
+    <v-list-tile>
+      <v-list-tile-action>
+        <v-icon>dns</v-icon>
+      </v-list-tile-action>
+      <v-list-tile-content>
+        <router-link to="GerenciarBancoHoras">
+          <v-list-tile-title>Banco de Horas</v-list-tile-title>
+        </router-link>
+      </v-list-tile-content>
+    </v-list-tile>
+
+    <v-list-tile>
+      <v-list-tile-action>
+        <v-icon>timeline</v-icon>
+      </v-list-tile-action>
+      <v-list-tile-content>
+        <router-link to="LinhaDoTempo">
+          <v-list-tile-title>Linha do Tempo</v-list-tile-title>
+        </router-link>
+      </v-list-tile-content>
+    </v-list-tile>
+
   </v-app>
 </template>
 

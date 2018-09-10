@@ -18,7 +18,7 @@
             <template slot="items" slot-scope="props">
               <tr>
                 <td>{{ props.item.parameterName }}</td>
-                <td class="text-xs-left">{{ props.item.value }}</td>            
+                <td class="text-xs-left">{{ props.item.value }}</td>
               </tr>
             </template>
           </v-data-table>
@@ -89,7 +89,7 @@ export default {
       }
     ],
     message: '',
-    haveMessage: true
+    haveMessage: false
   }),
   created () {
     let parameter =
