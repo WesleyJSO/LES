@@ -61,7 +61,7 @@ export default new Router({
       component: RequestView
     },
     {
-      path: '/Relatorios',
+      path: '/Graficos',
       name: 'Reports',
       component: Reports
     },

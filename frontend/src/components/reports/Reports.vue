@@ -1,10 +1,14 @@
 <template>
+    <v-app>
+        <h1>Gráficos</h1>
     <v-container fluid>
-      <v-layout wrap column py-5 my-5>
+      <v-layout wrap column >
+
 
         <v-layout >
           <v-combobox
-            label="Selecione os funcionários"
+            label="Funcionários"
+            prepend-icon="supervisor_account"
             v-model="selectedEmployesList"
             :items="employees"
             hide-selected
@@ -31,13 +35,69 @@
           </v-combobox>
         </v-layout>
 
-        <v-layout py-5 my-5>
+        <v-layout>
           <v-combobox
-            label="Selecione a periocidade"
+            label="Períocidade"
+            prepend-icon="event"
             :items="frequency"
             @change="changeFrequency">
           </v-combobox>
         </v-layout>
+
+        <v-layout pb-5>
+          <v-flex xs12 sm9 md6 lg6 xl4>
+            <v-menu
+              ref="joiningDateHelper"
+              :close-on-content-click="false"
+              v-model="joiningDateHelper"
+              :nudge-right="40"
+              :return-value.sync="joiningDate"
+              lazy
+              min-width="290px"
+              transition="scale-transition"
+              full-width>
+            <v-text-field
+                slot="activator"
+                v-model="joiningDate"
+                label="Data inícial"
+                prepend-icon="event"
+                readonly>
+            </v-text-field>
+            <v-date-picker
+                v-model="joiningDate"
+                header-color="black"
+                :reactive="reactive"
+                @input="$refs.joiningDateHelper.save(joiningDate)">
+            </v-date-picker>
+          </v-menu>
+        </v-flex>
+        <v-flex xs12 sm9 md6 lg6 xl4>
+          <v-menu
+              ref="joiningDateHelper"
+              :close-on-content-click="false"
+              v-model="joiningDateHelper"
+              :nudge-right="40"
+              :return-value.sync="joiningDate"
+              lazy
+              min-width="290px"
+              transition="scale-transition"
+              full-width>
+            <v-text-field
+                slot="activator"
+                v-model="joiningDate"
+                label="Data final"
+                prepend-icon="event"
+                readonly>
+            </v-text-field>
+            <v-date-picker
+                v-model="joiningDate"
+                header-color="black"
+                :reactive="reactive"
+                @input="$refs.joiningDateHelper.save(joiningDate)">
+            </v-date-picker>
+          </v-menu>
+        </v-flex>
+      </v-layout>
 
         <v-flex xs12>
           <v-tabs dark slider-color="yellow" >
@@ -98,6 +158,7 @@
       </v-layout>
 
   </v-container>
+    </v-app>
 </template>
 
 
@@ -169,3 +230,12 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  h1 {
+    font-size: 40px;
+    text-align: center;
+    margin-top: -20px;
+    margin-bottom: 20px;
+  }
+</style>

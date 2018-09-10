@@ -3,7 +3,7 @@
 
     <v-list-tile>
       <v-list-tile-action>
-        <v-icon>group</v-icon>
+        <v-icon>account_box</v-icon>
       </v-list-tile-action>
       <v-list-tile-content>
         <router-link to="CadastrarUsuario">
@@ -25,7 +25,7 @@
 
     <v-list-tile>
       <v-list-tile-action>
-        <v-icon>group</v-icon>
+        <v-icon>touch_app</v-icon>
       </v-list-tile-action>
       <v-list-tile-content>
         <router-link to="Apontamentos">
@@ -36,19 +36,19 @@
 
     <v-list-tile>
       <v-list-tile-action>
-        <v-icon>group</v-icon>
+        <v-icon>assignment</v-icon>
       </v-list-tile-action>
       <v-list-tile-content>
         <router-link to="Solicitacao">
-          <v-list-tile-title>Solicitar abono/falta</v-list-tile-title>
+          <v-list-tile-title>Realizar Solicitações</v-list-tile-title>
         </router-link>
       </v-list-tile-content>
     </v-list-tile>
-    
+
 
     <v-list-tile>
       <v-list-tile-action>
-        <v-icon>group</v-icon>
+        <v-icon>group_add</v-icon>
       </v-list-tile-action>
       <v-list-tile-content>
         <router-link to="Grupos">
@@ -60,7 +60,7 @@
 
     <v-list-tile>
       <v-list-tile-action>
-        <v-icon>check</v-icon>
+        <v-icon>assignment_turned_in</v-icon>
       </v-list-tile-action>
       <v-list-tile-content>
         <router-link to="VisualizarSolicitacao">
@@ -68,7 +68,7 @@
         </router-link>
       </v-list-tile-content>
     </v-list-tile>
-    
+
     <v-list-tile>
       <v-list-tile-action>
         <v-icon>next_week</v-icon>
@@ -76,6 +76,17 @@
       <v-list-tile-content>
         <router-link to="CadastrarEmpresa">
           <v-list-tile-title>Dados Empresariais</v-list-tile-title>
+        </router-link>
+      </v-list-tile-content>
+    </v-list-tile>
+
+    <v-list-tile>
+      <v-list-tile-action>
+        <v-icon>bar_chart</v-icon>
+      </v-list-tile-action>
+      <v-list-tile-content>
+        <router-link to="Graficos">
+          <v-list-tile-title>Gráficos</v-list-tile-title>
         </router-link>
       </v-list-tile-content>
     </v-list-tile>

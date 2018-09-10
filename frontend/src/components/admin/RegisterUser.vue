@@ -144,7 +144,7 @@
             </v-text-field>
             <v-date-picker
                 v-model="joiningDate"
-                header-color="green"
+                header-color="black"
                 :reactive="reactive"
                 @input="$refs.joiningDateHelper.save(joiningDate)">
             </v-date-picker>
