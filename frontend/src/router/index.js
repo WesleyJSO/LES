@@ -10,6 +10,8 @@ import RegisterCompany from '@/components/admin/RegisterCompany'
 import RequestView from '@/components/admin/RequestView'
 import Reports from '@/components/reports/Reports'
 import Groups from '@/components/admin/Groups'
+import RegisterSystemParameters from '@/components/admin/RegisterSystemParameters'
+import SystemParameters from '@/components/admin/SystemParameters'
 
 Vue.use(Router)
 
@@ -69,6 +71,16 @@ export default new Router({
       path: '/Grupos',
       name: 'Groups',
       component: Groups
+    },
+    {
+      path: '/CadastroParametros',
+      name: 'RegisterSystemParameters',
+      component: RegisterSystemParameters
+    },
+    {
+      path: '/Parametros',
+      name: 'SystemParameters',
+      component: SystemParameters
     }
   ]
 })

@@ -12,6 +12,7 @@ import UserValidator from './validators/UserValidators'
 import BaseHourCalculationValidators from './validators/BaseHourCalculationValidators'
 import VueChartkick from 'vue-chartkick'
 import Chart from 'chart.js'
+import ParametersValidators from './validators/ParametersValidators'
 
 Vue.use(VueChartkick, {adapter: Chart})
 
@@ -24,6 +25,7 @@ Vue.prototype.$_moment = moment
 
 Vue.prototype.$v_user = new UserValidator()
 Vue.prototype.$v_baseHour = new BaseHourCalculationValidators()
+Vue.prototype.$v_parameters = new ParametersValidators()
 
 Vue.filter('dataFormatada', function (value) {
   if (value) {
