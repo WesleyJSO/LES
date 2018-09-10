@@ -25,6 +25,19 @@
           </v-card-text>
         </v-card>
       </v-dialog>
+      <v-dialog v-model="manageHoursDialog"
+                width="700">
+                <v-card>
+        <v-card-title
+          class="headline grey lighten-2"
+          primary-title
+        >
+          Gerenciamento de Banco de Horas
+        </v-card-title>
+          <manageHours :item="itemToShow">
+          </manageHours>
+                </v-card>
+      </v-dialog>
     </v-toolbar>
     <v-data-table :headers="getHeaders"
                   :items="users"
@@ -44,9 +57,15 @@
           <td class="justify-center layout px-0">
             <v-icon small
                     class="mr-2"
-                    @click.stop="editItem(props.item)">edit</v-icon>
+                    @click.stop="editItem(props.item)">edit
+            </v-icon>
             <v-icon small
+                    class="mr-2"
                     @click.stop="deleteItem(props.item)">delete
+            </v-icon>
+            <v-icon small
+                    class="mr-2"
+                    @click.stop="showItem(props.item)">remove_red_eye
             </v-icon>
           </td>
         </tr>
@@ -79,6 +98,7 @@ import BaseHourCalculation from '@/objects/BaseHourCalculation'
 import Telephone from '@/objects/Telephone'
 import Login from '@/objects/Login'
 import AdminService from '@/service/AdminService'
+import ManageHours from '@/components/admin/ManageHours'
 
 export default {
   props: {
@@ -161,7 +181,7 @@ export default {
           ],
           baseCalculationHours: {
             hourType: '-1',
-            workload: '6',
+            workload: '8',
             effectiveDate: '22/02/2010',
             salary: 3000
           },
@@ -174,10 +194,12 @@ export default {
             thisMonthBalanceDescription: 'Banco de Horas do Mês',
             monthPaymentLimit: '15',
             descriptionOfMontlyPaymentLimit: 'Limite Mensal de Banco'
-          }
+          },
+          amountHours: 80,
+          nextVacation: '22/10/2018'
         },
         {
-          id: '001',
+          id: '002',
           creationDate: '1/1/1990',
           name: 'Pedro',
           lastName: 'Silva',
@@ -265,7 +287,9 @@ export default {
             thisMonthBalanceDescription: 'Banco de Horas do Mês',
             monthPaymentLimit: '15',
             descriptionOfMontlyPaymentLimit: 'Limite Mensal de Banco'
-          }
+          },
+          amountHours: 30,
+          nextVacation: '05/11/2018'
         }]
       }
     },
@@ -287,7 +311,9 @@ export default {
     searchFilter: '',
     editedIndex: -1,
     dialog: false,
-    isEditing: false
+    manageHoursDialog: false,
+    isEditing: false,
+    itemToShow: {}
   }),
   computed: {
     getHeaders () {
@@ -386,6 +412,10 @@ export default {
         this.messageColor = 'error'
       }) */
     },
+    showItem (item) {
+      this.manageHoursDialog = true
+      Object.assign(this.itemToShow, item)
+    },
     close () {
       this.dialog = false
       this.isEditing = false
@@ -431,7 +461,8 @@ export default {
   components: {
     // Consultar,
     // Listar,
-    RegisterUser
+    RegisterUser,
+    ManageHours
   }
 }
 </script>
