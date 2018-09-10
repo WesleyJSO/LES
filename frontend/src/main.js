@@ -10,10 +10,24 @@ import moment from 'moment'
 import VeeValidate from 'vee-validate'
 import UserValidator from './validators/UserValidators'
 import BaseHourCalculationValidators from './validators/BaseHourCalculationValidators'
-import VueChartkick from 'vue-chartkick'
-import Chart from 'chart.js'
+// import VueChartkick from 'vue-chartkick'
+// import Chart from 'chart.js'
+import VCalendar from 'v-calendar'
+import 'v-calendar/lib/v-calendar.min.css'
 
-Vue.use(VueChartkick, {adapter: Chart})
+// Use v-calendar, v-date-picker & v-popover components
+Vue.use(VCalendar, {
+  formats: {
+    title: 'MMMM YYYY',
+    weekdays: 'W',
+    navMonths: 'MMM',
+    input: ['L', 'DD-MM-YYYY', 'DD/MM/YYYY'],
+    dayPopover: 'L',
+    data: ['L', 'DD-MM-YYYY', 'DD/MM/YYYY']
+  }
+})
+
+// Vue.use(VueChartkick, {adapter: Chart})
 
 Vue.use(VeeValidate)
 Vue.use(Vuetify)

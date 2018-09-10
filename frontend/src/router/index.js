@@ -10,6 +10,7 @@ import RegisterCompany from '@/components/admin/RegisterCompany'
 import RequestView from '@/components/admin/RequestView'
 import Reports from '@/components/admin/Reports'
 import Groups from '@/components/admin/Groups'
+import ManageHours from '@/components/admin/ManageHours'
 
 Vue.use(Router)
 
@@ -69,6 +70,11 @@ export default new Router({
       path: '/Grupos',
       name: 'Groups',
       component: Groups
+    },
+    {
+      path: '/GerenciarBancoHoras',
+      name: 'GerenciarBancoHoras',
+      component: ManageHours
     }
   ]
 })
