@@ -17,7 +17,7 @@
         <v-icon>contact_mail</v-icon>
       </v-list-tile-action>
       <v-list-tile-content>
-        <router-link to="ConsultarListar">
+        <router-link to="Consultar">
           <v-list-tile-title>Consulta de usuários</v-list-tile-title>
         </router-link>
       </v-list-tile-content>
@@ -63,7 +63,7 @@
         <v-icon>assignment_turned_in</v-icon>
       </v-list-tile-action>
       <v-list-tile-content>
-        <router-link to="VisualizarSolicitacao">
+        <router-link to="Solicitacoes">
           <v-list-tile-title>Solicitações</v-list-tile-title>
         </router-link>
       </v-list-tile-content>

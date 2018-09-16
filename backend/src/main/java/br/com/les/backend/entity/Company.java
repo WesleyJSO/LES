@@ -2,6 +2,7 @@ package br.com.les.backend.entity;
 
 import java.util.List;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 
@@ -18,8 +19,18 @@ public class Company extends DomainEntity {
 	private String cnpj;
 	private String stateRegistration;
 	
+	@Embedded
+	Address address;
+	
 	@ManyToMany
 	private List< Employee > employeeList;
+
+	public Company() {}
+	
+	public Company( Long companyId ) {
+		super();
+		this.setId( companyId );
+	}
 
 	public String getSocialName() {
 		return socialName;
@@ -59,5 +70,13 @@ public class Company extends DomainEntity {
 
 	public void setEmployeeList(List<Employee> employeeList) {
 		this.employeeList = employeeList;
+	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
 	}	
 }
