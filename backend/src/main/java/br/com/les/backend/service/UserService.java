@@ -59,4 +59,9 @@ public class UserService implements IService {
 		else
 			return userDAO.findByEmail( u );
 	}
+
+	@Override
+	public <T extends DomainEntity> int softDelete(T entity) {
+		return 0;
+	}
 }

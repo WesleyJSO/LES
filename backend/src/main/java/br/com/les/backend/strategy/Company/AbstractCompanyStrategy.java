@@ -1,4 +1,4 @@
-package br.com.les.backend.strategy.Company;
+package br.com.les.backend.strategy.company;
 
 import br.com.les.backend.utils.Result;
 

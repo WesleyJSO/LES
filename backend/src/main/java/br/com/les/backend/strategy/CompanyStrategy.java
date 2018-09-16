@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.DomainEntity;
-import br.com.les.backend.strategy.Company.ICompanyStrategy;
+import br.com.les.backend.strategy.company.ICompanyStrategy;
 import br.com.les.backend.utils.Result;
 
 @Component( "Company" )

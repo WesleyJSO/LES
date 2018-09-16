@@ -8,7 +8,7 @@ import br.com.les.backend.utils.Result;
 import br.com.les.backend.utils.Util;
 
 @Component
-public class SaveCompanyStrategy extends AbstractCompanyStrategy {
+public class SearchCompanyStrategy extends AbstractCompanyStrategy {
 
 	@Override
 	public Result execute(DomainEntity entity, String callerMethod) {
@@ -16,11 +16,14 @@ public class SaveCompanyStrategy extends AbstractCompanyStrategy {
 		result = new Result();
 		
 		Company c = ( Company ) entity;
+		
 		switch ( callerMethod ) {
-		case "save":
-			c.setActive( true );
+		case "search":
+			
+			break;
 		}
-		result.setSuccess( Util.SAVE_SUCESSFUL_COMPANY );
+		result.setSuccess( Util.SEARCH_SUCESSFUL_COMPANY );
 		return result;
 	}
+
 }

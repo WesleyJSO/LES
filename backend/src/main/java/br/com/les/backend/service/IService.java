@@ -8,7 +8,9 @@ public interface IService {
 
 	DomainEntity save( DomainEntity entity );
 	
-	< T > List< T > findAll();
+	<T extends DomainEntity> List< T > findAll();
 
 	List< DomainEntity > findByParameters( DomainEntity entity );
+	
+	<T extends DomainEntity> int softDelete( T entity );
 }
