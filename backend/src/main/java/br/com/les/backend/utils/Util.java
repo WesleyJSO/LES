@@ -24,4 +24,7 @@ public class Util {
 	public static final String SAVE_SUCCESSFUL_USER = "Usuário salvo com sucesso!";
 
 	public static final String SAVE_SUCESSFUL_COMPANY = "Empresa salva com sucesso!";
+	public static final String SEARCH_SUCESSFUL_COMPANY = "Consulta realizada com sucesso!";
+	public static final String DELETE_SUCESSFUL_COMPANY = "Consulta excluida com sucesso!";
+	
 }

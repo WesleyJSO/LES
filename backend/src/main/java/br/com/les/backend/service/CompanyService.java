@@ -27,16 +27,21 @@ public class CompanyService implements IService {
 		return companyRepository.save( ( Company ) entity );
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> List<T> findAll() {
-		return (List<T>) companyRepository.findAll();
-	}
-
 	@Override
 	public List<DomainEntity> findByParameters(DomainEntity entity) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends DomainEntity> List<T> findAll() {
+		return (List<T>) companyRepository.findByActive( true );
+	}
+
+	@Override
+	public <T extends DomainEntity> int softDelete(T entity) {
+		return companyDAO.softDelete(entity);
 	}
 
 }

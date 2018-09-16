@@ -32,6 +32,10 @@ public class Company extends DomainEntity {
 		this.setId( companyId );
 	}
 
+	public Company(boolean active) {
+		this.setActive( active );
+	}
+
 	public String getSocialName() {
 		return socialName;
 	}

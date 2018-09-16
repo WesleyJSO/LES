@@ -11,7 +11,6 @@ public class Login extends DomainEntity {
 	@Transient
 	private String passwordValidator;
 	private String password;
-	private Boolean active;
 	
 	
 	public String getPasswordValidator() {
@@ -25,11 +24,5 @@ public class Login extends DomainEntity {
 	}
 	public void setPassword(String password) {
 		this.password = password;
-	}
-	public Boolean getActive() {
-		return active;
-	}
-	public void setActive(Boolean active) {
-		this.active = active;
 	}
 }

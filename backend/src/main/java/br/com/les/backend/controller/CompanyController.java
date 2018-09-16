@@ -19,7 +19,7 @@ public class CompanyController extends AbstractController {
 	
 	@GetMapping(value = "/company" )
 	public Result findAll() {
-		return facade.findAll( new Company(), getMethodName( new Object() {} ) );
+		return facade.findAll( new Company( true ), getMethodName( new Object() {} ) );
 	}
 	
 	@PostMapping( value="/company" )
@@ -32,8 +32,8 @@ public class CompanyController extends AbstractController {
 		return facade.update( company, getMethodName( new Object() {} ) );
 	}
 	
-	@DeleteMapping( value="/company")
-	public Result delete( @PathVariable( "id" ) Long companyId ) {
-		return facade.delete( new Company( companyId ), getMethodName( new Object() {} ) );
+	@DeleteMapping( value="/company/{id:[\\d]+}")
+	public Result delete( @PathVariable Long id ) {
+		return facade.delete( new Company( id ), getMethodName( new Object() {} ) );
 	}
 }
