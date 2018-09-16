@@ -13,6 +13,7 @@ import Groups from '@/components/admin/Groups'
 import SystemParameters from '@/components/admin/SystemParameters'
 import ManageHours from '@/components/admin/ManageHours'
 import Timeline from '@/components/user/Timeline'
+import RegisterSystemParameters from '@/components/admin/RegisterSystemParameters'
 
 Vue.use(Router)
 
@@ -87,6 +88,11 @@ export default new Router({
       path: '/LinhaDoTempo',
       name: 'Timeline',
       component: Timeline
+    },
+    {
+      path: '/CadastroParametros',
+      name: 'RegisterSystemParameters',
+      component: RegisterSystemParameters
     }
   ]
 })

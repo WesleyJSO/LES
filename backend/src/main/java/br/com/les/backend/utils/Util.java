@@ -22,4 +22,6 @@ public class Util {
 	
 	public static final String SAVE_SUCCESSFUL_EMPLOYEE = "Funcionário salvo com sucesso!";
 	public static final String SAVE_SUCCESSFUL_USER = "Usuário salvo com sucesso!";
+
+	public static final String SAVE_SUCESSFUL_COMPANY = "Empresa salva com sucesso!";
 }
