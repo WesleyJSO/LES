@@ -128,7 +128,7 @@
     </v-form>
     <v-flex xs12 right>
       <br/><br/><br/><br/>
-      <CompanyList ref="companyList"></CompanyList>
+      <CompanyList @emitCompany="updateCompany($event)" ref="companyList"></CompanyList>
     </v-flex>
   </v-app>
 </template>
@@ -153,7 +153,6 @@ export default {
   },
   methods: {
     submit () {
-      console.log(JSON.stringify(this.company))
       this.$_axios.post(`${this.$_url}company`, this.company).then(response => {
         let result = response.data
         if (result.resultList.length !== 0) {
@@ -180,6 +179,9 @@ export default {
     },
     clear () {
       this.$refs.form.reset()
+    },
+    updateCompany (companyToEdit) {
+      this.company = companyToEdit
     },
     getAddress (zipCode) {
       if (zipCode.length === 8) {
