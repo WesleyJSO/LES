@@ -514,9 +514,11 @@ export default {
           })
           this.$_axios.post(`${this.$_url}parameter`, this.parameters).then(response => {
             var result = response.data
+            this.$router.push('/Parametros')
             if (result.listaResultado.length !== 0) {
               // retorno ok /
               this.parameters = result.listaResultado
+              this.$router.push('/Parametros')
             }
             if (result.mensagem) {
               this.messages = [...result.message]
@@ -539,9 +541,11 @@ export default {
         } else {
           this.$_axios.put(`${this.$_url}parameter`, this.parameters).then(response => {
             var result = response.data
+            this.$router.push('/Parametros')
             if (result.listaResultado.length !== 0) {
               // retorno ok /
               this.parameters = result.listaResultado
+              this.$router.push('/Parametros')
             }
             if (result.mensagem) {
               this.messages = [...result.message]
@@ -565,9 +569,11 @@ export default {
       } else {
         this.$_axios.post(`${this.$_url}parameter`, this.parameters).then(response => {
           var result = response.data
+          this.$router.push('/Parametros')
           if (result.listaResultado.length !== 0) {
             // retorno ok /
             this.parameters = result.listaResultado
+            this.$router.push('/Parametros')
           }
           if (result.mensagem) {
             this.messages = [...result.message]
