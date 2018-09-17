@@ -139,6 +139,7 @@ export default {
   data: function () {
     return {
       company: {
+        id: 0,
         address: {}
       },
       edit: false,
@@ -153,34 +154,70 @@ export default {
   },
   methods: {
     submit () {
-      this.$_axios.post(`${this.$_url}company`, this.company).then(response => {
-        let result = response.data
-        if (result.resultList.length !== 0) {
-          this.company = result.resultList[0]
-        }
-        if (result.message) {
-          this.messages = [...result.message]
-          this.haveMessage = true
-          if (result.success) {
-            this.messageColor = 'info'
-            this.clear()
-            this.company = { address: {} }
-            this.$refs.companyList.initialize()
-          } else {
-            this.messageColor = 'warning'
+      console.log(JSON.stringify(this.company))
+      if (this.company.id === 0) {
+        this.$_axios.post(`${this.$_url}company`, this.company).then(response => {
+          console.log('post')
+          let result = response.data
+          if (result.resultList.length !== 0) {
+            this.company = result.resultList[0]
           }
-        }
-      }).catch(error => {
-        console.log(error)
-        this.messages = ['Erro durante execução do serviço!']
-        this.haveMessage = true
-        this.messageColor = 'error'
-      })
+          if (result.message) {
+            this.messages = [...result.message]
+            this.haveMessage = true
+            if (result.success) {
+              this.messageColor = 'info'
+              this.clear()
+              this.company = {
+                id: 0,
+                address: {}
+              }
+              this.$refs.companyList.initialize()
+            } else {
+              this.messageColor = 'warning'
+            }
+          }
+        }).catch(error => {
+          console.log(error)
+          this.messages = ['Erro durante execução do serviço!']
+          this.haveMessage = true
+          this.messageColor = 'error'
+        })
+      } else {
+        this.$_axios.put(`${this.$_url}company`, this.company).then(response => {
+          console.log('put')
+          let result = response.data
+          if (result.resultList.length !== 0) {
+            this.company = result.resultList[0]
+          }
+          if (result.message) {
+            this.messages = [...result.message]
+            this.haveMessage = true
+            if (result.success) {
+              this.messageColor = 'info'
+              this.clear()
+              this.company = {
+                id: 0,
+                address: {}
+              }
+              this.$refs.companyList.initialize()
+            } else {
+              this.messageColor = 'warning'
+            }
+          }
+        }).catch(error => {
+          console.log(error)
+          this.messages = ['Erro durante execução do serviço!']
+          this.haveMessage = true
+          this.messageColor = 'error'
+        })
+      }
     },
     clear () {
       this.$refs.form.reset()
     },
     updateCompany (companyToEdit) {
+      console.log(JSON.stringify(companyToEdit))
       this.company = companyToEdit
     },
     getAddress (zipCode) {

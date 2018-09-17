@@ -130,6 +130,7 @@
         this.messageColor = ''
       },
       editItem (item) {
+        console.log(JSON.stringify(item))
         this.$emit('emitCompany', item)
       },
       deleteDialog (item) {
