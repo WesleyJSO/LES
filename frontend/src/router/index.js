@@ -92,7 +92,8 @@ export default new Router({
     {
       path: '/CadastroParametros',
       name: 'RegisterSystemParameters',
-      component: RegisterSystemParameters
+      component: RegisterSystemParameters,
+      props: true
     }
   ]
 })

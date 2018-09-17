@@ -40,9 +40,10 @@ public class Facade extends AbstractFacade {
 
     @Override
     public Result update(DomainEntity entity, String callerMethod ) {
-    	validate( entity, Actions.SAVE.getValue(), callerMethod  );
+
+    	validate( entity, Actions.UPDATE.getValue(), callerMethod  );
     	if ( result.isSuccess() )
-    		service.save( entity );
+    		result.getResultList().add( service.save( entity ) );
     	return result;
     }
 
