@@ -1,4 +1,4 @@
-package br.com.les.backend.strategy.company;
+package br.com.les.backend.strategy.Company;
 
 import org.springframework.stereotype.Component;
 

@@ -44,4 +44,10 @@ public class ParameterService implements IService {
 		return resultList;
 	}
 
+	@Override
+	public <T extends DomainEntity> int softDelete(T entity) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

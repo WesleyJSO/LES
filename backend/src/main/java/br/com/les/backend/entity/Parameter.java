@@ -25,13 +25,12 @@ public class Parameter extends DomainEntity {
 	private Integer bankedHourTypeLimit;
 	private String firstTypeApplied;
 	private Calendar endDate;
-	private Boolean active;
 	
 	public Parameter() {}
 	
 	public Parameter( boolean active ) {
 		this.setId(1l);
-		this.active = active;
+		this.setActive(active);
 		this.overtimePercentage = 0d;
 		this.nightOvertimePercentage = 0d;
 		this.weekEndOvertimePercentage = 0d;
@@ -112,12 +111,6 @@ public class Parameter extends DomainEntity {
 	}
 	public void setEndDate(Calendar endDate) {
 		this.endDate = endDate;
-	}
-	public Boolean getActive() {
-		return active;
-	}
-	public void setActive(Boolean active) {
-		this.active = active;
 	}
 
 	public String getFirstTypeApplied() {
