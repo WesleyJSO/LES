@@ -19,11 +19,12 @@ export const ITEMS = [
   'Bill Gates', 'Torvald Linux', 'Elon Musk'
 ]
 export const DATE_FORMATS = [ {year: 'numeric', month: 'numeric', day: 'numeric'} ]
-export const GROUPS_HEADERS = [
-  { text: 'Nome', align: 'center', sortable: false, value: 'nome' },
-  { text: 'Data Criação', align: 'center', value: 'dataCriacao' },
-  { text: 'Centro de Custos', value: 'centroDeCusto' },
-  { text: 'Membros', value: 'tipoHora' }
+export const COST_CENTRE_HEADERS = [
+  { text: 'Código', align: 'left', sortable: false, value: 'code' },
+  { text: 'Nome', align: 'center', sortable: false, value: 'name' },
+  { text: 'Apelido', align: 'center', sortable: false, value: 'nickName' },
+  { text: 'Membros', value: 'employees' },
+  { text: 'Data Criação', align: 'center', value: 'criationDate' }
 ]
 export const MANAGE_HOURS_TABLE_HEADERS = [
   { text: 'Total Horas Banco', align: 'center', sortable: false, value: 'total_banco' },
@@ -36,6 +37,6 @@ export default class AdminService {
   static get SUB_HEADERS () { return SUB_HEADERS }
   static get DATE_FORMATS () { return SUB_HEADERS }
   static get ITEMS () { return ITEMS }
-  static get GROUPS_HEADERS () { return GROUPS_HEADERS }
+  static get COST_CENTRE_HEADERS () { return COST_CENTRE_HEADERS }
   static get MANAGE_HOURS_TABLE_HEADERS () { return MANAGE_HOURS_TABLE_HEADERS }
 }

@@ -42,12 +42,16 @@ public class Employee extends User {
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private List< Appointments > appointmentList;
 	
-	@OneToOne( mappedBy="employee", fetch=FetchType.LAZY )
+	@OneToOne( mappedBy="employee", fetch=FetchType.LAZY,  cascade=CascadeType.PERSIST  )
 	private BaseHourCalculation baseHourCalculation;
 
 	@OneToMany( cascade=CascadeType.ALL )
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private List< CompTime > monthlyCompTimeList;
+	
+	@ManyToOne
+	@JoinColumn(name = "costCentre_id")
+	private CostCentre costCentre;
 
 	public Employee() {}
 	
@@ -117,5 +121,13 @@ public class Employee extends User {
 
 	public void setBaseHourCalculation(BaseHourCalculation baseHourCalculation) {
 		this.baseHourCalculation = baseHourCalculation;
+	}
+
+	public CostCentre getCostCentre() {
+		return costCentre;
+	}
+
+	public void setCostCentre(CostCentre costCentre) {
+		this.costCentre = costCentre;
 	}
 }

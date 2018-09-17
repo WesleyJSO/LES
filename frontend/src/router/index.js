@@ -9,7 +9,7 @@ import Request from '@/components/user/Request'
 import RegisterCompany from '@/components/admin/RegisterCompany'
 import RequestView from '@/components/admin/RequestView'
 import Reports from '@/components/reports/Reports'
-import Groups from '@/components/admin/Groups'
+import CostCentre from '@/components/admin/CostCentre'
 import SystemParameters from '@/components/admin/SystemParameters'
 import ManageHours from '@/components/admin/ManageHours'
 import Timeline from '@/components/user/Timeline'
@@ -69,9 +69,9 @@ export default new Router({
       component: Reports
     },
     {
-      path: '/Grupos',
-      name: 'Groups',
-      component: Groups
+      path: '/CentroDeCustos',
+      name: 'CostCentre',
+      component: CostCentre
     },
     {
       path: '/Parametros',

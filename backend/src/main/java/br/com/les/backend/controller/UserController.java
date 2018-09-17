@@ -39,7 +39,7 @@ public class UserController extends AbstractController {
 		return facade.find( user, getMethodName( new Object() {} ) );
 	}
 	
-	// waiting for a user with a login filled by nomeLogin and senha
+	// Expected a user login filled by nomeLogin and senha
 	@PostMapping( value="/UsuarioLogin" )
 	public Result findByLogin( @RequestBody User user ) {
 		

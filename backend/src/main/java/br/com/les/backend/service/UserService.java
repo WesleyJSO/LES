@@ -59,4 +59,10 @@ public class UserService implements IService {
 		else
 			return userDAO.findByEmail( u );
 	}
+
+	@Override
+	public void delete(DomainEntity entity) {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -51,8 +51,8 @@
         <v-icon>group_add</v-icon>
       </v-list-tile-action>
       <v-list-tile-content>
-        <router-link to="Grupos">
-          <v-list-tile-title>Grupos</v-list-tile-title>
+        <router-link to="CentroDeCustos">
+          <v-list-tile-title>Centro de Custos</v-list-tile-title>
         </router-link>
       </v-list-tile-content>
     </v-list-tile>

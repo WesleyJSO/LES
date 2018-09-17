@@ -48,4 +48,10 @@ public class EmployeeService implements IService {
 		return employeeDAO.findByLoginAndSenha( ( Employee ) entity );
 	}
 
+	@Override
+	public void delete(DomainEntity entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

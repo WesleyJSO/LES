@@ -1,6 +1,8 @@
 package br.com.les.backend.utils;
 
 public class Util {
+	
+	// Employee messages
 	public static final String ERROR_BIRTHDATE = "Por favor, informem a data de nascimento!";
 	public static final String ERROR_EMAIL = "Por favor, informe um email válido!";
 	public static final String ERROR_JOINING_DATE = "Por favor, informe a data de ingresso!";
@@ -22,4 +24,8 @@ public class Util {
 	
 	public static final String SAVE_SUCCESSFUL_EMPLOYEE = "Funcionário salvo com sucesso!";
 	public static final String SAVE_SUCCESSFUL_USER = "Usuário salvo com sucesso!";
+	
+	// Cost Centre messages
+	public static final String COST_INVALID_NAME = "Por Favor, informe um nome válido!";
+	public static final String COST_INVALID_CODE = "Por Favor, informe um código válido!";
 }

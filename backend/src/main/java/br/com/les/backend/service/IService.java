@@ -11,4 +11,6 @@ public interface IService {
 	< T > List< T > findAll();
 
 	List< DomainEntity > findByParameters( DomainEntity entity );
+	
+	void delete(DomainEntity entity );
 }

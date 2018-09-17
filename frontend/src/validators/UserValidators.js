@@ -84,7 +84,7 @@ export default class UserValidators {
   pisRules (pis) {
     if (!pis) {
       return ['Informe um número PIS/PASESP!']
-    } else if (pis.length !== 9) {
+    } else if (pis.length !== 11) {
       return ['Informe um número PIS/PASESP Válido!']
     }
   }

@@ -10,9 +10,10 @@ import moment from 'moment'
 import VeeValidate from 'vee-validate'
 import UserValidator from './validators/UserValidators'
 import BaseHourCalculationValidators from './validators/BaseHourCalculationValidators'
+import ParametersValidators from './validators/ParametersValidators'
+import CostCentreValidator from './validators/CostCentreValidator'
 import VCalendar from 'v-calendar'
 import 'v-calendar/lib/v-calendar.min.css'
-import ParametersValidators from './validators/ParametersValidators'
 import VueChartkick from 'vue-chartkick'
 import Chart from 'chart.js'
 
@@ -39,6 +40,7 @@ Vue.prototype.$_moment = moment
 Vue.prototype.$v_user = new UserValidator()
 Vue.prototype.$v_baseHour = new BaseHourCalculationValidators()
 Vue.prototype.$v_parameters = new ParametersValidators()
+Vue.prototype.$v_costCentre = new CostCentreValidator()
 
 Vue.filter('dataFormatada', function (value) {
   if (value) {
