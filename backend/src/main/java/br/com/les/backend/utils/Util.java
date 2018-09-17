@@ -24,8 +24,16 @@ public class Util {
 	
 	public static final String SAVE_SUCCESSFUL_EMPLOYEE = "Funcionário salvo com sucesso!";
 	public static final String SAVE_SUCCESSFUL_USER = "Usuário salvo com sucesso!";
+<<<<<<< HEAD
 	
 	// Cost Centre messages
 	public static final String COST_INVALID_NAME = "Por Favor, informe um nome válido!";
 	public static final String COST_INVALID_CODE = "Por Favor, informe um código válido!";
+=======
+
+	public static final String SAVE_SUCESSFUL_COMPANY = "Empresa salva com sucesso!";
+	public static final String SEARCH_SUCESSFUL_COMPANY = "Consulta realizada com sucesso!";
+	public static final String DELETE_SUCESSFUL_COMPANY = "Consulta excluida com sucesso!";
+	
+>>>>>>> 66dac4c6c26029578a47a257e36c811cc4afc1c3
 }

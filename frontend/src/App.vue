@@ -11,7 +11,7 @@
             <v-icon>home</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <router-link to="Login">
+            <router-link to="LinhaDoTempo">
               <v-list-tile-title>Home</v-list-tile-title>
             </router-link>
           </v-list-tile-content>

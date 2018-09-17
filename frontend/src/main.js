@@ -16,6 +16,8 @@ import VCalendar from 'v-calendar'
 import 'v-calendar/lib/v-calendar.min.css'
 import VueChartkick from 'vue-chartkick'
 import Chart from 'chart.js'
+import CompanyValidators from '@/validators/CompanyValidators'
+import AddressValidators from '@/validators/AddressValidators'
 
 Vue.use(VueChartkick, {adapter: Chart})
 
@@ -35,12 +37,18 @@ Vue.use(Vuetify)
 
 Vue.prototype.$_axios = axios
 Vue.prototype.$_url = 'http://localhost:8080/'
+Vue.prototype.$_viaCep = 'https://viacep.com.br/ws/'
 Vue.prototype.$_moment = moment
 
 Vue.prototype.$v_user = new UserValidator()
 Vue.prototype.$v_baseHour = new BaseHourCalculationValidators()
 Vue.prototype.$v_parameters = new ParametersValidators()
+<<<<<<< HEAD
 Vue.prototype.$v_costCentre = new CostCentreValidator()
+=======
+Vue.prototype.$v_company = new CompanyValidators()
+Vue.prototype.$v_address = new AddressValidators()
+>>>>>>> 66dac4c6c26029578a47a257e36c811cc4afc1c3
 
 Vue.filter('dataFormatada', function (value) {
   if (value) {

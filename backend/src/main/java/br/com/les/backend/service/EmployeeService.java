@@ -49,9 +49,14 @@ public class EmployeeService implements IService {
 	}
 
 	@Override
+<<<<<<< HEAD
 	public void delete(DomainEntity entity) {
 		// TODO Auto-generated method stub
 		
+=======
+	public <T extends DomainEntity> int softDelete(T entity) {
+		return 0;
+>>>>>>> 66dac4c6c26029578a47a257e36c811cc4afc1c3
 	}
 
 }
