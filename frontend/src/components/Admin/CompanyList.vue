@@ -4,7 +4,7 @@
      <v-toolbar class="elevation-10" dark>
       <v-toolbar-title color="white">Lista de empresas cadastradas</v-toolbar-title>
 
-      <div class="text-xs-center">
+      <div class="text-xs-right">
         <v-dialog v-model="dialog" max-width="500px">
           <v-card>
             <v-card-title primary-title class="headline grey lighten-2">
@@ -40,25 +40,44 @@
       class="elevation-10"
     >
       <template slot="items" slot-scope="props">
-        <td>{{ props.item.tradingName }}</td>
-        <td class="text-xs-right">{{ props.item.socialName }}</td>
-        <td class="text-xs-right">{{ props.item.cnpj }}</td>
-        <td class="text-xs-right">{{ props.item.stateRegistration }}</td>
-        <td class="justify-center layout px-0">
-          <v-icon small class="mr-2" @click="editItem(props.item)" >
-            edit
-          </v-icon>
-          <v-icon small @click="deleteDialog(props.item)" >
-            delete
-          </v-icon>
-        </td>
+        <tr @click="props.expanded = !props.expanded">
+          <td>{{ props.item.tradingName }}</td>
+          <td class="text-xs-right">{{ props.item.socialName }}</td>
+          <td class="text-xs-right">{{ props.item.cnpj }}</td>
+          <td class="text-xs-right">{{ props.item.stateRegistration }}</td>
+          <td class="justify-center layout px-0">
+            <v-icon small class="mr-2" @click="editItem(props.item)" >
+              edit
+            </v-icon>
+            <v-icon small @click="deleteDialog(props.item)" >
+              delete
+            </v-icon>
+          </td>
+        </tr>
       </template>
+
+      <template slot="expand" slot-scope="props">
+        <v-data-table :headers="subHeaders"
+                      :items="companyList"
+                      hide-actions dark
+                      class="elevation-10" >
+          <template slot="items" slot-scope="props">
+            <td class="text-xs-right">{{ props.item.address.zipCode }}</td>
+            <td class="text-xs-right">{{ props.item.address.number }}</td>
+            <td class="text-xs-right">{{ props.item.address.street }}</td>
+            <td class="text-xs-right">{{ props.item.address.city }}</td>
+            <td class="text-xs-right">{{ props.item.address.state }}</td>
+          </template>
+        </v-data-table>
+      </template>
+
       <template slot="no-data">
         <v-alert :value="true" :color="errorColor" icon="warning">
           {{ errorMessage }}
         </v-alert>
         <v-btn color="primary" @click="initialize">Refazer consulta</v-btn>
       </template>
+
     </v-data-table>
 
   </v-app>
@@ -75,15 +94,18 @@
         errorMessage: '',
         dialog: false,
         headers: [
-          {
-            text: 'Empresas',
-            align: 'left',
-            sortable: false,
-            value: 'name'
-          },
+          { text: 'Empresas', value: 'tradingName', align: 'left' },
           { text: 'Razão Social', value: 'socialName', align: 'right' },
-          { text: 'CNPJ', value: 'zipCode', align: 'right' },
-          { text: 'Inscrição Estadual', value: 'stateRegistration', align: 'right' }
+          { text: 'CNPJ', value: 'cnpj', align: 'right' },
+          { text: 'Inscrição Estadual', value: 'stateRegistration', align: 'right' },
+          { text: 'Opções', align: 'right' }
+        ],
+        subHeaders: [
+          { text: 'CEP', value: 'zipCode', align: 'right' },
+          { text: 'Número', value: 'number', align: 'right' },
+          { text: 'Rua', value: 'street', align: 'right' },
+          { text: 'Cidade', value: 'city', align: 'right' },
+          { text: 'Estado', value: 'state', align: 'right' }
         ],
         companyList: [],
         selectedItem: {}
@@ -108,8 +130,7 @@
         this.messageColor = ''
       },
       editItem (item) {
-        const index = this.companyList.indexOf(item)
-        confirm('Are you sure you want to delete this item?') && this.companyList.splice(index, 1)
+        this.$emit('emitCompany', item)
       },
       deleteDialog (item) {
         this.deleteIndex = this.companyList.indexOf(item)
@@ -118,7 +139,6 @@
       },
       deleteItem () {
         this.close()
-        console.log(JSON.stringify(this.selectedItem.id))
         this.$_axios.delete(`${this.$_url}company/${this.selectedItem.id}`).then(reponse => {
           let result = reponse.data
           if (result.message) {
