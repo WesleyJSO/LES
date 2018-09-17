@@ -4909,7 +4909,6 @@
       "requires": {
         "inherits": "^2.0.1",
         "readable-stream": "^2.0.0"
-<<<<<<< Updated upstream
       }
     },
     "fs-access": {
@@ -4919,8 +4918,6 @@
       "dev": true,
       "requires": {
         "null-check": "^1.0.0"
-=======
->>>>>>> Stashed changes
       }
     },
     "fs-extra": {

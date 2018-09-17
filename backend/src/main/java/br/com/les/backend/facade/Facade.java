@@ -40,12 +40,30 @@ public class Facade extends AbstractFacade {
 
     @Override
     public Result update(DomainEntity entity, String callerMethod ) {
-        return null;
+
+    	validate( entity, Actions.UPDATE.getValue(), callerMethod  );
+    	if ( result.isSuccess() )
+    		result.getResultList().add( service.save( entity ) );
+    	return result;
     }
 
     @Override
     public Result delete( DomainEntity entity, String callerMethod ) {
-    	return null;
+    	
+    	validate( entity, Actions.DELETE.getValue(), callerMethod );
+    	
+    	if ( result.getMessage() == null ) {
+        	int updateResult = service.softDelete( entity );
+	    	if ( updateResult == 0 )
+	    		result.setError( "Nenhum registro alterado" );
+	    	else if ( updateResult == 1 )
+	    		result.setSuccess( "Registro alterdo com sucesso!" );
+	    	else if ( updateResult > 1 )
+	    		result.setSuccess( "Registros alterdos com sucesso!" );
+	    	else
+	    		result.setSuccess( "Erro ao alterar registro!" );
+    	}
+    	return result;
     }
 
     @Override

@@ -48,4 +48,9 @@ public class EmployeeService implements IService {
 		return employeeDAO.findByLoginAndSenha( ( Employee ) entity );
 	}
 
+	@Override
+	public <T extends DomainEntity> int softDelete(T entity) {
+		return 0;
+	}
+
 }

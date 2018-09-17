@@ -35,8 +35,8 @@
         </v-flex>
         <!-- Row 2  for testes 61442737000230 -->
         <v-flex xs6>
-          <v-text-field v-model="company.cpnj"
-                :rules="$v_company.cnpjRules(company.cpnj)"
+          <v-text-field v-model="company.cnpj"
+                :rules="$v_company.cnpjRules(company.cnpj)"
                 :counter="14"
                 type="text"
                 prepend-icon="email"
@@ -126,10 +126,15 @@
       </v-flex>
 
     </v-form>
+    <v-flex xs12 right>
+      <br/><br/><br/><br/>
+      <CompanyList @emitCompany="updateCompany($event)" ref="companyList"></CompanyList>
+    </v-flex>
   </v-app>
 </template>
 
 <script>
+import CompanyList from '@/components/Admin/CompanyList'
 export default {
   data: function () {
     return {
@@ -143,11 +148,12 @@ export default {
       valid: false
     }
   },
+  components: {
+    CompanyList
+  },
   methods: {
     submit () {
-      console.log(JSON.stringify(this.company))
       this.$_axios.post(`${this.$_url}company`, this.company).then(response => {
-        console.log(JSON.stringify(response.data))
         let result = response.data
         if (result.resultList.length !== 0) {
           this.company = result.resultList[0]
@@ -156,16 +162,15 @@ export default {
           this.messages = [...result.message]
           this.haveMessage = true
           if (result.success) {
-          // retorno mensagem de sucesso /
             this.messageColor = 'info'
             this.clear()
+            this.company = { address: {} }
+            this.$refs.companyList.initialize()
           } else {
-            // retorno mensagem de erro /
             this.messageColor = 'warning'
           }
         }
       }).catch(error => {
-        // erro na requisição do serviço /
         console.log(error)
         this.messages = ['Erro durante execução do serviço!']
         this.haveMessage = true
@@ -175,15 +180,16 @@ export default {
     clear () {
       this.$refs.form.reset()
     },
+    updateCompany (companyToEdit) {
+      this.company = companyToEdit
+    },
     getAddress (zipCode) {
       if (zipCode.length === 8) {
         this.$_axios.get(`${this.$_viaCep}${zipCode}/json`).then(reponse => {
-          console.log(reponse)
           let address = reponse.data
           this.company.address.street = address.logradouro
           this.company.address.city = address.localidade
           this.company.address.state = address.uf
-          console.log(JSON.stringify(this.company.address))
         }).catch(error => {
           console.log(error)
           if (error.data) {

@@ -32,15 +32,13 @@
           <!-- Row 1 -->
             <v-flex xs12 sm9 md6 lg6 xl4>
               <v-text-field
-                    v-model="overtime"
+                    v-model="parameters.overtimePercentage"
                     type="number"
                     class="px-0"
                     prepend-icon="looks_one"
                     clearable
                     suffix="%"
-                    :rules="$v_parameters.overtimeRules(overtime)"
-                    label="Adicional hora extra"
-                    required>
+                    label="Adicional hora extra">
               </v-text-field>
             </v-flex>
           </v-layout>
@@ -49,14 +47,12 @@
           <!-- Row 2 -->
             <v-flex xs12 sm9 md6 lg6 xl4>
               <v-text-field
-                    v-model="nightOvertime"
+                    v-model="parameters.nightOvertimePercentage"
                     type="number"
                     prepend-icon="looks_two"
                     clearable
                     suffix="%"
-                    :rules="$v_parameters.nightOvertimeRules(nightOvertime)"
-                    label="Adicional noturno *"
-                    required>
+                    label="Adicional noturno *">
               </v-text-field>
             </v-flex>
           </v-layout>
@@ -65,14 +61,12 @@
           <!-- Row 3 -->
             <v-flex xs12 sm9 md6 lg6 xl4>
               <v-text-field
-                    v-model="weekEndOvertime"
+                    v-model="parameters.weekEndOvertimePercentage"
                     type="number"
                     prepend-icon="looks_3"
                     clearable
                     suffix="%"
-                    :rules="$v_parameters.weekEndOvertimeRules(weekEndOvertime)"
-                    label="Adicional domingo e feriado *"
-                    required>
+                    label="Adicional domingo e feriado *">
               </v-text-field>
             </v-flex>
           </v-layout>
@@ -102,15 +96,13 @@
           <!-- Row 1 -->
             <v-flex xs12 sm9 md6 lg6 xl4>
               <v-text-field
-                    v-model="retroactiveAppointment"
+                    v-model="parameters.retroactiveAppointmentLimitTime"
                     type="number"
                     class="px-0"
                     prepend-icon="looks_one"
                     clearable
                     suffix="horas"
-                    :rules="$v_parameters.retroactiveAppointmentRules(retroactiveAppointment)"
-                    label="Prazo limite para apontamentos retroativos"
-                    required>
+                    label="Prazo limite para apontamentos retroativos">
               </v-text-field>
             </v-flex>
           </v-layout>
@@ -119,14 +111,12 @@
           <!-- Row 2 -->
             <v-flex xs12 sm9 md6 lg6 xl4>
               <v-text-field
-                    v-model="relocationRequest"
+                    v-model="parameters.relocationRequestLimitTime"
                     type="number"
                     prepend-icon="looks_two"
                     clearable
                     suffix="horas"
-                    :rules="$v_parameters.relocationRequestRules(relocationRequest)"
-                    label="Prazo limite para solicitação de remanejamento"
-                    required>
+                    label="Prazo limite para solicitação de remanejamento">
               </v-text-field>
             </v-flex>
           </v-layout>
@@ -135,14 +125,12 @@
           <!-- Row 3 -->
             <v-flex xs12 sm9 md6 lg6 xl4>
               <v-text-field
-                    v-model="bankCompensation"
+                    v-model="parameters.bankCompensationLimitTime"
                     type="number"
                     prepend-icon="looks_3"
                     clearable
                     suffix="meses"
-                    :rules="$v_parameters.bankCompensationRules(bankCompensation)"
-                    label="Prazo limite para compensação do banco de horas"
-                    required>
+                    label="Prazo limite para compensação do banco de horas">
               </v-text-field>
             </v-flex>
           </v-layout>
@@ -181,26 +169,6 @@
           </v-flex>
           </v-layout>
           <br/>
-          <v-layout v-if="bankOfHoursType || overtimeType">
-          <!-- Row 2 -->
-            <v-flex xs12 sm9 md6 lg6 xl4>
-              <v-checkbox
-                :label="`Não aplicar limite`"
-                v-model="checkbox1"
-                @change="verifyCheckBoxes"
-              ></v-checkbox>
-              <v-text-field
-                    :disabled="blockHoursLimit"
-                    v-model="hoursLimit"
-                    type="number"
-                    prepend-icon="looks_one"
-                    clearable
-                    suffix="horas"
-                    label="Limite diário de horas">
-              </v-text-field>
-            </v-flex>
-          </v-layout>
-          <br/>
           <v-layout v-if="bothTypes">
           <!-- Row 4 -->
             <v-flex xs12 sm9 md6 lg6 xl4>
@@ -209,12 +177,12 @@
                             v-model="radio"
                             :mandatory="false"
                             @change="changeRadio">
-                            <v-radio label="Hora Extra" value="overtime"></v-radio>
-                            <v-radio label="Banco de Horas" value="bankOfHours"></v-radio>
+                            <v-radio label="Hora Extra" value="Hora Extra"></v-radio>
+                            <v-radio label="Banco de Horas" value="Banco de Horas"></v-radio>
               </v-radio-group>
             </v-flex>
           </v-layout>
-          <v-layout v-if="bothTypes">
+          <v-layout v-if="overtimeType || bothTypes">
           <!-- Row 2 -->
             <v-flex xs12 sm9 md6 lg6 xl4>              
               <v-checkbox
@@ -234,7 +202,7 @@
               </v-text-field>
             </v-flex>
           </v-layout>
-          <v-layout v-if="bothTypes">
+          <v-layout v-if="bankOfHoursType || bothTypes">
           <!-- Row 3 -->
             <v-flex xs12 sm9 md6 lg6 xl4>
               <v-checkbox
@@ -277,9 +245,14 @@
 
 <script>
 import Parameters from '../../objects/Parameters'
+import DateHelper from '../../helpers/DateHelper'
 
 export default {
+  props: ['parameter'],
   data: () => ({
+    actualDate: '',
+    parameterDate: '',
+    message: '',
     step: 1,
     parameters: [],
     haveMessage: false,
@@ -302,21 +275,22 @@ export default {
       'Hora Extra e Banco de Horas'
     ],
     hoursLimit: 3,
-    overtimeTypeLimit: 0,
-    bankOfHoursTypeLimit: 0,
-    bankOfHoursType: true,
-    overtimeType: false,
+    overtimeTypeLimit: 1,
+    bankOfHoursTypeLimit: 1,
+    bankOfHoursType: false,
+    overtimeType: true,
     bothTypes: false,
-    radio: 'overtime',
+    radio: 'Hora Extra',
     type: 'Hora Extra',
     checkbox1: false,
     checkbox2: false,
     checkbox3: false,
-    blockCheckbox2: true,
+    blockCheckbox2: false,
     blockCheckbox3: false,
     blockHoursLimit: false,
     blockOvertimeTypeLimit: false,
     blockBankOfHoursTypeLimit: false,
+    welcome: 'welcome',
     dialog: false,
     blockDialog: false
   }),
@@ -329,40 +303,62 @@ export default {
   },
   watch: {
   },
+  mounted () {
+    if (this.parameter) {
+      this.parameters = this.parameter
+      this.hoursLimit = this.parameters.overtimeTypeLimit
+      this.overtimeTypeLimit = this.parameters.overtimeTypeLimit
+      this.bankOfHoursTypeLimit = this.parameters.bankedHourTypeLimit
+      if (this.parameters.hourType !== 'Não cadastrado') {
+        this.type = this.parameters.hourType
+        this.verifyFields()
+        if (this.parameters.hourType === 'Banco de Horas') {
+          this.hoursLimit = this.parameters.bankedHourTypeLimit
+          this.bankOfHoursType = true
+          this.overtimeType = false
+        } else if (this.parameters.hourType === 'Hora Extra e Banco de Horas') {
+          if (!this.parameters.overtimeTypeLimit) {
+            this.checkbox2 = true
+          }
+          if (!this.parameters.bankedHourTypeLimit) {
+            this.checkbox3 = true
+          }
+        }
+      }
+    }
+    if (this.parameters.creationDate) {
+      let date = this.parameters.creationDate.substring(0, 10).split('/')
+      date = `${date[2]}/${date[1]}/${date[0]}`
+      this.parameterDate = date
+    }
+  },
   methods: {
     changeRadio () {
-      if (this.radio === 'overtime') {
+      if (this.radio === 'Hora Extra') {
         this.checkbox2 = false
         this.blockCheckbox2 = true
         this.blockCheckbox3 = false
-      } else if (this.radio === 'bankOfHours') {
+        this.bankOfHoursTypeLimit = this.parameters.bankedHourTypeLimit
+      } else if (this.radio === 'Banco de Horas') {
         this.blockCheckbox2 = false
         this.checkbox3 = false
         this.blockCheckbox3 = true
+        this.overtimeTypeLimit = this.parameters.overtimeTypeLimit
       }
       this.verifyCheckBoxes()
     },
     verifyCheckBoxes () {
-      if (this.checkbox1) {
-        this.blockHoursLimit = true
-        this.hoursLimit = null
-      } else {
-        this.blockHoursLimit = false
-        this.hoursLimit = 0
-      }
-      if (this.checkbox2 && this.radio !== 'overtime') {
-        this.blockOvertimeTypeLimit = true
-        this.overtimeTypeLimit = null
-      } else {
-        this.blockOvertimeTypeLimit = false
-        this.overtimeTypeLimit = 0
-      }
-      if (this.checkbox3 && this.radio !== 'bankOfHours') {
-        this.blockBankOfHoursTypeLimit = true
-        this.bankOfHoursTypeLimit = null
-      } else {
-        this.blockBankOfHoursTypeLimit = false
-        this.bankOfHoursTypeLimit = 0
+      this.blockOvertimeTypeLimit = false
+      this.blockBankOfHoursTypeLimit = false
+      if (this.type === 'Hora Extra e Banco de Horas') {
+        if (this.checkbox2 && this.radio !== 'Hora Extra') {
+          this.blockOvertimeTypeLimit = true
+          this.overtimeTypeLimit = null
+        }
+        if (this.checkbox3 && this.radio !== 'Banco de Horas') {
+          this.blockBankOfHoursTypeLimit = true
+          this.bankOfHoursTypeLimit = null
+        }
       }
     },
     verifyFields (type) {
@@ -370,14 +366,22 @@ export default {
         this.overtimeType = true
         this.bankOfHoursType = false
         this.bothTypes = false
+        this.overtimeTypeLimit = this.parameters.overtimeTypeLimit
       } else if (type === 'Banco de Horas') {
         this.overtimeType = false
         this.bankOfHoursType = true
         this.bothTypes = false
-      } else if (type === 'Hora Extra e Banco de Horas') {
+        this.bankOfHoursTypeLimit = this.parameters.bankedHourTypeLimit
+      }
+      this.blockCheckbox2 = false
+      this.blockCheckbox3 = false
+      if (type === 'Hora Extra e Banco de Horas') {
         this.overtimeType = false
         this.bankOfHoursType = false
         this.bothTypes = true
+        this.changeRadio()
+      } else {
+        this.verifyCheckBoxes()
       }
     },
     nextStep () {
@@ -413,21 +417,22 @@ export default {
       this.messages = []
       this.messageColor = ''
       let error = []
-      error = this.$v_parameters.retroactiveAppointmentRules(this.retroactiveAppointment)
+      error = this.$v_parameters.retroactiveAppointmentRules(this.parameters.retroactiveAppointmentLimitTime)
       if (error) {
         this.messages = [...this.messages, ...error]
       }
-      error = this.$v_parameters.relocationRequestRules(this.relocationRequest)
+      error = this.$v_parameters.relocationRequestRules(this.parameters.relocationRequestLimitTime)
       if (error) {
         this.messages = [...this.messages, ...error]
       }
-      error = this.$v_parameters.bankCompensationRules(this.bankCompensation)
+      error = this.$v_parameters.bankCompensationRules(this.parameters.bankCompensationLimitTime)
       if (error) {
         this.messages = [...this.messages, ...error]
       }
+      this.$vuetify.goTo(0)
       if (this.messages.length === 0) {
         return true
-      } else if (this.messages.length <= 3) {
+      } else {
         this.haveMessage = true
         this.messageColor = 'warning'
         return false
@@ -438,21 +443,22 @@ export default {
       this.messages = []
       this.messageColor = ''
       let error = []
-      error = this.$v_parameters.overtimeRules(this.overtime)
+      error = this.$v_parameters.overtimeRules(this.parameters.overtimePercentage)
       if (error) {
         this.messages = [...this.messages, ...error]
       }
-      error = this.$v_parameters.nightOvertimeRules(this.nightOvertime)
+      error = this.$v_parameters.nightOvertimeRules(this.parameters.nightOvertimePercentage)
       if (error) {
         this.messages = [...this.messages, ...error]
       }
-      error = this.$v_parameters.weekEndOvertimeRules(this.weekEndOvertime)
+      error = this.$v_parameters.weekEndOvertimeRules(this.parameters.weekEndOvertimePercentage)
       if (error) {
         this.messages = [...this.messages, ...error]
       }
+      this.$vuetify.goTo(0)
       if (this.messages.length === 0) {
         return true
-      } else if (this.messages.length <= 3) {
+      } else {
         this.haveMessage = true
         this.messageColor = 'warning'
         return false
@@ -463,10 +469,6 @@ export default {
       this.messages = []
       this.messageColor = ''
       let error = []
-      error = this.$v_parameters.hoursLimitRules(this.type, this.checkbox1, this.hoursLimit)
-      if (error) {
-        this.messages = [...this.messages, ...error]
-      }
       error = this.$v_parameters.overtimeTypeLimitRules(this.type, this.checkbox2, this.overtimeTypeLimit)
       if (error) {
         this.messages = [...this.messages, ...error]
@@ -483,38 +485,89 @@ export default {
         return false
       }
     },
-    *callApi (parameters) {
-      if (!this.edit) {
-        yield this.$_axios.post(`${this.$_url}parametros`, parameters).then(response => {
-          var result = response.data
-          if (result.listaResultado.length !== 0) {
-            // retorno ok /
-            parameters = result.listaResultado
-          }
-          if (result.mensagem) {
-            this.messages = [...result.message]
-            this.haveMessage = true
-            if (result.success) {
-            // retorno mensagem de sucesso /
-              this.messageColor = 'info'
-            } else {
-              // retorno mensagem de erro /
-              this.messageColor = 'warning'
+    callApi () {
+      if (this.parameter.creationDate) {
+        if (DateHelper.diffDates(new Date(this.parameterDate), new Date()) !== 0) {
+          this.$_axios.put(`${this.$_url}parameterSaveUpdate`, this.parameters).then(response => {
+            var result = response.data
+            if (result.listaResultado.length !== 0) {
+              // retorno ok /
+              this.parameters = result.listaResultado
             }
-          }
-        },
-        response => {
-          // erro na requisição do serviço /
-          this.messages = ['Erro durante execução do serviço!']
-          this.haveMessage = true
-          this.messageColor = 'error'
-        })
+            if (result.mensagem) {
+              this.messages = [...result.message]
+              this.haveMessage = true
+              if (result.success) {
+              // retorno mensagem de sucesso /
+                this.messageColor = 'info'
+              } else {
+                // retorno mensagem de erro /
+                this.messageColor = 'warning'
+              }
+            }
+          },
+          response => {
+            // erro na requisição do serviço /
+            this.messages = ['Erro durante execução do serviço!']
+            this.haveMessage = true
+            this.messageColor = 'error'
+          })
+          this.$_axios.post(`${this.$_url}parameter`, this.parameters).then(response => {
+            var result = response.data
+            if (result.listaResultado.length !== 0) {
+              // retorno ok /
+              this.parameters = result.listaResultado
+            }
+            if (result.mensagem) {
+              this.messages = [...result.message]
+              this.haveMessage = true
+              if (result.success) {
+              // retorno mensagem de sucesso /
+                this.messageColor = 'info'
+              } else {
+                // retorno mensagem de erro /
+                this.messageColor = 'warning'
+              }
+            }
+          },
+          response => {
+            // erro na requisição do serviço /
+            this.messages = ['Erro durante execução do serviço!']
+            this.haveMessage = true
+            this.messageColor = 'error'
+          })
+        } else {
+          this.$_axios.put(`${this.$_url}parameter`, this.parameters).then(response => {
+            var result = response.data
+            if (result.listaResultado.length !== 0) {
+              // retorno ok /
+              this.parameters = result.listaResultado
+            }
+            if (result.mensagem) {
+              this.messages = [...result.message]
+              this.haveMessage = true
+              if (result.success) {
+              // retorno mensagem de sucesso /
+                this.messageColor = 'info'
+              } else {
+                // retorno mensagem de erro /
+                this.messageColor = 'warning'
+              }
+            }
+          },
+          response => {
+            // erro na requisição do serviço /
+            this.messages = ['Erro durante execução do serviço!']
+            this.haveMessage = true
+            this.messageColor = 'error'
+          })
+        }
       } else {
-        yield this.$_axios.put(`${this.$_url}parametros`, parameters).then(response => {
+        this.$_axios.post(`${this.$_url}parameter`, this.parameters).then(response => {
           var result = response.data
           if (result.listaResultado.length !== 0) {
             // retorno ok /
-            parameters = result.listaResultado
+            this.parameters = result.listaResultado
           }
           if (result.mensagem) {
             this.messages = [...result.message]
@@ -538,14 +591,23 @@ export default {
     },
     saveParameters (event) {
       if (this.validateHourType()) {
-        this.$router.push('/Parametros?message=mensagem')
-        // let parameters = this.createUser()
-        // this.callApi(parameters).next().value
+        this.parameters.hourType = this.type
+        if (this.parameters.hourType === 'Hora Extra') {
+          this.parameters.overtimeTypeLimit = this.overtimeTypeLimit
+          this.parameters.bankedHourTypeLimit = null
+          this.parameters.firstTypeApplied = null
+        } else if (this.parameters.hourType === 'Banco de Horas') {
+          this.parameters.overtimeTypeLimit = null
+          this.parameters.bankedHourTypeLimit = this.bankOfHoursTypeLimit
+          this.parameters.firstTypeApplied = null
+        } else if (this.parameters.hourType === 'Hora Extra e Banco de Horas') {
+          this.parameters.overtimeTypeLimit = this.overtimeTypeLimit
+          this.parameters.bankedHourTypeLimit = this.bankOfHoursTypeLimit
+          this.parameters.firstTypeApplied = this.radio
+        }
+        this.callApi()
       }
       this.$vuetify.goTo(0)
-    },
-    clearForm () {
-      this.parameters = {}
     }
   }
 }

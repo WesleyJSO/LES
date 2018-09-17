@@ -6,21 +6,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.DomainEntity;
-import br.com.les.backend.strategy.company.ICompanyStrategy;
+import br.com.les.backend.strategy.Company.ICompanyStrategy;
+import br.com.les.backend.strategy.parameter.IParameterStrategy;
 import br.com.les.backend.utils.Result;
 
-@Component( "Company" )
-public class CompanyStrategy implements IStrategy {
+@Component( "Parameter" )
+public class ParameterStrategy implements IStrategy {
 
 	@Autowired
-	List< ICompanyStrategy > actionStrategies;
+	List< IParameterStrategy > actionStrategies;
 	
 	@Override
 	public Result execute( DomainEntity entity, String action, String callerMethod ) {
 
-		ICompanyStrategy strategyToBeExecuted = null;
+		IParameterStrategy strategyToBeExecuted = null;
 		
-		for ( ICompanyStrategy s : actionStrategies ) 
+		for ( IParameterStrategy s : actionStrategies ) 
 			if ( s.getClass().getSimpleName().contains( action ) )
 				strategyToBeExecuted = s;
 				

@@ -27,6 +27,7 @@ public class DomainEntity implements Serializable {
 	@GeneratedValue( strategy=GenerationType.SEQUENCE )
 	@SequenceGenerator( allocationSize=0, name = "idGenerator" )
 	private Long id;
+	private boolean active;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
 	private Calendar creationDate;
 
@@ -45,5 +46,13 @@ public class DomainEntity implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public boolean getActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 }
