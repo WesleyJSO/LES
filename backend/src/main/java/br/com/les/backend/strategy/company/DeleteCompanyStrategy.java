@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.Company;
 import br.com.les.backend.entity.DomainEntity;
+import br.com.les.backend.strategy.company.AbstractCompanyStrategy;
 import br.com.les.backend.utils.Result;
 
 @Component

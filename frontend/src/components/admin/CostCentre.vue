@@ -95,8 +95,8 @@
           <td class="text-xs-center">{{ props.item.employees.length }}</td>
           <td class="text-xs-center">{{ props.item.creationDate }}</td>
           <td class="justify-center layout px-0">
-            <v-icon class="mr-2"
-                    @click.stop="editItem(props.item)">person_add</v-icon>
+            <!-- <v-icon class="mr-2"
+                    @click.stop="editItem(props.item)">person_add</v-icon> -->
             <v-icon class="mr-2"
                     @click.stop="editItem(props.item)">edit</v-icon>
             <v-icon class="mr-2"
@@ -183,12 +183,17 @@ export default {
       // User either to save or edit cost centres
       this.$_axios.post(`${this.$_url}CentroDeCusto`, this.costCentre).then((response) => {
         let result = response.data
-        alert(JSON.stringify(result))
+        alert(JSON.stringify(result.resultList))
+        alert(this.editedIndex)
         if (result.resultList.length !== 0) {
-          this.costCentres = this.costCentres.splice(this.editedIndex, 1, result.resultList[0])
+          if (this.editedIndex > -1) {
+            this.costCentres = this.costCentres.splice(this.editedIndex, 1, result.resultList[0])
+          } else {
+            this.costCentres.push(...result.resultList)
+          }
         }
         if (result.message) {
-          alert('Messages everything OK')
+          // alert('Messages everything OK')
           this.messages = [...result.message]
           this.haveMessage = true
           if (result.success) {
@@ -217,10 +222,10 @@ export default {
     },
     deleteItem (item) {
       let index = this.costCentres.indexOf(item)
-      confirm('Tem certeza que deseja excluir este Centro de Custo?') // && this.users.splice(index, 1)
+      confirm('Tem certeza que deseja excluir este Centro de Custo?') && this.costCentres.splice(index, 1)
       this.$_axios.delete(`${this.$_url}CentroDeCusto/${item.id}`).then((response) => {
         let result = response.data
-        this.costCentres = this.costCentres.splice(index, 1)
+        // this.costCentres = this.costCentres.splice(index, 1)
         if (result.mensagem) {
           this.messages = [...result.mensagem]
           this.haveMessage = true

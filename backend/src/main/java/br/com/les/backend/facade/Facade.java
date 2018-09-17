@@ -1,11 +1,11 @@
 package br.com.les.backend.facade;
 
+import org.springframework.stereotype.Component;
+
 import br.com.les.backend.entity.DomainEntity;
 import br.com.les.backend.service.IService;
 import br.com.les.backend.utils.Actions;
 import br.com.les.backend.utils.Result;
-
-import org.springframework.stereotype.Component;
 
 
 @Component
@@ -48,12 +48,6 @@ public class Facade extends AbstractFacade {
 
     @Override
     public Result delete( DomainEntity entity, String callerMethod ) {
-<<<<<<< HEAD
-    	validate( entity, Actions.SAVE.getValue(), callerMethod  );
-    	if ( result.isSuccess() )
-    		service.delete( entity );
-=======
-    	
     	validate( entity, Actions.DELETE.getValue(), callerMethod );
     	
     	if ( result.getMessage() == null ) {
@@ -67,7 +61,6 @@ public class Facade extends AbstractFacade {
 	    	else
 	    		result.setSuccess( "Erro ao alterar registro!" );
     	}
->>>>>>> 66dac4c6c26029578a47a257e36c811cc4afc1c3
     	return result;
     }
 

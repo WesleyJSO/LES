@@ -18,6 +18,7 @@ public class SaveCostCentreStrategy extends AbstractCostCentreStrategy {
 		switch ( callerMethod ) {
 		case "save":
 			CostCentre costCentre = ( CostCentre ) entity;
+			costCentre.setActive( true );
 			if ( null == costCentre.getName() || costCentre.getName().isEmpty() || costCentre.getName().trim().equals("") ) {
 				result.setError( Util.COST_INVALID_NAME );
 			}
@@ -27,6 +28,9 @@ public class SaveCostCentreStrategy extends AbstractCostCentreStrategy {
 			break;
 		default:
 			break;
+		}
+		if ( result.isSuccess() ) {
+			result.setSuccess( Util.SAVE_SUCCESSFUL_COST_CENTRE );
 		}
 		return result;
 	}

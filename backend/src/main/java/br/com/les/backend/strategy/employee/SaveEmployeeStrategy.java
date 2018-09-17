@@ -37,7 +37,7 @@ public class SaveEmployeeStrategy extends AbstractEmployeeStrategy {
 			/*if( funcionario.getListaRole().isEmpty() )
 				resultado.setError( "Ao menos uma role deve ser selecionada!" ); 
 			*/
-			if( employee.getBaseHourCalculation().getSalary() == 0D )
+			if( employee.getBaseHourCalculation().getSalary() == 0 )
 				result.setError(Util.ERROR_SALARY );
 			
 			if( employee.getPis() == null || employee.getPis().isEmpty() )

@@ -12,9 +12,5 @@ public interface IService {
 
 	List< DomainEntity > findByParameters( DomainEntity entity );
 	
-<<<<<<< HEAD
-	void delete(DomainEntity entity );
-=======
 	<T extends DomainEntity> int softDelete( T entity );
->>>>>>> 66dac4c6c26029578a47a257e36c811cc4afc1c3
 }
