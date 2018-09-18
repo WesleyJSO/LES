@@ -134,7 +134,7 @@
 </template>
 
 <script>
-import CompanyList from '@/components/Admin/CompanyList'
+import CompanyList from '@/components/admin/CompanyList'
 export default {
   data: function () {
     return {

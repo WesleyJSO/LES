@@ -149,7 +149,8 @@ export default {
     costCentre: {},
     costCentres: [],
     members: [],
-    valid: false
+    valid: false,
+    employessToSave: []
   }),
   computed: {
     getCostCentreHeaders () {
@@ -181,16 +182,14 @@ export default {
     },
     saveCostCentre () {
       // User either to save or edit cost centres
+      // alert(JSON.stringify(this.costCentre, null, ' '))
+      this.employessToSave = this.costCentre.employee
       this.$_axios.post(`${this.$_url}CentroDeCusto`, this.costCentre).then((response) => {
         let result = response.data
-        alert(JSON.stringify(result.resultList))
-        alert(this.editedIndex)
+        console.log(JSON.stringify(result.resultList), null, ' ')
+        // alert(this.editedIndex)
         if (result.resultList.length !== 0) {
-          if (this.editedIndex > -1) {
-            this.costCentres = this.costCentres.splice(this.editedIndex, 1, result.resultList[0])
-          } else {
-            this.costCentres.push(...result.resultList)
-          }
+          this.getCostCentresList()
         }
         if (result.message) {
           // alert('Messages everything OK')
@@ -205,6 +204,7 @@ export default {
           }
         }
         this.dialog = false
+        this.costCentre = {}
       },
       (response) => {
         // erro na requisição do serviço
@@ -275,7 +275,7 @@ export default {
         }
       },
       (response) => {
-        alert(JSON.stringify(response, null, ' '))
+        console.log(JSON.stringify(response, null, ' '))
         // Error during request
         this.messages = ['Erro durante execução do serviço!']
         this.haveMessage = true
@@ -305,6 +305,37 @@ export default {
       (response) => {
         console.log(JSON.stringify(response, null, ' '))
         // Error during request
+        this.messages = ['Erro durante execução do serviço!']
+        this.haveMessage = true
+        this.messageColor = 'error'
+      })
+    },
+    saveUser (user) {
+      alert(JSON.stringify(user))
+      this.$_axios.post(`${this.$_url}funcionario`, user).then((response) => {
+        let result = response.data
+        alert(JSON.stringify(result))
+        if (result.resultList.length !== 0) {
+          // retorno ok
+          alert(JSON.stringify(result))
+          user = result.resultList[0]
+        }
+        if (result.message) {
+          this.messages = [...result.message]
+          this.haveMessage = true
+          if (result.success) {
+          // retorno mensagem de sucesso
+            this.messageColor = 'info'
+            this.clearForm()
+          } else {
+            // retorno mensagem de erro
+            this.messageColor = 'warning'
+          }
+        }
+      },
+      (response) => {
+        // erro na requisição do serviço
+        alert(JSON.stringify(response))
         this.messages = ['Erro durante execução do serviço!']
         this.haveMessage = true
         this.messageColor = 'error'

@@ -46,6 +46,7 @@
             <v-text-field slot="activator"
                         v-model="request.entryDate"
                         label="Data Alvo"
+                        :rules="$v_request.validateDates()"
                         prepend-icon="event"
                         readonly>
             </v-text-field>
@@ -113,14 +114,6 @@
 <script>
 import UserService from '../../service/UserService'
 export default {
-  props: {
-    request: {
-      type: Object,
-      default () {
-        return {}
-      }
-    }
-  },
   data: () => ({
     valid: false,
     requestEntryDate: false,
@@ -128,7 +121,8 @@ export default {
     reactive: true,
     haveMessage: false,
     messages: [],
-    message: ''
+    message: '',
+    request: {}
   }),
   created () {
   },
