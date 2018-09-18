@@ -19,21 +19,25 @@ public class CompanyController extends AbstractController {
 	
 	@GetMapping(value = "/company" )
 	public Result findAll() {
-		return facade.findAll( new Company( true ), getMethodName( new Object() {} ) );
+		return run("FindAll").execute(new Company( true ), "findAll");
+		// return facade.findAll( new Company( true ), getMethodName( new Object() {} ) );
 	}
 	
 	@PostMapping( value="/company" )
 	public Result save( @RequestBody Company company ) {
-		return facade.save( ( DomainEntity ) company, getMethodName( new Object() {} ) );
+		return run("Save").execute(company, "save");
+		// return facade.execute( ( DomainEntity ) company, getMethodName( new Object() {} ) );
 	}
 	
 	@PutMapping( value="/company" )
 	public Result update( @RequestBody Company company ) {
-		return facade.update( company, getMethodName( new Object() {} ) );
+		return run("Update").execute(company, "update");
+		// return facade.update( company, getMethodName( new Object() {} ) );
 	}
 	
 	@DeleteMapping( value="/company/{id:[\\d]+}")
 	public Result delete( @PathVariable Long id ) {
-		return facade.delete( new Company( id ), getMethodName( new Object() {} ) );
+		return run("Delete").execute(new Company( id ), "delete");
+		// return facade.delete( new Company( id ), getMethodName( new Object() {} ) );
 	}
 }

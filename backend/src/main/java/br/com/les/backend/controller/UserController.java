@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.les.backend.entity.DomainEntity;
 import br.com.les.backend.entity.User;
 import br.com.les.backend.utils.Result;
 
@@ -22,13 +21,20 @@ public class UserController extends AbstractController {
 	@GetMapping( value="/Usuario" )
 	public Result findAll() {
 		
-		return facade.find( new User(), getMethodName( new Object() {} ) );
+		/* TODO:
+		 *  Think in better solutions
+		 * to the 'dynamic' inject the 
+		 * corresponding command instead take it from
+		 * a list of commands (run method) and
+		 * use literal strings ('search').
+		 */
+		return run("FindAll").execute(new User(), "find");
 	}
 	
 	@GetMapping( value="/UsuarioConsulta" )
 	public Result findByUser( @RequestBody User user ) {
 		
-		return facade.find( user, getMethodName( new Object() {} ) );
+		return run("Search").execute(user, "find");
 	}
 	
 	@GetMapping( value="/UsuarioEmail" )
@@ -36,31 +42,32 @@ public class UserController extends AbstractController {
 		
 		User user = new User();
 		user.setEmail(email);
-		return facade.find( user, getMethodName( new Object() {} ) );
+		return run("Search").execute(user, "find");
+		//return command.find( user, getMethodName( new Object() {} ) );
 	}
 	
 	// Expected a user login filled by nomeLogin and senha
 	@PostMapping( value="/UsuarioLogin" )
 	public Result findByLogin( @RequestBody User user ) {
 		
-		return facade.find( user, getMethodName( new Object() {} ) );
+		return run("Search").execute(user, "find");
 	}
 	
 	@PostMapping( value="/Usuario" )
 	public Result save( @RequestBody User user ) {
 		
-		return facade.save( ( DomainEntity ) user, getMethodName( new Object() {} ) );
+		return run("Save").execute(user, "save");
 	}
 	
 	@PutMapping( value="/Usuario" )
 	public Result update( @RequestBody User user ) {
 		
-		return facade.update( user, getMethodName( new Object() {} ) );
+		return run("Update").execute(user, "update");
 	}
 	
 	@DeleteMapping( value="/Usuario/{id}" )
 	public Result delete( @PathVariable( "id" ) Long userId ) {
 		
-		return facade.delete( new User( userId ), getMethodName( new Object() {} ) );
+		return run("Delete").execute(new User(userId), "delete");
 	}
 }

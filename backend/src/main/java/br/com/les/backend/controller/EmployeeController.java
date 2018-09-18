@@ -20,32 +20,32 @@ public class EmployeeController extends AbstractController {
 		
 	@GetMapping( value="/funcionario" )
 	public Result findAll() {
-		
-		return facade.findAll( new Employee(), getMethodName( new Object() {} ) );
+		return run("FindAll").execute(new Employee(), "findAll");
+		// return facade.facade( new Employee(), getMethodName( new Object() {} ) );
 	}
 	
 	@GetMapping( value="/usuarioFuncionario" )
 	public Result findByUsuario( @RequestBody Employee employee ) {
-		
-		return facade.find( employee, getMethodName( new Object() {} ) );
+		return run("Search").execute(employee, "find");
+		// return facade.find( employee, getMethodName( new Object() {} ) );
 	}
 	
 	@PostMapping( value="/funcionario" )
 	public Result save( @RequestBody Employee employee ) {
-		
-		return facade.save( ( DomainEntity ) employee, getMethodName( new Object() {} ) );
+		return run("Save").execute(employee, "save");
+		// return facade.save( ( DomainEntity ) employee, getMethodName( new Object() {} ) );
 	}
 	
 	@PutMapping( value="/funcionario" )
 	public Result update( @RequestBody Employee employee ) {
-		
-		return facade.update( employee, getMethodName( new Object() {} ) );
+		return run("Update").execute(employee, "update");
+		// return facade.update( employee, getMethodName( new Object() {} ) );
 	}
 	
 	
 	@DeleteMapping( value="/funcionario/{id}" )
 	public Result delete( @PathVariable( "id" ) Long employeeId ) {
-		
-		return facade.delete( new Employee( employeeId ), getMethodName( new Object() {} ) );
+		return run("Delete").execute(new Employee( employeeId ), "delete");
+		// return facade.delete( new Employee( employeeId ), getMethodName( new Object() {} ) );
 	}
 }

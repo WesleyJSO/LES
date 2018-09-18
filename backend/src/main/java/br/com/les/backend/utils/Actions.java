@@ -5,7 +5,8 @@ public enum Actions {
     SAVE("Save"), 
     UPDATE("Update"), 
     DELETE("Delete"), 
-    SEARCH("Search");
+    SEARCH("Search"),
+	FIND("find");
 	
 	private String value;
 	

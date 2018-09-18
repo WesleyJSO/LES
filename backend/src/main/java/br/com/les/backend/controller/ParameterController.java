@@ -18,25 +18,25 @@ public class ParameterController extends AbstractController {
 	
 	@GetMapping( value="/parameter" )
 	public Result findActive() {
-		
-		return facade.find( new Parameter( true ), getMethodName( new Object() {} ) );
+		return run("Search").execute(new Parameter( true ), "find");
+		// return facade.find( new Parameter( true ), getMethodName( new Object() {} ) );
 	}
 	
 	@PostMapping( value="/parameter" )
 	public Result save( @RequestBody Parameter parameter ) {
-		
-		return facade.save( ( DomainEntity ) parameter, getMethodName( new Object() {} ) );
+		return run("Save").execute(parameter, "save");
+		// return facade.save( ( DomainEntity ) parameter, getMethodName( new Object() {} ) );
 	}
 	
 	@PutMapping( value="/parameter" )
 	public Result update( @RequestBody Parameter parameter ) {
-		
-		return facade.update( parameter, getMethodName( new Object() {} ) );
+		return run("Update").execute(parameter, "update");
+		// return facade.update( parameter, getMethodName( new Object() {} ) );
 	}
 	
 	@PutMapping( value="/parameterSaveUpdate" )
 	public Result updateSave( @RequestBody Parameter parameter ) {
-		
-		return facade.update( parameter, getMethodName( new Object() {} ) );
+		return run("Update").execute(parameter, "updateSave");
+		// return facade.update( parameter, getMethodName( new Object() {} ) );
 	}
 }

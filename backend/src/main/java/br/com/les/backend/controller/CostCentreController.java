@@ -19,22 +19,26 @@ public class CostCentreController extends AbstractController {
 	
 	@GetMapping( value = "/CentrosDeCustos" )
 	public Result findAll () {
-		return facade.findAll( new CostCentre(), getMethodName( new Object() {} ) );
+		return run("FindAll").execute(new CostCentre(), "findAll");
+		// return facade.findAll( new CostCentre(), getMethodName( new Object() {} ) );
 	}
 	
 	@PostMapping( value = "/CentroDeCusto" )
 	public Result save ( @RequestBody CostCentre costCentre ) {
-		return facade.save( ( DomainEntity ) costCentre , getMethodName( new Object() {} ) );
+		return run("Save").execute(costCentre, "save");
+		// return facade.save( ( DomainEntity ) costCentre, getMethodName( new Object() {} ) );
 	}
 	
 	@PutMapping( value = "/CentroDeCustos/{centreCostId}" )
 	public Result update(@RequestBody CostCentre costCentre) {
-		return facade.update( ( DomainEntity ) costCentre, getMethodName(new Object() {} ) );
+		return run("Update").execute(costCentre, "update");
+		// return facade.update( ( DomainEntity ) costCentre, getMethodName(new Object() {} ) );
 	}
 
     @DeleteMapping( value = "CentroDeCusto/{centreCostId}" )
 	public Result delete ( @PathVariable Long centreCostId) {
-		return facade.delete( ( DomainEntity ) new CostCentre( centreCostId ), getMethodName( new Object() {} ) );
+    	return run("Delete").execute(new CostCentre( centreCostId ), "delete");
+		// return facade.delete( ( DomainEntity ) new CostCentre( centreCostId ), getMethodName( new Object() {} ) );
 	}
 	
 }

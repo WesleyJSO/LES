@@ -10,10 +10,10 @@ import RegisterCompany from '@/components/admin/RegisterCompany'
 import RequestView from '@/components/admin/RequestView'
 import Reports from '@/components/reports/Reports'
 import CostCentre from '@/components/admin/CostCentre'
-import SystemParameters from '@/components/admin/SystemParameters'
+// import SystemParameters from '@/components/admin/SystemParameters'
 import ManageHours from '@/components/admin/ManageHours'
 import Timeline from '@/components/user/Timeline'
-import RegisterSystemParameters from '@/components/admin/RegisterSystemParameters'
+// import RegisterSystemParameters from '@/components/admin/RegisterSystemParameters'
 
 Vue.use(Router)
 
@@ -74,11 +74,11 @@ export default new Router({
       name: 'CostCentre',
       component: CostCentre
     },
-    {
+    /* {
       path: '/Parametros',
       name: 'SystemParameters',
       component: SystemParameters
-    },
+    }, */
     {
       path: '/GerenciarBancoHoras',
       name: 'ManageHours',
@@ -88,12 +88,12 @@ export default new Router({
       path: '/LinhaDoTempo',
       name: 'Timeline',
       component: Timeline
-    },
+    }/*,
     {
       path: '/CadastroParametros',
       name: 'RegisterSystemParameters',
       component: RegisterSystemParameters,
       props: true
-    }
+    } */
   ]
 })
