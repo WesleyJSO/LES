@@ -13,7 +13,7 @@
       <v-layout row wrap>
       <!-- Row 1 -->
         <v-flex xs6>
-          <v-text-field v-model="company.socialName"
+          <v-text-field v-model="company.socialName" id="socialName"
                 :rules="$v_company.socialNameRules(company.socialName)"
                 type="text"
                 class="px-0"
@@ -24,7 +24,7 @@
           </v-text-field>
         </v-flex>
         <v-flex xs6>
-          <v-text-field v-model="company.tradingName"
+          <v-text-field v-model="company.tradingName" id="tradingName"
                 :rules="$v_company.tradingNameRules(company.tradingName)"
                 type="text"
                 prepend-icon="rate_review"
@@ -35,7 +35,7 @@
         </v-flex>
         <!-- Row 2  for testes 61442737000230 -->
         <v-flex xs6>
-          <v-text-field v-model="company.cnpj"
+          <v-text-field v-model="company.cnpj" id="cnpj"
                 :rules="$v_company.cnpjRules(company.cnpj)"
                 :counter="14"
                 type="text"
@@ -47,7 +47,7 @@
         </v-flex>
         <v-flex xs6>
           <!-- for tests 454504330118 -->
-          <v-text-field v-model="company.stateRegistration"
+          <v-text-field v-model="company.stateRegistration" id="stateRegistration"
                 :rules="$v_company.stateRegistrationRules(company.stateRegistration)"
                 :counter="12"
                 type="text"
@@ -119,10 +119,10 @@
       </v-layout>
 
       <v-flex xs12 right>
-        <v-btn @click="submit"
+        <v-btn id="success" @click="submit"
               :disabled="!valid"
               color="success">Salvar</v-btn>
-        <v-btn @click="clear" color="error">Cancelar</v-btn>
+        <v-btn @click="clear" id="cancel" color="error">Cancelar</v-btn>
       </v-flex>
 
     </v-form>

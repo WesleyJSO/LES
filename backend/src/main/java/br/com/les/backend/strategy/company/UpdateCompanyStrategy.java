@@ -3,6 +3,7 @@ package br.com.les.backend.strategy.company;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.Company;
 import br.com.les.backend.entity.DomainEntity;
@@ -10,7 +11,8 @@ import br.com.les.backend.repository.CompanyRepository;
 import br.com.les.backend.utils.Result;
 import br.com.les.backend.utils.Util;
 
-public class UpdateCompanyStrategy  extends AbstractCompanyStrategy {
+@Component
+public class UpdateCompanyStrategy extends AbstractCompanyStrategy {
 
 	@Autowired
 	CompanyRepository companyRepository;
