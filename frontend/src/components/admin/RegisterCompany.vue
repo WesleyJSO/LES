@@ -13,7 +13,7 @@
       <v-layout row wrap>
       <!-- Row 1 -->
         <v-flex xs6>
-          <v-text-field v-model="company.socialName"
+          <v-text-field v-model="company.socialName" id="socialName"
                 :rules="$v_company.socialNameRules(company.socialName)"
                 type="text"
                 class="px-0"
@@ -24,7 +24,7 @@
           </v-text-field>
         </v-flex>
         <v-flex xs6>
-          <v-text-field v-model="company.tradingName"
+          <v-text-field v-model="company.tradingName" id="tradingName"
                 :rules="$v_company.tradingNameRules(company.tradingName)"
                 type="text"
                 prepend-icon="rate_review"
@@ -35,7 +35,7 @@
         </v-flex>
         <!-- Row 2  for testes 61442737000230 -->
         <v-flex xs6>
-          <v-text-field v-model="company.cnpj"
+          <v-text-field v-model="company.cnpj" id="cnpj"
                 :rules="$v_company.cnpjRules(company.cnpj)"
                 :counter="14"
                 type="text"
@@ -47,7 +47,7 @@
         </v-flex>
         <v-flex xs6>
           <!-- for tests 454504330118 -->
-          <v-text-field v-model="company.stateRegistration"
+          <v-text-field v-model="company.stateRegistration" id="stateRegistration"
                 :rules="$v_company.stateRegistrationRules(company.stateRegistration)"
                 :counter="12"
                 type="text"
@@ -119,10 +119,10 @@
       </v-layout>
 
       <v-flex xs12 right>
-        <v-btn @click="submit"
+        <v-btn id="success" @click="submit"
               :disabled="!valid"
               color="success">Salvar</v-btn>
-        <v-btn @click="clear" color="error">Cancelar</v-btn>
+        <v-btn @click="clear" id="cancel" color="error">Cancelar</v-btn>
       </v-flex>
 
     </v-form>
@@ -139,6 +139,7 @@ export default {
   data: function () {
     return {
       company: {
+        id: 0,
         address: {}
       },
       edit: false,
@@ -153,34 +154,70 @@ export default {
   },
   methods: {
     submit () {
-      this.$_axios.post(`${this.$_url}company`, this.company).then(response => {
-        let result = response.data
-        if (result.resultList.length !== 0) {
-          this.company = result.resultList[0]
-        }
-        if (result.message) {
-          this.messages = [...result.message]
-          this.haveMessage = true
-          if (result.success) {
-            this.messageColor = 'info'
-            this.clear()
-            this.company = { address: {} }
-            this.$refs.companyList.initialize()
-          } else {
-            this.messageColor = 'warning'
+      console.log(JSON.stringify(this.company))
+      if (this.company.id === 0) {
+        this.$_axios.post(`${this.$_url}company`, this.company).then(response => {
+          console.log('post')
+          let result = response.data
+          if (result.resultList.length !== 0) {
+            this.company = result.resultList[0]
           }
-        }
-      }).catch(error => {
-        console.log(error)
-        this.messages = ['Erro durante execução do serviço!']
-        this.haveMessage = true
-        this.messageColor = 'error'
-      })
+          if (result.message) {
+            this.messages = [...result.message]
+            this.haveMessage = true
+            if (result.success) {
+              this.messageColor = 'info'
+              this.clear()
+              this.company = {
+                id: 0,
+                address: {}
+              }
+              this.$refs.companyList.initialize()
+            } else {
+              this.messageColor = 'warning'
+            }
+          }
+        }).catch(error => {
+          console.log(error)
+          this.messages = ['Erro durante execução do serviço!']
+          this.haveMessage = true
+          this.messageColor = 'error'
+        })
+      } else {
+        this.$_axios.put(`${this.$_url}company`, this.company).then(response => {
+          console.log('put')
+          let result = response.data
+          if (result.resultList.length !== 0) {
+            this.company = result.resultList[0]
+          }
+          if (result.message) {
+            this.messages = [...result.message]
+            this.haveMessage = true
+            if (result.success) {
+              this.messageColor = 'info'
+              this.clear()
+              this.company = {
+                id: 0,
+                address: {}
+              }
+              this.$refs.companyList.initialize()
+            } else {
+              this.messageColor = 'warning'
+            }
+          }
+        }).catch(error => {
+          console.log(error)
+          this.messages = ['Erro durante execução do serviço!']
+          this.haveMessage = true
+          this.messageColor = 'error'
+        })
+      }
     },
     clear () {
       this.$refs.form.reset()
     },
     updateCompany (companyToEdit) {
+      console.log(JSON.stringify(companyToEdit))
       this.company = companyToEdit
     },
     getAddress (zipCode) {
