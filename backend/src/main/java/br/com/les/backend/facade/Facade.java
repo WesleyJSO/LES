@@ -35,6 +35,7 @@ public class Facade extends AbstractFacade {
     	validate( entity, Actions.SAVE.getValue(), callerMethod  );
     	if ( result.isSuccess() )
     		result.getResultList().add( service.save( entity ) );
+    	
     	return result;
     }
 

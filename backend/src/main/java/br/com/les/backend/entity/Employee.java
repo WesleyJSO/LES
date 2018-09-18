@@ -16,6 +16,8 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Component
 @Entity
 public class Employee extends User {
@@ -49,7 +51,8 @@ public class Employee extends User {
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private List< CompTime > monthlyCompTimeList;
 	
-	@ManyToOne
+	@JsonIgnore
+	@ManyToOne (fetch = FetchType.LAZY)
 	@JoinColumn(name = "costCentre_id")
 	private CostCentre costCentre;
 

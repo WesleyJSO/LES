@@ -1,9 +1,12 @@
 package br.com.les.backend.dao;
 
+import java.util.List;
+
 import javax.persistence.Query;
 
 import org.springframework.stereotype.Component;
 
+import br.com.les.backend.entity.CostCentre;
 import br.com.les.backend.entity.DomainEntity;
 
 @Component
