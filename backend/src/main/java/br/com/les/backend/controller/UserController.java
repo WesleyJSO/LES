@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.les.backend.entity.User;
+import br.com.les.backend.utils.Actions;
 import br.com.les.backend.utils.Result;
 
 
@@ -28,13 +29,13 @@ public class UserController extends AbstractController {
 		 * a list of commands (run method) and
 		 * use literal strings ('search').
 		 */
-		return run("FindAll").execute(new User(), "find");
+		return run(Actions.FIND_ALL.getValue()).execute(new User(), Actions.FIND_ALL.getValue());
 	}
 	
 	@GetMapping( value="/UsuarioConsulta" )
 	public Result findByUser( @RequestBody User user ) {
 		
-		return run("Search").execute(user, "find");
+		return run(Actions.SEARCH.getValue()).execute(user, Actions.FIND_BY_USER.getValue());
 	}
 	
 	@GetMapping( value="/UsuarioEmail" )
@@ -42,7 +43,7 @@ public class UserController extends AbstractController {
 		
 		User user = new User();
 		user.setEmail(email);
-		return run("Search").execute(user, "find");
+		return run(Actions.SEARCH.getValue()).execute(user, Actions.SENT_PASSWORD.getValue());
 		//return command.find( user, getMethodName( new Object() {} ) );
 	}
 	
@@ -50,24 +51,24 @@ public class UserController extends AbstractController {
 	@PostMapping( value="/UsuarioLogin" )
 	public Result findByLogin( @RequestBody User user ) {
 		
-		return run("Search").execute(user, "find");
+		return run(Actions.SEARCH.getValue()).execute(user, Actions.FIND_BY_LOGIN.getValue());
 	}
 	
 	@PostMapping( value="/Usuario" )
 	public Result save( @RequestBody User user ) {
 		
-		return run("Save").execute(user, "save");
+		return run(Actions.SAVE.getValue()).execute(user, Actions.SAVE.getValue());
 	}
 	
 	@PutMapping( value="/Usuario" )
 	public Result update( @RequestBody User user ) {
 		
-		return run("Update").execute(user, "update");
+		return run(Actions.UPDATE.getValue()).execute(user, Actions.UPDATE.getValue());
 	}
 	
 	@DeleteMapping( value="/Usuario/{id}" )
 	public Result delete( @PathVariable( "id" ) Long userId ) {
 		
-		return run("Delete").execute(new User(userId), "delete");
+		return run(Actions.DELETE.getValue()).execute(new User(userId), Actions.DELETE.getValue());
 	}
 }

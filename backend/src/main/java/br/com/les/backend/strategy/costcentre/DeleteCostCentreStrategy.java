@@ -14,7 +14,7 @@ public class DeleteCostCentreStrategy extends AbstractCostCentreStrategy {
 		result = new Result();
 		
 		switch ( callerMethod ) {
-		case "delete":
+		case "Delete":
 			// result.setSuccess( Util.DELETE_COST_SUCCESSFUL );
 			break;
 		}

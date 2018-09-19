@@ -6,7 +6,12 @@ public enum Actions {
     UPDATE("Update"), 
     DELETE("Delete"), 
     SEARCH("Search"),
-	FIND("find");
+	FIND_ALL("FindAll"),
+	SAVE_UPDATE("SaveUpdate"),
+	FIND_BY_USER("FindByUser"),
+	FIND_BY_LOGIN("FindByLogin"),
+	SENT_PASSWORD("SentChangePasswordEmail");
+	
 	
 	private String value;
 	

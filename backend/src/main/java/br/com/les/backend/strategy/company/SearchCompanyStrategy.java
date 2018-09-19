@@ -19,7 +19,7 @@ public class SearchCompanyStrategy extends AbstractCompanyStrategy {
 		Company c = ( Company ) entity;
 		
 		switch ( callerMethod ) {
-		case "search":
+		case "Search":
 			
 			break;
 		}

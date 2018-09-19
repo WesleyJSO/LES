@@ -16,7 +16,7 @@ public class SaveCostCentreStrategy extends AbstractCostCentreStrategy {
 		result = new Result();
 		
 		switch ( callerMethod ) {
-		case "save":
+		case "Save":
 			CostCentre costCentre = ( CostCentre ) entity;
 			costCentre.setActive( true );
 			if ( null == costCentre.getName() || costCentre.getName().isEmpty() || costCentre.getName().trim().equals("") ) {

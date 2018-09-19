@@ -16,7 +16,7 @@ public class DeleteCompanyStrategy extends AbstractCompanyStrategy {
 		
 		Company c = new Company();
 		switch ( callerMethod ) {
-		case "delete":
+		case "Delete":
 			break;
 		}
 		return result;

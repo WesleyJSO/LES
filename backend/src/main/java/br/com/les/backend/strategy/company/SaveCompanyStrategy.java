@@ -24,7 +24,7 @@ public class SaveCompanyStrategy extends AbstractCompanyStrategy {
 		
 		Company c = ( Company ) entity;
 		switch ( callerMethod ) {
-		case "save":
+		case "Save":
 			c.setActive( true );
 			List<Company> companyList = companyRepository.findAll();
 			

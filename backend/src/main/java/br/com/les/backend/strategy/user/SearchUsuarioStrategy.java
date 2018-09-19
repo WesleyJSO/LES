@@ -37,7 +37,7 @@ public class SearchUsuarioStrategy extends AbstractUserStrategy {
 			
 			switch ( callerMethod ) {
 			
-				case "sentChangePasswordEmail":					
+				case "SentChangePasswordEmail":					
 					if ( u.getEmail() == null || u.getEmail().isEmpty() ) {
 						result.setError( "Informe um e-mail válido!" );
 					} else {
@@ -53,15 +53,15 @@ public class SearchUsuarioStrategy extends AbstractUserStrategy {
 					}
 				break;
 				
-				case "findAll":
+				case "FindAll":
 					
 				break;
 				
-				case "findByUsuario": // search for list of users
+				case "FindByUsuario": // search for list of users
 					
 					break;
 					
-				case "findByLogin": // search for logged user
+				case "FindByLogin": // search for logged user
 					
 					break;
 					

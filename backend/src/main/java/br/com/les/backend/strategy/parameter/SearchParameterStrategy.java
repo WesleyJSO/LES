@@ -20,7 +20,7 @@ public class SearchParameterStrategy extends AbstractParameterStrategy {
 			
 			switch ( callerMethod ) {
 			
-				case "findActive":
+				case "FindActive":
 					
 				break;
 					

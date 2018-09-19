@@ -24,7 +24,7 @@ public class UpdateCompanyStrategy extends AbstractCompanyStrategy {
 		
 		Company c = ( Company ) entity;
 		switch ( callerMethod ) {
-		case "update":
+		case "Update":
 			c.setActive( true );
 			List<Company> companyList = companyRepository.findAll();
 			

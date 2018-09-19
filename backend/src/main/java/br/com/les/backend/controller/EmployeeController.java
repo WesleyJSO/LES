@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.les.backend.entity.DomainEntity;
 import br.com.les.backend.entity.Employee;
+import br.com.les.backend.utils.Actions;
 import br.com.les.backend.utils.Result;
 
 
@@ -20,32 +21,32 @@ public class EmployeeController extends AbstractController {
 		
 	@GetMapping( value="/funcionario" )
 	public Result findAll() {
-		return run("FindAll").execute(new Employee(), "findAll");
-		// return facade.facade( new Employee(), getMethodName( new Object() {} ) );
+		return run(Actions.FIND_ALL.getValue()).execute(new Employee(), Actions.FIND_ALL.getValue());
+		// return facade.findAll( new Employee(), getMethodName( new Object() {} ) );
 	}
 	
 	@GetMapping( value="/usuarioFuncionario" )
 	public Result findByUsuario( @RequestBody Employee employee ) {
-		return run("Search").execute(employee, "find");
+		return run(Actions.SEARCH.getValue()).execute(employee, Actions.SEARCH.getValue());
 		// return facade.find( employee, getMethodName( new Object() {} ) );
 	}
 	
 	@PostMapping( value="/funcionario" )
 	public Result save( @RequestBody Employee employee ) {
-		return run("Save").execute(employee, "save");
+		return run(Actions.SAVE.getValue()).execute(employee, Actions.SAVE.getValue());
 		// return facade.save( ( DomainEntity ) employee, getMethodName( new Object() {} ) );
 	}
 	
 	@PutMapping( value="/funcionario" )
 	public Result update( @RequestBody Employee employee ) {
-		return run("Update").execute(employee, "update");
+		return run(Actions.UPDATE.getValue()).execute(employee, Actions.UPDATE.getValue());
 		// return facade.update( employee, getMethodName( new Object() {} ) );
 	}
 	
 	
 	@DeleteMapping( value="/funcionario/{id}" )
 	public Result delete( @PathVariable( "id" ) Long employeeId ) {
-		return run("Delete").execute(new Employee( employeeId ), "delete");
+		return run(Actions.DELETE.getValue()).execute(new Employee( employeeId ), Actions.DELETE.getValue());
 		// return facade.delete( new Employee( employeeId ), getMethodName( new Object() {} ) );
 	}
 }

@@ -21,7 +21,7 @@ public class SaveEmployeeStrategy extends AbstractEmployeeStrategy {
 		
 		switch ( callerMethod ) {
 		
-		case "save":
+		case "Save":
 			
 			Employee employee = ( Employee ) entity;
 			
@@ -59,17 +59,10 @@ public class SaveEmployeeStrategy extends AbstractEmployeeStrategy {
 			if( employee.getTelephoneList().isEmpty() )
 				result.setError( Util.ERROR_PHONE );
 			else {
-				List< Telephone > listToRemove = new ArrayList<>();
+				// List< Telephone > listToRemove = new ArrayList<>();
 				for( Telephone telephone: employee.getTelephoneList() ) {
 					telephone.setUser(employee);
-					if( telephone.getNumber().length() == 0 ) {
-						listToRemove.add( telephone );
-					}
 				}
-				
-				for( Telephone telephone : listToRemove )
-					employee.getTelephoneList().remove( telephone );
-
 				
 				for( Telephone telephone : employee.getTelephoneList() )
 					if( telephone.getNumber().length() < 8 ) {

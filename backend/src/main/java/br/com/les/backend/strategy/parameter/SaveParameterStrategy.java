@@ -17,7 +17,7 @@ public class SaveParameterStrategy extends AbstractParameterStrategy {
 		
 		Parameter parameter = ( Parameter ) entity;
 		switch ( callerMethod ) {
-		case "save":
+		case "Save":
 			parameter.setId(null);
 			parameter.setCreationDate();
 		}

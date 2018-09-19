@@ -16,7 +16,7 @@ public class SearchCostCentreStrategy extends AbstractCostCentreStrategy {
 		CostCentre costCentre = ( CostCentre ) entity;
 		
 		switch ( callerMethod ) {
-		case "findAll":
+		case "FindAll":
 			break;
 		default:
 			break;

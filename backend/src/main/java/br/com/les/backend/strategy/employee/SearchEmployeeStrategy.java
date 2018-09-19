@@ -23,17 +23,17 @@ public class SearchEmployeeStrategy extends AbstractEmployeeStrategy {
 			
 			switch ( callerMethod ) {
 			
-				case "findAll":
+				case "FindAll":
 					
 				break;
 				
-				case "findByUser": // search for list of users
+				case "FindByUser": // search for list of users
 					
 					if ( l != null && l.getCreationDate() != null && u.getEmail() == null && u.getName() == null && u.getEmail() == null )
 						result.setError( "Ao menos um dos campos deve ser preenchido!");
 					break;
 					
-				case "findByLogin": // search for logged user
+				case "FindByLogin": // search for logged user
 					
 							
 					if ( l.getPassword() == null || l.getPassword().equals("") )

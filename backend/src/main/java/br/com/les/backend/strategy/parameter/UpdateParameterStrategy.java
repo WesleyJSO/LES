@@ -19,7 +19,7 @@ public class UpdateParameterStrategy extends AbstractParameterStrategy {
 		
 		Parameter parameter = ( Parameter ) entity;
 		switch ( callerMethod ) {
-		case "updateSave":
+		case "UpdateSave":
 			Calendar data = Calendar.getInstance();
 			data.add(Calendar.DATE, -1);
 			parameter.setEndDate(Calendar.getInstance());
