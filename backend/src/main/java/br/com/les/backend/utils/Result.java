@@ -62,4 +62,15 @@ public class Result {
     	} else 
     		return null;
     }
+    
+    public void softDeleteStatus (int status) {
+    	if ( status == 0 )
+    		setError( "Nenhum registro alterado" );
+    	else if ( status == 1 )
+    		setSuccess( "Registro alterdo com sucesso!" );
+    	else if ( status > 1 )
+    		setSuccess( "Registros alterdos com sucesso!" );
+    	else
+    		setSuccess( "Erro ao alterar registro!" );
+    }
 }

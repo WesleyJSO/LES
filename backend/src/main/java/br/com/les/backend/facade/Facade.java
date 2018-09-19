@@ -53,16 +53,9 @@ public class Facade extends AbstractFacade {
     	validate( entity, Actions.DELETE.getValue(), callerMethod );
     	
     	if ( result.getMessage() == null ) {
-        	int updateResult = service.softDelete( entity );
-	    	if ( updateResult == 0 )
-	    		result.setError( "Nenhum registro alterado" );
-	    	else if ( updateResult == 1 )
-	    		result.setSuccess( "Registro alterdo com sucesso!" );
-	    	else if ( updateResult > 1 )
-	    		result.setSuccess( "Registros alterdos com sucesso!" );
-	    	else
-	    		result.setSuccess( "Erro ao alterar registro!" );
+        	result.softDeleteStatus( service.softDelete( entity ) );
     	}
+    	
     	return result;
     }
 
