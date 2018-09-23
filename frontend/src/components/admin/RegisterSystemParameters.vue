@@ -323,8 +323,14 @@ export default {
           if (!this.parameters.bankedHourTypeLimit) {
             this.checkbox3 = true
           }
+        } else {
+          if (!this.parameters.overtimeTypeLimit) {
+            this.checkbox2 = true
+          }
         }
       }
+      this.blockOvertimeTypeLimit = this.checkbox2
+      this.blockBankOfHoursTypeLimit = this.checkbox3
     }
     if (this.parameters.creationDate) {
       let date = this.parameters.creationDate.substring(0, 10).split('/')
@@ -355,9 +361,29 @@ export default {
           this.blockOvertimeTypeLimit = true
           this.overtimeTypeLimit = null
         }
+        if (!this.checkbox2) {
+          this.overtimeTypeLimit = this.parameters.overtimeTypeLimit
+        }
         if (this.checkbox3 && this.radio !== 'Banco de Horas') {
           this.blockBankOfHoursTypeLimit = true
           this.bankOfHoursTypeLimit = null
+        }
+        if (!this.checkbox3) {
+          this.bankOfHoursTypeLimit = this.parameters.bankedHourTypeLimit
+        }
+      } else if (this.type === 'Hora Extra') {
+        if (this.checkbox2) {
+          this.blockOvertimeTypeLimit = true
+          this.overtimeTypeLimit = null
+        } else {
+          this.overtimeTypeLimit = this.parameters.overtimeTypeLimit
+        }
+      } else if (this.type === 'Banco de Horas') {
+        if (this.checkbox3) {
+          this.blockBankOfHoursTypeLimit = true
+          this.bankOfHoursTypeLimit = null
+        } else {
+          this.bankOfHoursTypeLimit = this.parameters.bankedHourTypeLimit
         }
       }
     },
@@ -487,7 +513,7 @@ export default {
     },
     callApi () {
       if (this.parameter.creationDate) {
-        if (DateHelper.diffDates(new Date(this.parameterDate), new Date()) !== 0) {
+        if (DateHelper.diffDates(new Date(this.parameterDate), new Date()) >= 0) {
           this.$_axios.put(`${this.$_url}parameterSaveUpdate`, this.parameters).then(response => {
             var result = response.data
             if (result.listaResultado.length !== 0) {
