@@ -17,7 +17,25 @@ public class SaveParameterStrategy extends AbstractParameterStrategy {
 		
 		Parameter parameter = ( Parameter ) entity;
 		switch ( callerMethod ) {
-		case "Save":
+		case "save":
+			if (parameter.getOvertimePercentage() == null || parameter.getOvertimePercentage() < 50) {
+				result.setError("O adicional da hora extra deve ser no minimo 50%");
+			}
+			if (parameter.getNightOvertimePercentage() == null || parameter.getNightOvertimePercentage() < 20) {
+				result.setError("O adicional noturno deve ser no minimo 20%");
+			}
+			if (parameter.getWeekEndOvertimePercentage() == null || parameter.getWeekEndOvertimePercentage() < 100) {
+				result.setError("O adicional de domingos e feriados deve ser no minimo 100%");
+			}
+			if (parameter.getRetroactiveAppointmentLimitTime() == null || parameter.getOvertimePercentage() == 0) {
+				result.setError("Informe o prazo de apontamento retroativo!");
+			}
+			if (parameter.getRelocationRequestLimitTime() == null || parameter.getRelocationRequestLimitTime() == 0) {
+				result.setError("Informe o prazo de solicitação de remanejamento!");
+			}
+			if (parameter.getBankCompensationLimitTime() == null || parameter.getBankCompensationLimitTime() < 6) {
+				result.setError("O prazo para compensação do banco deve ser de no mínimo 6 meses");
+			}
 			parameter.setId(null);
 			parameter.setCreationDate();
 		}
