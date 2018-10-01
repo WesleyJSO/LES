@@ -191,62 +191,6 @@ export default {
       }
       this.registerAppointments()
     },
-    verifyButton (button) {
-      if (this.appointment.id) {
-        this.button1 = true
-      }
-      if (this.appointment.morningEntrance) {
-        this.button2 = this.button4 = this.button6 = this.button7 = false
-      }
-      if (this.appointment.afternoonOut) {
-        this.button3 = true
-      }
-      if (this.appointment.afternoonEntrance) {
-        this.button2 = true
-        this.button4 = this.button6 = false
-      }
-      if (this.appointment.nightOut) {
-        this.button5 = this.button7 = true
-      }
-      if (this.appointment.nightEntrance) {
-        this.button6 = false
-        this.button4 = true
-      }
-      if (this.appointment.particularExit) {
-        this.button6 = true
-      }
-      if (this.appointment.particularExitReturn) {
-        this.button6 = false
-      }
-    },
-    verifyButtons () {
-      if (this.appointment.id) {
-        this.button1 = true
-      }
-      if (this.appointment.morningEntrance) {
-        this.button2 = this.button4 = this.button6 = this.button7 = false
-      }
-      if (this.appointment.afternoonOut) {
-        this.button3 = true
-      }
-      if (this.appointment.afternoonEntrance) {
-        this.button2 = true
-        this.button4 = this.button6 = false
-      }
-      if (this.appointment.nightOut) {
-        this.button5 = this.button7 = true
-      }
-      if (this.appointment.nightEntrance) {
-        this.button6 = false
-        this.button4 = true
-      }
-      if (this.appointment.particularExit) {
-        this.button6 = true
-      }
-      if (this.appointment.particularExitReturn) {
-        this.button6 = false
-      }
-    },
     registerAppointments () {
       if (!this.appointment.id) {
         // this.appointment.employee = this.employee
