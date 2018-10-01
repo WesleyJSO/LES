@@ -105,14 +105,19 @@
 </v-app>
  </template>
  <script>
- export default {
-   data: () => ({
-     timelineData: [{
-       // TODO: Implement data bind and events
-     }]
-   }),
-   methods: {
-   }
+import Appoint from '@/components/user/Appoint'
+
+export default {
+  data: () => ({
+    timelineData: [{
+      // TODO: Implement data bind and events
+    }]
+  }),
+  components: {
+    Appoint
+  },
+  methods: {
+  }
 }
 </script>
 <style scoped>
