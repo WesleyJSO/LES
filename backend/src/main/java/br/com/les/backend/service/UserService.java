@@ -22,7 +22,7 @@ import br.com.les.backend.repository.UserRepository;
  */
 @Service
 @Transactional
-public class UserService implements IService {
+public class UserService implements IService<User> {
 
 	@Autowired
 	private UserRepository userRepository;
@@ -34,34 +34,33 @@ public class UserService implements IService {
 		return userRepository.count();
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List< User > findAll() {
 		return userRepository.findAll();
 	}
 	
 	public void deleteById( long userId ) {
-		
 		userRepository.deleteById( userId );
 	}
 
 	@Override
-	public DomainEntity save( DomainEntity entity ) {
+	public User save(User entity) {
 
-		return userRepository.save( ( User ) entity );
+		return userRepository.save(entity);
 	}
 
 	@Override
-	public List< DomainEntity > findByParameters( DomainEntity entity ) {
+	public List<User> findByParameters(User entity) {
 
-		User u = ( User ) entity;
-		if ( u.getLogin() != null && u.getLogin().getPassword() != null )
-			return userDAO.findByEmailAndPassword( u );
-		else
-			return userDAO.findByEmail( u );
+//		User u = ( User ) entity;
+//		if ( u.getLogin() != null && u.getLogin().getPassword() != null )
+//			return userDAO.findByEmailAndPassword( u );
+//		else
+//			return userDAO.findByEmail( u );
+		return null;
 	}
 
 	@Override
-	public <T extends DomainEntity> int softDelete(T entity) {
+	public int softDelete(User entity) {
 		return 0;
 	}
 }

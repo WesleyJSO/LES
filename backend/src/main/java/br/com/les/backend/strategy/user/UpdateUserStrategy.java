@@ -1,8 +1,11 @@
 package br.com.les.backend.strategy.user;
 
+import org.springframework.stereotype.Component;
+
 import br.com.les.backend.entity.DomainEntity;
 import br.com.les.backend.utils.Result;
 
+@Component
 public class UpdateUserStrategy extends AbstractUserStrategy {
 
 	@Override

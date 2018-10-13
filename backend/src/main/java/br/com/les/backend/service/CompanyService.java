@@ -14,34 +14,33 @@ import br.com.les.backend.repository.CompanyRepository;
 
 @Service
 @Transactional
-public class CompanyService implements IService {
+public class CompanyService implements IService<Company> {
 	
 	@Autowired
 	private CompanyRepository companyRepository;
 	
 	@Autowired
 	private CompanyDAO companyDAO;
-	
+
 	@Override
-	public DomainEntity save(DomainEntity entity) {
-		return companyRepository.save( ( Company ) entity );
+	public List<Company> findAll() {
+		return companyRepository.findByActive( true );
 	}
 
 	@Override
-	public List<DomainEntity> findByParameters(DomainEntity entity) {
+	public List<Company> findByParameters(Company entity) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends DomainEntity> List<T> findAll() {
-		return (List<T>) companyRepository.findByActive( true );
+	public int softDelete(Company entity) {
+		return companyDAO.softDelete(entity);
 	}
 
 	@Override
-	public <T extends DomainEntity> int softDelete(T entity) {
-		return companyDAO.softDelete(entity);
+	public Company save(Company entity) {
+		return companyRepository.save( entity );
 	}
 
 }

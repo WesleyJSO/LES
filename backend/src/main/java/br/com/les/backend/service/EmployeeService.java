@@ -14,7 +14,7 @@ import br.com.les.backend.repository.EmployeeRepository;
 
 @Service
 @Transactional
-public class EmployeeService implements IService {
+public class EmployeeService implements IService<Employee> {
 
 	@Autowired
 	private EmployeeRepository employeeRepository;
@@ -26,30 +26,28 @@ public class EmployeeService implements IService {
 		return employeeRepository.count();
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List< Employee > findAll() {
 		return employeeRepository.findAll();
 	}
 	
 	public void deleteById( long employeeId ) {
-		
 		employeeRepository.deleteById( employeeId );
 	}
 
 	@Override
-	public DomainEntity save( DomainEntity entity ) {
-
-		return employeeRepository.save( ( Employee ) entity );
+	public Employee save(Employee entity) {
+		return employeeRepository.save(entity );
 	}
 
 	@Override
-	public List< DomainEntity > findByParameters( DomainEntity entity ) {
-
-		return employeeDAO.findByLoginAndSenha( ( Employee ) entity );
+	public List<Employee> findByParameters(Employee entity) {
+		return null;
+		// return employeeDAO.findByLoginAndSenha(entity);
 	}
 
 	@Override
-	public <T extends DomainEntity> int softDelete(T entity) {
+	public int softDelete(Employee entity) {
+		// TODO Auto-generated method stub
 		return 0;
 	}
 

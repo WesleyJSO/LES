@@ -4,13 +4,13 @@ import java.util.List;
 
 import br.com.les.backend.entity.DomainEntity;
 
-public interface IService {
+public interface IService<T extends DomainEntity> {
 
-	DomainEntity save( DomainEntity entity );
+	T save( T entity );
 	
-	<T extends DomainEntity> List< T > findAll();
+	List< T > findAll();
 
-	List< DomainEntity > findByParameters( DomainEntity entity );
+	List< T > findByParameters( T entity );
 	
-	<T extends DomainEntity> int softDelete( T entity );
+	int softDelete( T entity );
 }

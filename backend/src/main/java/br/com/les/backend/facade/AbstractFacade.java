@@ -21,7 +21,7 @@ import br.com.les.backend.strategy.IStrategy;
 public  abstract class AbstractFacade implements IFacade {
 
 	@Autowired
-	protected List< IService > listServices;
+	protected List< IService<?> > listServices;
 	
     @Autowired
     protected Map< String, IStrategy > mapStrategies;

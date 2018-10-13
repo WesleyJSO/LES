@@ -16,7 +16,7 @@ import br.com.les.backend.repository.EmployeeRepository;
 
 @Service
 @Transactional
-public class CostCentreService implements IService {
+public class CostCentreService implements IService<CostCentre> {
 	
 	@Autowired
 	private CostCentreRepository costCentreRepository;
@@ -27,9 +27,12 @@ public class CostCentreService implements IService {
 	@Autowired
 	private EmployeeRepository employeeRepository;
 
+	public void deleteById ( long id ) {
+		costCentreRepository.deleteById( id );
+	}
+
 	@Override
-	public DomainEntity save(DomainEntity entity) {
-			
+	public CostCentre save(CostCentre entity) {
 		DomainEntity ent = costCentreRepository.save( ( CostCentre ) entity );
 		CostCentre c = ( CostCentre ) entity;
 		if ( null != c.getEmployees() && !c.getEmployees().isEmpty() ) {
@@ -48,27 +51,22 @@ public class CostCentreService implements IService {
 				}
 			}
 		}
-		return ent;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T extends DomainEntity> List<T> findAll() {
-		return ( List<T> ) costCentreRepository.findByActive( true );
-	}
-	
-	public void deleteById ( long id ) {
-		costCentreRepository.deleteById( id );
+		return c;
 	}
 
 	@Override
-	public List<DomainEntity> findByParameters( DomainEntity entity ) {
+	public List<CostCentre> findAll() {
+		return costCentreRepository.findByActive( true );
+	}
+
+	@Override
+	public List<CostCentre> findByParameters(CostCentre entity) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <T extends DomainEntity> int softDelete(T entity) {
+	public int softDelete(CostCentre entity) {
 		int i  =  costCentreDAO.softDelete( entity );
 		List < Employee > l =  employeeRepository.findAll();
 		for ( Employee e : l) {

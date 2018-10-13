@@ -15,7 +15,7 @@ import br.com.les.backend.repository.ParameterRepository;
 
 @Service
 @Transactional
-public class ParameterService implements IService {
+public class ParameterService implements IService<Parameter> {
 
 	@Autowired
 	private ParameterRepository parameterRepository;
@@ -29,23 +29,23 @@ public class ParameterService implements IService {
 	}
 
 	@Override
-	public DomainEntity save( DomainEntity entity ) {
+	public Parameter save( Parameter entity ) {
 
-		return parameterRepository.save( ( Parameter ) entity );
+		return parameterRepository.save(entity);
 	}
 
 	@Override
-	public List< DomainEntity > findByParameters( DomainEntity entity ) {
+	public List<Parameter> findByParameters( Parameter entity ) {
 
-		List< DomainEntity > resultList = parameterDAO.findActive( ( Parameter ) entity );
-		if ( resultList.isEmpty() ) {
-			resultList.add(entity);
-		}
-		return resultList;
+//		List< Parameter > resultList = parameterDAO.findActive(entity);
+//		if ( resultList.isEmpty() ) {
+//			resultList.add(entity);
+//		}
+		return null;
 	}
 
 	@Override
-	public <T extends DomainEntity> int softDelete(T entity) {
+	public int softDelete(Parameter entity) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

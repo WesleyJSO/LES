@@ -9,10 +9,30 @@
     </li>
     <br/>
     <v-form ref="form" v-model="valid" @submit.prevent="saveUser">
+
+      <!-- Row 0 -->
+      <v-layout v-if="roleList == null">
+        <v-flex xs12 sm9 md6 lg6 xl4>
+          <div class="loading">
+            Carregando...
+          </div>
+        </v-flex>
+      </v-layout>
+
+      <!-- Row 0 -->
+      <v-layout v-if="roleList != null">
+        <v-flex xs12 sm9 md6 lg6 xl4>
+          <v-checkbox v-for="(v, i) in roleList" :key="i"
+            :label="v.roleName"
+            v-model="v.active"
+          ></v-checkbox>
+        </v-flex>
+      </v-layout>
+
       <v-layout>
       <!-- Row 1 -->
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field
+          <v-text-field id="name"
                 v-model="employee.name"
                 type="text"
                 class="px-0"
@@ -24,7 +44,7 @@
           </v-text-field>
         </v-flex>
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field
+          <v-text-field id="lastName"
                 v-model="employee.lastName"
                 type="text"
                 prepend-icon="face"
@@ -35,7 +55,7 @@
           </v-text-field>
         </v-flex>
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field
+          <v-text-field id="email"
                 v-model="employee.email"
                 type="email"
                 prepend-icon="email"
@@ -50,7 +70,8 @@
       <!-- Row 2 -->
       <v-layout>
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field v-model="employee.baseHourCalculation.salary"
+          <v-text-field id="salary"
+                        v-model="employee.baseHourCalculation.salary"
                         type="number"
                         prepend-icon="monetization_on"
                         clearable
@@ -60,7 +81,8 @@
           </v-text-field>
         </v-flex>
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field v-model="employee.pis"
+          <v-text-field id="pis"
+                        v-model="employee.pis"
                         type="number"
                         prepend-icon="credit_card"
                         clearable
@@ -70,12 +92,13 @@
           </v-text-field>
         </v-flex>
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field v-model="employee.baseHourCalculation.workload"
+          <v-text-field id="workload"
+                        v-model="employee.baseHourCalculation.workload"
                         type="number"
                         prepend-icon="timer"
                         clearable
                         :rules="$v_user.workloadRules(employee.baseHourCalculation.workload)"
-                        label="Carga Horária"
+                        label="Carga Horária diaria"
                         required>
           </v-text-field>
         </v-flex>
@@ -84,7 +107,8 @@
       <!-- Row 3 -->
       <v-layout>
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field v-model="employee.telephoneList[0].number"
+          <v-text-field id="phoneNumber1"
+                          v-model="employee.telephoneList[0].number"
                           type="phone"
                           prepend-icon="phone"
                           clearable
@@ -94,7 +118,8 @@
             </v-text-field>
         </v-flex>
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field v-model="employee.telephoneList[1].number"
+          <v-text-field id="phoneNumber2"
+                          v-model="employee.telephoneList[1].number"
                           type="phone"
                           prepend-icon="phone"
                           clearable
@@ -103,7 +128,8 @@
           </v-text-field>
         </v-flex>
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field v-model="employee.telephoneList[2].number"
+          <v-text-field id="phoneNumber3"
+                          v-model="employee.telephoneList[2].number"
                           type="phone"
                           prepend-icon="phone"
                           clearable
@@ -116,7 +142,7 @@
       <!-- Row 4 -->
       <v-layout>
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field
+          <v-text-field id="supervisor"
               label="Gestor"
               v-model="employee.manager.name"
               type="text"
@@ -135,12 +161,12 @@
               lazy
               transition="scale-transition"
               full-width>
-            <v-text-field
+            <v-text-field id="joiningDate"
                 slot="activator"
                 v-model="employee.joiningDate"
                 label="Data de Ingresso na Empresa"
                 prepend-icon="event"
-                readonly>
+                ><!-- add readonly -->
             </v-text-field>
             <v-date-picker
                 v-model="employee.joiningDate"
@@ -151,7 +177,7 @@
           </v-menu>
         </v-flex>
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field
+          <v-text-field id="hourType"
                 v-model="employee.baseHourCalculation.hourType"
                 type="number"
                 prepend-icon="timer"
@@ -165,7 +191,7 @@
       <!-- Row 5 -->
       <v-layout xs12 sm9 md6 lg6 xl4>
         <v-flex>
-          <v-text-field
+          <v-text-field id="password"
               v-model="employee.login.password"
               color="cyan darken"
               label="Senha"
@@ -183,7 +209,7 @@
           </v-text-field>
         </v-flex>
         <v-flex>
-          <v-text-field
+          <v-text-field id="passwordValidator"
               v-model="employee.login.passwordValidator"
               color="cyan darken"
               label="Senha de Confirmação"
@@ -202,8 +228,8 @@
         </v-flex>
       </v-layout>
       <div v-if="!edit">
-        <v-btn type="submit" 
-               @click.prevent="saveUser" 
+        <v-btn id="submit" type="submit"
+               @click.prevent="saveUser"
                :disabled="!valid"
                color="success">Salvar</v-btn>
         <v-btn @click="clearForm" color="error">Cancelar</v-btn>
@@ -213,8 +239,8 @@
 </template>
 
 <script>
+import axios from 'axios'
 import Login from '../../objects/Login'
-
 export default {
   props: {
     item: {
@@ -244,9 +270,21 @@ export default {
     messageColor: '',
     edit: false,
     joiningDateHelper: false,
-    valid: false
+    valid: false,
+    roleList: null
   }),
-  created () {
+  beforeMount () {
+    axios.get(`http://localhost:8080/role`)
+      .then(response => {
+        console.log(JSON.stringify(response.data))
+        this.roleList = response.data
+      })
+      .catch(error => {
+        console.log(JSON.stringify(error))
+        this.messages = ['Erro durante execução do serviço!']
+        this.haveMessage = true
+        this.messageColor = 'error'
+      })
   },
   computed: {
     color () { return ['error', 'warning', 'success'][Math.floor(this.progress() / 40)] },
@@ -257,31 +295,28 @@ export default {
     progress () { return Math.min(100, this.employee.login.password.length * 10) },
     progressValidation () { return Math.min(100, this.employee.login.passwordValidator.length * 10) },
     saveUser () {
-      alert(JSON.stringify(this.employee))
-      this.$_axios.post(`${this.$_url}funcionario`, this.employee).then((response) => {
+      console.log(JSON.stringify(this.employee))
+      this.$_axios.post(`${this.$_url}employee`, this.employee).then((response) => {
         let result = response.data
-        alert(JSON.stringify(result))
+        console.log(JSON.stringify(result))
         if (result.resultList.length !== 0) {
-          // retorno ok
-          alert(JSON.stringify(result))
+          console.log(JSON.stringify(result))
           this.employee = result.resultList[0]
         }
         if (result.message) {
           this.messages = [...result.message]
           this.haveMessage = true
           if (result.success) {
-          // retorno mensagem de sucesso
             this.messageColor = 'info'
             this.clearForm()
           } else {
-            // retorno mensagem de erro
             this.messageColor = 'warning'
           }
         }
       },
       (response) => {
         // erro na requisição do serviço
-        alert(JSON.stringify(response))
+        console.log(JSON.stringify(response))
         this.messages = ['Erro durante execução do serviço!']
         this.haveMessage = true
         this.messageColor = 'error'

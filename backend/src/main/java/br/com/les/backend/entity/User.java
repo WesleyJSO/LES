@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.LazyCollection;
@@ -23,8 +24,7 @@ public class User extends Person {
 	private Login login;
 	private String email;
 	
-	@OneToMany( mappedBy="user", cascade=CascadeType.ALL, orphanRemoval=true )
-	@LazyCollection(LazyCollectionOption.FALSE)
+	@ManyToMany(cascade=CascadeType.ALL)
 	private List< Role > roleList;
 	
 	@OneToMany( mappedBy="user", cascade=CascadeType.ALL, orphanRemoval=true )

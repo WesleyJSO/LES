@@ -1,10 +1,5 @@
 package br.com.les.backend.strategy.user;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Properties;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -41,15 +36,15 @@ public class SearchUsuarioStrategy extends AbstractUserStrategy {
 					if ( u.getEmail() == null || u.getEmail().isEmpty() ) {
 						result.setError( "Informe um e-mail válido!" );
 					} else {
-						List<DomainEntity> list = userService.findByParameters( (User) entity );
-						if ( !list.isEmpty() ) {
-							String generatedPassword = RandomStringUtils.randomAlphanumeric(10);
-							u = (User) list.get( 0 );
-							u.getLogin().setPassword( generatedPassword );
-							userService.save( u );
-							emailService.sendEmail( u.getEmail(), "Alteração de senha", 
-									"Está é a sua nova senha de acesso temporário: " + u.getLogin().getPassword() );
-						}
+//						List<User> list = userService.findByParameters(entity);
+//						if ( !list.isEmpty() ) {
+//							String generatedPassword = RandomStringUtils.randomAlphanumeric(10);
+//							u = list.get( 0 );
+//							u.getLogin().setPassword( generatedPassword );
+//							userService.save( u );
+//							emailService.sendEmail( u.getEmail(), "Alteração de senha", 
+//									"Está é a sua nova senha de acesso temporário: " + u.getLogin().getPassword() );
+//						}
 					}
 				break;
 				

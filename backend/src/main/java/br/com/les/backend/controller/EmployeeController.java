@@ -19,32 +19,32 @@ import br.com.les.backend.utils.Result;
 @RestController
 public class EmployeeController extends AbstractController {
 		
-	@GetMapping( value="/funcionario" )
+	@GetMapping( value="/employee" )
 	public Result findAll() {
 		return run(Actions.FIND_ALL.getValue()).execute(new Employee(), Actions.FIND_ALL.getValue());
 		// return facade.findAll( new Employee(), getMethodName( new Object() {} ) );
 	}
 	
-	@GetMapping( value="/usuarioFuncionario" )
+	@GetMapping( value="/userEmployee" )
 	public Result findByUsuario( @RequestBody Employee employee ) {
 		return run(Actions.SEARCH.getValue()).execute(employee, Actions.SEARCH.getValue());
 		// return facade.find( employee, getMethodName( new Object() {} ) );
 	}
 	
-	@PostMapping( value="/funcionario" )
+	@PostMapping( value="/employee" )
 	public Result save( @RequestBody Employee employee ) {
 		return run(Actions.SAVE.getValue()).execute(employee, Actions.SAVE.getValue());
 		// return facade.save( ( DomainEntity ) employee, getMethodName( new Object() {} ) );
 	}
 	
-	@PutMapping( value="/funcionario" )
+	@PutMapping( value="/employee" )
 	public Result update( @RequestBody Employee employee ) {
 		return run(Actions.UPDATE.getValue()).execute(employee, Actions.UPDATE.getValue());
 		// return facade.update( employee, getMethodName( new Object() {} ) );
 	}
 	
 	
-	@DeleteMapping( value="/funcionario/{id}" )
+	@DeleteMapping( value="/employee/{id}" )
 	public Result delete( @PathVariable( "id" ) Long employeeId ) {
 		return run(Actions.DELETE.getValue()).execute(new Employee( employeeId ), Actions.DELETE.getValue());
 		// return facade.delete( new Employee( employeeId ), getMethodName( new Object() {} ) );

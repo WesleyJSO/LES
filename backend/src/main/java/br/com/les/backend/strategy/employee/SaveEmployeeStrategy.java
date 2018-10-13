@@ -1,8 +1,5 @@
 package br.com.les.backend.strategy.employee;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.DomainEntity;
@@ -59,13 +56,10 @@ public class SaveEmployeeStrategy extends AbstractEmployeeStrategy {
 			if( employee.getTelephoneList().isEmpty() )
 				result.setError( Util.ERROR_PHONE );
 			else {
-				// List< Telephone > listToRemove = new ArrayList<>();
-				for( Telephone telephone: employee.getTelephoneList() ) {
-					telephone.setUser(employee);
-				}
+				employee.getTelephoneList().forEach(t -> t.setUser(employee));
 				
 				for( Telephone telephone : employee.getTelephoneList() )
-					if( telephone.getNumber().length() < 8 ) {
+					if( telephone.getNumber().length() != 0 && telephone.getNumber().length() != 8 && telephone.getNumber().length() != 9 ) {
 						result.setError( Util.INVALID_PHONE.concat( telephone.toString() ) );
 						break;
 					}

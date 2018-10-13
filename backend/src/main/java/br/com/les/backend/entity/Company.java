@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 
 import org.springframework.stereotype.Component;
@@ -22,7 +23,7 @@ public class Company extends DomainEntity {
 	@Embedded
 	Address address;
 	
-	@ManyToMany
+	@ManyToMany(fetch=FetchType.LAZY)
 	private List< Employee > employeeList;
 
 	public Company() {}

@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    
+
     <v-flex xs12 sm8 offset-sm2 pa-5>
       <v-card class="elevation-10">
 
@@ -15,26 +15,27 @@
                 v-text="msg"
                 transition="scale-transition" />
           </li>
-        <v-form v-model="valid" @submit.prevent="findByEmailAndPassword">
+        <v-form ref="form" v-model="valid">
 
           <v-card-text>
             <v-text-field
                 prepend-icon="person"
                 v-model="email"
-                :rules="emailRules"
+                :rules="$v_user.emailRules(email)"
                 label="E-mail"
                 required />
             <v-text-field
                 prepend-icon="lock"
                 v-model="password"
-                :rules="passwordRules"
+                :rules="$v_user.passwordRules(password)"
                 label="Senha"
                 type="password"
                 required />
           </v-card-text>
 
           <v-card-actions>
-            <v-btn color="blue" depressed flat @click="sentForgotPasswordEmail()">Esqueci a senha</v-btn>
+            <v-btn id="sendEmail" color="blue"
+              depressed flat @click="sendForgotPasswordEmail()">Esqueci a senha</v-btn>
             <v-spacer />
             <v-btn color="info" type="submit">Login</v-btn>
           </v-card-actions>
@@ -55,52 +56,10 @@ export default {
     password: '',
     haveMessage: false,
     messages: [],
-    msgColor: '',
-    emailRules: [
-      v => !!v || 'E-mail obrigatório!',
-      v => /.+@.+.+\..+/.test(v) || 'E-mail inválido válido!'
-    ],
-    passwordRules: [
-      v => !!v || 'Senha obrigatória!',
-      v => v.length >= 3 || 'Senha deve conter no mínimo 3 caracteres'
-    ]
+    msgColor: ''
   }),
   methods: {
-    validateEmailPassword () {
-      let error = []
-      error = this.$v_user.emailRules(this.email)
-      if (error) {
-        this.messages = [...error]
-      }
-      error = this.$v_user.passwordRules(this.password)
-      if (error) {
-        this.messages = [...this.messages, ...error]
-      }
-      if (this.messages.length > 0) {
-        this.haveMessage = true
-        this.msgColor = 'warning'
-        return false
-      } else {
-        return true
-      }
-    },
-    validateEmail () {
-      let error = []
-      this.messages = []
-      this.haveMessage = false
-      error = this.$v_user.email(this.email)
-      if (error) {
-        this.messages = [...error]
-      }
-      if (this.messages.length > 0) {
-        this.haveMessage = true
-        this.msgColor = 'warning'
-        return false
-      } else {
-        return true
-      }
-    },
-    sentForgotPasswordEmail () {
+    sendForgotPasswordEmail () {
       this.messages = []
       this.haveMessage = false
       if (this.validateEmail()) {
@@ -132,64 +91,36 @@ export default {
         })
       }
     },
-    findByEmailAndPassword () {
+    submit () {
       this.messages = []
       this.haveMessage = false
-      if (this.validateEmailPassword()) {
-        let user = {
-          email: this.email,
-          login: {
-            password: this.password
-          }
+      let user = { email: this.email, login: { password: this.password } }
+      this.$_axios.post(`${this.$_url}UsuarioLogin`, user).then((response) => {
+        let result = response.data
+        if (result.resultList.length !== 0) {
+          this.user = response.data
+          this.haveMessage = true
+          this.msgColor = 'info'
+          this.messages = [`Bem vindo ${this.user.login.nomeLgin}.`]
+          this.$emit('login', this.user.login)
+        } else if (result.mensagem) {
+          this.haveMessage = true
+          this.msgColor = 'warning'
+          this.messages = [...result.mensagem]
+        } else {
+          this.haveMessage = true
+          this.msgColor = 'warning'
+          this.messages = [`Usuário ${user.login.nomeLogin} não encontrado!`]
+          this.msgColor = 'info'
+          this.messages = [`Bem vindo ${this.user.login.nomeLgin}.`]
+          this.$emit('emittedUser', this.user)
         }
-        this.$_axios.post(`${this.$_url}UsuarioLogin`, user).then((response) => {
-          let result = response.data
-          if (result.resultList.length !== 0) {
-            this.user = response.data
-            this.haveMessage = true
-            this.msgColor = 'info'
-            this.messages = [`Bem vindo ${this.user.login.nomeLgin}.`]
-            this.$emit('login', this.user.login)
-          } else if (result.mensagem) {
-            this.haveMessage = true
-            this.msgColor = 'warning'
-            this.messages = [...result.mensagem]
-          } else {
-            /* this.haveMessage = true
-            this.msgColor = 'warning'
-            this.messages = [`Usuário ${user.login.nomeLogin} não encontrado!`] */
-
-            /* USER MOCK */
-            this.user = {
-              login: {
-                nomeLogin: 'wesley',
-                password: '123',
-                ativo: true,
-                dataCriacao: 'null'
-              },
-              roles: [
-                {name: 'ADMIN'}
-              ]
-            }
-            this.msgColor = 'info'
-            this.messages = [`Bem vindo ${this.user.login.nomeLgin}.`]
-            this.$emit('emittedUser', this.user)
-          }
-        },
-        response => {
-          this.user = {
-            login: {
-              nomeLogin: 'wesley',
-              password: '123',
-              ativo: true,
-              dataCriacao: 'null'
-            },
-            roles: [
-              {name: 'ADMIN'}
-            ]
-          }
-        })
-      }
+      }).catch(error => {
+        console.log(error)
+        this.messages = ['Erro durante execução do serviço!']
+        this.haveMessage = true
+        this.messageColor = 'error'
+      })
     }
   }
 }

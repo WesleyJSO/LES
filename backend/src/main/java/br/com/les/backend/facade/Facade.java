@@ -16,66 +16,64 @@ public class Facade extends AbstractFacade {
     private IService service;
 
     @Override
-    protected void validate( DomainEntity entity, String action, String callerMethod ) {
-
-    	String entityName = entity.getClass().getSimpleName();
+    protected void validate( DomainEntity clazz, String action, String callerMethod ) {
     	
-    	for ( IService s : listServices )
-			if ( s.getClass().getName().contains( entityName ) ) {
+    	for (IService s : listServices )
+			if ( s.getClass().getName().contains(clazz.getClass().getSimpleName())) {
 				service = s;
 				break;
 			}
 
-    	result = mapStrategies.get( entityName ).execute( entity, action, callerMethod );
+    	result = mapStrategies.get(clazz.getClass().getSimpleName()).execute( clazz, action, callerMethod );
     }
 
     @Override
-    public Result save( DomainEntity entity, String callerMethod ) {
+    public Result save( DomainEntity clazz, String callerMethod ) {
 
-    	validate( entity, Actions.SAVE.getValue(), callerMethod  );
+    	validate( clazz, Actions.SAVE.getValue(), callerMethod  );
     	if ( result.isSuccess() )
-    		result.getResultList().add( service.save( entity ) );
+    		result.getResultList().add( service.save( clazz ) );
     	
     	return result;
     }
 
     @Override
-    public Result update(DomainEntity entity, String callerMethod ) {
+    public Result update(DomainEntity clazz, String callerMethod ) {
 
-    	validate( entity, Actions.UPDATE.getValue(), callerMethod  );
+    	validate( clazz, Actions.UPDATE.getValue(), callerMethod  );
     	if ( result.isSuccess() )
-    		result.getResultList().add( service.save( entity ) );
+    		result.getResultList().add( service.save( clazz ) );
     	return result;
     }
 
     @Override
-    public Result delete( DomainEntity entity, String callerMethod ) {
-    	validate( entity, Actions.DELETE.getValue(), callerMethod );
+    public Result delete( DomainEntity clazz, String callerMethod ) {
+    	validate( clazz, Actions.DELETE.getValue(), callerMethod );
     	
     	if ( result.getMessage() == null ) {
-        	result.softDeleteStatus( service.softDelete( entity ) );
+        	result.softDeleteStatus( service.softDelete( clazz ) );
     	}
     	
     	return result;
     }
 
     @Override
-    public Result findAll( DomainEntity entity, String callerMethod ) {
+    public Result findAll( DomainEntity clazz, String callerMethod ) {
     		
-    	validate( entity, Actions.SEARCH.getValue(), callerMethod );
+    	validate( clazz, Actions.SEARCH.getValue(), callerMethod );
     	result.setResultList( service.findAll() );
     	return result;    	
     }
 
     @Override
-    public Result find( DomainEntity entity, String callerMethod ) {
+    public Result find( DomainEntity clazz, String callerMethod ) {
         
     	result = new Result();
  
-    	validate( entity, Actions.SEARCH.getValue(), callerMethod  );
+    	validate( clazz, Actions.SEARCH.getValue(), callerMethod  );
     	
     	if ( result.getMessage() == null ) {
-    		result.getResultList().addAll( service.findByParameters( entity ) );
+    		result.getResultList().addAll( service.findByParameters( clazz ) );
     		return result;
     	} else 
     		return result;

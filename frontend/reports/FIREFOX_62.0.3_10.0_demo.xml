@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites errors="1"
+            failures="1"
+            tests="1">
+
+  <testsuite name="demo"
+    errors="1" failures="1" hostname="" id="" package="demo" skipped="0"
+    tests="1" time="34.47" timestamp="Sun, 07 Oct 2018 21:25:12 GMT">
+  
+    <testcase name="test" classname="demo" time="34.47" assertions="2">
+
+      <failure message="Testing if element &lt;#main&gt; contains text: &#34;Dados da Empresa&#34;. Element could not be located.">    at Object.test (C:\Users\conta\Documents\Repositorios\les\frontend\tests\demo.js:29:15)
+    at process._tickCallback (internal/process/next_tick.js:61:11)</failure>
+
+    
+    </testcase>
+  
+
+  
+    <system-err>
+      ERROR: Unable to locate element: &#34;#main&#34; using: css selector
+    at F.command (C:\Users\conta\AppData\Roaming\npm\node_modules\nightwatch\lib\api\assertions\containsText.js:46:21)
+    at F.module.exports.BaseAssertion._scheduleAssertion (C:\Users\conta\AppData\Roaming\npm\node_modules\nightwatch\lib\core\assertion.js:87:17)
+    at F.module.exports.BaseAssertion._executeCommand (C:\Users\conta\AppData\Roaming\npm\node_modules\nightwatch\lib\core\assertion.js:82:17)
+    at AssertionInstance.commandFn [as _commandFn] (C:\Users\conta\AppData\Roaming\npm\node_modules\nightwatch\lib\core\assertion.js:180:21)
+    at AsyncTree.runCommand (C:\Users\conta\AppData\Roaming\npm\node_modules\nightwatch\lib\core\queue.js:154:30)
+    at AsyncTree.runChildNode (C:\Users\conta\AppData\Roaming\npm\node_modules\nightwatch\lib\core\queue.js:114:8)
+    at AsyncTree.walkDown (C:\Users\conta\AppData\Roaming\npm\node_modules\nightwatch\lib\core\queue.js:80:10)
+    at AsyncTree.walkUp (C:\Users\conta\AppData\Roaming\npm\node_modules\nightwatch\lib\core\queue.js:97:8)
+    at AsyncTree.walkDown (C:\Users\conta\AppData\Roaming\npm\node_modules\nightwatch\lib\core\queue.js:90:12)
+    at AsyncTree.traverse (C:\Users\conta\AppData\Roaming\npm\node_modules\nightwatch\lib\core\queue.js:73:8)
+    </system-err>
+  
+
+  
+  </testsuite>
+</testsuites>
