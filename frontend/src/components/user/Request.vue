@@ -37,25 +37,27 @@
                   :close-on-content-click="false"
                   v-model="requestEntryDate"
                   :nudge-right="40"
-                  :return-value.sync="request.entryDate"
+                  :return-value.sync="request.startDate"
                   lazy
                   transition="scale-transition"
                   offset-y
                   full-width
                   min-width="290px">
             <v-text-field slot="activator"
-                        v-model="request.entryDate"
+                        v-model="request.startDate"
                         label="Data Alvo"
-                        :rules="$v_request.validateDates()"
+                        :rules="$v_request.startDate(request.startDate)"
                         prepend-icon="event"
                         readonly>
             </v-text-field>
-            <v-date-picker v-model="request.entryDate"
+            <v-date-picker v-model="request.startDate"
+                            :locale="locale"
+                            :min="minDate"
                             :reactive="reactive"
                             no-title scrollable>
               <v-spacer></v-spacer>
               <v-btn flat color="primary" @click="requestEntryDate = false">Cancel</v-btn>
-              <v-btn flat color="primary" @click="$refs.requestEntryDate.save(request.entryDate)">Confirmar</v-btn>
+              <v-btn flat color="primary" @click="$refs.requestEntryDate.save(request.startDate)">Confirmar</v-btn>
             </v-date-picker>
           </v-menu>
         </v-flex>
@@ -65,24 +67,27 @@
                   :close-on-content-click="false"
                   v-model="requestChangeDate"
                   :nudge-right="40"
-                  :return-value.sync="request.dateChange"
+                  :return-value.sync="request.endDate"
                   lazy
                   transition="scale-transition"
                   offset-y
                   full-width
                   min-width="290px">
             <v-text-field slot="activator"
-                        v-model="request.dateChange"
+                        v-model="request.endDate"
                         label="Data Troca"
                         prepend-icon="event"
+                        :rules="$v_request.endDate(request.startDate, request.endDate)"
                         readonly>
             </v-text-field>
-            <v-date-picker v-model="request.dateChange"
+            <v-date-picker v-model="request.endDate"
                             :reactive="reactive"
+                            :locale="locale"
+                            :min="minDate"
                             no-title scrollable>
               <v-spacer></v-spacer>
               <v-btn flat color="primary" @click="requestChangeDate = false">Cancel</v-btn>
-              <v-btn flat color="primary" @click="$refs.requestChangeDate.save(request.dateChange)">Confirmar</v-btn>
+              <v-btn flat color="primary" @click="$refs.requestChangeDate.save(request.endDate)">Confirmar</v-btn>
             </v-date-picker>
           </v-menu>
         </v-flex>
@@ -100,6 +105,7 @@
           <v-textarea v-model="request.description"
                       box
                       outline
+                      :rules="$v_request.description(request.description)"
                       name="input-7-4"
                       label="Venho por meio deste solicitar ...">
             </v-textarea>
@@ -135,6 +141,19 @@ export default {
     },
     showAttachmentEntry () {
       return this.request.type === this.getItems.types[3] || this.request.type === this.getItems.types[1] || this.request.type === this.getItems.types[0]
+    },
+    parseDate () {
+      if (!this.request.startDate) {
+        return new Date(this.request.startDate).toLocaleDateString('pt-BR')
+      } else {
+        return ''
+      }
+    },
+    minDate () {
+      return new Date().toISOString()
+    },
+    locale () {
+      return 'pt-BR'
     }
   },
   watch: {
