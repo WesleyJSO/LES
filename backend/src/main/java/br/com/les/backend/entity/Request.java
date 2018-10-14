@@ -32,6 +32,25 @@ public class Request extends DomainEntity {
 	
 	@ManyToMany( cascade={ CascadeType.MERGE, CascadeType.PERSIST } )
 	private List< Employee > notificatedColaboratorsList;
+	
+	public Request () {}
+	
+	public Request (Long requestId) {
+		setId(requestId);
+	}
+
+	public Request(String description, RequestStatus status, Date startDate, Date endDate, RequestType type,
+			byte[] attachment, User employee, List<Employee> notificatedColaboratorsList) {
+		super();
+		this.description = description;
+		this.status = status;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.type = type;
+		this.attachment = attachment;
+		this.employee = employee;
+		this.notificatedColaboratorsList = notificatedColaboratorsList;
+	}
 
 	public String getDescription() {
 		return description;
