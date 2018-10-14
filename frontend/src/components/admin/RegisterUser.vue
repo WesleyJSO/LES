@@ -266,20 +266,10 @@ export default {
     managerList: null
   }),
   beforeMount () {
-    this.$_axios.get(`${this.$_url}/role`)
+    this.$_axios.get(`${this.$_url}role`)
       .then(response => {
         this.employee.roleList = response.data.resultList
-      })
-      .catch(error => {
-        console.log(JSON.stringify(error))
-        this.messages = ['Erro durante execução do serviço!']
-        this.haveMessage = true
-        this.messageColor = 'error'
-      })
-    this.$_axios.get(`${this.$_url}user`)
-      .then(response => {
-        this.managerList = response.data.resultList
-        console.log(JSON.stringify(this.managerList))
+        console.log('roles: ' + JSON.stringify(this.employee.roleList))
       })
       .catch(error => {
         console.log(JSON.stringify(error))

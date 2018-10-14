@@ -3,6 +3,7 @@ package br.com.les.backend.entity;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 
 import org.springframework.stereotype.Component;
@@ -13,7 +14,7 @@ public class Role extends DomainEntity {
 
 	private String roleName;
 
-	@ManyToMany(mappedBy="roleList")
+	@ManyToMany(mappedBy="roleList", fetch=FetchType.LAZY)
 	private List<User> userList;
 	
 	public String getRoleName() {

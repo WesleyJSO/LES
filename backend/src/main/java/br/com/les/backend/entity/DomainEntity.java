@@ -9,7 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.PrePersist;
-import javax.persistence.SequenceGenerator;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -22,8 +21,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 public abstract class DomainEntity {
 
 	@Id
-	@GeneratedValue( strategy=GenerationType.SEQUENCE )
-	@SequenceGenerator( allocationSize=0, name = "idGenerator" )
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
 	private boolean active;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")

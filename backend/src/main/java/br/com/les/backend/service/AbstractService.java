@@ -22,18 +22,18 @@ public abstract class AbstractService<T extends DomainEntity> implements IServic
 	}
 	
 	@Override
-	public List<T> findAll() {
-		return genericDAO.findAll();
+	public List<T> findAll(T entity) {
+		return genericDAO.findAll(entity);
 	}	
 
 	@Override
-	public List<T> findByActive() {
-		return genericDAO.findByActive();
+	public List<T> findByActive(T entity) {
+		return genericDAO.findByActive(entity);
 	}
 	
 	@Override
-	public List<T> findByInactive() {
-		return genericDAO.findByInactive();
+	public List<T> findByInactive(T entity) {
+		return genericDAO.findByInactive(entity);
 	}
 
 	@Override

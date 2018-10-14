@@ -26,7 +26,7 @@ public class UpdateCompanyStrategy implements IApplicationStrategy<Company> {
 		switch ( callerMethod ) {
 		case "Update":
 			c.setActive( true );
-			List<Company> companyList = repository.findAll();
+			List<Company> companyList = repository.findAll(entity);
 			
 			boolean isInvalid = false;
 			for (Company company : companyList) {

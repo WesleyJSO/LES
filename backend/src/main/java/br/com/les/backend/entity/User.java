@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -20,17 +21,15 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Entity
 public class User extends Person {
 
-	private static final long serialVersionUID = -2053120971761794871L;
-
 	@Embedded
 	private Login login;
 	private String email;
 	
 	@ManyToMany(cascade=CascadeType.ALL)
     @JoinTable(
-    	name="user_role", 
-        joinColumns={@JoinColumn(name="user_id")}, 
-        inverseJoinColumns={@JoinColumn(name="role_id")}
+    	name="USER_ROLE", 
+        joinColumns={@JoinColumn(name="USER_ID")}, 
+        inverseJoinColumns={@JoinColumn(name="ROLE_ID")}
     )
 	private List< Role > roleList;
 	
