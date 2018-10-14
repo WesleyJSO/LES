@@ -13,7 +13,7 @@ import br.com.les.backend.utils.Util;
 public class SaveRequestStrategy extends AbstractRequestStrategy {
 
 	@Override
-	public Result execute(DomainEntity entity, String callerMethod) {
+	public Result run(DomainEntity entity, String callerMethod) {
 		result = new Result();
 		
 		Request request = ( Request ) entity;

@@ -5,6 +5,6 @@ import br.com.les.backend.utils.Result;
 
 public interface IRequestStrategy {
 	
-	Result execute( DomainEntity entity, String callerMethod );
+	Result run( DomainEntity entity, String callerMethod );
 
 }
