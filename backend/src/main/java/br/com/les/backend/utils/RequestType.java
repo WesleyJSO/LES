@@ -2,11 +2,10 @@ package br.com.les.backend.utils;
 
 public enum RequestType {
 	
-	APPOINTMENT(1),
-	ABSENSE_WITH_PERMISSION(2),
-	WORK_OVERTIME(3),
-	COMP_TIME(4),
-	REALOCATION_DAYS(5);
+	CHANGE_APPOINTMENT(1),
+	WORK_OVERTIME(2),
+	COMP_TIME(3),
+	REALOCATION_DAYS(4);
 	
 	private int value;
 	
