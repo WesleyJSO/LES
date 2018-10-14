@@ -25,20 +25,23 @@ public class RequestService implements IService {
 	}
 
 	@Override
-	public <T extends DomainEntity> List<T> findAll() {
-		return (List<T>) requestRepository.findAll();
-	}
-
-	@Override
 	public List<DomainEntity> findByParameters(DomainEntity entity) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <T extends DomainEntity> int softDelete(T entity) {
+	public List findAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int softDelete(DomainEntity entity) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	
+	
 
 }
