@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.logging.SimpleFormatter;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,8 +21,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class Appointment extends DomainEntity {
 
 	private static final long serialVersionUID = 1L;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-	private Calendar date;
+	private String date;
 	private LocalTime morningEntrance;
 	private LocalTime morningOut;
 	private LocalTime afternoonEntrance;
@@ -44,14 +44,15 @@ public class Appointment extends DomainEntity {
 		this.employee = new Employee( employeeId );;
 	}
 
-	public Calendar getDate() {
+	public String getDate() {
 		return date;
 	}
 
 	@PrePersist
 	public void setDate() {
-		this.date = Calendar.getInstance();
-		this.date.add(Calendar.DATE, 0);
+		Date d = new Date();
+		SimpleDateFormat form = new SimpleDateFormat("yyyy-MM-dd");
+		date = form.format(d);
 	}
 
 	public LocalTime getMorningEntrance() {

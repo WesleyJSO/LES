@@ -17,7 +17,7 @@
                     :items="appointments"
                     item-key="id"
                     hide-actions
-                    class="elevation-10" >
+                    class="elevation-10 form-container" >
             <template slot="items" slot-scope="props">
               <tr>
                 <td class="text-xs-center" >{{ props.item.morningEntrance || empty }}</td>
@@ -149,28 +149,18 @@ export default {
       time += (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes())
       if (button === 'morningEntrance') {
         this.appointment.morningEntrance = time
-        this.button2 = this.button4 = this.button6 = this.button7 = false
-        this.button3 = this.button5 = true
       } else if (button === 'morningOut') {
         this.appointment.morningOut = time
-        this.button3 = this.button5 = false
-        this.button1 = this.button4 = this.button6 = this.button7 = true
       } else if (button === 'afternoonEntrance') {
         this.appointment.afternoonEntrance = time
-        this.button1 = this.button2 = this.button5 = true
-        this.button4 = this.button6 = this.button7 = false
       } else if (button === 'afternoonOut') {
         if (!this.appointment.morningOut) {
           this.appointment.morningOut = '12:00'
           this.appointment.afternoonEntrance = '12:00'
         }
         this.appointment.afternoonOut = time
-        this.button1 = this.button2 = this.button3 = this.button6 = this.button7 = true
-        this.button5 = false
       } else if (button === 'nightEntrance') {
         this.appointment.nightEntrance = time
-        this.button1 = this.button2 = this.button3 = this.button4 = true
-        this.button6 = this.button7 = false
       } else if (button === 'nightOut') {
         if (!this.appointment.morningOut && this.appointment.morningEntrance) {
           this.appointment.morningOut = '12:00'
@@ -181,7 +171,6 @@ export default {
           this.appointment.nightEntrance = '18:00'
         }
         this.appointment.nightOut = time
-        this.button1 = this.button2 = this.button3 = this.button4 = this.button7 = this.button5 = true
       } else if (button === 'particularExit') {
         if (!this.appointment.particularExit) {
           this.appointment.particularExit = time
@@ -189,7 +178,45 @@ export default {
           this.appointment.particularExitReturn = time
         }
       }
+      this.verifyButtons()
       this.registerAppointments()
+    },
+    verifyButtons () {
+      if (this.appointment.particularExit) {
+        this.button1 = this.button2 = this.button3 = this.button4 = this.button6 = true
+        this.button7 = false
+        if (this.appointment.particularExitReturn) {
+          this.button1 = this.button2 = this.button3 = this.button4 = true
+          this.button6 = this.button7 = false
+        }
+      }
+      if (this.appointment.morningEntrance) {
+        this.button2 = this.button4 = this.button6 = this.button7 = false
+        this.button3 = this.button5 = true
+      }
+      if (this.appointment.morningOut) {
+        this.button3 = this.button5 = false
+        this.button1 = this.button4 = this.button6 = this.button7 = true
+      }
+      if (this.appointment.afternoonEntrance) {
+        this.button1 = this.button2 = this.button5 = true
+        this.button4 = this.button6 = this.button7 = false
+      }
+      if (this.appointment.afternoonOut) {
+        this.button1 = this.button2 = this.button3 = this.button6 = this.button7 = true
+        this.button5 = false
+      }
+      if (this.appointment.nightEntrance) {
+        this.button1 = this.button2 = this.button3 = this.button4 = true
+        this.button6 = this.button7 = false
+      }
+      if (this.appointment.nightOut) {
+        this.button1 = this.button2 = this.button3 = this.button4 = this.button7 = this.button5 = true
+      }
+      if (this.appointment.particularExit && !this.appointment.particularExitReturn) {
+        this.button1 = this.button2 = this.button3 = this.button4 = this.button6 = true
+        this.button7 = false
+      }
     },
     registerAppointments () {
       if (!this.appointment.id) {
@@ -231,7 +258,8 @@ export default {
           // retorno ok /
           this.appointments = result.resultList
           this.appointment = this.appointments[0]
-          this.today = this.appointment.date
+          this.today = '01 de Outubro de 2018'// this.appointment.date
+          this.verifyButtons()
           console.log(JSON.stringify(this.appointments))
         }
         if (result.mensagem) {
@@ -262,6 +290,5 @@ export default {
     font-size: 40px;
     text-align: center;
     margin-top: -20px;
-    margin-bottom: 20px;
   }
 </style>

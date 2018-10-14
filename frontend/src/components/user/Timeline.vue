@@ -1,5 +1,6 @@
  <template>
   <v-app>
+      <Appoint></Appoint>
     <h1>Últimos Apontamentos</h1>
     <br/>
     <v-spacer></v-spacer>
@@ -143,7 +144,7 @@ img {
 h1 {
   font-size: 40px;
   text-align: center;
-  margin-top: -30px;
+  margin-top: -300px;
   margin-bottom: 20px;
 }
 h2 {
@@ -395,5 +396,9 @@ a.cd-read-more:hover{text-decoration:none; background-color: #424242;  }
     -moz-animation: cd-bounce-2-inverse 0.6s;
     animation: cd-bounce-2-inverse 0.6s;
   }
+}
+
+.form-container {
+  margin-bottom: -100px;
 }
 </style>

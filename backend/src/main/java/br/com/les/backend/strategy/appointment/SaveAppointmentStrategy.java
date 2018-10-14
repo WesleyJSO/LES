@@ -17,7 +17,6 @@ public class SaveAppointmentStrategy extends AbstractAppointmentStrategy {
 		Appointment appointment = ( Appointment ) entity;
 		switch ( callerMethod ) {
 		case "save":
-			
 		}
 		result.setSuccess( null );
 		return result;
