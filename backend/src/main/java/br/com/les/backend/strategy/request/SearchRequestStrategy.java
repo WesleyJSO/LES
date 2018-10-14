@@ -1,4 +1,4 @@
-package br.com.les.backend.strategy.Request;
+package br.com.les.backend.strategy.request;
 
 import br.com.les.backend.entity.DomainEntity;
 import br.com.les.backend.entity.Request;
