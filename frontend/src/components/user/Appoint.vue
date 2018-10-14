@@ -34,68 +34,9 @@
           <v-flex class="text-xs-center">
             <v-card class="elevation-10">       
 							<v-flex>
-								<v-btn small
-                  :disabled="button1"
-									outline
-									flat
-									color="primary" 
-                  @click="mountAppointment('morningEntrance')">
-									Entrada Manhã
-								</v-btn>
-								<v-btn small
-                  :disabled="button2"
-									outline
-									flat
-									color="primary"
-                  @click="mountAppointment('morningOut')" >
-									Saida Manhã
-								</v-btn>
-								<v-btn small
-                  :disabled="button3"
-									outline
-									flat
-									color="primary"
-                  @click="mountAppointment('afternoonEntrance')" >
-									Entrada Tarde
-								</v-btn>
-								<v-btn small
-                  :disabled="button4"
-									outline
-									flat
-									color="primary"
-                  @click="mountAppointment('afternoonOut')" >
-									Saida Tarde
-								</v-btn>
-								<v-btn small
-                  :disabled="button5"
-									outline
-									flat
-									color="primary"
-                  @click="mountAppointment('nightEntrance')" >
-									Entrada Noite
-								</v-btn>
-								<v-btn small
-                  :disabled="button6"
-									outline
-									flat
-									color="primary"
-                  @click="mountAppointment('nightOut')" >
-									Saida Noite
-								</v-btn>
-								<!--<v-btn small
-									outline
-									flat
-									color="primary" >
-									<v-icon>touch_app</v-icon>
-								</v-btn>-->
-								<v-btn small
-                  :disabled="button7"
-									outline
-									flat
-									color="primary"
-                  @click="mountAppointment('particularExit')" >
-									Saida Particular
-								</v-btn>
+								<AppointButton v-for="button in buttons" :key="button.name" :disable="button.disable" :buttonName="button.name" 
+                  @emitAppoint="mountAppointment($event)">
+                </AppointButton>
 							</v-flex>
             </v-card>
           </v-flex>
@@ -106,6 +47,7 @@
 </template>
 
 <script>
+import AppointButton from '@/components/shared/AppointButton.vue'
 
 export default {
   data: () => ({
@@ -114,13 +56,15 @@ export default {
     messageColor: '',
     empty: '--:--',
     today: '',
-    button1: false,
-    button2: true,
-    button3: false,
-    button4: true,
-    button5: false,
-    button6: true,
-    button7: true,
+    buttons: [
+      { name: 'Entrada Manhã', disable: false },
+      { name: 'Saída Manhã', disable: true },
+      { name: 'Entrada Tarde', disable: false },
+      { name: 'Saída Tarde', disable: true },
+      { name: 'Entrada Noite', disable: false },
+      { name: 'Saída Noite', disable: true },
+      { name: 'Saída Partícular', disable: true }
+    ],
     headers: [
       { text: 'Entrada Manhã', align: 'center', sortable: false },
       { text: 'Saída Manhã', align: 'center', sortable: false },
@@ -135,6 +79,9 @@ export default {
     employee: {id: 1},
     appointments: []
   }),
+  components: {
+    AppointButton
+  },
   computed: {
   },
   watch: {
@@ -147,7 +94,8 @@ export default {
       let date = new Date()
       let time = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':'
       time += (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes())
-      if (button === 'morningEntrance') {
+      if (button === 'Entrada Manhã') {
+        alert(button)
         this.appointment.morningEntrance = time
       } else if (button === 'morningOut') {
         this.appointment.morningOut = time
@@ -179,46 +127,49 @@ export default {
         }
       }
       this.verifyButtons()
+      alert('j')
       this.registerAppointments()
     },
     verifyButtons () {
       if (this.appointment.particularExit) {
-        this.button1 = this.button2 = this.button3 = this.button4 = this.button6 = true
-        this.button7 = false
+        this.buttons[0].disable = this.buttons[1].disable = this.buttons[2].disable = this.buttons[3].disable = this.buttons[5].disable = true
+        this.buttons[6].disable = false
         if (this.appointment.particularExitReturn) {
-          this.button1 = this.button2 = this.button3 = this.button4 = true
-          this.button6 = this.button7 = false
+          this.buttons[0].disable = this.buttons[1].disable = this.buttons[2].disable = this.buttons[3].disable = true
+          this.buttons[5].disable = this.buttons[6].disable = false
         }
       }
       if (this.appointment.morningEntrance) {
-        this.button2 = this.button4 = this.button6 = this.button7 = false
-        this.button3 = this.button5 = true
+        this.buttons[1].disable = this.buttons[3].disable = this.buttons[5].disable = this.buttons[6].disable = false
+        this.buttons[2].disable = this.buttons[4].disable = true
       }
       if (this.appointment.morningOut) {
-        this.button3 = this.button5 = false
-        this.button1 = this.button4 = this.button6 = this.button7 = true
+        this.buttons[2].disable = this.buttons[4].disable = false
+        this.buttons[0].disable = this.buttons[3].disable = this.buttons[5].disable = this.buttons[6].disable = true
       }
       if (this.appointment.afternoonEntrance) {
-        this.button1 = this.button2 = this.button5 = true
-        this.button4 = this.button6 = this.button7 = false
+        this.buttons[0].disable = this.buttons[1].disable = this.buttons[4].disable = true
+        this.buttons[3].disable = this.buttons[5].disable = this.buttons[6].disable = false
       }
       if (this.appointment.afternoonOut) {
-        this.button1 = this.button2 = this.button3 = this.button6 = this.button7 = true
-        this.button5 = false
+        this.buttons[0].disable = this.buttons[1].disable = this.buttons[2].disable = this.buttons[5].disable = this.buttons[6].disable = true
+        this.buttons[4].disable = false
       }
       if (this.appointment.nightEntrance) {
-        this.button1 = this.button2 = this.button3 = this.button4 = true
-        this.button6 = this.button7 = false
+        this.buttons[0].disable = this.buttons[1].disable = this.buttons[2].disable = this.buttons[3].disable = true
+        this.buttons[5].disable = this.buttons[6].disable = false
       }
       if (this.appointment.nightOut) {
-        this.button1 = this.button2 = this.button3 = this.button4 = this.button7 = this.button5 = true
+        this.buttons[0].disable = this.buttons[1].disable = this.buttons[2].disable = this.buttons[3].disable = this.buttons[6].disable = this.buttons[4].disable = true
       }
       if (this.appointment.particularExit && !this.appointment.particularExitReturn) {
-        this.button1 = this.button2 = this.button3 = this.button4 = this.button6 = true
-        this.button7 = false
+        this.buttons[0].disable = this.buttons[1].disable = this.buttons[2].disable = this.buttons[3].disable = this.buttons[5].disable = true
+        this.buttons[6].disable = false
       }
+      alert()
     },
     registerAppointments () {
+      alert('aa')
       if (!this.appointment.id) {
         // this.appointment.employee = this.employee
         console.log(JSON.stringify(this.appointment))
