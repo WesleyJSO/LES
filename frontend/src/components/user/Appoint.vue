@@ -34,7 +34,9 @@
           <v-flex class="text-xs-center">
             <v-card class="elevation-10">       
 							<v-flex>
-								<AppointButton v-for="button in buttons" :key="button.name" :disable="button.disable" :buttonName="button.name" 
+								<AppointButton v-for="button in buttons" :key="button.name" 
+                  :disable="button.disable" 
+                  :buttonName="button.name" 
                   @emitAppoint="mountAppointment($event)">
                 </AppointButton>
 							</v-flex>
@@ -95,7 +97,6 @@ export default {
       let time = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':'
       time += (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes())
       if (button === 'Entrada Manhã') {
-        alert(button)
         this.appointment.morningEntrance = time
       } else if (button === 'morningOut') {
         this.appointment.morningOut = time
@@ -127,7 +128,6 @@ export default {
         }
       }
       this.verifyButtons()
-      alert('j')
       this.registerAppointments()
     },
     verifyButtons () {
@@ -166,10 +166,8 @@ export default {
         this.buttons[0].disable = this.buttons[1].disable = this.buttons[2].disable = this.buttons[3].disable = this.buttons[5].disable = true
         this.buttons[6].disable = false
       }
-      alert()
     },
     registerAppointments () {
-      alert('aa')
       if (!this.appointment.id) {
         // this.appointment.employee = this.employee
         console.log(JSON.stringify(this.appointment))
