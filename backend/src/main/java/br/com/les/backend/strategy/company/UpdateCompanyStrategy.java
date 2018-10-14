@@ -6,36 +6,36 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.Company;
-import br.com.les.backend.entity.DomainEntity;
-import br.com.les.backend.repository.CompanyRepository;
+import br.com.les.backend.service.AbstractService;
+import br.com.les.backend.strategy.IApplicationStrategy;
 import br.com.les.backend.utils.Result;
 import br.com.les.backend.utils.Util;
 
 @Component
-public class UpdateCompanyStrategy extends AbstractCompanyStrategy {
+public class UpdateCompanyStrategy implements IApplicationStrategy<Company> {
 
 	@Autowired
-	CompanyRepository companyRepository;
+	AbstractService<Company> repository;
 	
 	@Override
-	public Result execute(DomainEntity entity, String callerMethod) {
+	public Result<Company> execute(Company entity, String callerMethod) {
 
-		result = new Result();
+		Result<Company> result = new Result<>();
 		
 		Company c = ( Company ) entity;
 		switch ( callerMethod ) {
 		case "Update":
 			c.setActive( true );
-			List<Company> companyList = companyRepository.findAll();
+			List<Company> companyList = repository.findAll();
 			
 			boolean isInvalid = false;
 			for (Company company : companyList) {
 				if(!company.getId().equals(c.getId())) {
-					if(company.getCnpj().equals(c.getCnpj())) {
+					if(((Company) company).getCnpj().equals(c.getCnpj())) {
 						result.setError( "Cnpj já cadastrado!" );
 						isInvalid = true;
 					}
-					if(company.getStateRegistration().equals(c.getStateRegistration())) {
+					if(((Company) company).getStateRegistration().equals(c.getStateRegistration())) {
 						result.setError( "Inscrição estadual já cadastrada!" );
 						isInvalid = true;
 					}

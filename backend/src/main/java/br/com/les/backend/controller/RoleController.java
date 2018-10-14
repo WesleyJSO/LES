@@ -1,20 +1,15 @@
 package br.com.les.backend.controller;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import br.com.les.backend.entity.Role;
-import br.com.les.backend.utils.Actions;
-import br.com.les.backend.utils.Result;
 
-
-@CrossOrigin
-@RestController
-public class RoleController extends AbstractController {
-		
-	@GetMapping( value="/role" )
-	public Result findAll() {
-		return run(Actions.FIND_ALL.getValue()).execute(new Role(), Actions.FIND_ALL.getValue());
+@Controller
+@RequestMapping("${server.controller.prefix}role")
+public class RoleController extends AbstractController<Role> {
+	
+	public RoleController() {
+		super(Role.class);
 	}
 }

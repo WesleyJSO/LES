@@ -19,6 +19,7 @@ import Chart from 'chart.js'
 import CompanyValidators from '@/validators/CompanyValidators'
 import AddressValidators from '@/validators/AddressValidators'
 import RequestValidator from './validators/RequestValidator'
+import RoleValidators from './validators/RoleValidators'
 
 Vue.use(VueChartkick, {adapter: Chart})
 
@@ -48,6 +49,7 @@ Vue.prototype.$v_costCentre = new CostCentreValidator()
 Vue.prototype.$v_company = new CompanyValidators()
 Vue.prototype.$v_address = new AddressValidators()
 Vue.prototype.$v_request = new RequestValidator()
+Vue.prototype.$v_role = new RoleValidators()
 
 Vue.filter('dataFormatada', function (value) {
   if (value) {

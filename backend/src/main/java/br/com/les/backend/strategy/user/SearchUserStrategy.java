@@ -7,11 +7,12 @@ import br.com.les.backend.entity.DomainEntity;
 import br.com.les.backend.entity.Login;
 import br.com.les.backend.entity.User;
 import br.com.les.backend.service.UserService;
+import br.com.les.backend.strategy.IApplicationStrategy;
 import br.com.les.backend.utils.EmailServiceImpl;
 import br.com.les.backend.utils.Result;
 
 @Component
-public class SearchUsuarioStrategy extends AbstractUserStrategy {
+public class SearchUserStrategy<T extends DomainEntity> implements IApplicationStrategy<T> {
 
 	@Autowired
 	UserService userService;
@@ -20,9 +21,9 @@ public class SearchUsuarioStrategy extends AbstractUserStrategy {
 	EmailServiceImpl emailService;
 	
 	@Override
-	public Result execute( DomainEntity entity, String callerMethod ) {
+	public Result<T> execute( DomainEntity entity, String callerMethod ) {
 		
-		result = new Result();
+		Result<T> result = new Result<>();
 		
 		User u = ( User ) entity;
 		

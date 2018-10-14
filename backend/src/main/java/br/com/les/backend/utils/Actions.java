@@ -10,6 +10,7 @@ public enum Actions {
 	SAVE_UPDATE("SaveUpdate"),
 	FIND_BY_USER("FindByUser"),
 	FIND_BY_LOGIN("FindByLogin"),
+	FIND_BY_ID("FindById"),
 	SENT_PASSWORD("SentChangePasswordEmail");
 	
 	

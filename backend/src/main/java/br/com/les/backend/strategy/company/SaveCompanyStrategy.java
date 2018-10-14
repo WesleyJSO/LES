@@ -6,38 +6,38 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.Company;
-import br.com.les.backend.entity.DomainEntity;
-import br.com.les.backend.repository.CompanyRepository;
+import br.com.les.backend.service.AbstractService;
+import br.com.les.backend.strategy.IApplicationStrategy;
 import br.com.les.backend.utils.Result;
 import br.com.les.backend.utils.Util;
 
 @Component
-public class SaveCompanyStrategy extends AbstractCompanyStrategy {
+public class SaveCompanyStrategy implements IApplicationStrategy<Company> {
 	
 	@Autowired
-	CompanyRepository companyRepository;
+	AbstractService<Company> service;
 	
 	@Override
-	public Result execute(DomainEntity entity, String callerMethod) {
+	public Result<Company> execute(Company entity, String callerMethod) {
 
-		result = new Result();
+		Result<Company> result = new Result<>();
 		
 		Company c = ( Company ) entity;
 		switch ( callerMethod ) {
 		case "Save":
 			c.setActive( true );
-			List<Company> companyList = companyRepository.findAll();
+			List<Company> companyList = service.findByInactive();
 			
 			boolean isInvalid = false;
 			for (Company company : companyList) {
-				if(company.getCnpj().equals(c.getCnpj())) {
+				if(((Company) company).getCnpj().equals(c.getCnpj())) {
 					if(!company.getActive())
 						result.setError( "Cnpj já cadastrado em empresa desativada!" );
 					else	
 						result.setError( "Cnpj já cadastrado!" );
 					isInvalid = true;
 				}
-				if(company.getStateRegistration().equals(c.getStateRegistration())) {
+				if(((Company) company).getStateRegistration().equals(c.getStateRegistration())) {
 					if(!company.getActive())
 						result.setError( "Inscrição estadual já cadastrada em empresa desativada!" );
 					else

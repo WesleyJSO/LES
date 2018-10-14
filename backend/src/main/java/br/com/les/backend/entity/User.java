@@ -5,6 +5,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
@@ -25,6 +27,11 @@ public class User extends Person {
 	private String email;
 	
 	@ManyToMany(cascade=CascadeType.ALL)
+    @JoinTable(
+    	name="user_role", 
+        joinColumns={@JoinColumn(name="user_id")}, 
+        inverseJoinColumns={@JoinColumn(name="role_id")}
+    )
 	private List< Role > roleList;
 	
 	@OneToMany( mappedBy="user", cascade=CascadeType.ALL, orphanRemoval=true )

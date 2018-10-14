@@ -4,20 +4,21 @@ import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.CostCentre;
 import br.com.les.backend.entity.DomainEntity;
+import br.com.les.backend.strategy.IApplicationStrategy;
 import br.com.les.backend.utils.Result;
 import br.com.les.backend.utils.Util;
 
 
 @Component
-public class SaveCostCentreStrategy extends AbstractCostCentreStrategy {
+public class SaveCostCentreStrategy implements IApplicationStrategy<CostCentre> {
 
 	@Override
-	public Result execute(DomainEntity entity, String callerMethod) {
-		result = new Result();
+	public Result<CostCentre> execute(CostCentre entity, String callerMethod) {
+		Result<CostCentre> result = new Result<>();
 		
 		switch ( callerMethod ) {
 		case "Save":
-			CostCentre costCentre = ( CostCentre ) entity;
+			CostCentre costCentre = entity;
 			costCentre.setActive( true );
 			if ( null == costCentre.getName() || costCentre.getName().isEmpty() || costCentre.getName().trim().equals("") ) {
 				result.setError( Util.COST_INVALID_NAME );

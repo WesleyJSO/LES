@@ -5,7 +5,9 @@ module.exports = {
   'test': function (browser) {
     browser
       .url('http://localhost:8081/#/CadastrarUsuario')
-      .waitForElementVisible('body', 3000)
+      .waitForElementVisible('body', 5000)
+      .verify.visible('div.input[id=checkBox1]', 'checkBox is visible')
+      .click('div[class=v-input--selection-controls__input]').pause(500
       .setValue('input[id=name]', 'wesley').pause(500)
       .setValue('input[id=lastName]', 'silva').pause(500)
       .setValue('input[id=email]', 'teste@email.com').pause(500)

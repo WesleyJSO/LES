@@ -1,6 +1,5 @@
 package br.com.les.backend.entity;
 
-import java.io.Serializable;
 import java.util.Calendar;
 
 import javax.persistence.Entity;
@@ -16,12 +15,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+
 @Entity
 @Inheritance( strategy=InheritanceType.TABLE_PER_CLASS )
 @JsonInclude(Include.NON_NULL)
-public class DomainEntity implements Serializable {
-
-	private static final long serialVersionUID = 6370123170646666841L;
+public abstract class DomainEntity {
 
 	@Id
 	@GeneratedValue( strategy=GenerationType.SEQUENCE )

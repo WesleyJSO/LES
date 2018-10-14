@@ -3,17 +3,19 @@ package br.com.les.backend.strategy.employee;
 import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.DomainEntity;
+import br.com.les.backend.entity.Employee;
 import br.com.les.backend.entity.Login;
 import br.com.les.backend.entity.User;
+import br.com.les.backend.strategy.IApplicationStrategy;
 import br.com.les.backend.utils.Result;
 
 @Component
-public class SearchEmployeeStrategy extends AbstractEmployeeStrategy {
+public class SearchEmployeeStrategy implements IApplicationStrategy<Employee> {
 
 	@Override
-	public Result execute( DomainEntity entity, String callerMethod ) {
+	public Result<Employee> execute( Employee entity, String callerMethod ) {
 		
-		result = new Result();
+		Result<Employee> result = new Result<>();
 		
 		User u = ( User ) entity;
 		

@@ -2,16 +2,16 @@ package br.com.les.backend.strategy.costcentre;
 
 import org.springframework.stereotype.Component;
 
-import br.com.les.backend.entity.DomainEntity;
+import br.com.les.backend.entity.CostCentre;
+import br.com.les.backend.strategy.IApplicationStrategy;
 import br.com.les.backend.utils.Result;
-import br.com.les.backend.utils.Util;
 
 @Component
-public class DeleteCostCentreStrategy extends AbstractCostCentreStrategy {
+public class DeleteCostCentreStrategy implements IApplicationStrategy<CostCentre> {
 
 	@Override
-	public Result execute(DomainEntity entity, String callerMethod) {
-		result = new Result();
+	public Result<CostCentre> execute(CostCentre entity, String callerMethod) {
+		Result<CostCentre> result = new Result<>();
 		
 		switch ( callerMethod ) {
 		case "Delete":

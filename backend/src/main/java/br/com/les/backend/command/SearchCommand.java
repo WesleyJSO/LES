@@ -5,10 +5,10 @@ import br.com.les.backend.entity.DomainEntity;
 import br.com.les.backend.utils.Result;
 
 @Component
-public class SearchCommand extends AbstractCommand {
+public class SearchCommand<T extends DomainEntity> extends AbstractCommand<T> {
 	
 	@Override
-	public Result execute(DomainEntity entity, String callerMethod) {
+	public Result<T> execute(T entity, String callerMethod) {
 		return facade.find(entity, callerMethod);
 	}
 
