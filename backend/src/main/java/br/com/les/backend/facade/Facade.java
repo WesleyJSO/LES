@@ -96,4 +96,3 @@ public class Facade<T extends DomainEntity> implements IFacade<T> {
 		result.getResultList().add(service.findById(id, clazz));
 		return result;
 	}
-}
