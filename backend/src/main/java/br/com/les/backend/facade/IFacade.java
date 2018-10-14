@@ -4,21 +4,19 @@ import br.com.les.backend.entity.DomainEntity;
 import br.com.les.backend.utils.Result;
 
 
-/**
- *
- * @author  José Wesley
- *
- *  this class contais base facade methods that makes most commons system needed funcitions
- */
-public interface IFacade {
+public interface IFacade<T extends DomainEntity> {
 
-    Result save( DomainEntity entity, String callerMethod );
+	void validate(T entity, String action, String callerMethod );
+	
+    Result<T> save( T entity, String callerMethod );
 
-    Result update( DomainEntity entity, String callerMethod );
+    Result<T> update( T entity, String callerMethod );
 
-    Result delete( DomainEntity entity, String callerMethod );
+    Result<T> delete( T entity, String callerMethod );
 
-    Result findAll( DomainEntity entity, String callerMethod );
+    Result<T> findAll( T entity, String callerMethod );
 
-    Result find( DomainEntity entity, String callerMethod );
+    Result<T> find( T entity, String callerMethod );
+
+	Result<T> findById(Long id, Class<? extends T> clazz);
 }

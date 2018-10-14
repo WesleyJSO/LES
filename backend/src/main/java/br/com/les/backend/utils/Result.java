@@ -8,12 +8,12 @@ import org.springframework.stereotype.Component;
 import br.com.les.backend.entity.DomainEntity;
 
 @Component
-public class Result {
+public class Result<T extends DomainEntity> {
 
     private boolean success;
     private List< String > message = new ArrayList<>();
     
-    private List< DomainEntity > resultList = new ArrayList<>();
+    private List<T> resultList = new ArrayList<>();
     
     public Result() {
     	success = true;
@@ -47,11 +47,11 @@ public class Result {
        return success;
     }
 
-    public void setResultList( List<DomainEntity> resultList ) {
+    public void setResultList( List<T> resultList ) {
         this.resultList = resultList;
     }
 
-    public List<DomainEntity> getResultList() {
+    public List<T> getResultList() {
         return this.resultList;
     }
     
@@ -61,16 +61,5 @@ public class Result {
 	    	return message;
     	} else 
     		return null;
-    }
-    
-    public void softDeleteStatus (int status) {
-    	if ( status == 0 )
-    		setError( "Nenhum registro alterado" );
-    	else if ( status == 1 )
-    		setSuccess( "Registro alterdo com sucesso!" );
-    	else if ( status > 1 )
-    		setSuccess( "Registros alterdos com sucesso!" );
-    	else
-    		setSuccess( "Erro ao alterar registro!" );
     }
 }

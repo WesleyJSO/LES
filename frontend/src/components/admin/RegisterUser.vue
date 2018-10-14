@@ -8,23 +8,15 @@
                transition="scale-transition" />
     </li>
     <br/>
-    <v-form ref="form" v-model="valid" @submit.prevent="saveUser">
-
+    <v-form ref="form" v-model="valid">
       <!-- Row 0 -->
-      <v-layout v-if="roleList == null">
-        <v-flex xs12 sm9 md6 lg6 xl4>
-          <div class="loading">
-            Carregando...
-          </div>
-        </v-flex>
-      </v-layout>
-
-      <!-- Row 0 -->
-      <v-layout v-if="roleList != null">
-        <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-checkbox v-for="(v, i) in roleList" :key="i"
-            :label="v.roleName"
+      <v-layout>
+        <v-flex xs4 sm3 md2 lg2
+                v-for="v in employee.roleList" :key="v.id">
+          <v-checkbox :id="`checkBox${v.id}`"
             v-model="v.active"
+            :label="v.roleName"
+            :rules="$v_role.validateSelectedRoles(employee.roleList)"
           ></v-checkbox>
         </v-flex>
       </v-layout>
@@ -229,7 +221,7 @@
       </v-layout>
       <div v-if="!edit">
         <v-btn id="submit" type="submit"
-               @click.prevent="saveUser"
+               @click="submit"
                :disabled="!valid"
                color="success">Salvar</v-btn>
         <v-btn @click="clearForm" color="error">Cancelar</v-btn>
@@ -239,7 +231,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import Login from '../../objects/Login'
 export default {
   props: {
@@ -256,6 +247,7 @@ export default {
         login: new Login('', '', true),
         email: ''
       },
+      roleList: null,
       login: {
         password: '',
         passwordValidator: ''
@@ -271,13 +263,23 @@ export default {
     edit: false,
     joiningDateHelper: false,
     valid: false,
-    roleList: null
+    managerList: null
   }),
   beforeMount () {
-    axios.get(`http://localhost:8080/role`)
+    this.$_axios.get(`${this.$_url}/role`)
       .then(response => {
-        console.log(JSON.stringify(response.data))
-        this.roleList = response.data
+        this.employee.roleList = response.data.resultList
+      })
+      .catch(error => {
+        console.log(JSON.stringify(error))
+        this.messages = ['Erro durante execução do serviço!']
+        this.haveMessage = true
+        this.messageColor = 'error'
+      })
+    this.$_axios.get(`${this.$_url}user`)
+      .then(response => {
+        this.managerList = response.data.resultList
+        console.log(JSON.stringify(this.managerList))
       })
       .catch(error => {
         console.log(JSON.stringify(error))
@@ -289,13 +291,12 @@ export default {
   computed: {
     color () { return ['error', 'warning', 'success'][Math.floor(this.progress() / 40)] },
     colorValidation () { return ['error', 'warning', 'success'][Math.floor(this.progressValidation() / 40)] },
-    title () { return this.edit ? 'Alterar Funcionário' : 'Cadastro de Funcionário' }
+    title () { return this.edit ? 'Alterar Usuário' : 'Cadastro de Usuário' }
   },
   methods: {
     progress () { return Math.min(100, this.employee.login.password.length * 10) },
     progressValidation () { return Math.min(100, this.employee.login.passwordValidator.length * 10) },
-    saveUser () {
-      console.log(JSON.stringify(this.employee))
+    submit () {
       this.$_axios.post(`${this.$_url}employee`, this.employee).then((response) => {
         let result = response.data
         console.log(JSON.stringify(result))
@@ -322,22 +323,7 @@ export default {
         this.messageColor = 'error'
       })
     },
-    clearForm () {
-      this.menu = false
-      this.$refs.form.reset()
-      this.employee = {
-        manager: {
-          login: new Login('', '', true),
-          email: ''
-        },
-        login: {
-          password: '',
-          passwordValidator: ''
-        },
-        baseHourCalculation: { expirationDate: null, salary: '' },
-        telephoneList: [ {type: '', number: ''}, {type: '', number: ''}, {type: '', number: ''} ]
-      }
-    }
+    clearForm () { this.$refs.form.reset() }
   }
 }
 </script>

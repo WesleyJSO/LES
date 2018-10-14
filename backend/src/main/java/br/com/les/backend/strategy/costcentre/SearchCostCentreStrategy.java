@@ -4,16 +4,15 @@ import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.CostCentre;
 import br.com.les.backend.entity.DomainEntity;
-import br.com.les.backend.strategy.employee.AbstractEmployeeStrategy;
+import br.com.les.backend.strategy.IApplicationStrategy;
 import br.com.les.backend.utils.Result;
 
 @Component
-public class SearchCostCentreStrategy extends AbstractCostCentreStrategy {
+public class SearchCostCentreStrategy implements IApplicationStrategy<CostCentre> {
 
 	@Override
-	public Result execute(DomainEntity entity, String callerMethod) {
-		result = new Result();
-		CostCentre costCentre = ( CostCentre ) entity;
+	public Result<CostCentre> execute(CostCentre entity, String callerMethod) {
+		Result<CostCentre> result = new Result<>();
 		
 		switch ( callerMethod ) {
 		case "FindAll":

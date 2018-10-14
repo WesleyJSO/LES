@@ -6,10 +6,10 @@ import br.com.les.backend.entity.DomainEntity;
 import br.com.les.backend.utils.Result;
 
 @Component
-public class FindAllCommand extends AbstractCommand {
+public class FindAllCommand<T extends DomainEntity> extends AbstractCommand<T> {
 	
 	@Override
-	public Result execute(DomainEntity entity, String callerMethod) {
+	public Result<T> execute(T entity, String callerMethod) {
 		return facade.findAll(entity, callerMethod);
 	}
 

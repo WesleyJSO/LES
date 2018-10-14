@@ -6,10 +6,10 @@ import br.com.les.backend.entity.DomainEntity;
 import br.com.les.backend.utils.Result;
 
 @Component
-public class SaveCommand extends AbstractCommand {
+public class SaveCommand<T extends DomainEntity> extends AbstractCommand<T> {
 	
 	@Override
-	public Result execute(DomainEntity entity, String callerMethod) {
+	public Result<T> execute(T entity, String callerMethod) {
 		return facade.save( entity, callerMethod );
 	}
 

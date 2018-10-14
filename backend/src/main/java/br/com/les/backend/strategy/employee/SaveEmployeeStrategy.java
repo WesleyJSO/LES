@@ -5,16 +5,17 @@ import org.springframework.stereotype.Component;
 import br.com.les.backend.entity.DomainEntity;
 import br.com.les.backend.entity.Employee;
 import br.com.les.backend.entity.Telephone;
+import br.com.les.backend.strategy.IApplicationStrategy;
 import br.com.les.backend.utils.Result;
 import br.com.les.backend.utils.Util;
 
 @Component
-public class SaveEmployeeStrategy extends AbstractEmployeeStrategy {
+public class SaveEmployeeStrategy implements IApplicationStrategy<Employee> {
 
 	@Override
-	public Result execute(DomainEntity entity, String callerMethod ) {
+	public Result<Employee> execute(Employee entity, String callerMethod ) {
 		
-		result = new Result();
+		Result<Employee> result = new Result<>();
 		
 		switch ( callerMethod ) {
 		
@@ -56,7 +57,7 @@ public class SaveEmployeeStrategy extends AbstractEmployeeStrategy {
 			if( employee.getTelephoneList().isEmpty() )
 				result.setError( Util.ERROR_PHONE );
 			else {
-				employee.getTelephoneList().forEach(t -> t.setUser(employee));
+				employee.getTelephoneList().forEach(Employee -> Employee.setUser(employee));
 				
 				for( Telephone telephone : employee.getTelephoneList() )
 					if( telephone.getNumber().length() != 0 && telephone.getNumber().length() != 8 && telephone.getNumber().length() != 9 ) {

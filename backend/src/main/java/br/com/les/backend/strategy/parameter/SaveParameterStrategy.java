@@ -2,18 +2,18 @@ package br.com.les.backend.strategy.parameter;
 
 import org.springframework.stereotype.Component;
 
-import br.com.les.backend.entity.DomainEntity;
 import br.com.les.backend.entity.Parameter;
+import br.com.les.backend.strategy.IApplicationStrategy;
 import br.com.les.backend.utils.Result;
 import br.com.les.backend.utils.Util;
 
 @Component
-public class SaveParameterStrategy extends AbstractParameterStrategy {
+public class SaveParameterStrategy implements IApplicationStrategy<Parameter> {
 
 	@Override
-	public Result execute(DomainEntity entity, String callerMethod) {
+	public Result<Parameter> execute(Parameter entity, String callerMethod) {
 
-		result = new Result();
+		Result<Parameter> result = new Result<>();
 		
 		Parameter parameter = ( Parameter ) entity;
 		switch ( callerMethod ) {

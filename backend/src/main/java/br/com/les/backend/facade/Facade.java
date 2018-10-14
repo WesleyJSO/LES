@@ -1,74 +1,84 @@
 package br.com.les.backend.facade;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.DomainEntity;
-import br.com.les.backend.service.IService;
+import br.com.les.backend.service.AbstractService;
+import br.com.les.backend.strategy.GenericStrategy;
 import br.com.les.backend.utils.Actions;
 import br.com.les.backend.utils.Result;
 
 
 @Component
-public class Facade extends AbstractFacade {
+public class Facade<T extends DomainEntity> implements IFacade<T> {
 
-    private Result result;
+    private Result<T> result;
     
-    private IService service;
-
+    private AbstractService<T> service;
+    
+	@Autowired
+	protected List< AbstractService<T> > listServices;
+	
+    @Autowired
+    protected GenericStrategy<T> strategy;
+    
     @Override
-    protected void validate( DomainEntity clazz, String action, String callerMethod ) {
+    public void validate(T clazz, String action, String callerMethod ) {
     	
-    	for (IService s : listServices )
-			if ( s.getClass().getName().contains(clazz.getClass().getSimpleName())) {
+    	for (AbstractService<T> s : listServices )
+			if (s.getClass().getSimpleName().contains(clazz.getClass().getSimpleName())) {
 				service = s;
 				break;
 			}
-
-    	result = mapStrategies.get(clazz.getClass().getSimpleName()).execute( clazz, action, callerMethod );
+    	result = strategy.execute( clazz, action, callerMethod );
     }
 
     @Override
-    public Result save( DomainEntity clazz, String callerMethod ) {
+    public Result<T> save(T clazz, String callerMethod ) {
 
     	validate( clazz, Actions.SAVE.getValue(), callerMethod  );
     	if ( result.isSuccess() )
     		result.getResultList().add( service.save( clazz ) );
-    	
     	return result;
     }
 
     @Override
-    public Result update(DomainEntity clazz, String callerMethod ) {
+    public Result<T> update(T clazz, String callerMethod ) {
 
     	validate( clazz, Actions.UPDATE.getValue(), callerMethod  );
     	if ( result.isSuccess() )
-    		result.getResultList().add( service.save( clazz ) );
+    		result.getResultList().add( service.update( clazz ) );
     	return result;
     }
 
     @Override
-    public Result delete( DomainEntity clazz, String callerMethod ) {
+    public Result<T> delete(T clazz, String callerMethod ) {
     	validate( clazz, Actions.DELETE.getValue(), callerMethod );
     	
     	if ( result.getMessage() == null ) {
-        	result.softDeleteStatus( service.softDelete( clazz ) );
+        	if(service.setInactiveById(clazz))
+        		result.setSuccess("Removido com sucesso.");
+        	else
+        		result.setError("Código inválido!");
     	}
-    	
     	return result;
     }
 
     @Override
-    public Result findAll( DomainEntity clazz, String callerMethod ) {
+    public Result<T> findAll(T clazz, String callerMethod ) {
     		
     	validate( clazz, Actions.SEARCH.getValue(), callerMethod );
-    	result.setResultList( service.findAll() );
-    	return result;    	
+    	result.setResultList(service.findByActive());
+    	return result;
     }
 
     @Override
-    public Result find( DomainEntity clazz, String callerMethod ) {
+    public Result<T> find(T clazz, String callerMethod ) {
         
-    	result = new Result();
+    	result = new Result<T>();
  
     	validate( clazz, Actions.SEARCH.getValue(), callerMethod  );
     	
@@ -79,4 +89,11 @@ public class Facade extends AbstractFacade {
     		return result;
     	
     }
+
+	@Override
+	public Result<T> findById(Long id, Class<? extends T> clazz) {
+		Result<T> result = new Result<>();
+		result.getResultList().add(service.findById(id, clazz));
+		return result;
+	}
 }
