@@ -12,6 +12,7 @@ import br.com.les.backend.utils.Actions;
 import br.com.les.backend.utils.Result;
 
 
+
 @Component
 public class Facade<T extends DomainEntity> implements IFacade<T> {
 
