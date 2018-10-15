@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.DomainEntity;
+import br.com.les.backend.entity.User;
 import br.com.les.backend.service.AbstractService;
 import br.com.les.backend.strategy.GenericStrategy;
 import br.com.les.backend.utils.Actions;
@@ -94,6 +95,13 @@ public class Facade<T extends DomainEntity> implements IFacade<T> {
 	public Result<T> findById(Long id, Class<? extends T> clazz) {
 		Result<T> result = new Result<>();
 		result.getResultList().add(service.findById(id, clazz));
+		return result;
+	}
+
+	@Override
+	public Result<T> findByEmailAndPassword(String password, String email, Class<? extends User> clazz) {
+		Result<T> result = new Result<>();
+		result.getResultList().add(service.findByEmailAndPassword(password, email, clazz));
 		return result;
 	}
 }

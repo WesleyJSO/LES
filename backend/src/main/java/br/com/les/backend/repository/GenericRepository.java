@@ -12,7 +12,7 @@ public interface GenericRepository<T extends DomainEntity> extends JpaRepository
 	
 	@Modifying
 	@Query("select t from #{#entityName} t where t.active = true")
-	List<T> findByActive(String entityName);
+	List<T> findByActive();
 	
 	@Query("select t from #{#entityName} t where t.active = false")
 	List<T> findByInactive();

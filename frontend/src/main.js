@@ -38,7 +38,7 @@ Vue.use(VeeValidate)
 Vue.use(Vuetify)
 
 Vue.prototype.$_axios = axios
-Vue.prototype.$_url = 'http://localhost:8080/'
+Vue.prototype.$_url = 'http://localhost:9999/'
 Vue.prototype.$_viaCep = 'https://viacep.com.br/ws/'
 Vue.prototype.$_moment = moment
 

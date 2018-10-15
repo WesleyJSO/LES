@@ -2,17 +2,17 @@ package br.com.les.backend.strategy.user;
 
 import org.springframework.stereotype.Component;
 
-import br.com.les.backend.entity.DomainEntity;
+import br.com.les.backend.entity.User;
 import br.com.les.backend.strategy.IApplicationStrategy;
 import br.com.les.backend.utils.Result;
 
 @Component
-public class DeleteUserStrategy<T extends DomainEntity> implements IApplicationStrategy<T> {
+public class DeleteUserStrategy implements IApplicationStrategy<User> {
 
 	@Override
-	public Result<T> execute(DomainEntity entity, String callerMethod ) {
+	public Result<User> execute(User entity, String callerMethod ) {
 
-		return new Result<T>();
+		return new Result<User>();
 	}
 
 }

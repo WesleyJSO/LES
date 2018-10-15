@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.DomainEntity;
+import br.com.les.backend.entity.User;
 import br.com.les.backend.repository.GenericRepository;
+import br.com.les.backend.repository.UserRepository;
 @Component
 public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 	
@@ -24,6 +26,8 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 	protected Map<String, GenericRepository<T>> repositoryMap;
 	
 	protected GenericRepository<T> repository;
+
+	protected UserRepository userRepository;
 	
 	private GenericRepository<T> findRepository(T clazz) {
 		repositoryMap.forEach((k, v) -> {
@@ -38,8 +42,6 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 		return findRepository(entity).save(entity);
 	}
 	
-	
-
 	@Override
 	public T update(T entity) {
 		return em.merge(entity);
@@ -51,7 +53,7 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 	}
 	
 	public List<T> findByActive(T entity) {
-		return findRepository(entity).findByActive(entity.getClass().getSimpleName());
+		return findRepository(entity).findByActive();
 	}
 
 	public List<T> findByInactive(T entity) {
@@ -69,6 +71,11 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 	@Override
 	public T findById(Long id, Class<? extends T> clazz) {
 		return em.find(clazz, id);
+	}
+	
+	@Override
+	public T findByEmailAndPassword(String password, String email, Class<? extends User> clazz) {
+		return userRepository.findByEmailAndPassword(email, password);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -116,4 +123,6 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 		}
 		return null;
 	}
+
+
 }

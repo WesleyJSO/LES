@@ -134,14 +134,25 @@
       <!-- Row 4 -->
       <v-layout>
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-text-field id="supervisor"
-              label="Gestor"
-              v-model="employee.manager.name"
-              type="text"
-              prepend-icon="supervisor_account"
-              clearable
-              required>
-          </v-text-field>
+          <v-combobox v-if="managerList" id="supervisor"
+            v-model="select"
+            :items="managerList.map(x => x.name)"
+            chips
+            label="Gestor">
+            <template slot="selection" slot-scope="data">
+              <v-chip
+                :selected="data.selected"
+                :disabled="data.disabled"
+                :key="JSON.stringify(data.item)"
+                class="v-chip--select-multi"
+                @input="data.parent.selectItem(data.item)">
+                <v-avatar class="accent white--text">
+                  {{ data.item.slice(0, 1).toUpperCase() }}
+                </v-avatar>
+                {{ data.item }}
+              </v-chip>
+            </template>
+          </v-combobox>
         </v-flex>
         <v-flex xs12 sm9 md6 lg6 xl4>
           <v-menu
@@ -233,15 +244,8 @@
 <script>
 import Login from '../../objects/Login'
 export default {
-  props: {
-    item: {
-      type: Object,
-      default () {
-        return {}
-      }
-    }
-  },
   data: () => ({
+    select: '',
     employee: {
       manager: {
         login: new Login('', '', true),
@@ -269,7 +273,11 @@ export default {
     this.$_axios.get(`${this.$_url}role`)
       .then(response => {
         this.employee.roleList = response.data.resultList
-        console.log('roles: ' + JSON.stringify(this.employee.roleList))
+        this.$_axios.get(`${this.$_url}user`)
+          .then(response => {
+            this.managerList = response.data.resultList
+            console.log(JSON.stringify(this.managerList))
+          })
       })
       .catch(error => {
         console.log(JSON.stringify(error))
@@ -289,9 +297,7 @@ export default {
     submit () {
       this.$_axios.post(`${this.$_url}employee`, this.employee).then((response) => {
         let result = response.data
-        console.log(JSON.stringify(result))
         if (result.resultList.length !== 0) {
-          console.log(JSON.stringify(result))
           this.employee = result.resultList[0]
         }
         if (result.message) {
@@ -306,14 +312,20 @@ export default {
         }
       },
       (response) => {
-        // erro na requisição do serviço
-        console.log(JSON.stringify(response))
         this.messages = ['Erro durante execução do serviço!']
         this.haveMessage = true
         this.messageColor = 'error'
       })
     },
     clearForm () { this.$refs.form.reset() }
+  },
+  props: {
+    item: {
+      type: Object,
+      default () {
+        return {}
+      }
+    }
   }
 }
 </script>

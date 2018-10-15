@@ -3,8 +3,6 @@ package br.com.les.backend.strategy.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import br.com.les.backend.entity.DomainEntity;
-import br.com.les.backend.entity.Login;
 import br.com.les.backend.entity.User;
 import br.com.les.backend.service.UserService;
 import br.com.les.backend.strategy.IApplicationStrategy;
@@ -12,7 +10,7 @@ import br.com.les.backend.utils.EmailServiceImpl;
 import br.com.les.backend.utils.Result;
 
 @Component
-public class SearchUserStrategy<T extends DomainEntity> implements IApplicationStrategy<T> {
+public class SearchUserStrategy implements IApplicationStrategy<User> {
 
 	@Autowired
 	UserService userService;
@@ -21,20 +19,15 @@ public class SearchUserStrategy<T extends DomainEntity> implements IApplicationS
 	EmailServiceImpl emailService;
 	
 	@Override
-	public Result<T> execute( DomainEntity entity, String callerMethod ) {
+	public Result<User> execute( User user, String callerMethod ) {
 		
-		Result<T> result = new Result<>();
+		Result<User> result = new Result<>();
 		
-		User u = ( User ) entity;
-		
-		if ( u != null ) {
-
-			Login l = u.getLogin();
 			
 			switch ( callerMethod ) {
 			
 				case "SentChangePasswordEmail":					
-					if ( u.getEmail() == null || u.getEmail().isEmpty() ) {
+					if ( user.getEmail() == null || user.getEmail().isEmpty() ) {
 						result.setError( "Informe um e-mail válido!" );
 					} else {
 //						List<User> list = userService.findByParameters(entity);
@@ -64,7 +57,6 @@ public class SearchUserStrategy<T extends DomainEntity> implements IApplicationS
 				default:
 		        break;
 			}
-		}
 		return result;
 	}
 }
