@@ -11,114 +11,8 @@
 				<v-toolbar-title>{{ today }}</v-toolbar-title>
 			</v-toolbar>
       <v-layout>
-      <!-- Row 1 -->
         <v-flex center >
-          <v-data-table :headers="headers"
-                    :items="appointments"
-                    item-key="id"
-                    hide-actions
-                    class="elevation-10 form-container" >
-            <template slot="items" slot-scope="props">
-              <tr>
-                <td class="text-xs-center" >{{ props.item.morningEntrance || empty }} 
-                  <v-dialog v-model="headers[0].dialog" max-width="300px" max-height="300px">
-                    <v-icon small
-                      slot="activator"
-                      :key="props.item.index"
-                      light>
-                      edit
-                    </v-icon>
-                    <AppointDialog :value="props.item.morningEntrance || empty"
-                      type="Entrada Manhã" @editAppoint="editAppointment($event, 0)"></AppointDialog>
-                  </v-dialog>
-                </td>
-                <td class="text-xs-center" >{{ props.item.morningOut || empty }}
-                  <v-dialog v-model="headers[1].dialog" max-width="300px" max-height="300px">
-                    <v-icon small
-                      slot="activator"
-                      :key="props.item.index"
-                      light>
-                      edit
-                    </v-icon>
-                    <AppointDialog :value="props.item.morningOut || empty"
-                      type="Saída Manhã" @editAppoint="editAppointment($event, 1)"></AppointDialog>
-                  </v-dialog>
-                </td>
-                <td class="text-xs-center" >{{ props.item.afternoonEntrance || empty }}
-                  <v-dialog v-model="headers[2].dialog" max-width="300px" max-height="300px">
-                    <v-icon small
-                      slot="activator"
-                      :key="props.item.index"
-                      light>
-                      edit
-                    </v-icon>
-                    <AppointDialog :value="props.item.afternoonEntrance || empty"
-                      type="Entrada Tarde" @editAppoint="editAppointment($event, 2)"></AppointDialog>
-                  </v-dialog>
-                </td>
-                <td class="text-xs-center" >{{ props.item.afternoonOut || empty }}
-                  <v-dialog v-model="headers[3].dialog" max-width="300px" max-height="300px">
-                    <v-icon small
-                      slot="activator"
-                      :key="props.item.index"
-                      light>
-                      edit
-                    </v-icon>
-                    <AppointDialog :value="props.item.afternoonOut || empty"
-                      type="Saída Tarde" @editAppoint="editAppointment($event, 3)"></AppointDialog>
-                  </v-dialog>
-                </td>
-                <td class="text-xs-center" >{{ props.item.nightEntrance || empty }}
-                  <v-dialog v-model="headers[4].dialog" max-width="300px" max-height="300px">
-                    <v-icon small
-                      slot="activator"
-                      :key="props.item.index"
-                      light>
-                      edit
-                    </v-icon>
-                    <AppointDialog :value="props.item.nightEntrance || empty"
-                      type="Entrada Noite" @editAppoint="editAppointment($event, 4)"></AppointDialog>
-                  </v-dialog>
-                </td>
-                <td class="text-xs-center" >{{ props.item.nightOut || empty }}
-                  <v-dialog v-model="headers[5].dialog" max-width="300px" max-height="300px">
-                    <v-icon small
-                      slot="activator"
-                      :key="props.item.index"
-                      light>
-                      edit
-                    </v-icon>
-                    <AppointDialog :value="props.item.nightOut || empty"
-                      type="Saída Noite" @editAppoint="editAppointment($event, 5)"></AppointDialog>
-                  </v-dialog>
-                </td>
-                <td class="text-xs-center" >{{ props.item.particularExit || empty }}
-                  <v-dialog v-model="headers[6].dialog" max-width="300px" max-height="300px">
-                    <v-icon small
-                      slot="activator"
-                      :key="props.item.index"
-                      light>
-                      edit
-                    </v-icon>
-                    <AppointDialog :value="props.item.particularExit || empty"
-                      type="Saída Partícular" @editAppoint="editAppointment($event, 6)"></AppointDialog>
-                  </v-dialog>
-                </td>
-                <td class="text-xs-center" >{{ props.item.particularExitReturn || empty }}
-                  <v-dialog v-model="headers[7].dialog" max-width="300px" max-height="300px">
-                    <v-icon small
-                      slot="activator"
-                      :key="props.item.index"
-                      light>
-                      edit
-                    </v-icon>
-                    <AppointDialog :value="props.item.particularExitReturn || empty"
-                      type="Retorno" @editAppoint="editAppointment($event, 7)"></AppointDialog>
-                  </v-dialog>
-                </td>
-              </tr>
-            </template>
-          </v-data-table>
+          <AppointTable :appointments="appointments" @register="takeAppointment($event)"></AppointTable>
           <v-flex class="text-xs-center">
             <v-card class="elevation-10">       
 							<v-flex>
@@ -139,6 +33,7 @@
 <script>
 import AppointButton from '@/components/shared/AppointButton.vue'
 import AppointDialog from '@/components/shared/AppointDialog.vue'
+import AppointTable from '@/components/shared/AppointTable.vue'
 
 export default {
   data: () => ({
@@ -173,7 +68,8 @@ export default {
   }),
   components: {
     AppointButton,
-    AppointDialog
+    AppointDialog,
+    AppointTable
   },
   computed: {
   },
@@ -183,11 +79,10 @@ export default {
     this.callApi()
   },
   methods: {
-    editAppointment (value, index) {
-      if (value !== false) {
-        this.mountAppointment(this.headers[index].text, value)
-      }
-      this.headers[index].dialog = false
+    takeAppointment (appointment) {
+      this.appointment = appointment
+      this.registerAppointments()
+      this.verifyButtons()
     },
     appoint (button) {
       let date = new Date()
