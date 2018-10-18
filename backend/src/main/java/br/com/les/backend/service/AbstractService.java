@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.les.backend.dao.GenericDAO;
 import br.com.les.backend.entity.DomainEntity;
-import br.com.les.backend.entity.User;
 
 public abstract class AbstractService<T extends DomainEntity> implements IService<T> {
 
@@ -56,9 +55,4 @@ public abstract class AbstractService<T extends DomainEntity> implements IServic
 	public T findById(Long id, Class<? extends T> clazz) {
 		return genericDAO.findById(id, clazz);
 	}
-
-	public T findByEmailAndPassword(String password, String email, Class<? extends User> clazz) {
-		return genericDAO.findByEmailAndPassword(password, email, clazz);
-	}
-
 }

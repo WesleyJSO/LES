@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 public class User extends DomainEntity {
 
 	private String email;
+	private String password;
 	private String name;
 	private String lastName;
 	
@@ -79,9 +80,17 @@ public class User extends DomainEntity {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-	
+
 	public String getName() {
 		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getPassword() {
+		return password;
 	}
 
 	public void setPassword(String password) {

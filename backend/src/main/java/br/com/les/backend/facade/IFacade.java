@@ -20,6 +20,4 @@ public interface IFacade<T extends DomainEntity> {
     Result<T> find( T entity, String callerMethod );
 
 	Result<T> findById(Long id, Class<? extends T> clazz);
-
-	Result<T> findByEmailAndPassword(String password, String email, Class<? extends User> clazz);
 }

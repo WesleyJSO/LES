@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.DomainEntity;
 import br.com.les.backend.repository.GenericRepository;
+
 @Component
 public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 	
@@ -34,12 +35,10 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 	protected Map<String, GenericRepository<T>> repositoryMap;
 	
 	protected GenericRepository<T> repository;
-
-	protected UserRepository userRepository;
 	
-	private GenericRepository<T> findRepository(T clazz) {
+	private GenericRepository<T> getRepository(T clazz) { // testar
 		repositoryMap.forEach((k, v) -> {
-			if(k.toLowerCase().contains(clazz.getClass().getSimpleName().toLowerCase()))
+			if(k.substring(0, clazz.getClass().getSimpleName().length()).equals(clazz.getClass().getSimpleName()))
 				repository = v;
 		});
 		return repository;
@@ -47,7 +46,7 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 	
 	@Override
 	public T save(T entity) {
-		return findRepository(entity).save(entity);
+		return getRepository(entity).save(entity);
 	}
 	
 	@Override
@@ -57,23 +56,23 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 
 	@Override
 	public List<T> findAll(T entity) {
-		return findRepository(entity).findAll();
+		return getRepository(entity).findAll();
 	}
 	
 	public List<T> findByActive(T entity) {
-		return findRepository(entity).findByActive();
+		return getRepository(entity).findByActive();
 	}
 
 	public List<T> findByInactive(T entity) {
-		return findRepository(entity).findByInactive();
+		return getRepository(entity).findByInactive();
 	}
 	
 	public boolean setActiveById(T entity) {
-		return findRepository(entity).setActiveById(entity.getId());
+		return getRepository(entity).setActiveById(entity.getId());
 	}
 	
 	public boolean setInactiveById(T entity) {
-		return findRepository(entity).setInactiveById(entity.getId());
+		return getRepository(entity).setInactiveById(entity.getId());
 	}
 	
 	@Override
