@@ -18,13 +18,13 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Component
 @Entity
-public class User extends Person {
-
-	private static final long serialVersionUID = -2053120971761794871L;
+public class User extends DomainEntity {
 
 	@Embedded
 	private Login login;
 	private String email;
+	private String name;
+	private String lastName;
 	
 	@ManyToMany(cascade=CascadeType.ALL)
     @JoinTable(
@@ -88,5 +88,21 @@ public class User extends Person {
 
 	public void setTelephoneList(List< Telephone > telephoneList) {
 		this.telephoneList = telephoneList;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+	
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

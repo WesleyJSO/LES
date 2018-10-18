@@ -1,6 +1,6 @@
 package br.com.les.backend.entity;
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,17 +25,18 @@ public abstract class DomainEntity {
 	@GeneratedValue( strategy=GenerationType.SEQUENCE )
 	@SequenceGenerator( allocationSize=0, name = "idGenerator" )
 	private Long id;
-	private boolean active;
+	private Boolean active;
+	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
-	private Calendar creationDate;
+	private LocalDateTime creationDate;
 
-	public Calendar getCreationDate() {
+	public LocalDateTime getCreationDate() {
 		return creationDate;
 	}
 
 	@PrePersist
 	public void setCreationDate() {
-		this.creationDate = Calendar.getInstance();
+		this.creationDate = LocalDateTime.now();
 	}
 
 	public Long getId() {
@@ -46,11 +47,11 @@ public abstract class DomainEntity {
 		this.id = id;
 	}
 
-	public boolean getActive() {
+	public Boolean getActive() {
 		return active;
 	}
 
-	public void setActive(boolean active) {
+	public void setActive(Boolean active) {
 		this.active = active;
 	}
 }
