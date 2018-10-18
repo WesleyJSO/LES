@@ -17,7 +17,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.DomainEntity;
@@ -32,13 +31,23 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 	private EntityManager em;
 
 	@Autowired
-	@Qualifier("genericRepository")
-	private GenericRepository<T> repository;
+	protected Map<String, GenericRepository<T>> repositoryMap;
 	
+	protected GenericRepository<T> repository;
+
+	protected UserRepository userRepository;
+	
+	private GenericRepository<T> findRepository(T clazz) {
+		repositoryMap.forEach((k, v) -> {
+			if(k.toLowerCase().contains(clazz.getClass().getSimpleName().toLowerCase()))
+				repository = v;
+		});
+		return repository;
+	}
 	
 	@Override
 	public T save(T entity) {
-		return repository.save(entity);
+		return findRepository(entity).save(entity);
 	}
 	
 	@Override
@@ -47,24 +56,24 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 	}
 
 	@Override
-	public List<T> findAll() {
-		return repository.findAll();
+	public List<T> findAll(T entity) {
+		return findRepository(entity).findAll();
 	}
 	
-	public List<T> findByActive() {
-		return repository.findByActive();
+	public List<T> findByActive(T entity) {
+		return findRepository(entity).findByActive();
 	}
 
-	public List<T> findByInactive() {
-		return repository.findByInactive();
+	public List<T> findByInactive(T entity) {
+		return findRepository(entity).findByInactive();
 	}
 	
 	public boolean setActiveById(T entity) {
-		return repository.setActiveById(entity.getId());
+		return findRepository(entity).setActiveById(entity.getId());
 	}
 	
 	public boolean setInactiveById(T entity) {
-		return repository.setInactiveById(entity.getId());
+		return findRepository(entity).setInactiveById(entity.getId());
 	}
 	
 	@Override

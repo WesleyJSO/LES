@@ -26,7 +26,7 @@ public class SaveCompanyStrategy implements IApplicationStrategy<Company> {
 		switch ( callerMethod ) {
 		case "Save":
 			c.setActive( true );
-			List<Company> companyList = service.findByInactive();
+			List<Company> companyList = service.findByInactive(entity);
 			
 			boolean isInvalid = false;
 			for (Company company : companyList) {

@@ -3,12 +3,14 @@ package br.com.les.backend.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import br.com.les.backend.entity.DomainEntity;
 
 public interface GenericRepository<T extends DomainEntity> extends JpaRepository <T, Long> {
 	
+	@Modifying
 	@Query("select t from #{#entityName} t where t.active = true")
 	List<T> findByActive();
 	
@@ -20,6 +22,7 @@ public interface GenericRepository<T extends DomainEntity> extends JpaRepository
 
 	@Query("update #{#entityName} t set t.active = false where id = ?2")
 	boolean setInactiveById(Long id);
+
 
 	
 }

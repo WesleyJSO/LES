@@ -3,7 +3,6 @@ package br.com.les.backend.entity;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -20,17 +19,15 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Entity
 public class User extends DomainEntity {
 
-	@Embedded
-	private Login login;
 	private String email;
 	private String name;
 	private String lastName;
 	
 	@ManyToMany(cascade=CascadeType.ALL)
     @JoinTable(
-    	name="user_role", 
-        joinColumns={@JoinColumn(name="user_id")}, 
-        inverseJoinColumns={@JoinColumn(name="role_id")}
+    	name="USER_ROLE", 
+        joinColumns={@JoinColumn(name="USER_ID")}, 
+        inverseJoinColumns={@JoinColumn(name="ROLE_ID")}
     )
 	private List< Role > roleList;
 	
@@ -43,13 +40,6 @@ public class User extends DomainEntity {
 	private List< Telephone > telephoneList;
 
 	
-	// constructors
-	public User () {}
-
-	public User(Long userId ) {
-		this.setId( userId );
-	}
-
 	public String getEmail() {
 		return email;
 	}
@@ -57,15 +47,7 @@ public class User extends DomainEntity {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
-	public Login getLogin() {
-		return login;
-	}
-
-	public void setLogin(Login login) {
-		this.login = login;
-	}
-
+	
 	public List<Role> getRoleList() {
 		return roleList;
 	}
@@ -102,7 +84,7 @@ public class User extends DomainEntity {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }

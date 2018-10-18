@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.les.backend.dao.GenericDAO;
 import br.com.les.backend.entity.DomainEntity;
+import br.com.les.backend.entity.User;
 
 public abstract class AbstractService<T extends DomainEntity> implements IService<T> {
 
@@ -22,18 +23,18 @@ public abstract class AbstractService<T extends DomainEntity> implements IServic
 	}
 	
 	@Override
-	public List<T> findAll() {
-		return genericDAO.findAll();
+	public List<T> findAll(T entity) {
+		return genericDAO.findAll(entity);
 	}	
 
 	@Override
-	public List<T> findByActive() {
-		return genericDAO.findByActive();
+	public List<T> findByActive(T entity) {
+		return genericDAO.findByActive(entity);
 	}
 	
 	@Override
-	public List<T> findByInactive() {
-		return genericDAO.findByInactive();
+	public List<T> findByInactive(T entity) {
+		return genericDAO.findByInactive(entity);
 	}
 
 	@Override
@@ -54,6 +55,10 @@ public abstract class AbstractService<T extends DomainEntity> implements IServic
 	@Override
 	public T findById(Long id, Class<? extends T> clazz) {
 		return genericDAO.findById(id, clazz);
+	}
+
+	public T findByEmailAndPassword(String password, String email, Class<? extends User> clazz) {
+		return genericDAO.findByEmailAndPassword(password, email, clazz);
 	}
 
 }
