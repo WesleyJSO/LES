@@ -1,10 +1,6 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer
-        v-model="drawer"
-        :clipped="clipped"
-        fixed
-        app >
+    <v-navigation-drawer v-model="drawer" fixed clipped   app >
       <v-list dense>
         <v-list-tile>
           <v-list-tile-action>
@@ -113,8 +109,9 @@ export default {
   name: 'App'
 }
 </script>
-<style>
-li {
-  list-style: none
-}
+
+<style lang="stylus">
+#keep
+  .v-navigation-drawer__border
+    display: none
 </style>

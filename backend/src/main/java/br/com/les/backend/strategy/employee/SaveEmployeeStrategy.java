@@ -2,7 +2,6 @@ package br.com.les.backend.strategy.employee;
 
 import org.springframework.stereotype.Component;
 
-import br.com.les.backend.entity.DomainEntity;
 import br.com.les.backend.entity.Employee;
 import br.com.les.backend.entity.Telephone;
 import br.com.les.backend.strategy.IApplicationStrategy;
@@ -13,16 +12,11 @@ import br.com.les.backend.utils.Util;
 public class SaveEmployeeStrategy implements IApplicationStrategy<Employee> {
 
 	@Override
-	public Result<Employee> execute(Employee entity, String callerMethod ) {
+	public Result<Employee> execute(Employee employee, String callerMethod ) {
 		
 		Result<Employee> result = new Result<>();
-		
 		switch ( callerMethod ) {
-		
 		case "Save":
-			
-			Employee employee = ( Employee ) entity;
-			
 			if( employee.getName() == null || employee.getName().isEmpty() )
 				result.setError( Util.ERROR_NAME );
 			
@@ -32,16 +26,13 @@ public class SaveEmployeeStrategy implements IApplicationStrategy<Employee> {
 			if( employee.getEmail() == null || employee.getEmail().isEmpty() )
 				result.setError( Util.ERROR_EMAIL );
 			
-			/*if( funcionario.getListaRole().isEmpty() )
-				resultado.setError( "Ao menos uma role deve ser selecionada!" ); 
-			*/
 			if( employee.getBaseHourCalculation().getSalary() == 0 )
 				result.setError(Util.ERROR_SALARY );
 			
 			if( employee.getPis() == null || employee.getPis().isEmpty() )
 				result.setError( Util.ERROR_PIS );
 			else
-				if( employee.getPis().length() < 11 )
+				if( employee.getPis().length() != 11 )
 					result.setError( Util.INVALID_PIS);
 				
 			
@@ -60,7 +51,9 @@ public class SaveEmployeeStrategy implements IApplicationStrategy<Employee> {
 				employee.getTelephoneList().forEach(Employee -> Employee.setUser(employee));
 				
 				for( Telephone telephone : employee.getTelephoneList() )
-					if( telephone.getNumber().length() != 0 && telephone.getNumber().length() != 8 && telephone.getNumber().length() != 9 ) {
+					if( telephone.getNumber().length() != 0 
+						&& telephone.getNumber().length() != 8 
+						&& telephone.getNumber().length() != 9 ) {
 						result.setError( Util.INVALID_PHONE.concat( telephone.toString() ) );
 						break;
 					}
@@ -70,7 +63,7 @@ public class SaveEmployeeStrategy implements IApplicationStrategy<Employee> {
 					result.setError( Util.ERROR_JOINING_DATE );
 			}
 			
-			if( employee.getLogin().getPassword() == null || employee.getLogin().getPassword().isEmpty() )
+			if( employee.getPassword() == null || employee.getPassword().isEmpty() )
 				result.setError( Util.INVALID_PASSWORD );
 			
 			if( result.isSuccess() )

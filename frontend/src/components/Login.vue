@@ -18,26 +18,31 @@
         <v-form ref="form" v-model="valid">
 
           <v-card-text>
-            <v-text-field
+            <v-text-field id="email"
                 prepend-icon="person"
-                v-model="email"
-                :rules="$v_user.emailRules(email)"
+                v-model="user.email"
+                :rules="$v_user.emailRules(user.email)"
                 label="E-mail"
                 required />
-            <v-text-field
+            <v-text-field id="password"
                 prepend-icon="lock"
-                v-model="password"
-                :rules="$v_user.passwordRules(password)"
+                v-model="user.password"
+                :rules="$v_user.passwordRules(user.password)"
                 label="Senha"
                 type="password"
                 required />
           </v-card-text>
 
           <v-card-actions>
-            <v-btn id="sendEmail" color="blue"
-              depressed flat @click="sendForgotPasswordEmail()">Esqueci a senha</v-btn>
+            <v-btn id="sendEmail"
+              color="blue"
+              depressed flat
+              @click="sendForgotPasswordEmail()">Esqueci a senha</v-btn>
             <v-spacer />
-            <v-btn color="info" type="submit">Login</v-btn>
+            <v-btn id="submit"
+              color="info"
+              :disabled="!valid"
+              @click="submit">Login</v-btn>
           </v-card-actions>
 
         </v-form>
@@ -49,11 +54,8 @@
 <script>
 export default {
   data: () => ({
-    login: [],
-    user: [],
+    user: {},
     valid: false,
-    email: '',
-    password: '',
     haveMessage: false,
     messages: [],
     msgColor: ''
@@ -63,12 +65,12 @@ export default {
       this.messages = []
       this.haveMessage = false
       if (this.validateEmail()) {
-        this.$_axios.get(`${this.$_url}UsuarioEmail`, {params: {email: this.email}}).then(response => {
+        this.$_axios.patch(`${this.$_url}user`, {params: {email: this.user.email}}).then(response => {
           let result = response.data
           if (result.resultList.length !== 0) {
             this.haveMessage = true
             this.msgColor = 'info'
-            this.messages = [`Nova senha de acesso enviada para o e-mail ${this.email}!`]
+            this.messages = [`Nova senha de acesso enviada para o e-mail ${this.user.email}!`]
           } else {
             this.haveMessage = true
             this.msgColor = 'warning'
@@ -94,33 +96,39 @@ export default {
     submit () {
       this.messages = []
       this.haveMessage = false
-      let user = { email: this.email, login: { password: this.password } }
-      this.$_axios.post(`${this.$_url}UsuarioLogin`, user).then((response) => {
-        let result = response.data
-        if (result.resultList.length !== 0) {
-          this.user = response.data
+      this.$_axios.patch(`${this.$_url}user/`, {params: {password: this.user.password, email: this.user.email}})
+        .then((response) => {
+          let result = response.data
+          if (result.resultList.length === 0) {
+            this.$_axios.patch(`${this.$_url}employee/`, {params: {password: this.user.password, email: this.user.email}})
+              .then(response => {
+                result = response.data
+              })
+          } else if (result.resultList.length !== 0) {
+            this.user = response.data
+            this.haveMessage = true
+            this.msgColor = 'info'
+            this.messages = [`Bem vindo ${this.user.email}.`]
+            this.$emit('login', this.user)
+          } else if (result.mensagem) {
+            this.haveMessage = true
+            this.msgColor = 'warning'
+            this.messages = [...result.mensagem]
+          } else {
+            this.haveMessage = true
+            this.msgColor = 'warning'
+            this.messages = [`Usuário ${this.user.email} não encontrado!`]
+            this.msgColor = 'info'
+            this.messages = [`Bem vindo ${this.user.email}.`]
+            this.$emit('emittedUser', this.user)
+          }
+        })
+        .catch(error => {
+          console.log(error)
+          this.messages = ['Erro durante execução do serviço!']
           this.haveMessage = true
-          this.msgColor = 'info'
-          this.messages = [`Bem vindo ${this.user.login.nomeLgin}.`]
-          this.$emit('login', this.user.login)
-        } else if (result.mensagem) {
-          this.haveMessage = true
-          this.msgColor = 'warning'
-          this.messages = [...result.mensagem]
-        } else {
-          this.haveMessage = true
-          this.msgColor = 'warning'
-          this.messages = [`Usuário ${user.login.nomeLogin} não encontrado!`]
-          this.msgColor = 'info'
-          this.messages = [`Bem vindo ${this.user.login.nomeLgin}.`]
-          this.$emit('emittedUser', this.user)
-        }
-      }).catch(error => {
-        console.log(error)
-        this.messages = ['Erro durante execução do serviço!']
-        this.haveMessage = true
-        this.messageColor = 'error'
-      })
+          this.messageColor = 'error'
+        })
     }
   }
 }
