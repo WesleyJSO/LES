@@ -24,8 +24,6 @@ public class GenericStrategy<T extends DomainEntity> implements IStrategy<T> {
 				strategyToBeExecuted = v;
 		});
 		
-		Result<T> result = strategyToBeExecuted.execute(entity, callerMethod);
-		strategyToBeExecuted = null;
-		return result;
+		return strategyToBeExecuted.execute(entity, callerMethod);
 	}
 }

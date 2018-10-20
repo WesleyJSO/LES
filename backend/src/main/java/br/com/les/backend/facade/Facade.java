@@ -72,7 +72,8 @@ public class Facade<T extends DomainEntity> implements IFacade<T> {
     public Result<T> findAll(T clazz, String callerMethod ) {
     		
     	validate( clazz, Actions.SEARCH.getValue(), callerMethod );
-    	result.setResultList(service.findByActive());
+    	//result.setResultList(service.findByActive());
+    	result.setResultList(service.findByParameters(clazz));
     	return result;
     }
 

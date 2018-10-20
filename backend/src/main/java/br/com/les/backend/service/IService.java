@@ -6,21 +6,23 @@ import br.com.les.backend.entity.DomainEntity;
 
 public interface IService<T extends DomainEntity> {
 
-	public T save(T entity);
+	T save(T entity);
 	
-	public T update(T entity);
+	T update(T entity);
 	
-	public List<T> findByActive();
-	
-	public List<T> findByInactive();
-	
-	public boolean setActiveById(T entity);
-	
-	public boolean setInactiveById(T entity);
-	
-	public List<T> findByParameters(T entity);
+	List<T> findByActive(T entity);
 
-	List<T> findAll();
+	List<T> findByInactive(T entity);
+	
+	boolean setActiveById(T entity);
+	
+	boolean setInactiveById(T entity);
+	
+	List<T> findByParameters(T entity);
+
+	List<T> findAll(T entity);
 	
 	T findById(Long id, Class<? extends T> clazz);
+
+
 }

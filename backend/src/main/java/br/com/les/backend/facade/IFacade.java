@@ -1,6 +1,7 @@
 package br.com.les.backend.facade;
 
 import br.com.les.backend.entity.DomainEntity;
+import br.com.les.backend.entity.User;
 import br.com.les.backend.utils.Result;
 
 

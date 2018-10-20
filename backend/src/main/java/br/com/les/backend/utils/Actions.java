@@ -8,10 +8,9 @@ public enum Actions {
     SEARCH("Search"),
 	FIND_ALL("FindAll"),
 	SAVE_UPDATE("SaveUpdate"),
-	FIND_BY_USER("FindByUser"),
-	FIND_BY_LOGIN("FindByLogin"),
+	FIND_BY_EMAIL_AND_PASSWORD("findByEmailAndPassword"),
 	FIND_BY_ID("FindById"),
-	SENT_PASSWORD("SentChangePasswordEmail");
+	NEW_PASSWORD("NewPassword");
 	
 	
 	private String value;
