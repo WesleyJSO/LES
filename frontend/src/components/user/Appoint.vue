@@ -7,8 +7,12 @@
 								transition="scale-transition" />
 			</li>
     <v-form>
-			<v-toolbar flat color="white">
-				<v-toolbar-title>{{ today }}</v-toolbar-title>
+			<v-toolbar flat color="white" >
+				<v-toolbar-title>{{ tittle }}</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-flex xs3 sm3 md3 lg3 xl3 class="text-xs-right">
+          <v-text-field value="Carga Horária: 08:00" :readonly="true"></v-text-field>
+        </v-flex>
 			</v-toolbar>
       <v-layout>
         <v-flex center >
@@ -41,7 +45,7 @@ export default {
     haveMessage: false,
     messageColor: '',
     empty: '--:--',
-    today: '',
+    tittle: 'Apontamento Rápido',
     dialog: false,
     buttons: [
       { name: 'Entrada Manhã', disable: false },
@@ -51,16 +55,6 @@ export default {
       { name: 'Entrada Noite', disable: false },
       { name: 'Saída Noite', disable: true },
       { name: 'Saída Partícular', disable: true }
-    ],
-    headers: [
-      { text: 'Entrada Manhã', align: 'center', sortable: false, dialog: false },
-      { text: 'Saída Manhã', align: 'center', sortable: false, dialog: false },
-      { text: 'Entrada Tarde', align: 'center', sortable: false, dialog: false },
-      { text: 'Saída Tarde', align: 'center', sortable: false, dialog: false },
-      { text: 'Entrada Noite', align: 'center', sortable: false, dialog: false },
-      { text: 'Saída Noite', align: 'center', sortable: false, dialog: false },
-      { text: 'Saída Partícular', align: 'center', sortable: false, dialog: false },
-      { text: 'Retorno', align: 'center', sortable: false, dialog: false }
     ],
     appointment: {},
     employee: {id: 1},
@@ -205,7 +199,6 @@ export default {
           // retorno ok /
           this.appointments = result.resultList
           this.appointment = this.appointments[0]
-          this.today = '01 de Outubro de 2018'// this.appointment.date
           this.verifyButtons()
           console.log(JSON.stringify(this.appointments))
         }

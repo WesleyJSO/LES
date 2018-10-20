@@ -64,6 +64,7 @@ public class AppointmentService implements IService {
 		List< DomainEntity > resultList = appointmentRepository.findByDate( today );
 		if ( resultList.isEmpty() ) {
 			Appointment appointment = new Appointment();
+			appointment.setId(1l);
 			appointment.setDate();
 			resultList.add(appointment);
 		}
