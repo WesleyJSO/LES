@@ -41,7 +41,6 @@ Vue.prototype.$_axios = axios
 Vue.prototype.$_url = 'http://localhost:9999/'
 Vue.prototype.$_viaCep = 'https://viacep.com.br/ws/'
 Vue.prototype.$_moment = moment
-
 Vue.prototype.$v_user = new UserValidator()
 Vue.prototype.$v_baseHour = new BaseHourCalculationValidators()
 Vue.prototype.$v_parameters = new ParametersValidators()
@@ -50,6 +49,37 @@ Vue.prototype.$v_company = new CompanyValidators()
 Vue.prototype.$v_address = new AddressValidators()
 Vue.prototype.$v_request = new RequestValidator()
 Vue.prototype.$v_role = new RoleValidators()
+
+// Axios interceptors
+// Request
+axios.interceptors.request.use(
+  (config) => {
+    let token = localStorage.getItem('access_token')
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`
+    }
+    return config
+  },
+  (error) => {
+    return Promise.reject(error)
+  }
+)
+// Response
+axios.interceptors.response.use(function (response) {
+  // Get JWT token from response and save it on localStorage
+  let token = response.headers['authorization']
+  if (token) {
+    localStorage.setItem('access_token', token)
+  }
+  return response
+}, function (error) {
+  if (error.response.status === 401) {
+    alert('Usuário não reconhecido')
+    this.router.push('Login')
+  } else {
+    return Promise.reject(error)
+  }
+})
 
 Vue.filter('dataFormatada', function (value) {
   if (value) {
