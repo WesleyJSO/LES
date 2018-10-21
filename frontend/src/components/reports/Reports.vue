@@ -1,5 +1,5 @@
 <template>
-    <v-app>
+    <div>
         <h1>Gráficos</h1>
     <v-container fluid>
       <v-layout wrap column >
@@ -157,7 +157,7 @@
       </v-layout>
 
   </v-container>
-    </v-app>
+    </div>
 </template>
 
 

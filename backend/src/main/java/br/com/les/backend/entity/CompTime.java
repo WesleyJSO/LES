@@ -11,8 +11,6 @@ import org.springframework.stereotype.Component;
 @Entity
 public class CompTime extends DomainEntity {
 
-	private static final long serialVersionUID = -6687722120215401938L;
-
 	private float balance;
 	private float monthlyHoursLimit;
 	private float dailyHoursLimit;

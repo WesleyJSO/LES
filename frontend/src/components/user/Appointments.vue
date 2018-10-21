@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <div>
     <h1>{{getAppointments.title}}</h1>
     <br/>
     <li v-for="(message, index) in messages" :key="index">
@@ -126,7 +126,7 @@
             </v-fab-transition>
           </v-card-text>
         </v-card>
-  </v-app>
+  </div>
 </template>
 
 <script>

@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <div>
 
     <v-flex xs12 sm8 offset-sm2 pa-5>
       <v-card class="elevation-10">
@@ -48,7 +48,7 @@
         </v-form>
       </v-card>
     </v-flex>
-  </v-app>
+  </div>
 </template>
 
 <script>

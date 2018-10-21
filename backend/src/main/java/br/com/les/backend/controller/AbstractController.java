@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.les.backend.command.ICommand;
@@ -33,23 +34,23 @@ public abstract class AbstractController<T extends DomainEntity> extends BaseCon
 	}
     
 	@GetMapping
-	public @ResponseBody Result<T> findAll(T entity) throws InstantiationException, IllegalAccessException {
+	public @ResponseBody Result<T> findAll() throws InstantiationException, IllegalAccessException {
 		return run(Actions.FIND_ALL.getValue()).execute(clazz.newInstance(), Actions.FIND_ALL.getValue());
 	}
     
     @PostMapping
-    public @ResponseBody Result<T> save(T entity) throws InstantiationException, IllegalAccessException {
-    	return run(Actions.SAVE.getValue()).execute(clazz.newInstance(), Actions.SAVE.getValue());
+    public @ResponseBody Result<T> save(@RequestBody T entity) throws InstantiationException, IllegalAccessException {
+    	return run(Actions.SAVE.getValue()).execute(entity, Actions.SAVE.getValue());
     }
     
     @PutMapping
-    public @ResponseBody Result<T> update(T entity) throws InstantiationException, IllegalAccessException {
-    	return run(Actions.UPDATE.getValue()).execute(clazz.newInstance(), Actions.UPDATE.getValue());
+    public @ResponseBody Result<T> update(@RequestBody T entity) throws InstantiationException, IllegalAccessException {
+    	return run(Actions.UPDATE.getValue()).execute(entity, Actions.UPDATE.getValue());
     }
     
     @PostMapping(value="/{id}")
-	public @ResponseBody Result<T> findById(T entity) throws InstantiationException, IllegalAccessException {
-		return run(Actions.FIND_BY_ID.getValue()).execute(clazz.newInstance(), Actions.FIND_BY_ID.getValue());
+	public @ResponseBody Result<T> findById(@RequestBody T entity) throws InstantiationException, IllegalAccessException {
+		return run(Actions.FIND_BY_ID.getValue()).execute(entity, Actions.FIND_BY_ID.getValue());
 	}
     
     @DeleteMapping( value="/{id}" ) 

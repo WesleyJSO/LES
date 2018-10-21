@@ -1,5 +1,5 @@
 <template id="app">
-    <v-app>
+    <div>
         teste
-    </v-app>
+    </div>
 </template>

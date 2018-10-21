@@ -1,5 +1,5 @@
 <template>
-    <v-app>
+    <div>
     <h1>Realizar Solicitação</h1>
     <li v-for="(message, index) in messages" :key="index">
       <v-alert :color="messageColor"
@@ -108,7 +108,7 @@
     <v-btn type="submit" color="success">Salvar</v-btn>
     <v-btn @click="clearForm" color="error">Cancelar</v-btn>
     </v-form>
-  </v-app>
+  </div>
 </template>
 
 <script>

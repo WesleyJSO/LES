@@ -13,10 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 @Entity
-@Inheritance( strategy=InheritanceType.TABLE_PER_CLASS )
+@Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
 public abstract class Request extends DomainEntity {
-
-	private static final long serialVersionUID = 9026354384897022658L;
 
 	private String description;
 	private boolean agreed;

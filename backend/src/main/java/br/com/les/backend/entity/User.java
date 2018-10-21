@@ -1,6 +1,6 @@
 package br.com.les.backend.entity;
 
-import java.util.List;
+import java.util.List; 
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -9,8 +9,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -24,7 +22,7 @@ public class User extends DomainEntity {
 	private String name;
 	private String lastName;
 	
-	@ManyToMany(cascade=CascadeType.ALL)
+	@ManyToMany(cascade={ CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE })
     @JoinTable(
     	name="USER_ROLE", 
         joinColumns={@JoinColumn(name="USER_ID")}, 
@@ -32,11 +30,7 @@ public class User extends DomainEntity {
     )
 	private List< Role > roleList;
 	
-	@OneToMany( mappedBy="user", cascade=CascadeType.ALL, orphanRemoval=true )
-	@LazyCollection(LazyCollectionOption.FALSE)
-	private List< LogAction > logActionList;
-	
-	@OneToMany( mappedBy="user", cascade=CascadeType.ALL, orphanRemoval=true )
+	@OneToMany(mappedBy="user", cascade=CascadeType.ALL, orphanRemoval=true)
 	@JsonManagedReference
 	private List< Telephone > telephoneList;
 
@@ -55,14 +49,6 @@ public class User extends DomainEntity {
 
 	public void setRoleList(List<Role> roleList) {
 		this.roleList = roleList;
-	}
-
-	public List<LogAction> getLogActionList() {
-		return logActionList;
-	}
-
-	public void setLogActionList(List<LogAction> logActionList) {
-		this.logActionList = logActionList;
 	}
 
 	public List< Telephone > getTelephoneList() {

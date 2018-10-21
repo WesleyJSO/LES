@@ -1,5 +1,5 @@
 <template>
-    <v-app>
+    <div>
     <h1>Dados da Empresa</h1>
     <li v-for="(message, index) in messages" :key="index">
       <v-alert :color="messageColor"
@@ -130,7 +130,7 @@
       <br/><br/><br/><br/>
       <CompanyList @emitCompany="updateCompany($event)" ref="companyList"></CompanyList>
     </v-flex>
-  </v-app>
+  </div>
 </template>
 
 <script>

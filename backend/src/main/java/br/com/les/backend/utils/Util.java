@@ -33,5 +33,7 @@ public class Util {
 	public static final String SAVE_SUCESSFUL_COMPANY = "Empresa salva com sucesso!";
 	public static final String SEARCH_SUCESSFUL_COMPANY = "Consulta realizada com sucesso!";
 	public static final String DELETE_SUCESSFUL_COMPANY = "Consulta excluida com sucesso!";
+	public static final String ERROR_ROLE = "Ao menos uma role deve ser selecionada!";
+	public static final String ERROR_ALREADY_REGISTRED_EMAIL = "E-mail já cadastrado!";
 	
 }

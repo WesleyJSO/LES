@@ -10,9 +10,6 @@ import org.springframework.stereotype.Component;
 @Entity
 public class AbsenceRequest extends Request {
 
-	private static final long serialVersionUID = -5240926882445795466L;
-
-	
 	private Date absenceDate;
 	private Date returnDate;
 	private byte[] attachment;

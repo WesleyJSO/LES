@@ -1,5 +1,5 @@
  <template>
-  <v-app>
+  <div>
     <h1>Últimos Apontamentos</h1>
     <br/>
     <v-spacer></v-spacer>
@@ -102,7 +102,7 @@
         </div>
       </div>
     </section>
-</v-app>
+</div>
  </template>
  <script>
  export default {
@@ -299,7 +299,7 @@ h2 {
   border-radius: 0.25em;
 }
 .no-touch .cd-timeline-content .cd-read-more:hover {
-  background-color: #bac4cb;  
+  background-color: #bac4cb;
 }
 a.cd-read-more:hover{text-decoration:none; background-color: #424242;  }
 .cd-timeline-content .cd-date {

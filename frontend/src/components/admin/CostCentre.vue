@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <div>
       <h1>Gerenciar Centro de Custos</h1>
     <li v-for="(message, index) in messages" :key="index">
       <v-alert :color="messageColor"
@@ -72,8 +72,8 @@
               </v-layout>
             </v-form>
             <v-spacer></v-spacer>
-            <v-btn @click="saveCostCentre()" 
-                   type="submit" 
+            <v-btn @click="saveCostCentre()"
+                   type="submit"
                    color="success"
                    :disabled="!valid">Salvar</v-btn>
             <v-btn @click="close()" color="error">Cancelar</v-btn>
@@ -121,7 +121,7 @@
         </v-fab-transition>
         </v-card-text>
     </v-card>
-  </v-app>
+  </div>
 </template>
 
 <script>

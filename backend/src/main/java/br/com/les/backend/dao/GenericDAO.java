@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -34,14 +35,15 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 	@Autowired
 	protected Map<String, GenericRepository<T>> repositoryMap;
 	
-	protected GenericRepository<T> repository;
-	
-	private GenericRepository<T> getRepository(T clazz) { // testar
-		repositoryMap.forEach((k, v) -> {
-			if(k.substring(0, clazz.getClass().getSimpleName().length()).equals(clazz.getClass().getSimpleName()))
-				repository = v;
-		});
-		return repository;
+	private GenericRepository<T> getRepository(T clazz) {
+		for (Entry<String, GenericRepository<T>> e : repositoryMap.entrySet())
+			if(e.getKey()
+					.substring(0, clazz.getClass().getSimpleName().length())
+					.toLowerCase()
+					.equals(clazz.getClass().getSimpleName().toLowerCase()))
+				return e.getValue();
+		
+		return null;
 	}
 	
 	@Override
@@ -82,8 +84,7 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 	
 	@SuppressWarnings("unchecked")
 	public List<T> findByParameters(T clazz) {
-		clazz.setActive(true);
-		clazz.setId(4l);
+		
 		String sql = "select t from " + clazz.getClass().getSimpleName() + " t where 1=1 ";
 	    
 		List<Method> methodList = getMethodsFromClass(clazz);
@@ -101,7 +102,7 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 			
 		}
 		sql += queryForDate();
-		return (List<T>) em.createQuery(sql).getResultList();
+		return (List<T>) em.createQuery(sql).getResultList(); 
 	}
 
 	private String queryForDate() {
@@ -114,23 +115,29 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 				if(item.getKey().equals(lastKey) && firstDate != null) {
 					days = ChronoUnit.DAYS.between(firstDate, item.getValue());
 					if(days > 0) {
-						sql.concat(" and t." + lastKey + " between '" + firstDate.format(pettern) + "' and '" + item.getValue().format(pettern) + "'");
+						sql += " and t." + lastKey + " between '" + firstDate.format(pettern) + "' and '" + item.getValue().format(pettern) + "'";
 					} else {
-						sql.concat(" and t." + lastKey + " between '" + item.getValue().format(pettern) + "' and '" + firstDate.format(pettern) + "'");
+						sql += " and t." + lastKey + " between '" + item.getValue().format(pettern) + "' and '" + firstDate.format(pettern) + "'";
 					}
 				} else if(!item.getKey().equals(lastKey) && firstDate != null) {
 					days = ChronoUnit.DAYS.between(firstDate, item.getValue());
 					if(days > 0) {
-						sql.concat(" and t." + item.getKey() + " > " + firstDate.format(pettern));
-						sql.concat(" and t." + item.getKey() + " < " + item.getValue().format(pettern));
+						sql += " and t." + item.getKey() + " > " + firstDate.format(pettern);
+						sql += " and t." + item.getKey() + " < " + item.getValue().format(pettern);
 					} else {
-						sql.concat(" and t." + item.getKey() + " > " + item.getValue().format(pettern));
-						sql.concat(" and t." + item.getKey() + " < " + firstDate.format(pettern));
+						sql += " and t." + item.getKey() + " > " + item.getValue().format(pettern);
+						sql += " and t." + item.getKey() + " < " + firstDate.format(pettern);
 					}
 				}
 				firstDate = item.getValue();
 				lastKey = item.getKey();
 			}
+		} else if(dateMap.keySet().size() == 1) {
+			LocalDateTime localDateTime = dateMap.entrySet().iterator().next().getValue();
+			sql += " and t." + dateMap.keySet().iterator().next();
+			sql += " between '" + localDateTime.toLocalDate().atStartOfDay().format(pettern);
+			sql += "' and '" + localDateTime.toLocalDate().atTime(LocalTime.MAX).format(pettern) + "'";
+
 		}
 		return sql;
 	}
@@ -152,7 +159,7 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 
 	private String queryForString(Field f, Method m, T clazz) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		if(m.getReturnType() == String.class) {
-			return " and t." + f.getName() + "='%" + m.invoke(clazz) + "%'";
+			return " and t." + f.getName() + " like '%" + m.invoke(clazz) + "%'";
 		}
 		return "";
 	}

@@ -10,12 +10,9 @@ import org.springframework.stereotype.Component;
 @Entity
 public class ChangeAppointmentRequest extends Request {
 
-	private static final long serialVersionUID = -6495527335471584927L;
-
 	private Date oldDate;
 	private Date newDate;
 
-	
 	public Date getOldDate() {
 		return oldDate;
 	}

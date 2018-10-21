@@ -13,8 +13,6 @@ import org.springframework.stereotype.Component;
 @Entity
 public class Appointments extends DomainEntity {
 
-	private static final long serialVersionUID = -5608859856328862142L;
-
 	private String description;
 	private Date userAppointmentDate;
 	private Date userSystemAccessDate;

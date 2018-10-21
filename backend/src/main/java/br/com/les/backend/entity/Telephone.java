@@ -1,6 +1,6 @@
 package br.com.les.backend.entity;
 
-import javax.persistence.Entity;
+import javax.persistence.Entity; 
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -12,8 +12,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Component
 @Entity
 public class Telephone extends DomainEntity {
-
-	private static final long serialVersionUID = 7779619258535476494L;
 
 	private String type;
 	private String number;

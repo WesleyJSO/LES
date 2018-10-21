@@ -8,10 +8,7 @@ import org.springframework.stereotype.Component;
 @Entity
 public class RequestType extends DomainEntity {
 
-	private static final long serialVersionUID = 7549530991131057672L;
-
 	private String description;
-
 	
 	public String getDescription() {
 		return description;

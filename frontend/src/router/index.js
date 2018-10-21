@@ -35,12 +35,12 @@ export default new Router({
       component: ConsultarListar
     },
     {
-      path: '/AlterarUsuario',
+      path: '/alterar',
       name: 'UpdateUser',
       component: UpdateUser
     },
     {
-      path: '/CadastrarUsuario',
+      path: '/cadastro',
       name: 'RegisterUser',
       component: RegisterUser
     },

@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <div>
     <v-data-table :headers="headers" :items="usuarios" hide-actions class="elevation-10">
       <template slot="items" slot-scope="usuario">
         <td>{{ counter }}</td>
@@ -12,7 +12,7 @@
         <td><v-btn color="warning" @click="excluir">Excluir</v-btn></td>
       </template>
     </v-data-table>
-  </v-app>
+  </div>
 </template>
 
 <script>

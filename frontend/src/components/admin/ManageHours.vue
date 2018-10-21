@@ -1,5 +1,5 @@
 <template>
-    <v-app>
+    <div>
         <v-container fluid>
             <v-flex xs12 sm12>
                 <v-card>
@@ -30,7 +30,7 @@
                 </v-card>
             </v-flex>
         </v-container>
-    </v-app>
+    </div>
 </template>
 <script>
 import AdminService from '@/service/AdminService'

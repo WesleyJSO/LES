@@ -4,8 +4,8 @@
 module.exports = {
   'test': function (browser) {
     browser
-      .url('http://localhost:8081/#/CadastrarUsuario')
-      .waitForElementVisible('body', 5000)
+      .url('http://localhost:8081/#/cadastro')
+      .waitForElementVisible('input[id=name]', 5000)
       .click('div[class=v-input--selection-controls__input]').pause(500)
       .setValue('input[id=name]', 'wesley').pause(500)
       .setValue('input[id=lastName]', 'silva').pause(500)
@@ -17,7 +17,7 @@ module.exports = {
       .setValue('input[id=phoneNumber2]', '987654321').pause(500)
       .click('input[id=supervisor]').pause(500)
       .click('div[class=v-list__tile__title]').pause(500)
-      .click('i[class= material-icons]').pause(500)
+      .click('i[class=material-icons]').pause(500)
       .setValue('input[id=joiningDate]', '2018-01-01').pause(500)
       .setValue('input[id=hourType]', '1').pause(500)
       .setValue('input[id=password]', '123456789').pause(500)
@@ -26,8 +26,8 @@ module.exports = {
       .url('http://localhost:8081/#/Login')
       .waitForElementVisible('body', 5000)
       .setValue('input[id=email]', 'zeller@zeller.com').pause(500)
-      .setValue('inpu[id=password', '123456')
-      .click('button[id=submit]')
+      .setValue('inpu[id=password]', '123456')
+      .click('button[id=submit]').pause(5000)
       // .url('http://localhost:8081/#/CadastrarEmpresa')
       // .waitForElementVisible('body', 5000)
       // .setValue('input[id=socialName]', 'test1')

@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <div>
 
      <v-toolbar class="elevation-10" dark>
       <v-toolbar-title color="white">Lista de empresas cadastradas</v-toolbar-title>
@@ -80,7 +80,7 @@
 
     </v-data-table>
 
-  </v-app>
+  </div>
 </template>
 
 <script>

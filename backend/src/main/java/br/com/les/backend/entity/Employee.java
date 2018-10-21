@@ -21,9 +21,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Component
 @Entity
 public class Employee extends User {
-
-	private static final long serialVersionUID = 7031669546742429620L;
-
 	
 	private String pis;
 	private Date  joiningDate;

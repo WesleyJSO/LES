@@ -1,9 +1,15 @@
 package br.com.les.backend.strategy.user;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import br.com.les.backend.entity.Employee;
 import br.com.les.backend.entity.Telephone;
 import br.com.les.backend.entity.User;
+import br.com.les.backend.service.EmployeeService;
+import br.com.les.backend.service.UserService;
 import br.com.les.backend.strategy.IApplicationStrategy;
 import br.com.les.backend.utils.Result;
 import br.com.les.backend.utils.Util;
@@ -11,67 +17,68 @@ import br.com.les.backend.utils.Util;
 @Component
 public class SaveUserStrategy implements IApplicationStrategy<User> {
 
+	@Autowired private UserService userService;
+	@Autowired private EmployeeService employeeService;
+	
+	
 	@Override
 	public Result<User> execute(User user, String callerMethod ) {
 		
 		Result<User> result = new Result<>();
 		
-		switch ( callerMethod ) {
+		if( user.getName() == null || user.getName().isEmpty() )
+			result.setError( Util.ERROR_NAME );
 		
-		case "Save":
+		if( user.getLastName() == null || user.getLastName().isEmpty() )
+			result.setError( Util.ERROR_LAST_NAME );
+		
+		if( user.getRoleList() == null || user.getRoleList().isEmpty() )
+			result.setError(Util.ERROR_ROLE); 
+		
+		if(user.getTelephoneList() == null || user.getTelephoneList().isEmpty())
+			result.setError(Util.ERROR_PHONE);
+		else
+			result = validatePhoneNumbers(result, user.getTelephoneList());
 			
-			if( user.getName() == null || user.getName().isEmpty() )
-				result.setError( Util.ERROR_NAME );
-			
-			if( user.getLastName() == null || user.getLastName().isEmpty() )
-				result.setError( Util.ERROR_LAST_NAME );
-			
-			if( user.getEmail() == null || user.getEmail().isEmpty() )
-				result.setError( Util.ERROR_EMAIL );
-			
-			/*if( funcionario.getListaRole().isEmpty() )
-				resultado.setError( "Ao menos uma role deve ser selecionada!" ); 
-			*/
-			/*if( user.getBaseHourCalculation() == null )
-				result.setError( Util.ERROR_SALARY );
-			
-			if( user.getPis() == null || user.getPis().isEmpty() )
-				result.setError( Util.ERROR_PIS);
-			else
-				if( user.getPis().length() < 11 )
-					result.setError( Util.INVALID_PIS );
-				
-			
-			if( user.getBaseHourCalculation().getWorkload() == 0D )
-				result.setError( Util.ERROR_WORKLOAD );
-			
-			if( user.getManager().getName().equals("") )
-				result.setError( Util.ERROR_MANAGER_NAME );*/
-			
-			if( user.getTelephoneList().isEmpty() )
-				result.setError( Util.ERROR_PHONE );
-			else {
-				
-				for( Telephone telephone: user.getTelephoneList() )
-					if( telephone.getNumber().length() < 9 ) {
-						result.setError( Util.INVALID_PHONE );
-						break;
-					}
-				
-			}
-			/*if( user.getJoiningDate() == null || user.getJoiningDate().toString().isEmpty() )
-				result.setError( Util.ERROR_JOINING_DATE );*/
-			
-			if( user.getPassword() == null || user.getPassword().isEmpty() )
-				result.setError( Util.ERROR_PASSWORD );
-			
-			if( result.isSuccess() )
-				result.setSuccess( Util.SAVE_SUCCESSFUL_USER );
-			
-			break;
-		}
+		if( user.getEmail() == null || user.getEmail().isEmpty() )
+			result.setError( Util.ERROR_EMAIL );
+		else
+			result = verifyIfEmailIsAlreadyUsed(result, user);
+		
+		if( user.getPassword() == null || user.getPassword().isEmpty() )
+			result.setError( Util.ERROR_PASSWORD );
+		
+		if( result.isSuccess() )
+			result.setSuccess( Util.SAVE_SUCCESSFUL_USER );
 		
 		return result;
+	}
 
+	private Result<User> validatePhoneNumbers(Result<User> result, List<Telephone> telephoneList) {
+		for (int i = telephoneList.size() - 1; i >= 0; i--)
+			if(telephoneList.get(i).getNumber() == null || telephoneList.get(i).getNumber() == "")
+				telephoneList.remove(i);
+			else if(telephoneList.get(i).getNumber().length() != 8 
+					&& telephoneList.get(i).getNumber().length() != 9) 
+				result.setError(Util.INVALID_PHONE.concat(telephoneList.get(i).getNumber()));		
+		return result;
+	}
+
+	private Result<User> verifyIfEmailIsAlreadyUsed(Result<User> result, User user) {
+		List<User> searchUserResult = null; 
+		User u = new User();
+		u.setEmail(user.getEmail());
+		searchUserResult = userService.findByParameters(u);
+		if(!searchUserResult.isEmpty())
+			result.setError(Util.ERROR_ALREADY_REGISTRED_EMAIL);
+		else {
+			List<Employee> searchEmployeeResult = null;
+			Employee e = new Employee();
+			e.setEmail(user.getEmail());
+			searchEmployeeResult = employeeService.findByParameters(e);
+			if(!searchEmployeeResult.isEmpty())
+				result.setError(Util.ERROR_ALREADY_REGISTRED_EMAIL);
+		}
+		return result;
 	}
 }
