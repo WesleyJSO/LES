@@ -10,7 +10,7 @@ import br.com.les.backend.utils.Result;
 public class UpdateUserStrategy<T extends DomainEntity> implements IApplicationStrategy<T> {
 
 	@Override
-	public Result<T> execute(DomainEntity entity, String callerMethod ) {
+	public Result<T> execute(DomainEntity entity) {
 
 		return new Result<T>();
 	}

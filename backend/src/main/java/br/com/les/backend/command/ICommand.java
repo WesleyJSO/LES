@@ -6,6 +6,6 @@ import br.com.les.backend.utils.Result;
 
 public interface ICommand<T extends DomainEntity> {
 	
-	public Result<T> execute (T entity, String callerMethod);
+	public Result<T> execute (T entity);
 	
 }

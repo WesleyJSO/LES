@@ -196,12 +196,12 @@
         </v-flex>
         <v-flex>
           <v-text-field id="passwordValidator"
-              v-model="employee.passwordValidator"
+              v-model="passwordValidator"
               color="cyan darken"
               label="Senha de Confirmação"
               type="password"
               prepend-icon="fingerprint"
-              :rules="$v_user.passwordValidationRules(employee.password, employee.passwordValidator)"
+              :rules="$v_user.passwordValidationRules(employee.password, passwordValidator)"
               placeholder="Confirme a Senha do Colaborador"
               loading >
             <v-progress-linear
@@ -238,12 +238,12 @@ export default {
     dateFormatted: null,
     select: '',
     selectedType: '',
+    passwordValidator: '',
     employee: {
       joiningDate: null,
       password: '',
-      passwordValidator: '',
-      baseHourCalculation: {},
-      manager: {},
+      baseHourCalculation: [],
+      manager: [],
       roleList: [],
       telephoneList: [ {type: '', number: ''}, {type: '', number: ''}, {type: '', number: ''} ]
     },
@@ -258,13 +258,13 @@ export default {
     roleList: null
   }),
   beforeMount () {
-    this.$_axios.get(`${this.$_url}role`)
+    this.$_axios.patch(`${this.$_url}role`, {active: true})
       .then(response => {
         this.roleList = response.data.resultList
         for (let role of this.roleList) {
           role.active = false
         }
-        this.$_axios.get(`${this.$_url}user`)
+        this.$_axios.patch(`${this.$_url}user`, {active: true})
           .then(response => {
             this.managerList = response.data.resultList
           })
@@ -289,7 +289,7 @@ export default {
   },
   methods: {
     progress () { return Math.min(100, this.employee.password.length * 10) },
-    progressValidation () { return Math.min(100, this.employee.passwordValidator.length * 10) },
+    progressValidation () { return Math.min(100, this.passwordValidator.length * 10) },
     formatDate (date) {
       if (!date) return null
       const [year, month, day] = date.split('-')
@@ -312,9 +312,9 @@ export default {
       } else if (item.active === false && item.roleName === 'Gestor') {
         this.isManager = false
       }
-      if (item.active === true && item.roleName === 'Usuário') {
+      if (item.active === true && item.roleName === 'Colaborador') {
         this.isEmployee = true
-      } else if (item.active === false && item.roleName === 'Usuário') {
+      } else if (item.active === false && item.roleName === 'Colaborador') {
         this.isEmployee = false
       }
     },
@@ -334,9 +334,9 @@ export default {
       this.$_axios.post(url, this.employee)
         .then((response) => {
           let result = response.data
-          console.log(JSON.stringify(result))
           if (result.resultList.length !== 0) {
             this.employee = result.resultList[0]
+            this.employee.telephoneList = [ {type: '', number: ''}, {type: '', number: ''}, {type: '', number: ''} ]
           }
           if (result.message) {
             this.messages = [...result.message]
@@ -356,7 +356,18 @@ export default {
           this.messageColor = 'error'
         })
     },
-    clearForm () { this.$refs.form.reset() }
+    clearForm () {
+      this.$refs.form.reset()
+      this.passwordValidator = ''
+      this.employee = {
+        joiningDate: null,
+        password: '',
+        baseHourCalculation: [],
+        manager: [],
+        roleList: [],
+        telephoneList: [ {type: '', number: ''}, {type: '', number: ''}, {type: '', number: ''} ]
+      }
+    }
   }
 }
 </script>

@@ -35,5 +35,8 @@ public class Util {
 	public static final String DELETE_SUCESSFUL_COMPANY = "Consulta excluida com sucesso!";
 	public static final String ERROR_ROLE = "Ao menos uma role deve ser selecionada!";
 	public static final String ERROR_ALREADY_REGISTRED_EMAIL = "E-mail já cadastrado!";
+	public static final String SAVE_SUCCESSFUL_APPOINTMENTS = "Apontamento salvo com sucesso!";
+	public static final String UPDATE_SUCESSFUL_PARAMETER = "Parâmetros alterado com sucesso!";
+	public static final String SAVE_SUCESSFUL_PARAMETER = "Parâmetros salvos com sucesso!";
 	
 }

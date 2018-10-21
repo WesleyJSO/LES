@@ -8,18 +8,13 @@ import br.com.les.backend.utils.Result;
 import br.com.les.backend.utils.Util;
 
 @Component
-public class SearchCompanyStrategy implements IApplicationStrategy<Company> {
+public class FindCompanyStrategy implements IApplicationStrategy<Company> {
 
 	@Override
-	public Result<Company> execute(Company entity, String callerMethod) {
+	public Result<Company> execute(Company entity) {
 
 		Result<Company> result = new Result<>();
 		
-		switch ( callerMethod ) {
-		case "Search":
-			
-			break;
-		}
 		result.setSuccess( Util.SEARCH_SUCESSFUL_COMPANY );
 		return result;
 	}

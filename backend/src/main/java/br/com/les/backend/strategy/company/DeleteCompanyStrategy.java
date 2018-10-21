@@ -9,14 +9,10 @@ import br.com.les.backend.utils.Result;
 @Component
 public class DeleteCompanyStrategy implements IApplicationStrategy<Company> {
 	
-	public Result<Company> execute(Company entity, String callerMethod) {
+	public Result<Company> execute(Company entity) {
 		
 		Result<Company> result = new Result<>();
 		
-		switch ( callerMethod ) {
-		case "Delete":
-			break;
-		}
 		return result;
 	}
 

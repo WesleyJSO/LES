@@ -10,14 +10,9 @@ import br.com.les.backend.utils.Result;
 public class DeleteCostCentreStrategy implements IApplicationStrategy<CostCentre> {
 
 	@Override
-	public Result<CostCentre> execute(CostCentre entity, String callerMethod) {
+	public Result<CostCentre> execute(CostCentre entity) {
 		Result<CostCentre> result = new Result<>();
 		
-		switch ( callerMethod ) {
-		case "Delete":
-			// result.setSuccess( Util.DELETE_COST_SUCCESSFUL );
-			break;
-		}
 		return result;
 	}
 

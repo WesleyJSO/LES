@@ -7,22 +7,13 @@ import br.com.les.backend.strategy.IApplicationStrategy;
 import br.com.les.backend.utils.Result;
 
 @Component
-public class SearchEmployeeStrategy implements IApplicationStrategy<Employee> {
+public class FindEmployeeStrategy implements IApplicationStrategy<Employee> {
 
 	@Override
-	public Result<Employee> execute( Employee employee, String callerMethod ) {
+	public Result<Employee> execute( Employee employee) {
 		
 		Result<Employee> result = new Result<>();
 
-		
-		switch ( callerMethod ) {
-		
-		case "FindAll":
-		break;
-
-		default:
-			break;
-		}
 		return result;
 	}
 }

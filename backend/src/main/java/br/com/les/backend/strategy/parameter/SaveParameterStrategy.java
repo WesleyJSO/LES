@@ -11,13 +11,9 @@ import br.com.les.backend.utils.Util;
 public class SaveParameterStrategy implements IApplicationStrategy<Parameter> {
 
 	@Override
-	public Result<Parameter> execute(Parameter entity, String callerMethod) {
+	public Result<Parameter> execute(Parameter parameter) {
 
 		Result<Parameter> result = new Result<>();
-		
-		Parameter parameter = ( Parameter ) entity;
-		switch ( callerMethod ) {
-		case "save":
 			if (parameter.getOvertimePercentage() == null || parameter.getOvertimePercentage() < 50) {
 				result.setError("O adicional da hora extra deve ser no minimo 50%");
 			}
@@ -38,8 +34,8 @@ public class SaveParameterStrategy implements IApplicationStrategy<Parameter> {
 			}
 			parameter.setId(null);
 			parameter.setCreationDate();
-		}
-		result.setSuccess( Util.SAVE_SUCESSFUL_COMPANY );
+			
+		result.setSuccess( Util.SAVE_SUCESSFUL_PARAMETER );
 		return result;
 	}
 

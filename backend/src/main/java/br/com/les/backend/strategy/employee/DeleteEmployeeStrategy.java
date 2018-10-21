@@ -7,7 +7,7 @@ import br.com.les.backend.utils.Result;
 public class DeleteEmployeeStrategy implements IApplicationStrategy<Employee> {
 
 	@Override
-	public Result<Employee> execute(Employee entity, String callerMethod ) {
+	public Result<Employee> execute(Employee entity) {
 
 		return new Result<Employee>();
 	}

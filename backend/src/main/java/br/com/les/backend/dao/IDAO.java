@@ -6,11 +6,11 @@ import br.com.les.backend.entity.DomainEntity;
 
 public interface IDAO<T extends DomainEntity> {
 
+	void delete(T aEntity);
+	
 	T save(T aEntity);
 
 	T update(T aEntity);
 
-	T findById(Long id, Class<? extends T> clazz);
-
-	List<T> findAll(T entity);	
+	List<T> find(T entity);	
 }

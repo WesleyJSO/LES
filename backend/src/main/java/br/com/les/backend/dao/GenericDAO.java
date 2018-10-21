@@ -16,14 +16,18 @@ import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import br.com.les.backend.entity.DomainEntity;
 import br.com.les.backend.repository.GenericRepository;
 
 @Component
+@Service
+@Transactional
 public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 	
 	private Map<String, LocalDateTime> dateMap = new HashMap<>();
@@ -45,6 +49,11 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 		
 		return null;
 	}
+
+	@Override
+	public void delete(T entity) {
+		getRepository(entity).delete(entity);
+	}
 	
 	@Override
 	public T save(T entity) {
@@ -56,34 +65,8 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 		return em.merge(entity);
 	}
 
-	@Override
-	public List<T> findAll(T entity) {
-		return getRepository(entity).findAll();
-	}
-	
-	public List<T> findByActive(T entity) {
-		return getRepository(entity).findByActive();
-	}
-
-	public List<T> findByInactive(T entity) {
-		return getRepository(entity).findByInactive();
-	}
-	
-	public boolean setActiveById(T entity) {
-		return getRepository(entity).setActiveById(entity.getId());
-	}
-	
-	public boolean setInactiveById(T entity) {
-		return getRepository(entity).setInactiveById(entity.getId());
-	}
-	
-	@Override
-	public T findById(Long id, Class<? extends T> clazz) {
-		return em.find(clazz, id);
-	}
-	
 	@SuppressWarnings("unchecked")
-	public List<T> findByParameters(T clazz) {
+	public List<T> find(T clazz) {
 		
 		String sql = "select t from " + clazz.getClass().getSimpleName() + " t where 1=1 ";
 	    

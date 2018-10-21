@@ -8,8 +8,7 @@ import org.springframework.stereotype.Component;
 import br.com.les.backend.entity.Employee;
 import br.com.les.backend.entity.Telephone;
 import br.com.les.backend.entity.User;
-import br.com.les.backend.service.EmployeeService;
-import br.com.les.backend.service.UserService;
+import br.com.les.backend.service.GenericService;
 import br.com.les.backend.strategy.IApplicationStrategy;
 import br.com.les.backend.utils.Result;
 import br.com.les.backend.utils.Util;
@@ -17,12 +16,12 @@ import br.com.les.backend.utils.Util;
 @Component
 public class SaveUserStrategy implements IApplicationStrategy<User> {
 
-	@Autowired private UserService userService;
-	@Autowired private EmployeeService employeeService;
+	@Autowired private GenericService<User> userService;
+	@Autowired private GenericService<Employee> employeeService;
 	
 	
 	@Override
-	public Result<User> execute(User user, String callerMethod ) {
+	public Result<User> execute(User user) {
 		
 		Result<User> result = new Result<>();
 		
@@ -68,14 +67,14 @@ public class SaveUserStrategy implements IApplicationStrategy<User> {
 		List<User> searchUserResult = null; 
 		User u = new User();
 		u.setEmail(user.getEmail());
-		searchUserResult = userService.findByParameters(u);
+		searchUserResult = userService.find(u);
 		if(!searchUserResult.isEmpty())
 			result.setError(Util.ERROR_ALREADY_REGISTRED_EMAIL);
 		else {
 			List<Employee> searchEmployeeResult = null;
 			Employee e = new Employee();
 			e.setEmail(user.getEmail());
-			searchEmployeeResult = employeeService.findByParameters(e);
+			searchEmployeeResult = employeeService.find(e);
 			if(!searchEmployeeResult.isEmpty())
 				result.setError(Util.ERROR_ALREADY_REGISTRED_EMAIL);
 		}

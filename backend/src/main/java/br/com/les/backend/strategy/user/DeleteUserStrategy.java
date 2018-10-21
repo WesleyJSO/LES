@@ -10,7 +10,7 @@ import br.com.les.backend.utils.Result;
 public class DeleteUserStrategy implements IApplicationStrategy<User> {
 
 	@Override
-	public Result<User> execute(User entity, String callerMethod ) {
+	public Result<User> execute(User entity) {
 
 		return new Result<User>();
 	}

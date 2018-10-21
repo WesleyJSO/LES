@@ -9,8 +9,8 @@ import br.com.les.backend.utils.Result;
 public class SaveCommand<T extends DomainEntity> extends AbstractCommand<T> {
 	
 	@Override
-	public Result<T> execute(T entity, String callerMethod) {
-		return facade.save( entity, callerMethod );
+	public Result<T> execute(T entity) {
+		return facade.save( entity );
 	}
 
 }

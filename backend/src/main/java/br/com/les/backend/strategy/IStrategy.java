@@ -5,6 +5,6 @@ import br.com.les.backend.utils.Result;
 
 public interface IStrategy<T extends DomainEntity> {
 
-	Result<T> execute(T entity, String action, String callerMethod );
+	Result<T> execute(T entity, String action );
 
 }
