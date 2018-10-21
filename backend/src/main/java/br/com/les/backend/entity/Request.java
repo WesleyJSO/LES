@@ -2,6 +2,9 @@ package br.com.les.backend.entity;
 
 import java.util.Date;
 import java.util.List;
+
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,6 +13,8 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+
 import br.com.les.backend.utils.RequestStatus;
 import br.com.les.backend.utils.RequestType;
 
@@ -23,7 +28,7 @@ public class Request extends DomainEntity {
 	private RequestStatus status;
 	private Date startDate;
 	private Date endDate;
-	private RequestType type;
+	private int type;
 	private byte[] attachment;
 	
 	@ManyToOne( fetch=FetchType.LAZY )
@@ -39,7 +44,7 @@ public class Request extends DomainEntity {
 		setId(requestId);
 	}
 
-	public Request(String description, RequestStatus status, Date startDate, Date endDate, RequestType type,
+	public Request(String description, RequestStatus status, Date startDate, Date endDate, int type,
 			byte[] attachment, User employee, List<Employee> notificatedColaboratorsList) {
 		super();
 		this.description = description;
@@ -100,12 +105,12 @@ public class Request extends DomainEntity {
 		this.attachment = attachment;
 	}
 
-	public RequestType getType() {
+	public int getType() {
 		return type;
 	}
 
-	public void setType(RequestType requestType) {
-		this.type = requestType;
+	public void setType(int type) {
+		this.type = type;
 	}
 
 	public RequestStatus getStatus() {
