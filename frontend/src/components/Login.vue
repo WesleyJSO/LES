@@ -42,7 +42,7 @@
             <v-btn id="submit"
               color="info"
               :disabled="!valid"
-              @click="submit">Login</v-btn>
+              @click="login">Login</v-btn>
           </v-card-actions>
 
         </v-form>
@@ -54,7 +54,10 @@
 <script>
 export default {
   data: () => ({
-    user: {},
+    user: {
+      email: 'zeller@zeller.com',
+      password: 1234
+    },
     valid: false,
     haveMessage: false,
     messages: [],
@@ -93,18 +96,37 @@ export default {
         })
       }
     },
+    login () {
+      this.$_axios.post(`${this.$_url}login`, {email: this.user.email, password: this.user.password}).then(response => {
+        let result = response.data
+        if (result.message) {
+          this.messages = result.message
+          this.haveMessage = true
+          if (result.success) {
+            this.companyList.splice(this.deleteIndex, 1)
+            this.messageColor = 'info'
+          } else {
+            this.messageColor = 'warning'
+          }
+        }
+        this.$router.push('/LinhaDoTempo')
+      }).catch(error => {
+        console.log(error)
+        // if the request fails, remove any possible user token if possible
+        localStorage.removeItem('user-token')
+        this.messages = ['Erro durante execução do serviço!']
+        this.haveMessage = true
+        this.messageColor = 'error'
+      })
+    },
     submit () {
       this.messages = []
       this.haveMessage = false
-      this.$_axios.patch(`${this.$_url}user/`, {params: {password: this.user.password, email: this.user.email}})
+      alert(JSON.stringify(this.user, null, '\n'))
+      this.$_axios.post(`${this.$_url}login`, {'email': this.user.email, 'password': this.user.password})
         .then((response) => {
           let result = response.data
-          if (result.resultList.length === 0) {
-            this.$_axios.patch(`${this.$_url}employee/`, {params: {password: this.user.password, email: this.user.email}})
-              .then(response => {
-                result = response.data
-              })
-          } else if (result.resultList.length !== 0) {
+          if (result.resultList.length !== 0) {
             this.user = response.data
             this.haveMessage = true
             this.msgColor = 'info'
@@ -122,6 +144,7 @@ export default {
             this.messages = [`Bem vindo ${this.user.email}.`]
             this.$emit('emittedUser', this.user)
           }
+          this.$router.push('/LinhaDoTempo')
         })
         .catch(error => {
           console.log(error)

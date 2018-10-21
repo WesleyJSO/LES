@@ -16,17 +16,12 @@ export const SUB_HEADERS = [
 export const DATE_FORMATS = [ {year: 'numeric', month: 'numeric', day: 'numeric'} ]
 export const PAGINATION = { sortBy: 'id' }
 export const APPOINTMENTS = { title: 'Apontamento de Horas', table: 'Lista de Apontamentos', addAppointments: 'Apontar Horas', types: ['Entrada', 'Almoço', 'Retorno Almoço', 'Saída', 'Saída Particular'] }
-export const REQUEST = { title: 'Solicitação Abono/Falta',
-  types: [
-    /* {id: 1, description: 'Falta'},
-    {id: 2, description: 'Consulta Médica'},
-    {id: 3, description: 'Abono'},
-    {id: 4, description: 'Hora Extran'},
-    {id: 5, description: 'Banco de Horas'},
-    {id: 6, description: 'Remanejamento de Horas/Dias'} */
-    'Falta', 'Consulta Médica', 'Abono', 'Hora Extra', 'Banco de Horas', 'Remanejamento de Dias'
-  ]
-}
+export const REQUEST = [
+  {id: 1, description: 'Correção Apontamento'},
+  {id: 2, description: 'Hora Extra'},
+  {id: 3, description: 'Banco de Horas'},
+  {id: 4, description: 'Remanejamento de Horas/Dias'}
+]
 export default class UserService {
   static get HEADERS () { return HEADERS }
   static get SUB_HEADERS () { return SUB_HEADERS }

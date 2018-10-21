@@ -6,12 +6,17 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 @Component
 @Entity
-public class Role extends DomainEntity {
+@SuppressWarnings("serial")
+public class Role extends DomainEntity implements GrantedAuthority{
 
+	public static final String USER_ROLE = "USER";
+	public static final String ADMIN_ROLE = "ADMIN";
+	
 	private String roleName;
 
 	@ManyToMany(mappedBy="roleList", fetch=FetchType.LAZY)
@@ -23,6 +28,11 @@ public class Role extends DomainEntity {
 
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
+	}
+
+	@Override
+	public String getAuthority() {
+		return getId().toString();
 	}
 	
 }
