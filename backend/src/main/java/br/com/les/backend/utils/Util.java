@@ -45,4 +45,14 @@ public class Util {
 	public static final String INVALID_END_DATE = "Informe uma data Final maior que a data Alvo!!";
 	public static final String INVALID_DESCRIPTION = "Informe uma descrição válida com pelo menos 10 caractéres!!";
 
+	public static final String SAVE_SUCCESSFUL_APPOINTMENTS = "Apontamento salvo com sucesso!";
+
+	public static final String SAVE_SUCESSFUL_PARAMETER = "Parâmetro salvo com sucesso!";
+
+	public static final String UPDATE_SUCESSFUL_PARAMETER = "Parâmetro atualizado com sucesso!";
+
+	public static final String ERROR_ROLE = "Usuário não cadastrado no sistema!";
+
+	public static final String ERROR_ALREADY_REGISTRED_EMAIL = "E-mail já cadastrado!";
+
 }

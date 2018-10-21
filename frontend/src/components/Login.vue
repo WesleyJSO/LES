@@ -16,8 +16,8 @@
                 transition="scale-transition" />
           </li>
         <v-form ref="form" v-model="valid">
-
           <v-card-text>
+
             <v-text-field id="email"
                 prepend-icon="person"
                 v-model="user.email"
@@ -42,7 +42,7 @@
             <v-btn id="submit"
               color="info"
               :disabled="!valid"
-              @click="login">Login</v-btn>
+              @click="submit">Login</v-btn>
           </v-card-actions>
 
         </v-form>
@@ -54,10 +54,7 @@
 <script>
 export default {
   data: () => ({
-    user: {
-      email: 'zeller@zeller.com',
-      password: 1234
-    },
+    user: {},
     valid: false,
     haveMessage: false,
     messages: [],
@@ -96,38 +93,21 @@ export default {
         })
       }
     },
-    login () {
-      this.$_axios.post(`${this.$_url}login`, {email: this.user.email, password: this.user.password}).then(response => {
-        let result = response.data
-        if (result.message) {
-          this.messages = result.message
-          this.haveMessage = true
-          if (result.success) {
-            this.companyList.splice(this.deleteIndex, 1)
-            this.messageColor = 'info'
-          } else {
-            this.messageColor = 'warning'
-          }
-        }
-        this.$router.push('/LinhaDoTempo')
-      }).catch(error => {
-        console.log(error)
-        // if the request fails, remove any possible user token if possible
-        localStorage.removeItem('user-token')
-        this.messages = ['Erro durante execução do serviço!']
-        this.haveMessage = true
-        this.messageColor = 'error'
-      })
-    },
     submit () {
       this.messages = []
       this.haveMessage = false
-      alert(JSON.stringify(this.user, null, '\n'))
-      this.$_axios.post(`${this.$_url}login`, {'email': this.user.email, 'password': this.user.password})
+      this.$_axios.patch(`${this.$_url}user/`, {params: {password: this.user.password, email: this.user.email}})
         .then((response) => {
           let result = response.data
+          if (result.resultList.length === 0) {
+            this.$_axios.patch(`${this.$_url}employee/`, {params: {password: this.user.password, email: this.user.email}})
+              .then(response => {
+                result = response.data
+              })
+          }
           if (result.resultList.length !== 0) {
-            this.user = response.data
+            this.clearForm()
+            this.user = result.resultList[0]
             this.haveMessage = true
             this.msgColor = 'info'
             this.messages = [`Bem vindo ${this.user.email}.`]
@@ -152,6 +132,9 @@ export default {
           this.haveMessage = true
           this.messageColor = 'error'
         })
+    },
+    clearForm () {
+      this.$refs.form.reset()
     }
   }
 }

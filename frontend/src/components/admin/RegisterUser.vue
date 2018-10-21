@@ -168,6 +168,7 @@
               v-model="employee.joiningDate"
               header-color="black"
               @input="joiningDateHelper = false"
+              locale="pt-br"
             ></v-date-picker>
           </v-menu>
         </v-flex>

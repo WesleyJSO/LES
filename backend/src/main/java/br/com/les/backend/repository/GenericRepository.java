@@ -17,6 +17,9 @@ public interface GenericRepository<T extends DomainEntity> extends JpaRepository
 	@Query("select t from #{#entityName} t where t.active = false")
 	List<T> findByInactive();
 
+	@Query("select t from #{#entityName} t where t.active = true and id = ?2")
+	T findActiveById(Long id);
+	
 	@Query("update #{#entityName} t set t.active = true where id = ?2")
 	boolean setActiveById(Long id);
 

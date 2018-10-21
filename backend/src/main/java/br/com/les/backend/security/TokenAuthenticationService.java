@@ -1,18 +1,18 @@
 package br.com.les.backend.security;
 
 import java.sql.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import br.com.les.backend.dao.GenericDAO;
 import br.com.les.backend.entity.User;
-import br.com.les.backend.repository.UserRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -20,8 +20,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class TokenAuthenticationService {
 	
 	@Autowired
-	@Qualifier("userRepository")
-	private UserRepository userRepository;
+	private GenericDAO<User> genericDAO;
 	
 	// EXPIRATION_TIME = 10 dias
 	static final long EXPIRATION_TIME = 860_000_000;
@@ -47,14 +46,16 @@ public Authentication getAuthentication(HttpServletRequest request) {
 		String token = request.getHeader(HEADER_STRING);
 		
 		if (token != null) {
-			String user = Jwts.parser()
+			String email = Jwts.parser()
 					.setSigningKey(SECRET)
 					.parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
 					.getBody()
 					.getSubject();
-			User load = (User) userRepository.findByEmail(user);
-			if (load != null && load.getId() > 0) {
-				return new UsernamePasswordAuthenticationToken(load, null, load.getRoleList());
+			User u = new User();
+			u.setEmail(email);
+			List<User> load = genericDAO.find(u);
+			if (load != null && load.size() > 0 && load.get(0).getId() > 0) {
+				return new UsernamePasswordAuthenticationToken(load, null, load.get(0).getRoleList());
 			}
 		}
 		 

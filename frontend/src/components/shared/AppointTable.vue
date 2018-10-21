@@ -8,10 +8,11 @@
                     item-key="id"
                     hide-actions
                     class="elevation-10 form-container" >
+
             <template slot="items" slot-scope="props">
               <tr @click="props.expanded = !props.expanded">
                 <td class="text-xs-center" >{{ props.item.date }}</td>
-                <td class="text-xs-center" >{{ props.item.morningEntrance || empty }} 
+                <td class="text-xs-center" >{{ props.item.morningEntrance || empty }}
                   <v-dialog v-model="dialogs[0].value" max-width="300px" max-height="300px">
                     <v-icon small
                       slot="activator"
@@ -93,6 +94,8 @@
                 </td>
               </tr>
             </template>
+
+            <!-- details -->
             <template slot="expand" slot-scope="props" >
               <v-card flat dark >
                 <v-layout class="text-xs-center">
@@ -135,6 +138,14 @@
                 </v-layout>
               </v-card>
             </template>
+
+            <!-- empty message -->
+            <template slot="no-data">
+              <v-alert :value="true" color="error" icon="warning">
+                Não existem valores para o mês selecionado.
+              </v-alert>
+            </template>
+
           </v-data-table>
         </v-flex>
       </v-layout>
@@ -227,10 +238,3 @@ export default {
 }
 </script>
 
-<style scoped>
-  h1 {
-    font-size: 40px;
-    text-align: center;
-    margin-top: -20px;
-  }
-</style>

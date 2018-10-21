@@ -8,11 +8,9 @@ import br.com.les.backend.utils.Result;
 public class SearchRequestStrategy implements IApplicationStrategy<Request> {
 
 	@Override
-	public Result<Request> execute(Request entity, String callerMethod) {
+	public Result<Request> execute(Request request) {
 
 		Result<Request> result = new Result<>();
-
-		Request request = (Request) entity;
 
 		switch (request.getType()) {
 		case RequestType.CHANGE_APPOINTMENT:

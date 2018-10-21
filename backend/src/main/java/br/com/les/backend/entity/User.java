@@ -1,6 +1,6 @@
 package br.com.les.backend.entity;
 
-import java.util.List; 
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -9,8 +9,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.security.core.userdetails.User.UserBuilder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Component
 @Entity
-@SuppressWarnings("serial")
 public class User extends DomainEntity implements UserDetailsService {
 
 	private String email;
@@ -36,10 +33,6 @@ public class User extends DomainEntity implements UserDetailsService {
 			@JoinColumn(name = "ROLE_ID") })
 	@JsonProperty("authorities")
 	private List<Role> roleList;
-
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-	@LazyCollection(LazyCollectionOption.FALSE)
-	private List<LogAction> logActionList;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonManagedReference
@@ -59,14 +52,6 @@ public class User extends DomainEntity implements UserDetailsService {
 
 	public void setRoleList(List<Role> roleList) {
 		this.roleList = roleList;
-	}
-
-	public List<LogAction> getLogActionList() {
-		return logActionList;
-	}
-
-	public void setLogActionList(List<LogAction> logActionList) {
-		this.logActionList = logActionList;
 	}
 
 	public List<Telephone> getTelephoneList() {

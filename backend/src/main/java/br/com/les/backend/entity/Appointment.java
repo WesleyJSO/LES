@@ -1,19 +1,27 @@
 package br.com.les.backend.entity;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.stereotype.Component;
 
 @Component
 @Entity
 public class Appointment extends DomainEntity {
 	
-	private String date;
+	private LocalDateTime date;
+	private LocalDate monthAndYear;
 	private LocalTime morningEntrance;
 	private LocalTime morningOut;
 	private LocalTime afternoonEntrance;
@@ -26,15 +34,13 @@ public class Appointment extends DomainEntity {
 	private LocalTime hoursLeft;
 	private LocalTime dayOvertime;
 	
+	@OneToMany(mappedBy="appointment", cascade=CascadeType.ALL)
+	@LazyCollection(LazyCollectionOption.FALSE)
+	private List<AppointmentRequest> appointmentRequestList;
+	
 	@ManyToOne( fetch=FetchType.EAGER )
 	@JoinColumn( name="employee_id" )
 	private Employee employee;
-
-	public Appointment() {}
-	
-	public Appointment( Long employeeId ) {
-		this.employee = new Employee( employeeId );;
-	}
 
 	public LocalTime getMorningEntrance() {
 		return morningEntrance;
@@ -100,6 +106,14 @@ public class Appointment extends DomainEntity {
 		this.particularExitReturn = particularExitReturn;
 	}
 
+	public LocalTime getBalance() {
+		return balance;
+	}
+
+	public void setBalance(LocalTime balance) {
+		this.balance = balance;
+	}
+
 	public LocalTime getHoursLeft() {
 		return hoursLeft;
 	}
@@ -124,19 +138,27 @@ public class Appointment extends DomainEntity {
 		this.employee = employee;
 	}
 
-	public LocalTime getBalance() {
-		return balance;
+	public List<AppointmentRequest> getAppointmentRequestList() {
+		return appointmentRequestList;
 	}
 
-	public void setBalance(LocalTime balance) {
-		this.balance = balance;
+	public void setAppointmentRequestList(List<AppointmentRequest> appointmentRequestList) {
+		this.appointmentRequestList = appointmentRequestList;
 	}
 
-	public String getDate() {
+	public LocalDate getMonthAndYear() {
+		return monthAndYear;
+	}
+
+	public void setMonthAndYear(LocalDate monthAndYear) {
+		this.monthAndYear = monthAndYear;
+	}
+
+	public LocalDateTime getDate() {
 		return date;
 	}
 
-	public void setDate(String date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 }

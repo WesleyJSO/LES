@@ -1,8 +1,11 @@
 package br.com.les.backend.dao;
 
+import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
+import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -30,8 +33,11 @@ import br.com.les.backend.repository.GenericRepository;
 @Transactional
 public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 	
-	private Map<String, LocalDateTime> dateMap = new HashMap<>();
-	private static DateTimeFormatter pettern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	
+	private Map<String, LocalDateTime> dateTimeMap; 	// for dates that will query for days and time of a day
+	private Map<String, LocalDate> dateMap; 			// for dates that will query for month
+	private static DateTimeFormatter datePettern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	private static DateTimeFormatter monthYearPettern = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	
 	@PersistenceContext
 	private EntityManager em;
@@ -70,6 +76,8 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 		
 		String sql = "select t from " + clazz.getClass().getSimpleName() + " t where 1=1 ";
 	    
+		dateMap = new HashMap<>();
+		dateTimeMap = new HashMap<>();
 		List<Method> methodList = getMethodsFromClass(clazz);
 		List<Field> fieldList = getFieldsFromClass(clazz);
 		Map<Field, Method> attributesMap = MakeMapToMethods(methodList, fieldList);
@@ -79,55 +87,74 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 				if(item.getValue().invoke(clazz) != null && !item.getValue().invoke(clazz).equals("") && !item.getValue().invoke(clazz).equals(0)) {
 					sql += queryForString(item.getKey(), item.getValue(), clazz);
 					sql += queryForNumber(item.getKey(), item.getValue(), clazz);
+					storeDateTimeTypes(item.getKey(), item.getValue(), clazz);
 					storeDateTypes(item.getKey(), item.getValue(), clazz);
 				}
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) { e.printStackTrace(); }
 			
 		}
-		sql += queryForDate();
+		sql += queryForMonth();
+		sql += queryForDateTime();
 		return (List<T>) em.createQuery(sql).getResultList(); 
 	}
-
-	private String queryForDate() {
+	
+	private String queryForDateTime() {
 		String sql = "";
-		if(dateMap.keySet().size() == 2) {
+		if(dateTimeMap.keySet().size() == 2) {
 			long days;
 			LocalDateTime firstDate = null;
-			String lastKey = null;
-			for (Entry<String, LocalDateTime> item : dateMap.entrySet()) {
-				if(item.getKey().equals(lastKey) && firstDate != null) {
+			String firstKey = null;
+			for (Entry<String, LocalDateTime> item : dateTimeMap.entrySet()) {
+				if(item.getKey().equals(firstKey) && firstDate != null) { // same date field
 					days = ChronoUnit.DAYS.between(firstDate, item.getValue());
 					if(days > 0) {
-						sql += " and t." + lastKey + " between '" + firstDate.format(pettern) + "' and '" + item.getValue().format(pettern) + "'";
+						sql += " and t." + firstKey + " between '" + firstDate.format(datePettern) + "' and '" + item.getValue().format(datePettern) + "'";
 					} else {
-						sql += " and t." + lastKey + " between '" + item.getValue().format(pettern) + "' and '" + firstDate.format(pettern) + "'";
+						sql += " and t." + firstKey + " between '" + item.getValue().format(datePettern) + "' and '" + firstDate.format(datePettern) + "'";
 					}
-				} else if(!item.getKey().equals(lastKey) && firstDate != null) {
+				} else if(!item.getKey().equals(firstKey) && firstDate != null) { // different date field's
 					days = ChronoUnit.DAYS.between(firstDate, item.getValue());
 					if(days > 0) {
-						sql += " and t." + item.getKey() + " > " + firstDate.format(pettern);
-						sql += " and t." + item.getKey() + " < " + item.getValue().format(pettern);
+						sql += " and t." + firstKey + " > " + firstDate.format(datePettern);
+						sql += " and t." + item.getKey() + " < " + item.getValue().format(datePettern);
 					} else {
-						sql += " and t." + item.getKey() + " > " + item.getValue().format(pettern);
-						sql += " and t." + item.getKey() + " < " + firstDate.format(pettern);
+						sql += " and t." + item.getKey() + " > " + item.getValue().format(datePettern);
+						sql += " and t." + firstKey + " < " + firstDate.format(datePettern);
 					}
 				}
 				firstDate = item.getValue();
-				lastKey = item.getKey();
+				firstKey = item.getKey();
 			}
-		} else if(dateMap.keySet().size() == 1) {
-			LocalDateTime localDateTime = dateMap.entrySet().iterator().next().getValue();
-			sql += " and t." + dateMap.keySet().iterator().next();
-			sql += " between '" + localDateTime.toLocalDate().atStartOfDay().format(pettern);
-			sql += "' and '" + localDateTime.toLocalDate().atTime(LocalTime.MAX).format(pettern) + "'";
+		} else if(dateTimeMap.keySet().size() == 1) {
+			LocalDateTime localDateTime = dateTimeMap.entrySet().iterator().next().getValue();
+			sql += " and t." + dateTimeMap.keySet().iterator().next();
+			sql += " between '" + localDateTime.toLocalDate().atStartOfDay().format(datePettern);
+			sql += "' and '" + localDateTime.toLocalDate().atTime(LocalTime.MAX).format(datePettern) + "'";
 
 		}
 		return sql;
 	}
 
+	private String queryForMonth() {
+		String sql = "";
+		if(dateMap.keySet().size() == 1) {
+			Entry<String, LocalDate> entry = dateMap.entrySet().iterator().next();
+			sql = " and t." + entry.getKey() 
+				+ " between '" + entry.getValue().with(firstDayOfMonth()).format(monthYearPettern) + "'"
+				+ " and '" + entry.getValue().with(lastDayOfMonth()).format(monthYearPettern) + "'";
+		}
+		return sql;
+	}
+	
 	private void storeDateTypes(Field f, Method m, T clazz) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		if(m.getReturnType() == LocalDate.class) {
+			dateMap.put(f.getName(), (LocalDate) m.invoke(clazz));
+		}
+	}
+	
+	private void storeDateTimeTypes(Field f, Method m, T clazz) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		if(m.getReturnType() == LocalDateTime.class) {
-			dateMap.put(f.getName(), (LocalDateTime) m.invoke(clazz));
+			dateTimeMap.put(f.getName(), (LocalDateTime) m.invoke(clazz));
 		}
 	}
 
@@ -153,9 +180,11 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 		
 		for (Method method : methodList)
 			if(method.getReturnType() != Void.TYPE && method.getReturnType().isPrimitive()
-				|| method.getReturnType() == String.class || method.getReturnType() == Long.class || method.getReturnType() == Double.class
-				|| method.getReturnType() == Integer.class || method.getReturnType() == LocalDateTime.class
-				|| method.getReturnType() == Boolean.class || method.getReturnType() == Float.class)
+				|| method.getReturnType() == String.class || method.getReturnType() == Long.class 
+				|| method.getReturnType() == Double.class || method.getReturnType() == Integer.class 
+				|| method.getReturnType() == Boolean.class || method.getReturnType() == Float.class
+				|| method.getReturnType() == LocalDate.class || method.getReturnType() == LocalDateTime.class
+				|| method.getReturnType() == LocalDate.class)
 				for (Field field : fieldList) 				
 					if(field.getName().toLowerCase().equals(method.getName().toLowerCase().substring(3, method.getName().length()))) {
 						methodMap.put(field, method);

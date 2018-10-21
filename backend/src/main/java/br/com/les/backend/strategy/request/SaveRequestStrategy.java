@@ -1,12 +1,12 @@
 package br.com.les.backend.strategy.request;
 
-import java.util.Calendar;
+import java.time.LocalDate;
 
 import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.Request;
 import br.com.les.backend.strategy.IApplicationStrategy;
-import br.com.les.backend.utils.RequestStatus;
+import br.com.les.backend.entity.RequestStatus;
 import br.com.les.backend.utils.RequestType;
 import br.com.les.backend.utils.Result;
 import br.com.les.backend.utils.Util;
@@ -15,18 +15,17 @@ import br.com.les.backend.utils.Util;
 public class SaveRequestStrategy implements IApplicationStrategy<Request> {
 
 	@Override
-	public Result<Request> execute(Request entity, String callerMethod) {
+	public Result<Request> execute(Request request) {
 
 		Result<Request> result = new Result<>();
 		
-		Request request = ( Request ) entity;
 		// Take a look more carefully in how to get the request type
 		
 		switch ( request.getType() ) {
 		case RequestType.CHANGE_APPOINTMENT:
 			if( null == request.getStartDate() ) 
 				result.setError(Util.ERROR_ENTRY_DATE);
-			if( request.getStartDate().compareTo( Calendar.getInstance().getTime() ) <= 0 ) {
+			if( request.getStartDate().compareTo(LocalDate.now()) <= 0) {
 				result.setError(Util.INVALID_ENTRY_DATE);
 			}
 			if( null == request.getDescription() )
@@ -40,7 +39,7 @@ public class SaveRequestStrategy implements IApplicationStrategy<Request> {
 		case RequestType.WORK_OVERTIME:
 			if( null == request.getStartDate() ) 
 				result.setError(Util.ERROR_ENTRY_DATE);
-			if( request.getStartDate().compareTo( Calendar.getInstance().getTime() ) <= 0 ) {
+			if( request.getStartDate().compareTo(LocalDate.now()) <= 0) {
 				result.setError(Util.INVALID_ENTRY_DATE);
 			}
 			if( null != request.getEndDate() ) {
@@ -59,7 +58,7 @@ public class SaveRequestStrategy implements IApplicationStrategy<Request> {
 		case RequestType.COMP_TIME:
 			if( null == request.getStartDate() ) 
 				result.setError(Util.ERROR_ENTRY_DATE);
-			if( request.getStartDate().compareTo( Calendar.getInstance().getTime() ) <= 0 ) {
+			if( request.getStartDate().compareTo(LocalDate.now()) <= 0) {
 				result.setError(Util.INVALID_ENTRY_DATE);
 			}
 			if( request.getStartDate().compareTo(request.getEndDate()) <= 0 ) {
@@ -80,7 +79,7 @@ public class SaveRequestStrategy implements IApplicationStrategy<Request> {
 		case RequestType.REALOCATION_DAYS:
 			if( null == request.getStartDate() ) 
 				result.setError(Util.ERROR_ENTRY_DATE);
-			if( request.getStartDate().compareTo( Calendar.getInstance().getTime() ) <= 0 ) {
+			if( request.getStartDate().compareTo(LocalDate.now()) <= 0) {
 				result.setError(Util.INVALID_ENTRY_DATE);
 			}
 			if( request.getStartDate().compareTo(request.getEndDate()) <= 0 ) {

@@ -1,31 +1,23 @@
 package br.com.les.backend.entity;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
-import javax.persistence.Access;
-import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
-import br.com.les.backend.utils.RequestStatus;
-import br.com.les.backend.utils.RequestType;
-
 @Entity
-@Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
-public abstract class Request extends DomainEntity {
+public class Request extends DomainEntity {
 
 	private String description;
 	private RequestStatus status;
-	private Date startDate;
-	private Date endDate;
+	private LocalDate startDate;
+	private LocalDate endDate;
 	private int type;
 	private byte[] attachment;
 	
@@ -63,22 +55,6 @@ public abstract class Request extends DomainEntity {
 		this.notificatedColaboratorsList = notificatedColaboratorsList;
 	}
 	
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	public Date getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
-
 	public byte[] getAttachment() {
 		return attachment;
 	}
@@ -101,5 +77,21 @@ public abstract class Request extends DomainEntity {
 
 	public void setStatus(RequestStatus status) {
 		this.status = status;
+	}
+
+	public LocalDate getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(LocalDate endDate) {
+		this.endDate = endDate;
+	}
+
+	public LocalDate getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(LocalDate startDate) {
+		this.startDate = startDate;
 	}	
 }

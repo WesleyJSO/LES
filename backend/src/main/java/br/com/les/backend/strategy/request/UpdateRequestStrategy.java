@@ -1,13 +1,12 @@
 package br.com.les.backend.strategy.request;
 
-import java.util.Calendar;
+import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.les.backend.entity.Request;
-import br.com.les.backend.service.RequestService;
+import br.com.les.backend.repository.RequestRepository;
 import br.com.les.backend.strategy.IApplicationStrategy;
-import br.com.les.backend.utils.RequestStatus;
 import br.com.les.backend.utils.RequestType;
 import br.com.les.backend.utils.Result;
 import br.com.les.backend.utils.Util;
@@ -15,23 +14,22 @@ import br.com.les.backend.utils.Util;
 public class UpdateRequestStrategy implements IApplicationStrategy<Request> {
 
 	@Autowired
-	private RequestService service;
+	private RequestRepository requestRepository;
 
 	@Override
-	public Result<Request> execute(Request entity, String callerMethod) {
+	public Result<Request> execute(Request request) {
 
 		Result<Request> result = new Result<>();
 
-		Request request = (Request) entity;
 		// Load request to persist changes from update
-		Request savedRequest = service.findById(request.getId(), Request.class);
+		Request savedRequest = requestRepository.findActiveById(request.getId());
 
 		switch (request.getType()) {
 		case RequestType.CHANGE_APPOINTMENT:
 			if (null == request.getStartDate())
 				result.setError(Util.ERROR_ENTRY_DATE);
 			else if (savedRequest.getStartDate().compareTo(request.getStartDate()) != 0)
-				if(request.getStartDate().compareTo(Calendar.getInstance().getTime()) <= 0)
+				if(request.getStartDate().compareTo(LocalDate.now()) <= 0);
 					result.setError(Util.INVALID_ENTRY_DATE);
 			if (null == request.getDescription())
 				result.setError(Util.ERROR_DESCRIPTION);
@@ -43,7 +41,7 @@ public class UpdateRequestStrategy implements IApplicationStrategy<Request> {
 			if (null == request.getStartDate())
 				result.setError(Util.ERROR_ENTRY_DATE);
 			else if (savedRequest.getStartDate().compareTo(request.getStartDate()) != 0)
-				if(request.getStartDate().compareTo(Calendar.getInstance().getTime()) <= 0)
+				if(request.getStartDate().compareTo(LocalDate.now()) <= 0)
 					result.setError(Util.INVALID_ENTRY_DATE);
 			if (null != request.getEndDate())
 				if (request.getStartDate().compareTo(request.getEndDate()) <= 0)
@@ -58,7 +56,7 @@ public class UpdateRequestStrategy implements IApplicationStrategy<Request> {
 			if (null == request.getStartDate())
 				result.setError(Util.ERROR_ENTRY_DATE);
 			else if (savedRequest.getStartDate().compareTo(request.getStartDate()) != 0)
-				if(request.getStartDate().compareTo(Calendar.getInstance().getTime()) <= 0)
+				if(request.getStartDate().compareTo(LocalDate.now()) <= 0)
 					result.setError(Util.INVALID_ENTRY_DATE);
 			if (null != request.getEndDate())
 				if (request.getStartDate().compareTo(request.getEndDate()) <= 0)
@@ -73,7 +71,7 @@ public class UpdateRequestStrategy implements IApplicationStrategy<Request> {
 			if (null == request.getStartDate())
 				result.setError(Util.ERROR_ENTRY_DATE);
 			else if (savedRequest.getStartDate() != request.getStartDate())
-				if(request.getStartDate().compareTo(Calendar.getInstance().getTime()) <= 0)
+				if(request.getStartDate().compareTo(LocalDate.now()) <= 0)
 					result.setError(Util.INVALID_ENTRY_DATE);
 			if (null != request.getEndDate())
 				if (request.getStartDate().compareTo(request.getEndDate()) <= 0)
