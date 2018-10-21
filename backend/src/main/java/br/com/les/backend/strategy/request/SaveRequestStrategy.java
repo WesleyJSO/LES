@@ -21,10 +21,9 @@ public class SaveRequestStrategy implements IApplicationStrategy<Request> {
 		
 		Request request = ( Request ) entity;
 		// Take a look more carefully in how to get the request type
-		RequestType type = Enum.valueOf( RequestType.class, String.valueOf( request.getType() ) );
 		
-		switch ( type ) {
-		case CHANGE_APPOINTMENT:
+		switch ( request.getType() ) {
+		case RequestType.CHANGE_APPOINTMENT:
 			if( null == request.getStartDate() ) 
 				result.setError(Util.ERROR_ENTRY_DATE);
 			if( request.getStartDate().compareTo( Calendar.getInstance().getTime() ) <= 0 ) {
@@ -38,7 +37,7 @@ public class SaveRequestStrategy implements IApplicationStrategy<Request> {
 			}
 			request.setStatus(RequestStatus.SENT);
 			break;
-		case WORK_OVERTIME:
+		case RequestType.WORK_OVERTIME:
 			if( null == request.getStartDate() ) 
 				result.setError(Util.ERROR_ENTRY_DATE);
 			if( request.getStartDate().compareTo( Calendar.getInstance().getTime() ) <= 0 ) {
@@ -57,7 +56,7 @@ public class SaveRequestStrategy implements IApplicationStrategy<Request> {
 			}
 			// Need to verify file uploaded
 			break;
-		case COMP_TIME:
+		case RequestType.COMP_TIME:
 			if( null == request.getStartDate() ) 
 				result.setError(Util.ERROR_ENTRY_DATE);
 			if( request.getStartDate().compareTo( Calendar.getInstance().getTime() ) <= 0 ) {
@@ -78,7 +77,7 @@ public class SaveRequestStrategy implements IApplicationStrategy<Request> {
 					result.setError(Util.INVALID_DESCRIPTION);
 			}
 			break;
-		case REALOCATION_DAYS:
+		case RequestType.REALOCATION_DAYS:
 			if( null == request.getStartDate() ) 
 				result.setError(Util.ERROR_ENTRY_DATE);
 			if( request.getStartDate().compareTo( Calendar.getInstance().getTime() ) <= 0 ) {

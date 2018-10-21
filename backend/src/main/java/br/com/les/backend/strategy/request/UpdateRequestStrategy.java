@@ -25,11 +25,9 @@ public class UpdateRequestStrategy implements IApplicationStrategy<Request> {
 		Request request = (Request) entity;
 		// Load request to persist changes from update
 		Request savedRequest = service.findById(request.getId(), Request.class);
-		// Take a look more carefully in how to get the request type
-		RequestType type = Enum.valueOf(RequestType.class, String.valueOf(request.getType()));
 
-		switch (type) {
-		case CHANGE_APPOINTMENT:
+		switch (request.getType()) {
+		case RequestType.CHANGE_APPOINTMENT:
 			if (null == request.getStartDate())
 				result.setError(Util.ERROR_ENTRY_DATE);
 			else if (savedRequest.getStartDate().compareTo(request.getStartDate()) != 0)
@@ -41,22 +39,7 @@ public class UpdateRequestStrategy implements IApplicationStrategy<Request> {
 				if (request.getDescription().trim().equals("") || request.getDescription().length() < 10)
 					result.setError(Util.INVALID_DESCRIPTION);
 			break;
-		case WORK_OVERTIME:
-			if (null == request.getStartDate())
-				result.setError(Util.ERROR_ENTRY_DATE);
-			else if (savedRequest.getStartDate().compareTo(request.getStartDate()) != 0)
-				if(request.getStartDate().compareTo(Calendar.getInstance().getTime()) <= 0)
-					result.setError(Util.INVALID_ENTRY_DATE);
-			if (null != request.getEndDate())
-				if (request.getStartDate().compareTo(request.getEndDate()) <= 0)
-					result.setError(Util.INVALID_END_DATE);
-			if (null == request.getDescription())
-				result.setError(Util.ERROR_DESCRIPTION);
-			else if (savedRequest.getDescription() != request.getDescription())
-				if (request.getDescription().trim().equals("") || request.getDescription().length() < 10)
-					result.setError(Util.INVALID_DESCRIPTION);
-			break;
-		case COMP_TIME:
+		case RequestType.WORK_OVERTIME:
 			if (null == request.getStartDate())
 				result.setError(Util.ERROR_ENTRY_DATE);
 			else if (savedRequest.getStartDate().compareTo(request.getStartDate()) != 0)
@@ -71,7 +54,22 @@ public class UpdateRequestStrategy implements IApplicationStrategy<Request> {
 				if (request.getDescription().trim().equals("") || request.getDescription().length() < 10)
 					result.setError(Util.INVALID_DESCRIPTION);
 			break;
-		case REALOCATION_DAYS:
+		case RequestType.COMP_TIME:
+			if (null == request.getStartDate())
+				result.setError(Util.ERROR_ENTRY_DATE);
+			else if (savedRequest.getStartDate().compareTo(request.getStartDate()) != 0)
+				if(request.getStartDate().compareTo(Calendar.getInstance().getTime()) <= 0)
+					result.setError(Util.INVALID_ENTRY_DATE);
+			if (null != request.getEndDate())
+				if (request.getStartDate().compareTo(request.getEndDate()) <= 0)
+					result.setError(Util.INVALID_END_DATE);
+			if (null == request.getDescription())
+				result.setError(Util.ERROR_DESCRIPTION);
+			else if (savedRequest.getDescription() != request.getDescription())
+				if (request.getDescription().trim().equals("") || request.getDescription().length() < 10)
+					result.setError(Util.INVALID_DESCRIPTION);
+			break;
+		case RequestType.REALOCATION_DAYS:
 			if (null == request.getStartDate())
 				result.setError(Util.ERROR_ENTRY_DATE);
 			else if (savedRequest.getStartDate() != request.getStartDate())
