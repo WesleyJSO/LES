@@ -106,7 +106,7 @@ public class User extends DomainEntity implements UserDetailsService {
 		UserBuilder builder = null;
 		builder = org.springframework.security.core.userdetails.User.withUsername(username);
 		builder.password(new BCryptPasswordEncoder().encode(this.password));
-		builder.roles("ROLE_USER");
+		builder.roles("ROLE_ADMIN");
 
 		return builder.build();
 	}
