@@ -79,13 +79,12 @@ axios.interceptors.response.use(function (response) {
   if (token) {
     localStorage.setItem('principal', JSON.stringify(response.data))
     localStorage.token = token
-    alert(localStorage.getItem('principal'))
   }
   return response
 }, function (error) {
   if (error.response.status === 401) {
     alert('Usuário não reconhecido')
-    this.router.push('Login')
+    this.router.push('/Login')
   } else {
     return Promise.reject(error)
   }
