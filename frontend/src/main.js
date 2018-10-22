@@ -61,9 +61,10 @@ Vue.prototype.$v_role = new RoleValidators()
 // Request
 axios.interceptors.request.use(
   (config) => {
-    let token = localStorage.getItem('access_token')
+    let token = localStorage.token
+    console.log(token)
     if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`
+      config.headers['Authorization'] = token
     }
     return config
   },
@@ -76,7 +77,9 @@ axios.interceptors.response.use(function (response) {
   // Get JWT token from response and save it on localStorage
   let token = response.headers['authorization']
   if (token) {
-    localStorage.setItem('access_token', token)
+    localStorage.setItem('principal', JSON.stringify(response.data))
+    localStorage.token = token
+    alert(localStorage.getItem('principal'))
   }
   return response
 }, function (error) {
