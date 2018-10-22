@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <div>
 
     <v-flex xs12 sm8 offset-sm2 pa-5>
       <v-card class="elevation-10">
@@ -16,8 +16,8 @@
                 transition="scale-transition" />
           </li>
         <v-form ref="form" v-model="valid">
-
           <v-card-text>
+
             <v-text-field id="email"
                 prepend-icon="person"
                 v-model="user.email"
@@ -48,7 +48,7 @@
         </v-form>
       </v-card>
     </v-flex>
-  </v-app>
+  </div>
 </template>
 
 <script>
@@ -104,8 +104,10 @@ export default {
               .then(response => {
                 result = response.data
               })
-          } else if (result.resultList.length !== 0) {
-            this.user = response.data
+          }
+          if (result.resultList.length !== 0) {
+            this.clearForm()
+            this.user = result.resultList[0]
             this.haveMessage = true
             this.msgColor = 'info'
             this.messages = [`Bem vindo ${this.user.email}.`]
@@ -122,6 +124,7 @@ export default {
             this.messages = [`Bem vindo ${this.user.email}.`]
             this.$emit('emittedUser', this.user)
           }
+          this.$router.push('/LinhaDoTempo')
         })
         .catch(error => {
           console.log(error)
@@ -129,6 +132,9 @@ export default {
           this.haveMessage = true
           this.messageColor = 'error'
         })
+    },
+    clearForm () {
+      this.$refs.form.reset()
     }
   }
 }

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.Company;
-import br.com.les.backend.service.AbstractService;
+import br.com.les.backend.service.GenericService;
 import br.com.les.backend.strategy.IApplicationStrategy;
 import br.com.les.backend.utils.Result;
 import br.com.les.backend.utils.Util;
@@ -15,38 +15,33 @@ import br.com.les.backend.utils.Util;
 public class SaveCompanyStrategy implements IApplicationStrategy<Company> {
 	
 	@Autowired
-	AbstractService<Company> service;
+	GenericService<Company> companyService;
 	
 	@Override
-	public Result<Company> execute(Company entity, String callerMethod) {
+	public Result<Company> execute(Company company) {
 
 		Result<Company> result = new Result<>();
 		
-		Company c = ( Company ) entity;
-		switch ( callerMethod ) {
-		case "Save":
-			c.setActive( true );
-			List<Company> companyList = service.findByInactive(entity);
-			
-			boolean isInvalid = false;
-			for (Company company : companyList) {
-				if(((Company) company).getCnpj().equals(c.getCnpj())) {
-					if(!company.getActive())
-						result.setError( "Cnpj já cadastrado em empresa desativada!" );
-					else	
-						result.setError( "Cnpj já cadastrado!" );
-					isInvalid = true;
-				}
-				if(((Company) company).getStateRegistration().equals(c.getStateRegistration())) {
-					if(!company.getActive())
-						result.setError( "Inscrição estadual já cadastrada em empresa desativada!" );
-					else
-						result.setError( "Inscrição estadual já cadastrada!" );
-					isInvalid = true;
-				}
-				if(isInvalid) break;
-				else continue;
+		List<Company> companyList = companyService.find(company);
+		
+		boolean isInvalid = false;
+		for (Company c : companyList) {
+			if(c.getCnpj().equals(company.getCnpj())) {
+				if(!company.getActive())
+					result.setError( "Cnpj já cadastrado em empresa desativada!" );
+				else	
+					result.setError( "Cnpj já cadastrado!" );
+				isInvalid = true;
 			}
+			if(c.getStateRegistration().equals(company.getStateRegistration())) {
+				if(c.getActive())
+					result.setError( "Inscrição estadual já cadastrada!" );
+				else
+					result.setError( "Inscrição estadual já cadastrada em empresa desativada!" );
+				isInvalid = true;
+			}
+			if(isInvalid) break;
+			else continue;
 		}
 		if(result.isSuccess())
 			result.setSuccess( Util.SAVE_SUCESSFUL_COMPANY );

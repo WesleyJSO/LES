@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <div>
     <li v-for="(message, index) in messages" :key="index">
       <v-alert :color="messageColor"
                :value="haveMessage"
@@ -86,7 +86,7 @@
         </v-data-table>
       </template>
     </v-data-table>
-  </v-app>
+  </div>
 </template>
 
 <script>

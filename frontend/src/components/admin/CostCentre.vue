@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <div>
       <h1>Gerenciar Centro de Custos</h1>
     <li v-for="(message, index) in messages" :key="index">
       <v-alert :color="messageColor"
@@ -72,8 +72,8 @@
               </v-layout>
             </v-form>
             <v-spacer></v-spacer>
-            <v-btn @click="saveCostCentre()" 
-                   type="submit" 
+            <v-btn @click="saveCostCentre()"
+                   type="submit"
                    color="success"
                    :disabled="!valid">Salvar</v-btn>
             <v-btn @click="close()" color="error">Cancelar</v-btn>
@@ -121,7 +121,7 @@
         </v-fab-transition>
         </v-card-text>
     </v-card>
-  </v-app>
+  </div>
 </template>
 
 <script>
@@ -184,7 +184,7 @@ export default {
       // User either to save or edit cost centres
       // alert(JSON.stringify(this.costCentre, null, ' '))
       this.employessToSave = this.costCentre.employee
-      this.$_axios.post(`${this.$_url}CentroDeCusto`, this.costCentre).then((response) => {
+      this.$_axios.post(`${this.$_url}costcentre`, this.costCentre).then((response) => {
         let result = response.data
         console.log(JSON.stringify(result.resultList), null, ' ')
         // alert(this.editedIndex)
@@ -223,7 +223,7 @@ export default {
     deleteItem (item) {
       let index = this.costCentres.indexOf(item)
       confirm('Tem certeza que deseja excluir este Centro de Custo?') && this.costCentres.splice(index, 1)
-      this.$_axios.delete(`${this.$_url}CentroDeCusto/${item.id}`).then((response) => {
+      this.$_axios.delete(`${this.$_url}costcentre/${item.id}`).then((response) => {
         let result = response.data
         // this.costCentres = this.costCentres.splice(index, 1)
         if (result.mensagem) {
@@ -255,7 +255,7 @@ export default {
       }, 300)
     },
     getMembersList () {
-      this.$_axios.get(`${this.$_url}funcionario`).then((response) => {
+      this.$_axios.get(`${this.$_url}employee`).then((response) => {
         let resultado = response.data
         // alert(JSON.stringify(resultado, null, ' '))
         if (resultado.resultList.length >= 0) {
@@ -283,7 +283,7 @@ export default {
       })
     },
     getCostCentresList () {
-      this.$_axios.get(`${this.$_url}CentrosDeCustos`).then((response) => {
+      this.$_axios.get(`${this.$_url}costcentre`).then((response) => {
         let resultado = response.data
         // alert(JSON.stringify(resultado, null, ' '))
         if (resultado.resultList.length >= 0) {
@@ -312,7 +312,7 @@ export default {
     },
     saveUser (user) {
       alert(JSON.stringify(user))
-      this.$_axios.post(`${this.$_url}funcionario`, user).then((response) => {
+      this.$_axios.post(`${this.$_url}employee`, user).then((response) => {
         let result = response.data
         alert(JSON.stringify(result))
         if (result.resultList.length !== 0) {

@@ -17,13 +17,13 @@ public class GenericStrategy<T extends DomainEntity> implements IStrategy<T> {
 	IApplicationStrategy<T> strategyToBeExecuted;
 	
 	@Override
-	public Result<T> execute(T entity, String action, String callerMethod) {
+	public Result<T> execute(T entity, String action) {
 		
 		applicationStrategy.forEach((k, v) -> {
 			if(k.contains(entity.getClass().getSimpleName()) && k.contains(action.toLowerCase()))
 				strategyToBeExecuted = v;
 		});
 		
-		return strategyToBeExecuted.execute(entity, callerMethod);
+		return strategyToBeExecuted.execute(entity);
 	}
 }

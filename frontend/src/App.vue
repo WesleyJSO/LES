@@ -1,25 +1,15 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer v-model="drawer" fixed clipped   app >
-      <v-list dense>
-        <v-list-tile>
-          <v-list-tile-action>
-            <v-icon>home</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <router-link to="LinhaDoTempo">
-              <v-list-tile-title>Home</v-list-tile-title>
-            </router-link>
-          </v-list-tile-content>
-        </v-list-tile>
-
-        <admin-role v-if="true"></admin-role>
-        <user-role v-else-if="isUsuarioAtivo"></user-role>
-
-      </v-list>
+    <v-navigation-drawer
+      fixed app v-model="drawer"
+      :clipped="$vuetify.breakpoint.mdAndUp"
+    >
+      <admin-role v-if="true"></admin-role>
+      <user-role v-else-if="isUsuarioAtivo"></user-role>
     </v-navigation-drawer>
 
-    <v-toolbar dense dark fixed app class="elevation-10">
+    <v-toolbar dark dense app fixed
+      :clipped-left="$vuetify.breakpoint.mdAndUp">
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title v-text="title" />
       <v-toolbar-title>{{ login.nomeLogin }}</v-toolbar-title>
@@ -33,7 +23,7 @@
     </v-toolbar>
 
     <v-content>
-      <v-container fluid>
+      <v-container fluid fixed="fixed">
         <v-slide-y-transition mode="out-in">
             <v-flex xs12 sm10 offset-sm1 pa-5>
               <router-view @emittedUser="setUsuarioLogado" />
@@ -42,7 +32,7 @@
       </v-container>
     </v-content>
 
-    <v-footer :fixed="fixed" app dark>
+    <v-footer fixed="fixed" app dark>
       <span>&copy; LES 2018 - 2º semestre</span>
     </v-footer>
 
@@ -56,18 +46,16 @@ import UserRole from '@/components/roles/UserRole'
 export default {
   data () {
     return {
+      drawer: false,
       lblLogin: 'LOGIN',
       isAdminAtivo: false,
       isUsuarioAtivo: false,
       title: 'Apontamento de Horas',
-      fixed: false,
       login: [],
       notifications: '',
       account_circle: '',
       avatar: '',
-      roles: [],
-      drawer: false,
-      clipped: true
+      roles: []
     }
   },
   components: {
@@ -110,8 +98,13 @@ export default {
 }
 </script>
 
-<style lang="stylus">
-#keep
-  .v-navigation-drawer__border
-    display: none
+<style>
+  h1 {
+    font-size: 40px;
+    text-align: center;
+    margin-top: -20px;
+    margin-bottom: 20px;
+  }
+  li { list-style: none; }
 </style>
+

@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <div>
     <v-card class="elevation-10">
       <v-toolbar dark>
         <v-toolbar-title>Formulário de consulta</v-toolbar-title>
@@ -34,7 +34,7 @@
       </v-form>
 
     </v-card>
-  </v-app>
+  </div>
 </template>
 
 <script>

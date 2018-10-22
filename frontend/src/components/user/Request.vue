@@ -1,5 +1,5 @@
 <template>
-    <v-app>
+    <div>
     <h1>Realizar Solicitação</h1>
     <li v-for="(message, index) in messages" :key="index">
       <v-alert :color="messageColor"
@@ -8,14 +8,15 @@
                transition="scale-transition" />
     </li>
     <br/>
-    <v-form v-model="valid" @submit.prevent="validateRequest">
+    <v-form ref="form" v-model="valid">
       <v-layout row wrap>
       <!-- Row 1 -->
       <v-flex xs6>
-          <v-combobox v-model="request.type"
+          <v-combobox v-model="type"
                       prepend-icon="check_circle"
-                      :items="getItems.types"
+                      :items="getItems"
                       label="Tipo de Solicitação"
+                      item-text="description"
                       chips>
             <template slot="selection"
                       slot-scope="data">
@@ -25,9 +26,9 @@
                       class="v-chip--select-multi"
                       @input="data.parent.selectItem(data.item)">
                 <v-avatar class="accent white--text"
-                          v-text="data.item.slice(0, 1).toUpperCase()">
+                          v-text="data.item.description.slice(0, 1).toUpperCase()">
                 </v-avatar>
-                  {{ data.item }}
+                  {{ data.item.description }}
               </v-chip>
             </template>
           </v-combobox>
@@ -52,7 +53,7 @@
             </v-text-field>
             <v-date-picker v-model="request.startDate"
                             :locale="locale"
-                            :min="minDate"
+                            :min="minStartDate"
                             :reactive="reactive"
                             no-title scrollable>
               <v-spacer></v-spacer>
@@ -77,13 +78,15 @@
                         v-model="request.endDate"
                         label="Data Troca"
                         prepend-icon="event"
+                        :disabled="enableEndDate"
                         :rules="$v_request.endDate(request.startDate, request.endDate)"
                         readonly>
             </v-text-field>
             <v-date-picker v-model="request.endDate"
                             :reactive="reactive"
                             :locale="locale"
-                            :min="minDate"
+                            :min="minChangeDate"
+                            lazy
                             no-title scrollable>
               <v-spacer></v-spacer>
               <v-btn flat color="primary" @click="requestChangeDate = false">Cancel</v-btn>
@@ -111,10 +114,13 @@
             </v-textarea>
         </v-flex>
     </v-layout>
-    <v-btn type="submit" color="success">Salvar</v-btn>
+    <v-btn type="submit" 
+           color="success"
+           :disabled="!valid"
+           @click="saveRequest">Salvar</v-btn>
     <v-btn @click="clearForm" color="error">Cancelar</v-btn>
     </v-form>
-  </v-app>
+  </div>
 </template>
 
 <script>
@@ -128,7 +134,8 @@ export default {
     haveMessage: false,
     messages: [],
     message: '',
-    request: {}
+    request: {},
+    type: ''
   }),
   created () {
   },
@@ -137,10 +144,10 @@ export default {
       return UserService.REQUEST
     },
     showEntryDates () {
-      return this.request.type === this.getItems.types[5] || this.request.type === this.getItems.types[4] || this.request.type === this.getItems.types[3]
+      return this.request.type === this.getItems[3] || this.request.type === this.getItems[2] || this.request.type === this.getItems[1]
     },
     showAttachmentEntry () {
-      return this.request.type === this.getItems.types[3] || this.request.type === this.getItems.types[1] || this.request.type === this.getItems.types[0]
+      return this.request.type === this.getItems[2] || this.request.type === this.getItems[1]
     },
     parseDate () {
       if (!this.request.startDate) {
@@ -149,8 +156,14 @@ export default {
         return ''
       }
     },
-    minDate () {
+    minStartDate () {
       return new Date().toISOString()
+    },
+    minChangeDate () {
+      return !this.request.startDate ? new Date().toISOString() : new Date(this.request.startDate).toISOString()
+    },
+    enableEndDate () {
+      return !this.request.startDate
     },
     locale () {
       return 'pt-BR'
@@ -159,58 +172,39 @@ export default {
   watch: {
   },
   methods: {
-    validateRequest () {
-      // Need to validate the fields
-      // adding in the rules in the userValidator file
-      this.valid = true
-      if (this.valid) {
-        this.saveRequest()
-      } else {
-        this.messages = ['Para realizar o cadastro de funcionário todos os campos abaixo devem ser preenchidos!']
-        this.haveMessage = true
-        this.messageColor = 'warning'
-      }
-    },
     saveRequest () {
       // TODO: Change method to "really"
       // send the request to rest service
       // Remeber that request can be both
       // created and edited, this is the
       // meaning of the variable 'edit'
-      if (!this.edit) {
-        let funcionario = this.user
-        this.$_axios.post(`${this.$_url}funcionario`, funcionario).then((response) => {
-          let resultado = response.data
-          if (resultado.listaResultado.length !== 0) {
-            // retorno ok /
-            this.funcionario = resultado.listaResultado
-          }
-          if (resultado.mensagem) {
-            this.messages = [...resultado.mensagem]
-            this.haveMessage = true
-            if (resultado.sucesso) {
-            // retorno mensagem de sucesso /
-              this.messageColor = 'info'
-            } else {
-              // retorno mensagem de erro /
-              this.messageColor = 'warning'
-            }
-          }
-        },
-        (response) => {
-          // erro na requisição do serviço /
-          this.messages = ['Erro durante execução do serviço!']
+      this.request = Object.assign({'status': null, 'type': this.type.id}, this.request)
+      alert(JSON.stringify(this.request, null, ' '))
+      this.$_axios.post(`${this.$_url}request`, this.request).then((response) => {
+        let result = response.data
+        console.log(JSON.stringify(result.resultList), null, ' ')
+        if (result.message) {
+          // alert('Messages everything OK')
+          this.messages = [...result.message]
           this.haveMessage = true
-          this.messageColor = 'error'
-        })
-      } else {
-        this.$emit('save', this.user)
-      }
+          if (result.success) {
+          // retorno mensagem de sucesso
+            this.messageColor = 'info'
+          } else {
+            // retorno mensagem de erro
+            this.messageColor = 'warning'
+          }
+        }
+      },
+      (response) => {
+        // erro na requisição do serviço
+        this.messages = ['Erro durante execução do serviço!']
+        this.haveMessage = true
+        this.messageColor = 'error'
+      })
     },
     clearForm () {
-      this.valid = false
-      this.menu = false
-      this.urequest = {}
+      // this.$refs.form.reset()
     }
   }
 }

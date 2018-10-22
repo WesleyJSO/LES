@@ -13,6 +13,7 @@ import CostCentre from '@/components/admin/CostCentre'
 // import SystemParameters from '@/components/admin/SystemParameters'
 import ManageHours from '@/components/admin/ManageHours'
 import Timeline from '@/components/user/Timeline'
+import Appoint from '@/components/user/Appoint'
 // import RegisterSystemParameters from '@/components/admin/RegisterSystemParameters'
 
 Vue.use(Router)
@@ -35,12 +36,12 @@ export default new Router({
       component: ConsultarListar
     },
     {
-      path: '/AlterarUsuario',
+      path: '/alterar',
       name: 'UpdateUser',
       component: UpdateUser
     },
     {
-      path: '/CadastrarUsuario',
+      path: '/cadastro',
       name: 'RegisterUser',
       component: RegisterUser
     },
@@ -88,6 +89,11 @@ export default new Router({
       path: '/LinhaDoTempo',
       name: 'Timeline',
       component: Timeline
+    },
+    {
+      path: '/Apontar',
+      name: 'Appoint',
+      component: Appoint
     }/*,
     {
       path: '/CadastroParametros',

@@ -10,7 +10,10 @@ export default class RequestValidator {
   endDate (startDate, endDate) {
     let start = new Date(startDate)
     let end = new Date(endDate)
-    if (start < end) {
+    if (!startDate) {
+      return ['Informe a data Alvo!']
+    }
+    if (start >= end) {
       return ['A Data Final deve ser maior que a Data Alvo!']
     }
   }

@@ -9,8 +9,8 @@ import br.com.les.backend.utils.Result;
 public class UpdateCommand<T extends DomainEntity> extends AbstractCommand<T> {
 	
 	@Override
-	public Result<T> execute(T entity, String callerMethod) {
-		return facade.update( entity, callerMethod );
+	public Result<T> execute(T entity) {
+		return facade.update( entity );
 	}
 	
 }

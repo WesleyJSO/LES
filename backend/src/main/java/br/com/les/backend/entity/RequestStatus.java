@@ -1,4 +1,4 @@
-package br.com.les.backend.utils;
+package br.com.les.backend.entity;
 
 public enum RequestStatus {
 	

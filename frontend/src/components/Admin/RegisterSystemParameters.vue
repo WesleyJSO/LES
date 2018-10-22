@@ -1,5 +1,5 @@
 <template>
-    <v-app>
+    <div>
     <h1>Parametros do Sistema</h1>
     <h2>Os dados inseridos abaixo influenciarão no funcionamento do sistema</h2>
     <li v-for="(message, index) in messages" :key="index">
@@ -78,7 +78,7 @@
           </v-layout>
         </v-card>
 
-        <v-flex class="text-xs-center">          
+        <v-flex class="text-xs-center">
           <v-btn
             color="primary"
             @click="nextStep()">
@@ -137,7 +137,7 @@
         </v-card>
 
         <v-flex class="text-xs-center">
-          <v-btn 
+          <v-btn
             flat
             @click="backStep()">
             Voltar
@@ -173,7 +173,7 @@
           <!-- Row 4 -->
             <v-flex xs12 sm9 md6 lg6 xl4>
               <span>Qual tipo deve ser aplicado primeiro?</span>
-              <v-radio-group 
+              <v-radio-group
                             v-model="radio"
                             :mandatory="false"
                             @change="changeRadio">
@@ -184,7 +184,7 @@
           </v-layout>
           <v-layout v-if="overtimeType || bothTypes">
           <!-- Row 2 -->
-            <v-flex xs12 sm9 md6 lg6 xl4>              
+            <v-flex xs12 sm9 md6 lg6 xl4>
               <v-checkbox
                 :disabled="blockCheckbox2"
                 :label="`Não aplicar limite de horas extras`"
@@ -225,7 +225,7 @@
         </v-card>
 
         <v-flex class="text-xs-center">
-          <v-btn 
+          <v-btn
             flat
             @click="backStep()">
             Voltar
@@ -240,7 +240,7 @@
       </v-stepper-content>
     </v-stepper-items>
   </v-stepper>
-  </v-app>
+  </div>
 </template>
 
 <script>

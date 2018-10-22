@@ -9,8 +9,8 @@ import br.com.les.backend.utils.Result;
 public class DeleteCommand<T extends DomainEntity> extends AbstractCommand<T> {
 
 	@Override
-	public Result<T> execute(T entity, String callerMethod) {
-		return facade.delete(entity, callerMethod);
+	public Result<T> execute(T entity) {
+		return facade.delete(entity);
 	}
 	
 }

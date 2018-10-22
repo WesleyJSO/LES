@@ -5,6 +5,6 @@ import br.com.les.backend.utils.Result;
 
 public interface IApplicationStrategy<T extends DomainEntity> {
 
-	Result<T> execute(T entity, String callerMethod);
+	Result<T> execute(T entity);
 
 }

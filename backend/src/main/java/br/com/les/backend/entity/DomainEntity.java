@@ -31,12 +31,13 @@ public abstract class DomainEntity {
 	public LocalDateTime getCreationDate() {
 		return creationDate;
 	}
-
+	
 	@PrePersist
 	public void setCreationDate() {
+		this.active = true;
 		this.creationDate = LocalDateTime.now();
 	}
-
+	
 	public Long getId() {
 		return id;
 	}
@@ -48,7 +49,7 @@ public abstract class DomainEntity {
 	public Boolean getActive() {
 		return active;
 	}
-
+		
 	public void setActive(Boolean active) {
 		this.active = active;
 	}

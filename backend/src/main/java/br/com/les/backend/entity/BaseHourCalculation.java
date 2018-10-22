@@ -12,8 +12,6 @@ import org.springframework.stereotype.Component;
 @Entity
 public class BaseHourCalculation extends DomainEntity {
 
-	private static final long serialVersionUID = 5309951868771462074L;
-
 	private Short hourType = -1; // 0 - comp time, 1 - extra time, 2 - both
 	private Double workload;
 	private Date expirationDate;

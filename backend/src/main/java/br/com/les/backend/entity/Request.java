@@ -1,29 +1,24 @@
 package br.com.les.backend.entity;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import br.com.les.backend.utils.RequestStatus;
-import br.com.les.backend.utils.RequestType;
+import javax.persistence.OneToOne;
 
 @Entity
-@Inheritance( strategy=InheritanceType.TABLE_PER_CLASS )
 public class Request extends DomainEntity {
-
-	private static final long serialVersionUID = 9026354384897022658L;
 
 	private String description;
 	private RequestStatus status;
-	private Date startDate;
-	private Date endDate;
-	private RequestType type;
+	private LocalDate startDate;
+	private LocalDate endDate;
+	private int type;
 	private byte[] attachment;
 	
 	@ManyToOne( fetch=FetchType.LAZY )
@@ -32,25 +27,9 @@ public class Request extends DomainEntity {
 	
 	@ManyToMany( cascade={ CascadeType.MERGE, CascadeType.PERSIST } )
 	private List< Employee > notificatedColaboratorsList;
-	
-	public Request () {}
-	
-	public Request (Long requestId) {
-		setId(requestId);
-	}
 
-	public Request(String description, RequestStatus status, Date startDate, Date endDate, RequestType type,
-			byte[] attachment, User employee, List<Employee> notificatedColaboratorsList) {
-		super();
-		this.description = description;
-		this.status = status;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.type = type;
-		this.attachment = attachment;
-		this.employee = employee;
-		this.notificatedColaboratorsList = notificatedColaboratorsList;
-	}
+	@OneToOne( fetch=FetchType.LAZY )
+	private RequestType requestType;
 
 	public String getDescription() {
 		return description;
@@ -76,22 +55,6 @@ public class Request extends DomainEntity {
 		this.notificatedColaboratorsList = notificatedColaboratorsList;
 	}
 	
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	public Date getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
-
 	public byte[] getAttachment() {
 		return attachment;
 	}
@@ -100,12 +63,12 @@ public class Request extends DomainEntity {
 		this.attachment = attachment;
 	}
 
-	public RequestType getType() {
+	public int getType() {
 		return type;
 	}
 
-	public void setType(RequestType requestType) {
-		this.type = requestType;
+	public void setType(int type) {
+		this.type = type;
 	}
 
 	public RequestStatus getStatus() {
@@ -114,5 +77,21 @@ public class Request extends DomainEntity {
 
 	public void setStatus(RequestStatus status) {
 		this.status = status;
+	}
+
+	public LocalDate getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(LocalDate endDate) {
+		this.endDate = endDate;
+	}
+
+	public LocalDate getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(LocalDate startDate) {
+		this.startDate = startDate;
 	}	
 }

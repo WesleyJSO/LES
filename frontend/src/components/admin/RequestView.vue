@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <div>
     <li v-for="(message, index) in messages" :key="index">
       <v-alert :color="messageColor"
                :value="haveMessage"
@@ -64,29 +64,29 @@
                     </v-card-text>
 
                     <v-card-text v-if="props.item.type === 'Ausência'">
-                        Data Afetada - 
+                        Data Afetada -
                         {{ props.item.affectedDate}}<br><br>
 
-                        Documento: 
+                        Documento:
                         <a href="">Download</a>
 
                     </v-card-text>
 
                     <v-card-text v-if="props.item.type === 'Correção de Apontamento'">
-                        Data Afetada - 
+                        Data Afetada -
                         {{ props.item.affectedDate}}<br><br>
 
-                        Nova Data - 
+                        Nova Data -
                         {{ props.item.newDate}}
 
                     </v-card-text>
-                    
+
                     <v-card-text v-if="props.item.type === 'Remanejamento'">
                         Datas Afetadas:<br>
                         Folgar em -
                         {{ props.item.affectedDate}}<br>
 
-                        Trabalhar em - 
+                        Trabalhar em -
                         {{ props.item.newDate}}
 
                     </v-card-text>
@@ -153,29 +153,29 @@
                     </v-card-text>
 
                     <v-card-text v-if="props.item.type === 'Ausência'">
-                        Data Afetada - 
+                        Data Afetada -
                         {{ props.item.affectedDate}}<br><br>
 
-                        Documento: 
+                        Documento:
                         <a href="">Download</a>
 
                     </v-card-text>
 
                     <v-card-text v-if="props.item.type === 'Correção de Apontamento'">
-                        Data Afetada - 
+                        Data Afetada -
                         {{ props.item.affectedDate}}<br><br>
 
-                        Nova Data - 
+                        Nova Data -
                         {{ props.item.newDate}}
 
                     </v-card-text>
-                    
+
                     <v-card-text v-if="props.item.type === 'Remanejamento'">
                         Datas Afetadas:<br>
                         Folgar em -
                         {{ props.item.affectedDate}}<br>
 
-                        Trabalhar em - 
+                        Trabalhar em -
                         {{ props.item.newDate}}
 
                     </v-card-text>
@@ -200,7 +200,7 @@
     </v-tabs-items>
         </v-tabs>
     </template>
-  </v-app>
+  </div>
 </template>
 
 <script>

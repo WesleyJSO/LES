@@ -8,9 +8,6 @@ import javax.persistence.OneToMany;
 
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Component
 @Entity
 public class CostCentre extends DomainEntity {
@@ -19,7 +16,7 @@ public class CostCentre extends DomainEntity {
 	private String code;
 	
 	@OneToMany(mappedBy = "costCentre", fetch = FetchType.EAGER)
-	private List < Employee > employees;
+	private List < Employee > employeeList;
 	
 	public String getCode() {
 		return code;
@@ -30,11 +27,11 @@ public class CostCentre extends DomainEntity {
 	}
 	
 	public List<Employee> getEmployees() {
-		return employees;
+		return employeeList;
 	}
 	
-	public void setEmployees(List<Employee> employees) {
-		this.employees = employees;
+	public void setEmployees(List<Employee> employeeList) {
+		this.employeeList = employeeList;
 	}
 	
 	public String getName() {
@@ -53,11 +50,11 @@ public class CostCentre extends DomainEntity {
 		this.setId( id );
 	}
 	
-	public CostCentre(String name, String code, String nickName, List<Employee> employees) {
+	public CostCentre(String name, String code, String nickName, List<Employee> employeeList) {
 		super();
 		this.name = name;
 		this.code = code;
-		this.employees = employees;
+		this.employeeList = employeeList;
 	}
 	
 	

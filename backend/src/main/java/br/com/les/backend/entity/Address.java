@@ -1,7 +1,6 @@
 package br.com.les.backend.entity;
 
 import javax.persistence.Embeddable;
-import javax.persistence.Entity;
 
 import org.springframework.stereotype.Component;
 

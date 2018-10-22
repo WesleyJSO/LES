@@ -13,8 +13,6 @@ import org.springframework.stereotype.Component;
 @Entity
 public class Company extends DomainEntity {
 
-	private static final long serialVersionUID = 2623152606711154523L;
-
 	private String socialName;
 	private String tradingName;
 	private String cnpj;

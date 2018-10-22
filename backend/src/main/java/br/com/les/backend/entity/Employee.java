@@ -21,15 +21,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Component
 @Entity
 public class Employee extends User {
-
-	private static final long serialVersionUID = 7031669546742429620L;
-
 	
 	private String pis;
 	private Date  joiningDate;
 	
-	@ManyToOne( cascade=CascadeType.ALL)
-	@JoinColumn( name="manager_id" )
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="manager_id")
 	private User manager;
 
 	@OneToMany( cascade=CascadeType.ALL )
@@ -42,7 +39,7 @@ public class Employee extends User {
 	
 	@OneToMany( cascade=CascadeType.ALL )
 	@LazyCollection(LazyCollectionOption.FALSE)
-	private List< Appointments > appointmentList;
+	private List< Appointment > appointmentList;
 	
 	@OneToOne( mappedBy="employee", fetch=FetchType.LAZY,  cascade=CascadeType.PERSIST  )
 	private BaseHourCalculation baseHourCalculation;
@@ -94,11 +91,11 @@ public class Employee extends User {
 		this.notifiedEmployeesRequestList = notifiedEmployeesRequestList;
 	}
 
-	public List<Appointments> getAppointmentList() {
+	public List<Appointment> getAppointmentList() {
 		return appointmentList;
 	}
 
-	public void setAppointmentList(List<Appointments> appointmentList) {
+	public void setAppointmentList(List<Appointment> appointmentList) {
 		this.appointmentList = appointmentList;
 	}
 	
