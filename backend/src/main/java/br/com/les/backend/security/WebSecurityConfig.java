@@ -29,10 +29,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		.and()
 		.csrf().disable().authorizeRequests()
 		.antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-		.antMatchers(HttpMethod.POST, "/login").permitAll()
-		.antMatchers(HttpMethod.POST, "/h2/**").permitAll()
-		.antMatchers(HttpMethod.GET, "/h2/**").permitAll()
-		.anyRequest().authenticated()
+//		.antMatchers(HttpMethod.POST, "/login").permitAll()
+//		.antMatchers(HttpMethod.POST, "/h2/**").permitAll()
+//		.antMatchers(HttpMethod.GET, "/h2/**").permitAll()
+//		.anyRequest().authenticated()
+		.antMatchers("/**").permitAll()
 		.and()
 		
 		// filtra requisições de login
