@@ -7,12 +7,13 @@ import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.Company;
 import br.com.les.backend.service.GenericService;
+import br.com.les.backend.strategy.AbstractStrategy;
 import br.com.les.backend.strategy.IApplicationStrategy;
 import br.com.les.backend.utils.Result;
 import br.com.les.backend.utils.Util;
 
 @Component
-public class SaveCompanyStrategy implements IApplicationStrategy<Company> {
+public class SaveCompanyStrategy extends AbstractStrategy<Company> {
 	
 	@Autowired
 	GenericService<Company> companyService;

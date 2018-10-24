@@ -5,12 +5,13 @@ import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.User;
 import br.com.les.backend.service.GenericService;
+import br.com.les.backend.strategy.AbstractStrategy;
 import br.com.les.backend.strategy.IApplicationStrategy;
 import br.com.les.backend.utils.EmailServiceImpl;
 import br.com.les.backend.utils.Result;
 
 @Component
-public class FindUserStrategy implements IApplicationStrategy<User> {
+public class FindUserStrategy extends AbstractStrategy<User> {
 
 	@Autowired GenericService<User> userService;
 	

@@ -9,12 +9,13 @@ import br.com.les.backend.entity.Employee;
 import br.com.les.backend.entity.Telephone;
 import br.com.les.backend.entity.User;
 import br.com.les.backend.service.GenericService;
+import br.com.les.backend.strategy.AbstractStrategy;
 import br.com.les.backend.strategy.IApplicationStrategy;
 import br.com.les.backend.utils.Result;
 import br.com.les.backend.utils.Util;
 
 @Component
-public class SaveUserStrategy implements IApplicationStrategy<User> {
+public class SaveUserStrategy extends AbstractStrategy<User> {
 
 	@Autowired private GenericService<User> userService;
 	@Autowired private GenericService<Employee> employeeService;

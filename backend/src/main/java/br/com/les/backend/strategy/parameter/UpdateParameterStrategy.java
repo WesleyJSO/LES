@@ -5,12 +5,13 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.Parameter;
+import br.com.les.backend.strategy.AbstractStrategy;
 import br.com.les.backend.strategy.IApplicationStrategy;
 import br.com.les.backend.utils.Result;
 import br.com.les.backend.utils.Util;
 
 @Component
-public class UpdateParameterStrategy implements IApplicationStrategy<Parameter> {
+public class UpdateParameterStrategy extends AbstractStrategy<Parameter> {
 
 	@Override
 	public Result<Parameter> execute(Parameter entity) {

@@ -4,12 +4,13 @@ import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.Employee;
 import br.com.les.backend.entity.Telephone;
+import br.com.les.backend.strategy.AbstractStrategy;
 import br.com.les.backend.strategy.IApplicationStrategy;
 import br.com.les.backend.utils.Result;
 import br.com.les.backend.utils.Util;
 
 @Component
-public class SaveEmployeeStrategy implements IApplicationStrategy<Employee> {
+public class SaveEmployeeStrategy extends AbstractStrategy<Employee> {
 
 	@Override
 	public Result<Employee> execute(Employee employee) {
