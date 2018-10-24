@@ -63,7 +63,7 @@
           </v-menu>
         </v-flex>
         <!-- Row 2 -->
-        <v-flex xs6 v-if="showEntryDates">
+        <v-flex xs6>
           <v-menu ref="requestChangeDate"
                   :close-on-content-click="false"
                   v-model="requestChangeDate"
@@ -94,7 +94,7 @@
             </v-date-picker>
           </v-menu>
         </v-flex>
-        <v-flex xs6 v-if="showAttachmentEntry">
+        <v-flex xs6>
           <v-text-field v-model="request.attachment"
                         type="file"
                         prepend-icon="attachment"
@@ -114,7 +114,7 @@
             </v-textarea>
         </v-flex>
     </v-layout>
-    <v-btn type="submit" 
+    <v-btn type="button" 
            color="success"
            :disabled="!valid"
            @click="saveRequest">Salvar</v-btn>
@@ -144,10 +144,7 @@ export default {
       return UserService.REQUEST
     },
     showEntryDates () {
-      return this.request.type === this.getItems[3] || this.request.type === this.getItems[2] || this.request.type === this.getItems[1]
-    },
-    showAttachmentEntry () {
-      return this.request.type === this.getItems[2] || this.request.type === this.getItems[1]
+      return this.request.type === this.getItems[0] || this.request.type === this.getItems[1] || this.request.type === this.getItems[3]
     },
     parseDate () {
       if (!this.request.startDate) {
@@ -195,16 +192,18 @@ export default {
             this.messageColor = 'warning'
           }
         }
+        this.clearForm()
       },
       (response) => {
         // erro na requisição do serviço
+        console.log(response)
         this.messages = ['Erro durante execução do serviço!']
         this.haveMessage = true
         this.messageColor = 'error'
       })
     },
     clearForm () {
-      // this.$refs.form.reset()
+      this.$refs.form.reset()
     }
   }
 }

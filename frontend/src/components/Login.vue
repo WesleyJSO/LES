@@ -42,7 +42,7 @@
             <v-btn id="submit"
               color="info"
               :disabled="!valid"
-              @click="submit">Login</v-btn>
+              @click="login">Login</v-btn>
           </v-card-actions>
 
         </v-form>
@@ -93,10 +93,35 @@ export default {
         })
       }
     },
-    submit () {
+    login () {
       this.messages = []
       this.haveMessage = false
-      this.$_axios.patch(`${this.$_url}user/`, {params: {password: this.user.password, email: this.user.email}})
+      this.$_axios.post(`${this.$_url}login`, {email: this.user.email, password: this.user.password}).then(response => {
+        let result = response.data
+        if (result.message) {
+          this.messages = result.message
+          this.haveMessage = true
+          if (result.success) {
+            this.companyList.splice(this.deleteIndex, 1)
+            this.messageColor = 'info'
+          } else {
+            this.messageColor = 'warning'
+          }
+        }
+        this.$router.push('/LinhaDoTempo')
+      }).catch(error => {
+        console.log(error)
+        // if the request fails, remove any possible user token if possible
+        localStorage.removeItem('user-token')
+        this.messages = ['Erro durante execução do serviço!']
+        this.haveMessage = true
+        this.messageColor = 'error'
+      })
+    },
+    /* submit () {
+      this.messages = []
+      this.haveMessage = false
+      this.$_axios.patch(`${this.$_url}user`, {params: {password: this.user.password, email: this.user.email}})
         .then((response) => {
           let result = response.data
           if (result.resultList.length === 0) {
@@ -127,12 +152,11 @@ export default {
           this.$router.push('/LinhaDoTempo')
         })
         .catch(error => {
-          console.log(error)
           this.messages = ['Erro durante execução do serviço!']
           this.haveMessage = true
           this.messageColor = 'error'
         })
-    },
+    }, */
     clearForm () {
       this.$refs.form.reset()
     }
