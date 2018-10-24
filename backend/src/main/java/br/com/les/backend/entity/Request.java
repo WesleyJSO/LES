@@ -9,13 +9,12 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 
 @Entity
 public class Request extends DomainEntity {
 
 	private String description;
-	private RequestStatus status;
+	private int status;
 	private LocalDate startDate;
 	private LocalDate endDate;
 	private int type;
@@ -23,13 +22,10 @@ public class Request extends DomainEntity {
 	
 	@ManyToOne( fetch=FetchType.LAZY )
 	@JoinColumn( name="employee_id" )
-	private User employee;
+	private Employee employee;
 	
 	@ManyToMany( cascade={ CascadeType.MERGE, CascadeType.PERSIST } )
 	private List< Employee > notificatedColaboratorsList;
-
-	@OneToOne( fetch=FetchType.LAZY )
-	private RequestType requestType;
 
 	public String getDescription() {
 		return description;
@@ -39,11 +35,11 @@ public class Request extends DomainEntity {
 		this.description = description;
 	}
 
-	public User getEmployee() {
+	public Employee getEmployee() {
 		return employee;
 	}
 
-	public void setEmployee(User employee) {
+	public void setEmployee(Employee employee) {
 		this.employee = employee;
 	}
 
@@ -71,11 +67,11 @@ public class Request extends DomainEntity {
 		this.type = type;
 	}
 
-	public RequestStatus getStatus() {
+	public int getStatus() {
 		return status;
 	}
 
-	public void setStatus(RequestStatus status) {
+	public void setStatus(int status) {
 		this.status = status;
 	}
 
