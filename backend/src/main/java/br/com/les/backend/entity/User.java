@@ -25,8 +25,6 @@ public class User extends DomainEntity implements UserDetailsService {
 
 	private String email;
 	private String password;
-	private String name;
-	private String lastName;
 	
 	@ManyToMany(cascade={ CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE })
 	@JoinTable(name = "USER_ROLE", joinColumns = { @JoinColumn(name = "USER_ID") }, inverseJoinColumns = {
@@ -34,9 +32,6 @@ public class User extends DomainEntity implements UserDetailsService {
 	@JsonProperty("authorities")
 	private List<Role> roleList;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-	@JsonManagedReference
-	private List<Telephone> telephoneList;
 
 	public String getEmail() {
 		return email;
@@ -54,30 +49,6 @@ public class User extends DomainEntity implements UserDetailsService {
 		this.roleList = roleList;
 	}
 
-	public List<Telephone> getTelephoneList() {
-		return telephoneList;
-	}
-
-	public void setTelephoneList(List<Telephone> telephoneList) {
-		this.telephoneList = telephoneList;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public String getPassword() {
 		return password;
 	}
@@ -91,7 +62,7 @@ public class User extends DomainEntity implements UserDetailsService {
 		UserBuilder builder = null;
 		builder = org.springframework.security.core.userdetails.User.withUsername(username);
 		builder.password(new BCryptPasswordEncoder().encode(this.password));
-		builder.roles("ROLE_ADMIN");
+		builder.roles("ROLE_USER");
 
 		return builder.build();
 	}

@@ -17,17 +17,27 @@ import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Component
 @Entity
-public class Employee extends User {
+public class Employee extends DomainEntity {
 	
 	private String pis;
 	private Date  joiningDate;
+	@OneToOne()
+	@JoinColumn(name = "user_id")
+	private User user;
+	private String name;
+	private String lastName;
+	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonManagedReference
+	private List<Telephone> telephoneList;
 	
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="manager_id")
-	private User manager;
+	private Employee manager;
 
 	@OneToMany( cascade=CascadeType.ALL )
 	@LazyCollection(LazyCollectionOption.FALSE)
@@ -67,11 +77,11 @@ public class Employee extends User {
 		this.pis = pis;
 	}
 
-	public User getManager() {
+	public Employee getManager() {
 		return manager;
 	}
 
-	public void setManager(User manager) {
+	public void setManager(Employee manager) {
 		this.manager = manager;
 	}
 
@@ -130,4 +140,37 @@ public class Employee extends User {
 	public void setCostCentre(CostCentre costCentre) {
 		this.costCentre = costCentre;
 	}
+
+	public List<Telephone> getTelephoneList() {
+		return telephoneList;
+	}
+
+	public void setTelephoneList(List<Telephone> telephoneList) {
+		this.telephoneList = telephoneList;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+	
 }
