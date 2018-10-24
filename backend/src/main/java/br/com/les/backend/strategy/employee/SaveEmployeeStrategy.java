@@ -22,7 +22,7 @@ public class SaveEmployeeStrategy implements IApplicationStrategy<Employee> {
 		if( employee.getLastName() == null || employee.getLastName().isEmpty() )
 			result.setError( Util.ERROR_LAST_NAME );
 		
-		if( employee.getEmail() == null || employee.getEmail().isEmpty() )
+		if( employee.getUser().getEmail() == null || employee.getUser().getEmail().isEmpty() )
 			result.setError( Util.ERROR_EMAIL );
 		
 		if( employee.getBaseHourCalculation().getSalary() == 0 )
@@ -62,7 +62,7 @@ public class SaveEmployeeStrategy implements IApplicationStrategy<Employee> {
 				result.setError( Util.ERROR_JOINING_DATE );
 		}
 		
-		if( employee.getPassword() == null || employee.getPassword().isEmpty() )
+		if( employee.getUser().getPassword() == null || employee.getUser().getPassword().isEmpty() )
 			result.setError( Util.INVALID_PASSWORD );
 		
 		if( result.isSuccess() )

@@ -1,9 +1,12 @@
 package br.com.les.backend.strategy.request;
 
+import org.springframework.stereotype.Component;
+
 import br.com.les.backend.entity.Request;
 import br.com.les.backend.strategy.IApplicationStrategy;
 import br.com.les.backend.utils.Result;
 
+@Component
 public class DeleteRequestStrategy implements IApplicationStrategy<Request> {
 	
 	@Override
