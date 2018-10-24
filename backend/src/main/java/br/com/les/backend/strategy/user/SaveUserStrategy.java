@@ -26,7 +26,7 @@ public class SaveUserStrategy extends AbstractStrategy<User> {
 		
 		Result<User> result = new Result<>();
 		
-		if( user.getName() == null || user.getName().isEmpty() )
+		/*if( user.getName() == null || user.getName().isEmpty() )
 			result.setError( Util.ERROR_NAME );
 		
 		if( user.getLastName() == null || user.getLastName().isEmpty() )
@@ -49,7 +49,7 @@ public class SaveUserStrategy extends AbstractStrategy<User> {
 			result.setError( Util.ERROR_PASSWORD );
 		
 		if( result.isSuccess() )
-			result.setSuccess( Util.SAVE_SUCCESSFUL_USER );
+			result.setSuccess( Util.SAVE_SUCCESSFUL_USER );*/
 		
 		return result;
 	}
@@ -64,7 +64,7 @@ public class SaveUserStrategy extends AbstractStrategy<User> {
 		return result;
 	}
 
-	private Result<User> verifyIfEmailIsAlreadyUsed(Result<User> result, User user) {
+	/*private Result<User> verifyIfEmailIsAlreadyUsed(Result<User> result, User user) {
 		List<User> searchUserResult = null; 
 		User u = new User();
 		u.setEmail(user.getEmail());
@@ -80,5 +80,5 @@ public class SaveUserStrategy extends AbstractStrategy<User> {
 				result.setError(Util.ERROR_ALREADY_REGISTRED_EMAIL);
 		}
 		return result;
-	}
+	}*/
 }
