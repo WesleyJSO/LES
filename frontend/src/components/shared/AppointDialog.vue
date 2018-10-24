@@ -10,7 +10,7 @@
       <v-flex xs12 sm9 md6 lg6 xl4>
         <v-form v-model="valid">
           <v-text-field type="time"
-            v-model="editedValue"
+            v-model="value"
             prepend-icon="timer"
             label="Hora">
           </v-text-field>
@@ -47,31 +47,27 @@ export default {
   },
   data: () => ({
     dialog: false,
-    editedValue: '',
     valid: false
   }),
-  created () {
-    this.editedValue = this.value
-  },
   methods: {
     appoint (action) {
       if (action === 'close') {
         this.$emit('editAppoint', false)
       } else {
         if (this.type === 'Entrada Manhã') {
-          this.appointment.morningEntrance = this.editedValue
+          this.appointment.morningEntrance = this.value
         } else if (this.type === 'Saída Manhã') {
-          this.appointment.morningOut = this.editedValue
+          this.appointment.morningOut = this.value
         } else if (this.type === 'Entrada Tarde') {
-          this.appointment.afternoonEntrance = this.editedValue
+          this.appointment.afternoonEntrance = this.value
         } else if (this.type === 'Saída Tarde') {
           if (!this.appointment.morningOut) {
             this.appointment.morningOut = '12:00'
             this.appointment.afternoonEntrance = '12:00'
           }
-          this.appointment.afternoonOut = this.editedValue
+          this.appointment.afternoonOut = this.value
         } else if (this.type === 'Entrada Noite') {
-          this.appointment.nightEntrance = this.editedValue
+          this.appointment.nightEntrance = this.value
         } else if (this.type === 'Saída Noite') {
           if (!this.appointment.morningOut && this.appointment.morningEntrance) {
             this.appointment.morningOut = '12:00'
@@ -81,11 +77,11 @@ export default {
             this.appointment.afternoonOut = '18:00'
             this.appointment.nightEntrance = '18:00'
           }
-          this.appointment.nightOut = this.editedValue
+          this.appointment.nightOut = this.value
         } else if (this.type === 'Saída Partícular') {
-          this.appointment.particularExit = this.editedValue
+          this.appointment.particularExit = this.value
         } else if (this.type === 'Retorno') {
-          this.appointment.particularExitReturn = this.editedValue
+          this.appointment.particularExitReturn = this.value
         }
         this.$emit('editAppoint', this.appointment)
       }

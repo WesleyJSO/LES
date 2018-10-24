@@ -1,6 +1,6 @@
  <template>
   <div>
-      <Appoint></Appoint>
+      <Appoint id="apontamentoRapido"></Appoint>
     <h1>Últimos Apontamentos</h1>
     <br/>
     <v-spacer></v-spacer>
@@ -125,6 +125,9 @@ export default {
   html * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+#apontamentoRapido {
+  margin-bottom: 50px;
 }
 
 *, *:after, *:before {
@@ -390,9 +393,5 @@ a.cd-read-more:hover{text-decoration:none; background-color: #424242;  }
     -moz-animation: cd-bounce-2-inverse 0.6s;
     animation: cd-bounce-2-inverse 0.6s;
   }
-}
-
-.form-container {
-  margin-bottom: -100px;
 }
 </style>

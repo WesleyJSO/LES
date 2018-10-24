@@ -41,6 +41,18 @@ public class Appointment extends DomainEntity {
 	@ManyToOne( fetch=FetchType.EAGER )
 	@JoinColumn( name="employee_id" )
 	private Employee employee;
+	
+	@OneToMany( cascade=CascadeType.ALL )
+	@LazyCollection(LazyCollectionOption.FALSE)
+	private List< HistMonthlyBalanceChange > histChangeMonthlyBalanceList;
+
+	public List<HistMonthlyBalanceChange> getHistChangeMonthlyBalanceList() {
+		return histChangeMonthlyBalanceList;
+	}
+
+	public void setHistChangeMonthlyBalanceList(List<HistMonthlyBalanceChange> histChangeMonthlyBalanceList) {
+		this.histChangeMonthlyBalanceList = histChangeMonthlyBalanceList;
+	}
 
 	public LocalTime getMorningEntrance() {
 		return morningEntrance;
