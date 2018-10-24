@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import br.com.les.backend.dao.GenericDAO;
+import br.com.les.backend.entity.Employee;
 import br.com.les.backend.entity.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -20,7 +21,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class TokenAuthenticationService {
 	
 	@Autowired
-	private GenericDAO<User> genericDAO;
+	private GenericDAO<Employee> genericDAO;
 	
 	// EXPIRATION_TIME = 10 dias
 	static final long EXPIRATION_TIME = 860_000_000;
@@ -51,11 +52,16 @@ public Authentication getAuthentication(HttpServletRequest request) {
 					.parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
 					.getBody()
 					.getSubject();
-			User u = new User();
-			u.setEmail(email);
-			List<User> load = genericDAO.find(u);
-			if (load != null && load.size() > 0 && load.get(0).getId() > 0) {
-				return new UsernamePasswordAuthenticationToken(load, null, load.get(0).getRoleList());
+			
+			User user = new User();
+			Employee employee = new Employee();
+			
+			user.setEmail(email);
+			employee.setUser(user);
+			
+			List<Employee> load = genericDAO.find(employee);
+			if (load != null && load.size() > 0) {
+				return new UsernamePasswordAuthenticationToken(load, null, load.get(0).getUser().getRoleList());
 			}
 		}
 		 
