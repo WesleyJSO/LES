@@ -11,25 +11,28 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.session.SessionManagementFilter;
 
-import br.com.les.backend.repository.UserRepository;
+import br.com.les.backend.entity.Employee;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
-	@Qualifier("userRepository")
-	private UserRepository userRepository;
+	private Employee employeeRepository;
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
+		.addFilterBefore(new CorsFilter(), SessionManagementFilter.class)
 		.headers().frameOptions().disable()
 		.and()
 		.csrf().disable().authorizeRequests()
 		.antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+		.antMatchers(HttpMethod.OPTIONS, "/*").permitAll()
 		.antMatchers(HttpMethod.POST, "/login").permitAll()
+		.antMatchers(HttpMethod.PATCH, "/login").permitAll()
 		.antMatchers(HttpMethod.POST, "/h2/**").permitAll()
 		.antMatchers(HttpMethod.GET, "/h2/**").permitAll()
 		.anyRequest().authenticated()
@@ -47,7 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		// auth.userDetailsService( (UserDetailsService) new User() );
 		
 		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-		// cria uma conta default temporáriamente
+			// cria uma conta default temporáriamente
 				auth.inMemoryAuthentication()
 					.withUser("zeller@zeller.com")
 					.password(encoder.encode("1234"))
