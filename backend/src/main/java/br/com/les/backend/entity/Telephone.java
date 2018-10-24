@@ -19,7 +19,7 @@ public class Telephone extends DomainEntity {
 	@ManyToOne( fetch=FetchType.LAZY )
 	@JoinColumn( name="user_id" )
 	@JsonBackReference
-	private User user;
+	private Employee user;
 
 	
 	public String getType() {
@@ -38,11 +38,11 @@ public class Telephone extends DomainEntity {
 		this.number = number;
 	}
 
-	public User getUser() {
+	public Employee getUser() {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(Employee user) {
 		this.user = user;
 	}
 }
