@@ -15,6 +15,7 @@ import ManageHours from '@/components/admin/ManageHours'
 import Timeline from '@/components/user/Timeline'
 import Appoint from '@/components/user/Appoint'
 // import RegisterSystemParameters from '@/components/admin/RegisterSystemParameters'
+import Authenticator from '@/service/Authenticator'
 
 Vue.use(Router)
 
@@ -33,17 +34,26 @@ export default new Router({
     {
       path: '/Consultar',
       name: 'ConsultarListar',
-      component: ConsultarListar
+      component: ConsultarListar,
+      beforeEnter: (to, from, next) => {
+        Authenticator.HAS_ROLE('ROLE_ADMIN') ? next() : next('/Login')
+      }
     },
     {
       path: '/alterar',
       name: 'UpdateUser',
-      component: UpdateUser
+      component: UpdateUser,
+      beforeEnter: (to, from, next) => {
+        Authenticator.HAS_ROLE('ROLE_ADMIN') ? next() : next('/Login')
+      }
     },
     {
       path: '/cadastro',
       name: 'RegisterUser',
-      component: RegisterUser
+      component: RegisterUser,
+      beforeEnter: (to, from, next) => {
+        Authenticator.HAS_ROLE('ROLE_ADMIN') ? next() : next('/Login')
+      }
     },
     {
       path: '/Apontamentos',
@@ -58,7 +68,10 @@ export default new Router({
     {
       path: '/CadastrarEmpresa',
       name: 'RegisterCompany',
-      component: RegisterCompany
+      component: RegisterCompany,
+      beforeEnter: (to, from, next) => {
+        Authenticator.HAS_ROLE('ROLE_ADMIN') ? next() : next('/Login')
+      }
     },
     {
       path: '/Solicitacoes',
@@ -68,22 +81,34 @@ export default new Router({
     {
       path: '/Graficos',
       name: 'Reports',
-      component: Reports
+      component: Reports,
+      beforeEnter: (to, from, next) => {
+        Authenticator.HAS_ROLE('ROLE_ADMIN') ? next() : next('/Login')
+      }
     },
     {
       path: '/CentroDeCustos',
       name: 'CostCentre',
-      component: CostCentre
+      component: CostCentre,
+      beforeEnter: (to, from, next) => {
+        Authenticator.HAS_ROLE('ROLE_ADMIN') ? next() : next('/Login')
+      }
     },
     /* {
       path: '/Parametros',
       name: 'SystemParameters',
-      component: SystemParameters
+      component: SystemParameters,
+      beforeEnter: (to, from, next) => {
+        Authenticator.HAS_ROLE('ROLE_ADMIN') ? next() : next('/Login')
+      }
     }, */
     {
       path: '/GerenciarBancoHoras',
       name: 'ManageHours',
-      component: ManageHours
+      component: ManageHours,
+      beforeEnter: (to, from, next) => {
+        Authenticator.HAS_ROLE('ROLE_ADMIN') ? next() : next('/Login')
+      }
     },
     {
       path: '/LinhaDoTempo',
@@ -99,7 +124,10 @@ export default new Router({
       path: '/CadastroParametros',
       name: 'RegisterSystemParameters',
       component: RegisterSystemParameters,
-      props: true
+      props: true,
+      beforeEnter: (to, from, next) => {
+        Authenticator.HAS_ROLE('ROLE_ADMIN') ? next() : next('/Login')
+      }
     } */
   ]
 })

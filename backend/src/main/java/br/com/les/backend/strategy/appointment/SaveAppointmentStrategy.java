@@ -5,12 +5,13 @@ import java.time.LocalTime;
 import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.Appointment;
+import br.com.les.backend.strategy.AbstractStrategy;
 import br.com.les.backend.strategy.IApplicationStrategy;
 import br.com.les.backend.utils.Result;
 import br.com.les.backend.utils.Util;
 
 @Component
-public class SaveAppointmentStrategy implements IApplicationStrategy<Appointment> {
+public class SaveAppointmentStrategy extends AbstractStrategy<Appointment> {
 
 	@Override
 	public Result<Appointment> execute(Appointment a) {

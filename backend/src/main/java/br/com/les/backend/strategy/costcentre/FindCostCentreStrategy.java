@@ -3,11 +3,12 @@ package br.com.les.backend.strategy.costcentre;
 import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.CostCentre;
+import br.com.les.backend.strategy.AbstractStrategy;
 import br.com.les.backend.strategy.IApplicationStrategy;
 import br.com.les.backend.utils.Result;
 
 @Component
-public class FindCostCentreStrategy implements IApplicationStrategy<CostCentre> {
+public class FindCostCentreStrategy extends AbstractStrategy<CostCentre> {
 
 	@Override
 	public Result<CostCentre> execute(CostCentre entity) {

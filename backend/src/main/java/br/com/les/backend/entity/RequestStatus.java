@@ -2,17 +2,17 @@ package br.com.les.backend.entity;
 
 public enum RequestStatus {
 	
-	SENT("Enviada"),
-	APPROVED("Aprovada"),
-	DENIED("Rejeitada");
+	SENT(1),
+	APPROVED(2),
+	DENIED(3);
 	
-	private String value;
+	private int value;
 	
-	private RequestStatus (String value) {
+	private RequestStatus (int value) {
 		this.value = value;
 	}
 
-	public String getValue() {
+	public int getValue() {
 		return value;
 	}
 	

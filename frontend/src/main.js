@@ -61,9 +61,10 @@ Vue.prototype.$v_role = new RoleValidators()
 // Request
 axios.interceptors.request.use(
   (config) => {
-    let token = localStorage.getItem('access_token')
+    let token = sessionStorage.token
+    console.log(token)
     if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`
+      config.headers['Authorization'] = token
     }
     return config
   },
@@ -73,16 +74,17 @@ axios.interceptors.request.use(
 )
 // Response
 axios.interceptors.response.use(function (response) {
-  // Get JWT token from response and save it on localStorage
+  // Get JWT token from response and save it on sessionStorage
   let token = response.headers['authorization']
   if (token) {
-    localStorage.setItem('access_token', token)
+    sessionStorage.setItem('principal', JSON.stringify(response.data))
+    sessionStorage.token = token
   }
   return response
 }, function (error) {
   if (error.response.status === 401) {
     alert('Usuário não reconhecido')
-    this.router.push('Login')
+    this.router.push('/Login')
   } else {
     return Promise.reject(error)
   }

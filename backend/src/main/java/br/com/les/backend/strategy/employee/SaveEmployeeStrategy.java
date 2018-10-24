@@ -4,12 +4,13 @@ import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.Employee;
 import br.com.les.backend.entity.Telephone;
+import br.com.les.backend.strategy.AbstractStrategy;
 import br.com.les.backend.strategy.IApplicationStrategy;
 import br.com.les.backend.utils.Result;
 import br.com.les.backend.utils.Util;
 
 @Component
-public class SaveEmployeeStrategy implements IApplicationStrategy<Employee> {
+public class SaveEmployeeStrategy extends AbstractStrategy<Employee> {
 
 	@Override
 	public Result<Employee> execute(Employee employee) {
@@ -22,7 +23,7 @@ public class SaveEmployeeStrategy implements IApplicationStrategy<Employee> {
 		if( employee.getLastName() == null || employee.getLastName().isEmpty() )
 			result.setError( Util.ERROR_LAST_NAME );
 		
-		if( employee.getEmail() == null || employee.getEmail().isEmpty() )
+		if( employee.getUser().getEmail() == null || employee.getUser().getEmail().isEmpty() )
 			result.setError( Util.ERROR_EMAIL );
 		
 		if( employee.getBaseHourCalculation().getSalary() == 0 )
@@ -62,7 +63,7 @@ public class SaveEmployeeStrategy implements IApplicationStrategy<Employee> {
 				result.setError( Util.ERROR_JOINING_DATE );
 		}
 		
-		if( employee.getPassword() == null || employee.getPassword().isEmpty() )
+		if( employee.getUser().getPassword() == null || employee.getUser().getPassword().isEmpty() )
 			result.setError( Util.INVALID_PASSWORD );
 		
 		if( result.isSuccess() )
