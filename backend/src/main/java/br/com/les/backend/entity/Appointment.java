@@ -35,7 +35,7 @@ public class Appointment extends DomainEntity {
 	private LocalTime dayOvertime;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy="appointment", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="appointment", cascade=CascadeType.ALL)
 	private List<AppointmentRequest> appointmentRequestList;
 	
 	@ManyToOne( fetch=FetchType.EAGER )
@@ -43,7 +43,6 @@ public class Appointment extends DomainEntity {
 	private Employee employee;
 	
 	@OneToMany( cascade=CascadeType.ALL )
-	@LazyCollection(LazyCollectionOption.FALSE)
 	private List< HistMonthlyBalanceChange > histChangeMonthlyBalanceList;
 
 	public List<HistMonthlyBalanceChange> getHistChangeMonthlyBalanceList() {
