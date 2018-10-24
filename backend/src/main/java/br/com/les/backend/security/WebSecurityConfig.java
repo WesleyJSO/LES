@@ -1,7 +1,5 @@
 package br.com.les.backend.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -12,15 +10,9 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import br.com.les.backend.repository.UserRepository;
-
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-	
-	@Autowired
-	@Qualifier("userRepository")
-	private UserRepository userRepository;
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -29,10 +21,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		.and()
 		.csrf().disable().authorizeRequests()
 		.antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-		.antMatchers(HttpMethod.POST, "/login").permitAll()
+		/*.antMatchers(HttpMethod.POST, "/login").permitAll()
 		.antMatchers(HttpMethod.POST, "/h2/**").permitAll()
-		.antMatchers(HttpMethod.GET, "/h2/**").permitAll()
-		.anyRequest().authenticated()
+		.antMatchers(HttpMethod.GET, "/h2/**").permitAll()*/
+		.antMatchers("/**").permitAll()
+		//.anyRequest().authenticated()
 		.and()
 		
 		// filtra requisições de login

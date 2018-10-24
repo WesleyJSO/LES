@@ -8,6 +8,7 @@ import javax.persistence.ManyToOne;
 
 import org.springframework.stereotype.Component;
 
+
 @Component
 @Entity
 public class AppointmentRequest extends DomainEntity {

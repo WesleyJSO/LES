@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.les.backend.entity.Request;
-import br.com.les.backend.repository.RequestRepository;
+import br.com.les.backend.repository.GenericRepository;
 import br.com.les.backend.strategy.IApplicationStrategy;
 import br.com.les.backend.utils.RequestType;
 import br.com.les.backend.utils.Result;
@@ -14,7 +14,7 @@ import br.com.les.backend.utils.Util;
 public class UpdateRequestStrategy implements IApplicationStrategy<Request> {
 
 	@Autowired
-	private RequestRepository requestRepository;
+	private GenericRepository<Request> requestRepository;
 
 	@Override
 	public Result<Request> execute(Request request) {

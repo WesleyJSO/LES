@@ -12,9 +12,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Component
 @Entity
@@ -34,8 +34,8 @@ public class Appointment extends DomainEntity {
 	private LocalTime hoursLeft;
 	private LocalTime dayOvertime;
 	
-	@OneToMany(mappedBy="appointment", cascade=CascadeType.ALL)
-	@LazyCollection(LazyCollectionOption.FALSE)
+	@JsonIgnore
+	@OneToMany(mappedBy="appointment", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	private List<AppointmentRequest> appointmentRequestList;
 	
 	@ManyToOne( fetch=FetchType.EAGER )

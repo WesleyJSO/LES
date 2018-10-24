@@ -55,4 +55,8 @@ public class Util {
 
 	public static final String ERROR_ALREADY_REGISTRED_EMAIL = "E-mail já cadastrado!";
 
+	public static final String UPDATE_APPOINTMENT_REQUESTED = "Solicitação de apontamento enviada com sucesso!";
+
+	public static final String ERROR_NOT_VALID_PARAMETER = "Não existem parâmetros válidos cadastrados no sistema!";
+
 }

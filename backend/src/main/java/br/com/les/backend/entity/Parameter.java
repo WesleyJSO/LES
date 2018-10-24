@@ -16,30 +16,13 @@ public class Parameter extends DomainEntity {
 	private Integer retroactiveAppointmentLimitTime;
 	private Integer relocationRequestLimitTime;
 	private Integer bankCompensationLimitTime;
-	private String hourType;
+	private HourType hourType;
 	private Integer hoursLimit;
 	private Integer overtimeTypeLimit;
 	private Integer bankedHourTypeLimit;
-	private String firstTypeApplied;
+	private HourType firstTypeApplied;
 	private LocalDateTime endDate;
-	
-	public Parameter() {}
-	
-	public Parameter( boolean active ) {
-		this.setId(1l);
-		this.setActive(active);
-		this.overtimePercentage = 0d;
-		this.nightOvertimePercentage = 0d;
-		this.weekEndOvertimePercentage = 0d;
-		this.retroactiveAppointmentLimitTime = 0;
-		this.relocationRequestLimitTime = 0;
-		this.bankCompensationLimitTime = 0;
-		this.hourType = "Não cadastrado";
-		this.hoursLimit = 0;
-		this.overtimeTypeLimit = 0;
-		this.bankedHourTypeLimit = 0;
-	}
-	
+
 	public Double getOvertimePercentage() {
 		return overtimePercentage;
 	}
@@ -88,14 +71,6 @@ public class Parameter extends DomainEntity {
 		this.bankCompensationLimitTime = bankCompensationLimitTime;
 	}
 	
-	public String getHourType() {
-		return hourType;
-	}
-	
-	public void setHourType(String hourType) {
-		this.hourType = hourType;
-	}
-	
 	public Integer getHoursLimit() {
 		return hoursLimit;
 	}
@@ -127,12 +102,20 @@ public class Parameter extends DomainEntity {
 	public void setEndDate(LocalDateTime endDate) {
 		this.endDate = endDate;
 	}
+	
+	public HourType getHourType() {
+		return hourType;
+	}
 
-	public String getFirstTypeApplied() {
+	public void setHourType(HourType hourType) {
+		this.hourType = hourType;
+	}
+
+	public HourType getFirstTypeApplied() {
 		return firstTypeApplied;
 	}
 
-	public void setFirstTypeApplied(String firstTypeApplied) {
+	public void setFirstTypeApplied(HourType firstTypeApplied) {
 		this.firstTypeApplied = firstTypeApplied;
 	}
 }

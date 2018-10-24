@@ -19,24 +19,24 @@
           <v-dialog
             v-model="modal"
             width="290px" ref="dialog"
-            :return-value.sync="appointment.yearMonth"
+            :return-value.sync="appointment.monthAndYear"
             persistent lazy full-width>
 
           <v-text-field
-            slot="activator" v-model="appointment.yearMonth"
+            slot="activator" v-model="appointment.monthAndYear"
             label="Data dos apontamentos"
             prepend-icon="event" readonly
           ></v-text-field>
 
             <v-date-picker
-              v-model="appointment.yearMonth" scrollable locale="pt-br"
+              v-model="appointment.monthAndYear" scrollable locale="pt-br"
               header-color="black" type="month"
             >
               <v-spacer></v-spacer>
               <v-btn flat color="primary" @click="modal = false">Cancelar</v-btn>
               <v-btn flat color="primary"
-                @mouseup="callApi(appointment)"
-                @click="$refs.dialog.save(appointment.yearMonth)"
+                @mouseup="callApi({monthAndYear: new Date(`${appointment.monthAndYear}-01`)})"
+                @click="$refs.dialog.save(appointment.monthAndYear)"
               >OK</v-btn>
             </v-date-picker>
 
@@ -77,7 +77,7 @@ export default {
   data: () => ({
     modal: false,
     appointment: {
-      yearMonth: null
+      monthAndYear: null
     },
     messages: [],
     haveMessage: false,
@@ -104,14 +104,14 @@ export default {
       this.registerAppointments()
     },
     registerAppointments () {
-      this.$_axios.put(`${this.$_url}appointmentRequest`, this.appointment)
+      this.$_axios.put(`${this.$_url}appointment`, this.appointment)
         .then(response => {
           var result = response.data
           if (result.resultList.length !== 0) {
             this.appointments = result.resultList
             this.appointment = this.appointments[0]
           }
-          if (result.mensagem) {
+          if (result.message) {
             this.messages = [...result.message]
             this.haveMessage = true
             if (result.success) {
@@ -120,6 +120,7 @@ export default {
               this.messageColor = 'warning'
             }
           }
+          this.callApi({monthAndYear: new Date()})
         })
         .catch(error => {
           console.log(error)
@@ -129,14 +130,16 @@ export default {
         })
     },
     callApi (appointment) {
+      console.log(JSON.stringify(appointment))
       this.$_axios.patch(`${this.$_url}appointment`, appointment)
         .then(response => {
           var result = response.data
-          if (result.resultList.length !== 0) {
-            this.appointments = result.resultList
+          console.log(JSON.stringify(result))
+          this.appointments = result.resultList
+          if (this.appointments.length > 0) {
             this.appointment = this.appointments[0]
           }
-          if (result.mensagem) {
+          if (result.message) {
             this.messages = [...result.message]
             this.haveMessage = true
             if (result.success) {
