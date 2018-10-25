@@ -2,8 +2,9 @@ package br.com.les.backend.strategy.appointment;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.Month;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -112,71 +113,72 @@ public class UpdateAppointmentStrategy implements IApplicationStrategy<Appointme
 			List<MonthlyBalance> monthlyBalanceList = new ArrayList<>();
 			
 			// get all the appointments created after the edited appointment
-			List< Appointment > list = appointmentRepository.findByDate(appointment.getDate().toLocalDate().atStartOfDay());
+			List< Appointment > appointmentList = appointmentRepository.findByDate(appointment.getDate().toLocalDate().atStartOfDay());
 			
-			// using the history of 
-			for (Appointment ap : list){
-				for (HistMonthlyBalanceChange hist : ap.getHistChangeMonthlyBalanceList()) {
-					if ( !monthlyBalanceList.contains(hist.getMonthlyBalance()) ) {
-						monthlyBalanceList.add(hist.getMonthlyBalance());
+			// using the history to return the previous values subtracted to the monthly balance
+			for (Appointment ap : appointmentList){
+				for (HistMonthlyBalanceChange history : ap.getHistChangeMonthlyBalanceList()) {
+					if ( !monthlyBalanceList.contains(history.getMonthlyBalance()) ) {
+						monthlyBalanceList.add(history.getMonthlyBalance());
 					}
 					for ( MonthlyBalance mb : monthlyBalanceList ) {
-						if ( mb.getMonth().equals(hist.getMonthlyBalance().getMonth()) ) {
-							mb.setBalance( mb.getBalance() + (hist.getAmount() * (-1d)) );
-							hist.setAmount(0d);
+						if ( mb.getMonth().equals(history.getMonthlyBalance().getMonth()) ) {
+							mb.setBalance( mb.getBalance() + (history.getAmount() * (-1d)) );
+							history.setAmount(0d);
 						}
 					}
 				}
 			}
 			
+			// if empty, the history wasn't used, so the system get the list of balances with pendencies
+			// if not, the list get in the history already have the balances to compensate
 			if ( monthlyBalanceList.isEmpty() ) {
-				monthlyBalanceList = monthlyBalanceRepository.findWithPendency();
+				monthlyBalanceList = monthlyBalanceRepository.findWithPendency(YearMonth.now().toString());
 			}
+			// monthlyBalanceList = monthlyBalanceRepository.findAll();
 			
 			Double amount = null;
 			Stream<HistMonthlyBalanceChange> stream = null;
-			Optional<HistMonthlyBalanceChange> optional = null;
+			Optional<HistMonthlyBalanceChange> optional = null;			
+			Method method = null;
+			String appointmentMonth;
 			
-			for ( Appointment ap : list ) {
+			for ( Appointment ap : appointmentList ) {
 				stream = ap.getHistChangeMonthlyBalanceList().stream();
-				if ( ap.getDayOvertime().isAfter(LocalTime.MIN) ) {
-					amount = getDoubleTime(ap.getDayOvertime());
-					for (MonthlyBalance mb : monthlyBalanceList) {
-						if (mb.getBalance() > 0 ) {
-							optional = stream.filter(history -> mb.equals(history.getMonthlyBalance()))
-									.findFirst();
-							if (mb.getBalance() < amount) {
-								amount -= mb.getBalance();
-								createUpdateHistory(mb, amount, optional, ap);
-								mb.setBalance(0d); 
-							} else {
-								mb.setBalance(mb.getBalance() - amount);
-								createUpdateHistory(mb, amount, optional, ap);
-								break;
-							}
-						}
+				method = getMethod(ap);
+				// null means that the appointment have no active neither passive values to discount
+				if ( method == null )
+					continue;
+				method.invoke(ap);
+				amount = getDoubleTime((LocalTime) method.invoke(ap), method.getName());
+				appointmentMonth = getMonth(ap.getDate());
+				for (MonthlyBalance mb : monthlyBalanceList) {
+					// if balance and the amount are positive and it is not the current, go to the next balance
+					if ( mb.getBalance() > 0d && method.getName().equals("getDayOvertime")
+							|| mb.getBalance() < 0d && method.getName().equals("getHoursLeft")) {
+						if ( !mb.getMonth().equals(appointmentMonth) )
+							continue;
 					}
-				} else if ( ap.getHoursLeft().isAfter(LocalTime.MIN) ) {
-					amount = getDoubleTime(ap.getHoursLeft());
-					for (MonthlyBalance mb : monthlyBalanceList) {
-						if (mb.getBalance() < 0 ) {
-							optional = stream.filter(history -> mb.equals(history.getMonthlyBalance()))
-									.findFirst();
-							if (mb.getBalance() * (-1) < amount) {
-								amount += mb.getBalance();
-								createUpdateHistory(mb, amount, optional, ap);
-								mb.setBalance(0d);
-							} else {
-								mb.setBalance(mb.getBalance() + amount);
-								createUpdateHistory(mb, amount, optional, ap);
-								break;
-							}
+					if (Math.abs(mb.getBalance()) > 0d || mb.getMonth().equals(appointmentMonth) ) {
+						//get the specific element on the list to change
+						optional = stream.filter(history -> mb.equals(history.getMonthlyBalance()))
+								.findFirst();
+						if (Math.abs(mb.getBalance()) < Math.abs(amount) && !mb.getMonth().equals(appointmentMonth)) {
+							// save the rest of the amount to discount on the next balance of the list
+							// if the balance is negative, it will be subtracted from the amount
+							amount -= mb.getBalance() * (-1d);
+							createUpdateHistory(mb, mb.getBalance() * (-1d), optional, ap);
+							mb.setBalance(0d); 
+						} else {
+							mb.setBalance(mb.getBalance() - amount);
+							createUpdateHistory(mb, amount, optional, ap);
+							break;
 						}
 					}
 				}
 			}
 			monthlyBalanceRepository.saveAll(monthlyBalanceList);
-			appointmentRepository.saveAll(list);
+			appointmentRepository.saveAll(appointmentList);
 			histMonthlyBalanceChangeRepository.deleteDeprecated();
 		} catch (Exception e) { 
 			e.printStackTrace();
@@ -185,24 +187,53 @@ public class UpdateAppointmentStrategy implements IApplicationStrategy<Appointme
 		return true;
 	}
 	
-	public void createUpdateHistory(MonthlyBalance mb, Double amount, Optional<HistMonthlyBalanceChange> optional, Appointment ap) {
-		
-		if ( optional.isPresent() ) {
-			optional.get().setAmount( - amount );
-		} else {
-			HistMonthlyBalanceChange newHist = new HistMonthlyBalanceChange();
-			newHist.setAmount( - amount );
-			newHist.setAppointment(ap);
-			newHist.setMonthlyBalance(mb);
-			ap.getHistChangeMonthlyBalanceList().add(newHist);
+	private String getMonth(LocalDateTime date) {
+
+		YearMonth appointmentMonth = YearMonth.of(date.getYear(), date.getMonthValue());
+		return appointmentMonth.toString();
+	}
+
+	public Method getMethod(Appointment appointment) {
+		Class<?>[] methodParameters = new Class[0];
+        String methodName = "";
+        if ( appointment.getDayOvertime().isAfter(LocalTime.MIN) ) {
+        	methodName = "getDayOvertime";
+        } else if ( appointment.getHoursLeft().isAfter(LocalTime.MIN) ) {
+        	methodName = "getHoursLeft";
+        }
+		Class<?> clazz = appointment.getClass();
+		try {
+			return clazz.getMethod(methodName, methodParameters);
+		} catch (NoSuchMethodException | SecurityException e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 	
-	public Double getDoubleTime(LocalTime time) {
+	public void createUpdateHistory(MonthlyBalance monthlyBalance, Double amount, 
+			Optional<HistMonthlyBalanceChange> optional, Appointment appointment) {
+		
+		if ( optional.isPresent() ) {
+			optional.get().setAmount( amount );
+		} else {
+			HistMonthlyBalanceChange newHistory = new HistMonthlyBalanceChange();
+			newHistory.setAmount( amount );
+			newHistory.setAppointment(appointment);
+			newHistory.setMonthlyBalance(monthlyBalance);
+			appointment.getHistChangeMonthlyBalanceList().add(newHistory);
+		}
+	}
+	
+	public Double getDoubleTime(LocalTime time, String name) {
 
-		Double min = Double.valueOf( time.getMinute() / 60);
-		Double hor = time.getHour() + min;
-		return hor;
+		Double minuteValue = Double.valueOf( time.getMinute() / 60d);
+		Double hourValue = time.getHour() + minuteValue;
+		// day overtime means that the value will be subtracted from a negative value
+		// setting the value as negative will guarantee that the obtained value will be nearer from zero 
+		if (name == "getDayOvertime") {
+			hourValue *= (-1d);
+		}
+		return hourValue;
 	}
 
 	private Method findFieldAndValueToChange(Appointment dbAppointment, Appointment appointment) {

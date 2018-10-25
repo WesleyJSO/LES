@@ -15,9 +15,10 @@ insert into employee values(HIBERNATE_SEQUENCE.nextval, 1, getDate(), getDate(),
 
 insert into BASE_HOUR_CALCULATION values(HIBERNATE_SEQUENCE.nextval, 1, getDate(), getDate(), 1, 10000, 8, (select e.id from employee e inner join user u on e.user_id = u.id where u.email='bruno@bruno.com'))
 
-insert into MONTHLY_BALANCE values(HIBERNATE_SEQUENCE.nextval,1,getDate(),10,'2018-08',(select e.id from employee e inner join user u on e.user_id = u.id where u.email='bruno@bruno.com'))
-insert into MONTHLY_BALANCE values(HIBERNATE_SEQUENCE.nextval,1,getDate(),10,'2018-09',(select e.id from employee e inner join user u on e.user_id = u.id where u.email='bruno@bruno.com'))
-insert into MONTHLY_BALANCE values(HIBERNATE_SEQUENCE.nextval,1,getDate(),10,'2018-10',(select e.id from employee e inner join user u on e.user_id = u.id where u.email='bruno@bruno.com'))
+insert into MONTHLY_BALANCE values(HIBERNATE_SEQUENCE.nextval,1,getDate(),0,'2018-07',(select e.id from employee e inner join user u on e.user_id = u.id where u.email='bruno@bruno.com'))
+insert into MONTHLY_BALANCE values(HIBERNATE_SEQUENCE.nextval,1,getDate(),0,'2018-08',(select e.id from employee e inner join user u on e.user_id = u.id where u.email='bruno@bruno.com'))
+insert into MONTHLY_BALANCE values(HIBERNATE_SEQUENCE.nextval,1,getDate(),0,'2018-09',(select e.id from employee e inner join user u on e.user_id = u.id where u.email='bruno@bruno.com'))
+insert into MONTHLY_BALANCE values(HIBERNATE_SEQUENCE.nextval,1,getDate(),0,'2018-10',(select e.id from employee e inner join user u on e.user_id = u.id where u.email='bruno@bruno.com'))
 
 insert into APPOINTMENT values(HIBERNATE_SEQUENCE.nextval,1,getDate(), '13:00:00', '19:00:00', '09:00:00', '2018-07-01', '01:00:00', '00:00:00', '2018-07-01', '09:00:00', '12:00:00', null, null, null, null, null)
 insert into APPOINTMENT values(HIBERNATE_SEQUENCE.nextval,1,getDate(), '13:00:00', '19:00:00', '09:00:00', '2018-07-02', '01:00:00', '00:00:00', '2018-07-02', '09:00:00', '12:00:00', null, null, null, null, null)
@@ -36,6 +37,8 @@ insert into APPOINTMENT values(HIBERNATE_SEQUENCE.nextval,1,getDate(), '13:00:00
 insert into APPOINTMENT values(HIBERNATE_SEQUENCE.nextval,1,getDate(), '13:00:00', '19:00:00', '09:00:00', '2018-09-03', '01:00:00', '00:00:00', '2018-09-03', '09:00:00', '12:00:00', null, null, null, null, null)
 insert into APPOINTMENT values(HIBERNATE_SEQUENCE.nextval,1,getDate(), '13:00:00', '19:00:00', '09:00:00', '2018-09-04', '01:00:00', '00:00:00', '2018-09-04', '09:00:00', '12:00:00', null, null, null, null, null)
 insert into APPOINTMENT values(HIBERNATE_SEQUENCE.nextval,1,getDate(), '13:00:00', '19:00:00', '09:00:00', '2018-09-05', '01:00:00', '00:00:00', '2018-09-05', '09:00:00', '12:00:00', null, null, null, null, null)
+
+insert into APPOINTMENT values(HIBERNATE_SEQUENCE.nextval,1,getDate(), '13:00:00', '17:00:00', '09:00:00', '2018-10-01', '00:00:00', '01:00:00', '2018-10-01', '09:00:00', '12:00:00', null, null, null, null, null)
 
 --insert into employee values(HIBERNATE_SEQUENCE.nextval, 1, getdate(), 'wesley@wesley.com', 'silva', 'wesley', 123456, getdate(), 123456789, null, select user_id from user where email='zeller@zeller.com')
 --insert into appointment values(
