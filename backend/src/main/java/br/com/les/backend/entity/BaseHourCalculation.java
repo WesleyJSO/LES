@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class BaseHourCalculation extends DomainEntity {
 
 	private Short hourType = -1; // 0 - comp time, 1 - extra time, 2 - both
-	private Double workload;
+	private Integer workload;
 	private Date expirationDate;
 	private Double salary;
 
@@ -29,11 +29,11 @@ public class BaseHourCalculation extends DomainEntity {
 		this.hourType = hourType;
 	}
 
-	public Double getWorkload() {
+	public Integer getWorkload() {
 		return workload;
 	}
 
-	public void setWorkload(Double workload) {
+	public void setWorkload(Integer workload) {
 		this.workload = workload;
 	}
 

@@ -177,6 +177,7 @@ export default {
           this.messageColor = 'error'
         })
       } else {
+        console.log(JSON.stringify(this.appointment))
         this.$_axios.put(`${this.$_url}appointment`, this.appointment).then(response => {
           console.log('put')
           let result = response.data
@@ -192,8 +193,8 @@ export default {
         })
       }
     },
-    callApi (today) {
-      this.$_axios.patch(`${this.$_url}appointment`, this.appointment).then(response => {
+    callApi (appointment) {
+      this.$_axios.patch(`${this.$_url}appointment`, appointment).then(response => {
         var result = response.data
         if (result.resultList.length !== 0) {
           // retorno ok /
@@ -202,7 +203,7 @@ export default {
           this.verifyButtons()
           console.log(JSON.stringify(this.appointments))
         } else {
-          this.appointment = today
+          this.appointment = appointment
           this.registerAppointments()
         }
         this.verifyButtons()

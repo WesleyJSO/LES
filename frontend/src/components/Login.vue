@@ -60,6 +60,10 @@ export default {
     messages: [],
     msgColor: ''
   }),
+  created () {
+    this.user.email = 'bruno@bruno.com'
+    this.user.password = '1234'
+  },
   methods: {
     sendForgotPasswordEmail () {
       this.messages = []
