@@ -5,9 +5,11 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.Transient;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +21,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Entity
 public class User extends DomainEntity implements UserDetails {
 
+	@Transient private static final long serialVersionUID = -2363520425505851014L;
+	
 	private String email;
 	private String password;
 	private boolean accountNonExpired;
@@ -26,7 +30,7 @@ public class User extends DomainEntity implements UserDetails {
 	private boolean credentialsNonExpired;
 	private boolean enabled;
 	
-	@ManyToMany(cascade={ CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE })
+	@ManyToMany(fetch=FetchType.EAGER, cascade={ CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE })
 	@JoinTable(name = "USER_ROLE", joinColumns = { @JoinColumn(name = "USER_ID") }, inverseJoinColumns = {
 			@JoinColumn(name = "ROLE_ID") })
 	@JsonProperty("authorities")

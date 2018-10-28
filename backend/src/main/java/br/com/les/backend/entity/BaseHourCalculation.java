@@ -1,6 +1,6 @@
 package br.com.les.backend.entity;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -12,23 +12,22 @@ import org.springframework.stereotype.Component;
 @Entity
 public class BaseHourCalculation extends DomainEntity {
 
-	private Short hourType = -1; // 0 - comp time, 1 - extra time, 2 - both
 	private Integer workload;
-	private Date expirationDate;
+	private LocalDate expirationDate;
 	private Double salary;
+	private Double overtimePercentage;
+	private Double nightOvertimePercentage;
+	private Double weekEndOvertimePercentage;
 
-	@OneToOne()
+	@OneToOne
+	@JoinColumn(name = "hour_type_id")
+	private HourType hourType;
+
+	@OneToOne
 	@JoinColumn(name = "employee_id")
 	private Employee employee;
 
-	public Short getHourType() {
-		return hourType;
-	}
-
-	public void setHourType(Short hourType) {
-		this.hourType = hourType;
-	}
-
+	
 	public Integer getWorkload() {
 		return workload;
 	}
@@ -45,19 +44,51 @@ public class BaseHourCalculation extends DomainEntity {
 		this.employee = employee;
 	}
 
-	public Date getExpirationDate() {
-		return expirationDate;
-	}
-
-	public void setExpirationDate(Date expirationDate) {
-		this.expirationDate = expirationDate;
-	}
-
 	public Double getSalary() {
 		return salary;
 	}
 
 	public void setSalary(Double salary) {
 		this.salary = salary;
+	}
+
+	public HourType getHourType() {
+		return hourType;
+	}
+
+	public void setHourType(HourType hourType) {
+		this.hourType = hourType;
+	}
+
+	public LocalDate getExpirationDate() {
+		return expirationDate;
+	}
+
+	public void setExpirationDate(LocalDate expirationDate) {
+		this.expirationDate = expirationDate;
+	}
+
+	public Double getOvertimePercentage() {
+		return overtimePercentage;
+	}
+
+	public void setOvertimePercentage(Double overtimePercentage) {
+		this.overtimePercentage = overtimePercentage;
+	}
+
+	public Double getNightOvertimePercentage() {
+		return nightOvertimePercentage;
+	}
+
+	public void setNightOvertimePercentage(Double nightOvertimePercentage) {
+		this.nightOvertimePercentage = nightOvertimePercentage;
+	}
+
+	public Double getWeekEndOvertimePercentage() {
+		return weekEndOvertimePercentage;
+	}
+
+	public void setWeekEndOvertimePercentage(Double weekEndOvertimePercentage) {
+		this.weekEndOvertimePercentage = weekEndOvertimePercentage;
 	}
 }

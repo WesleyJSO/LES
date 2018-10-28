@@ -50,10 +50,7 @@ export default new Router({
     {
       path: '/cadastro',
       name: 'RegisterUser',
-      component: RegisterUser,
-      beforeEnter: (to, from, next) => {
-        Authenticator.HAS_ROLE('ROLE_ADMIN') ? next() : next('/Login')
-      }
+      component: RegisterUser
     },
     {
       path: '/Apontamentos',
@@ -81,10 +78,7 @@ export default new Router({
     {
       path: '/Graficos',
       name: 'Reports',
-      component: Reports,
-      beforeEnter: (to, from, next) => {
-        Authenticator.HAS_ROLE('ROLE_ADMIN') ? next() : next('/Login')
-      }
+      component: Reports
     },
     {
       path: '/CentroDeCustos',

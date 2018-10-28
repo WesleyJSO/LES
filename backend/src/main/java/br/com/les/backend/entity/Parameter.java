@@ -14,108 +14,71 @@ public class Parameter extends DomainEntity {
 	private Double nightOvertimePercentage;
 	private Double weekEndOvertimePercentage;
 	private Integer retroactiveAppointmentLimitTime;
-	private Integer relocationRequestLimitTime;
-	private Integer bankCompensationLimitTime;
-	private HourType hourType;
-	private Integer hoursLimit;
-	private Integer overtimeTypeLimit;
-	private Integer bankedHourTypeLimit;
-	private HourType firstTypeApplied;
+	private Integer relocationRequestLimitTime; // limit to change work days
+	private Integer bankCompensationLimitTime; // limit in months
 	private LocalDateTime endDate;
-
+	private HourType overTime;
+	private HourType compTime;
+	private HourType both;
+	
 	public Double getOvertimePercentage() {
 		return overtimePercentage;
 	}
-	
 	public void setOvertimePercentage(Double overtimePercentage) {
 		this.overtimePercentage = overtimePercentage;
 	}
-	
 	public Double getNightOvertimePercentage() {
 		return nightOvertimePercentage;
 	}
-	
 	public void setNightOvertimePercentage(Double nightOvertimePercentage) {
 		this.nightOvertimePercentage = nightOvertimePercentage;
 	}
-	
 	public Double getWeekEndOvertimePercentage() {
 		return weekEndOvertimePercentage;
 	}
-	
 	public void setWeekEndOvertimePercentage(Double weekEndOvertimePercentage) {
 		this.weekEndOvertimePercentage = weekEndOvertimePercentage;
 	}
-	
 	public Integer getRetroactiveAppointmentLimitTime() {
 		return retroactiveAppointmentLimitTime;
 	}
-	
 	public void setRetroactiveAppointmentLimitTime(Integer retroactiveAppointmentLimitTime) {
 		this.retroactiveAppointmentLimitTime = retroactiveAppointmentLimitTime;
 	}
-	
 	public Integer getRelocationRequestLimitTime() {
 		return relocationRequestLimitTime;
 	}
-	
 	public void setRelocationRequestLimitTime(Integer relocationRequestLimitTime) {
 		this.relocationRequestLimitTime = relocationRequestLimitTime;
 	}
-	
 	public Integer getBankCompensationLimitTime() {
 		return bankCompensationLimitTime;
 	}
-	
 	public void setBankCompensationLimitTime(Integer bankCompensationLimitTime) {
 		this.bankCompensationLimitTime = bankCompensationLimitTime;
 	}
-	
-	public Integer getHoursLimit() {
-		return hoursLimit;
-	}
-	
-	public void setHoursLimit(Integer hoursLimit) {
-		this.hoursLimit = hoursLimit;
-	}
-	
-	public Integer getOvertimeTypeLimit() {
-		return overtimeTypeLimit;
-	}
-	
-	public void setOvertimeTypeLimit(Integer overtimeTypeLimit) {
-		this.overtimeTypeLimit = overtimeTypeLimit;
-	}
-	
-	public Integer getBankedHourTypeLimit() {
-		return bankedHourTypeLimit;
-	}
-	
-	public void setBankedHourTypeLimit(Integer bankOfHoursTypeLimit) {
-		this.bankedHourTypeLimit = bankOfHoursTypeLimit;
-	}
-	
 	public LocalDateTime getEndDate() {
 		return endDate;
 	}
-	
 	public void setEndDate(LocalDateTime endDate) {
 		this.endDate = endDate;
 	}
-	
-	public HourType getHourType() {
-		return hourType;
+	public HourType getOverTime() {
+		return overTime;
 	}
-
-	public void setHourType(HourType hourType) {
-		this.hourType = hourType;
+	public void setOverTime(HourType overTime) {
+		this.overTime = overTime;
 	}
-
-	public HourType getFirstTypeApplied() {
-		return firstTypeApplied;
+	public HourType getCompTime() {
+		return compTime;
 	}
-
-	public void setFirstTypeApplied(HourType firstTypeApplied) {
-		this.firstTypeApplied = firstTypeApplied;
+	public void setCompTime(HourType compTime) {
+		this.compTime = compTime;
 	}
+	public HourType getBoth() {
+		return both;
+	}
+	public void setBoth(HourType both) {
+		this.both = both;
+	}	
 }

@@ -12,8 +12,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -35,27 +33,23 @@ public class Employee extends DomainEntity {
 	@JsonManagedReference
 	private List<Telephone> telephoneList;
 	
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	@JoinColumn(name="manager_id")
 	private Employee manager;
 
 	@OneToMany( cascade=CascadeType.ALL )
-	@LazyCollection(LazyCollectionOption.FALSE)
 	private List< Request > requestList;
 	
 	@ManyToMany( mappedBy="notificatedColaboratorsList", fetch=FetchType.LAZY )
-	@LazyCollection(LazyCollectionOption.FALSE)
 	private List< Request > notifiedEmployeesRequestList;
 	
 	@OneToMany( cascade=CascadeType.ALL )
-	@LazyCollection(LazyCollectionOption.FALSE)
 	private List< Appointment > appointmentList;
 	
 	@OneToOne( mappedBy="employee", fetch=FetchType.LAZY,  cascade=CascadeType.PERSIST  )
 	private BaseHourCalculation baseHourCalculation;
 
 	@OneToMany( cascade=CascadeType.ALL )
-	@LazyCollection(LazyCollectionOption.FALSE)
 	private List< CompTime > monthlyCompTimeList;
 	
 	@JsonIgnore
@@ -64,7 +58,6 @@ public class Employee extends DomainEntity {
 	private CostCentre costCentre;
 	
 	@OneToMany( cascade=CascadeType.ALL )
-	@LazyCollection(LazyCollectionOption.FALSE)
 	private List< MonthlyBalance > monthBalanceList;
 
 	public List<MonthlyBalance> getMonthBalanceList() {
