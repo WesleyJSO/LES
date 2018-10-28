@@ -58,6 +58,8 @@ public class Util {
 	public static final String UPDATE_APPOINTMENT_REQUESTED = "Solicitação de apontamento enviada com sucesso!";
 
 	public static final String ERROR_NOT_VALID_PARAMETER = "Não existem parâmetros válidos cadastrados no sistema!";
+	
+	public static final String ERROR_BANKED_HOURS_UPDATE = "Erro na atualização do banco de horas!";
 
 	public static final String INVALID_USER_IDENTIFICATION = "Usuário ou Senha inválidos!";
 

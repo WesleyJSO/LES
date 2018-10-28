@@ -40,6 +40,9 @@ public class Appointment extends DomainEntity {
 	@Transient private LocalTime initialQueryDate;
 	@Transient private LocalTime finalQueryDate;
 	
+	private Double previousBalanceInserted;
+	private Boolean calculated;
+	
 	@JsonIgnore
 	@OneToMany(mappedBy="appointment", cascade=CascadeType.ALL)
 	private List<AppointmentRequest> appointmentRequestList;
@@ -47,17 +50,6 @@ public class Appointment extends DomainEntity {
 	@ManyToOne( fetch=FetchType.EAGER )
 	@JoinColumn( name="employee_id" )
 	private Employee employee;
-	
-	@OneToMany( cascade=CascadeType.ALL )
-	private List< HistMonthlyBalanceChange > histChangeMonthlyBalanceList;
-
-	public List<HistMonthlyBalanceChange> getHistChangeMonthlyBalanceList() {
-		return histChangeMonthlyBalanceList;
-	}
-
-	public void setHistChangeMonthlyBalanceList(List<HistMonthlyBalanceChange> histChangeMonthlyBalanceList) {
-		this.histChangeMonthlyBalanceList = histChangeMonthlyBalanceList;
-	}
 
 	public LocalTime getMorningEntrance() {
 		return morningEntrance;
@@ -191,15 +183,16 @@ public class Appointment extends DomainEntity {
 		return initialQueryDate;
 	}
 
-	public void setInitialQueryDate(LocalTime initialQueryDate) {
+	public void setPreviousBalanceInserted(Double previousBalanceInserted) {
+		this.previousBalanceInserted = previousBalanceInserted;
+	}
+
+	public Boolean getCalculated() {
+		return calculated;
+	}
+
+	}
+    public void setInitialQueryDate(LocalTime initialQueryDate) {
 		this.initialQueryDate = initialQueryDate;
-	}
-
-	public LocalTime getFinalQueryDate() {
-		return finalQueryDate;
-	}
-
-	public void setFinalQueryDate(LocalTime finalQueryDate) {
-		this.finalQueryDate = finalQueryDate;
 	}
 }

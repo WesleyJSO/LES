@@ -70,7 +70,7 @@ export default {
   watch: {
   },
   created () {
-    this.callApi({date: new Date()})
+    this.callApi({date: new Date(), monthAndYear: new Date()})
   },
   methods: {
     takeAppointment (appointment) {

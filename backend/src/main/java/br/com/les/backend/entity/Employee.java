@@ -23,6 +23,7 @@ public class Employee extends DomainEntity {
 	
 	private String pis;
 	private Date  joiningDate;
+	
 	@OneToOne()
 	@JoinColumn(name = "user_id")
 	private User user;
@@ -43,11 +44,17 @@ public class Employee extends DomainEntity {
 	@ManyToMany( mappedBy="notificatedColaboratorsList", fetch=FetchType.LAZY )
 	private List< Request > notifiedEmployeesRequestList;
 	
+	@JsonIgnore
 	@OneToMany( cascade=CascadeType.ALL )
 	private List< Appointment > appointmentList;
 	
+	@JsonIgnore
 	@OneToOne( mappedBy="employee", fetch=FetchType.LAZY,  cascade=CascadeType.PERSIST  )
 	private BaseHourCalculation baseHourCalculation;
+	
+	@JsonIgnore
+	@OneToOne( mappedBy="employee", fetch=FetchType.LAZY,  cascade=CascadeType.PERSIST  )
+	private BankedHours bankedHours;
 
 	@OneToMany( cascade=CascadeType.ALL )
 	private List< CompTime > monthlyCompTimeList;
@@ -57,6 +64,7 @@ public class Employee extends DomainEntity {
 	@JoinColumn(name = "costCentre_id")
 	private CostCentre costCentre;
 	
+	@JsonIgnore
 	@OneToMany( cascade=CascadeType.ALL )
 	private List< MonthlyBalance > monthBalanceList;
 
