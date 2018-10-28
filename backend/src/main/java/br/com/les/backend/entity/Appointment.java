@@ -33,7 +33,9 @@ public class Appointment extends DomainEntity {
 	private LocalTime balance;
 	private LocalTime hoursLeft;
 	private LocalTime dayOvertime;
-	
+	private Double previousBalanceInserted;
+	private Boolean calculated;
+
 	@JsonIgnore
 	@OneToMany(mappedBy="appointment", cascade=CascadeType.ALL)
 	private List<AppointmentRequest> appointmentRequestList;
@@ -41,17 +43,6 @@ public class Appointment extends DomainEntity {
 	@ManyToOne( fetch=FetchType.EAGER )
 	@JoinColumn( name="employee_id" )
 	private Employee employee;
-	
-	@OneToMany( cascade=CascadeType.ALL )
-	private List< HistMonthlyBalanceChange > histChangeMonthlyBalanceList;
-
-	public List<HistMonthlyBalanceChange> getHistChangeMonthlyBalanceList() {
-		return histChangeMonthlyBalanceList;
-	}
-
-	public void setHistChangeMonthlyBalanceList(List<HistMonthlyBalanceChange> histChangeMonthlyBalanceList) {
-		this.histChangeMonthlyBalanceList = histChangeMonthlyBalanceList;
-	}
 
 	public LocalTime getMorningEntrance() {
 		return morningEntrance;
@@ -172,4 +163,21 @@ public class Appointment extends DomainEntity {
 	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
+	
+	public Double getPreviousBalanceInserted() {
+		return previousBalanceInserted;
+	}
+
+	public void setPreviousBalanceInserted(Double previousBalanceInserted) {
+		this.previousBalanceInserted = previousBalanceInserted;
+	}
+
+	public Boolean getCalculated() {
+		return calculated;
+	}
+
+	public void setCalculated(Boolean calculated) {
+		this.calculated = calculated;
+	}
+
 }
