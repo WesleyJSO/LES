@@ -7,19 +7,20 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.session.SessionManagementFilter;
 
-import br.com.les.backend.entity.Employee;
+import br.com.les.backend.service.SecurityService;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
-	@Autowired
-	private Employee employeeRepository;
+	@Autowired private SecurityService user;
+	@Autowired private BCryptPasswordEncoder passwordEncoder;
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -46,21 +47,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		// auth.userDetailsService( (UserDetailsService) new User() );
-		
-		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-			// cria uma conta default temporáriamente
-				auth.inMemoryAuthentication()
-					.withUser("zeller@zeller.com")
-					.password(encoder.encode("1234"))
-					.roles("USER")
-					.and()
-					.withUser("wesley@wesley.com")
-					.password(encoder.encode("1234"))
-					.roles("ADMIN")
-					.and()
-					.withUser("bruno@bruno.com")
-					.password(encoder.encode("1234"))
-					.roles("USER");
+		auth.userDetailsService( user ).passwordEncoder( passwordEncoder );
 	}
 }
