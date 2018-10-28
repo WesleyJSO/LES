@@ -49,11 +49,11 @@ public class Employee extends DomainEntity {
 	private List< Appointment > appointmentList;
 	
 	@JsonIgnore
-	@OneToOne( mappedBy="employee", fetch=FetchType.LAZY,  cascade=CascadeType.PERSIST  )
+	@OneToOne(mappedBy="employee", fetch=FetchType.LAZY, cascade=CascadeType.PERSIST)
 	private BaseHourCalculation baseHourCalculation;
 	
 	@JsonIgnore
-	@OneToOne( mappedBy="employee", fetch=FetchType.LAZY,  cascade=CascadeType.PERSIST  )
+	@OneToOne(mappedBy="employee", fetch=FetchType.LAZY, cascade=CascadeType.PERSIST)
 	private BankedHours bankedHours;
 
 	@OneToMany( cascade=CascadeType.ALL )

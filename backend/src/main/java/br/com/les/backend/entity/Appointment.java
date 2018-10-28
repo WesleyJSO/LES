@@ -51,6 +51,22 @@ public class Appointment extends DomainEntity {
 	@JoinColumn( name="employee_id" )
 	private Employee employee;
 
+	public LocalDateTime getDate() {
+		return date;
+	}
+
+	public void setDate(LocalDateTime date) {
+		this.date = date;
+	}
+
+	public LocalDate getMonthAndYear() {
+		return monthAndYear;
+	}
+
+	public void setMonthAndYear(LocalDate monthAndYear) {
+		this.monthAndYear = monthAndYear;
+	}
+
 	public LocalTime getMorningEntrance() {
 		return morningEntrance;
 	}
@@ -139,38 +155,6 @@ public class Appointment extends DomainEntity {
 		this.dayOvertime = dayOvertime;
 	}
 
-	public Employee getEmployee() {
-		return employee;
-	}
-
-	public void setEmployee(Employee employee) {
-		this.employee = employee;
-	}
-
-	public List<AppointmentRequest> getAppointmentRequestList() {
-		return appointmentRequestList;
-	}
-
-	public void setAppointmentRequestList(List<AppointmentRequest> appointmentRequestList) {
-		this.appointmentRequestList = appointmentRequestList;
-	}
-
-	public LocalDate getMonthAndYear() {
-		return monthAndYear;
-	}
-
-	public void setMonthAndYear(LocalDate monthAndYear) {
-		this.monthAndYear = monthAndYear;
-	}
-
-	public LocalDateTime getDate() {
-		return date;
-	}
-
-	public void setDate(LocalDateTime date) {
-		this.date = date;
-	}
-
 	public List<String> getEmployeeNameList() {
 		return employeeNameList;
 	}
@@ -183,6 +167,22 @@ public class Appointment extends DomainEntity {
 		return initialQueryDate;
 	}
 
+	public void setInitialQueryDate(LocalTime initialQueryDate) {
+		this.initialQueryDate = initialQueryDate;
+	}
+
+	public LocalTime getFinalQueryDate() {
+		return finalQueryDate;
+	}
+
+	public void setFinalQueryDate(LocalTime finalQueryDate) {
+		this.finalQueryDate = finalQueryDate;
+	}
+
+	public Double getPreviousBalanceInserted() {
+		return previousBalanceInserted;
+	}
+
 	public void setPreviousBalanceInserted(Double previousBalanceInserted) {
 		this.previousBalanceInserted = previousBalanceInserted;
 	}
@@ -191,8 +191,25 @@ public class Appointment extends DomainEntity {
 		return calculated;
 	}
 
+	public void setCalculated(Boolean calculated) {
+		this.calculated = calculated;
 	}
-    public void setInitialQueryDate(LocalTime initialQueryDate) {
-		this.initialQueryDate = initialQueryDate;
+
+	public List<AppointmentRequest> getAppointmentRequestList() {
+		return appointmentRequestList;
 	}
+
+	public void setAppointmentRequestList(List<AppointmentRequest> appointmentRequestList) {
+		this.appointmentRequestList = appointmentRequestList;
+	}
+
+	public Employee getEmployee() {
+		return employee;
+	}
+
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
+	}
+
+
 }
