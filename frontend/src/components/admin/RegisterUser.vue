@@ -215,11 +215,17 @@
         </v-flex>
       </v-layout>
       <div v-if="!edit">
-        <v-btn id="submit" type="submit"
-               @click="submit"
-               :disabled="!valid"
-               color="success">Salvar</v-btn>
-        <v-btn @click="clearForm" color="error">Cancelar</v-btn>
+        <v-btn
+          id="submit"
+          type="submit"
+          @click="submit"
+          :disabled="!valid"
+          color="success"
+        >Salvar</v-btn>
+        <v-btn
+          @click="clearForm"
+          color="error"
+        >Cancelar</v-btn>
       </div>
     </v-form>
   </div>

@@ -1,49 +1,89 @@
 <template>
-    <div>
-        <h1>Gráficos</h1>
+  <div>
+  <h1>Gráficos</h1>
     <v-container fluid>
       <v-layout wrap column >
 
-        <v-layout >
-          <v-combobox
-            label="Funcionários"
-            prepend-icon="supervisor_account"
-            v-model="selectedEmployesList"
-            :items="employees"
-            hide-selected
-            multiple
-            persistent-hint
-            small-chips
-            @change="selectedEmployes"
-            chips>
-            <template slot="selection" slot-scope="data">
-              <v-chip
-                multiple="true"
-                :selected="data.selected"
-                :disabled="data.disabled"
-                :key="JSON.stringify(data.item)"
-                class="v-chip--select-multi "
-                @input="data.parent.selectItem(data.item)"
+        <v-form ref="form" v-model="valid">
+          <v-layout >
+            <v-flex xs12 d-flex>
+              <v-select
+                label="Funcionários"
+                prepend-icon="supervisor_account"
+                :items="employees"
+                multiple small-chips
+                v-model="appointment.employeeNameList"
+              ></v-select>
+            </v-flex>
+          </v-layout>
+
+          <v-layout>
+            <!-- initial query date -->
+            <v-flex xs6 sm6 md6>
+              <v-menu
+                :close-on-content-click="false"
+                v-model="pickerInitialDate"
+                :nudge-right="40"
+                lazy offset-y full-width
+                transition="scale-transition"
+                min-width="290px"
               >
-                <v-avatar class="accent white--text">
-                  {{ data.item.slice(0, 1).toUpperCase() }}
-                </v-avatar>
-                {{ data.item }}
-              </v-chip>
-            </template>
-          </v-combobox>
-        </v-layout>
+                <v-text-field @click="console.log('wer')"
+                  label="Data inicial"
+                  v-model="appointment.initialQueryDate"
+                  slot="activator"
+                  prepend-icon="event"
+                  readonly
+                ></v-text-field>
 
-        <v-layout>
-          <v-combobox
-            label="Períocidade"
-            prepend-icon="event"
-            :items="frequency"
-            @change="changeFrequency">
-          </v-combobox>
-        </v-layout>
+                <v-date-picker
+                  locale="pt-br"
+                  header-color="black"
+                  v-model="appointment.initialQueryDate"
+                  @input="pickerInitialDate = false"
+                ></v-date-picker>
+              </v-menu>
+            </v-flex>
 
-        <v-layout pb-5>
+            <!-- final query date -->
+            <v-flex xs6 sm6 md6>
+              <v-menu
+                :close-on-content-click="false"
+                v-model="pickerFinalDate"
+                :nudge-right="40"
+                lazy offset-y full-width
+                transition="scale-transition"
+                min-width="290px"
+              >
+                <v-text-field
+                  label="Data final"
+                  v-model="appointment.finalQueryDate"
+                  slot="activator"
+                  prepend-icon="event"
+                  readonly
+                ></v-text-field>
+
+                <v-date-picker
+                  locale="pt-br"
+                  header-color="black"
+                  v-model="appointment.finalQueryDate"
+                  @input="pickerFinalDate = false"
+                ></v-date-picker>
+              </v-menu>
+            </v-flex>
+          </v-layout>
+
+          <v-layout pb-5>
+            <v-btn
+              id="submit"
+              type="submit"
+              color="info"
+              :disabled="!valid"
+              @click="submit"
+            >Consultar</v-btn>
+          </v-layout>
+        </v-form>
+        <!-- <v-layout pb-5>
           <v-flex xs12 sm9 md6 lg6 xl4>
             <v-menu
               ref="joiningDateHelper"
@@ -54,49 +94,55 @@
               lazy
               min-width="290px"
               transition="scale-transition"
-              full-width>
+              full-width
+            >
             <v-text-field
-                slot="activator"
-                v-model="joiningDate"
-                label="Data inícial"
-                prepend-icon="event"
-                readonly>
+              slot="activator"
+              v-model="joiningDate"
+              label="Data inícial"
+              prepend-icon="event"
+              readonly
+            >
             </v-text-field>
             <v-date-picker
-                v-model="joiningDate"
-                header-color="black"
-                :reactive="reactive"
-                @input="$refs.joiningDateHelper.save(joiningDate)">
+              v-model="joiningDate"
+              header-color="black"
+              :reactive="reactive"
+              @input="$refs.joiningDateHelper.save(joiningDate)"
+            >
             </v-date-picker>
           </v-menu>
         </v-flex>
         <v-flex xs12 sm9 md6 lg6 xl4>
           <v-menu
-              ref="joiningDateHelper"
-              :close-on-content-click="false"
-              v-model="joiningDateHelper"
-              :nudge-right="40"
-              :return-value.sync="joiningDate"
-              lazy
-              min-width="290px"
-              transition="scale-transition"
-              full-width>
+            ref="joiningDateHelper"
+            :close-on-content-click="false"
+            v-model="joiningDateHelper"
+            :nudge-right="40"
+            :return-value.sync="joiningDate"
+            lazy
+            min-width="290px"
+            transition="scale-transition"
+            full-width
+          >
             <v-text-field
-                slot="activator"
-                v-model="joiningDate"
-                label="Data final"
-                prepend-icon="event"
-                readonly>
+              slot="activator"
+              v-model="joiningDate"
+              label="Data final"
+              prepend-icon="event"
+              readonly
+            >
             </v-text-field>
             <v-date-picker
-                v-model="joiningDate"
-                header-color="black"
-                :reactive="reactive"
-                @input="$refs.joiningDateHelper.save(joiningDate)">
+              v-model="joiningDate"
+              header-color="black"
+              :reactive="reactive"
+              @input="$refs.joiningDateHelper.save(joiningDate)"
+            >
             </v-date-picker>
           </v-menu>
         </v-flex>
-      </v-layout>
+      </v-layout> -->
 
         <v-flex xs12>
           <v-tabs dark slider-color="yellow" >
@@ -106,90 +152,82 @@
 
             <v-tab-item>
               <v-form flat>
-                <v-form-text>
-                  <line-chart ref="chartObject1" :download="true"
-                    :stacked="false"
-                    title="Horas Trabalhadas"
-                    xtitle="Dias"
-                    ytitle="Horas"
-                    discrete="true"
-                    height="400px"
-                    :data="chart"/>
-                </v-form-text>
+                <line-chart ref="chartObject1" :download="true"
+                  :stacked="false"
+                  title="Horas Trabalhadas"
+                  xtitle="Dias"
+                  ytitle="Horas"
+                  discrete="true"
+                  height="400px"
+                  :data="chart"
+                />
               </v-form>
             </v-tab-item>
 
             <v-tab-item>
               <v-form flat>
-                <v-form-text>
-                  <column-chart ref="chartObject2" :download="true"
-                    :stacked="false"
-                    title="Horas de Almoço"
-                    xtitle="Dias"
-                    ytitle="Horas"
-                    discrete="true"
-                    height="400px"
-                    :data="chartFinal">
-                  </column-chart>
-                </v-form-text>
+                <column-chart ref="chartObject2" :download="true"
+                  :stacked="false"
+                  title="Horas de Almoço"
+                  xtitle="Dias"
+                  ytitle="Horas"
+                  discrete="true"
+                  height="400px"
+                  :data="chartFinal"
+                />
               </v-form>
             </v-tab-item>
 
             <v-tab-item>
               <v-form flat>
-                <v-form-text>
-                 <bar-chart ref="chartObject3" :download="true"
-                    :stacked="false"
-                    title="Horas Extras"
-                    xtitle="Horas"
-                    ytitle="Dias"
-                    discrete="true"
-                    height="400px"
-                    :data="chartFinal">
-                 </bar-chart>
-                </v-form-text>
+                <bar-chart ref="chartObject3" :download="true"
+                  :stacked="false"
+                  title="Horas Extras"
+                  xtitle="Horas"
+                  ytitle="Dias"
+                  discrete="true"
+                  height="400px"
+                  :data="chartFinal"
+                />
               </v-form>
             </v-tab-item>
 
           </v-tabs>
         </v-flex>
-
       </v-layout>
-
-  </v-container>
-    </div>
+    </v-container>
+  </div>
 </template>
 
 
 <script>
-import axios from 'axios'
-import DateHelper from '../../helpers/DateHelper.js'
+// import DateHelper from '../../helpers/DateHelper.js'
 export default {
   data: () => ({
-    tabs: ['Horas Trabalhadas', 'Horas de Almoço', 'Horas Extras'],
-    frequency: [
-      'Semana',
-      'Mês',
-      'Ano'
-    ],
-    employees: [
-      'Wesley',
-      'Zeller',
-      'Bruno',
-      'João',
-      'Maria',
-      'Zé',
-      'todos'
-    ],
+    valid: false,
+    appointment: {},
+    pickerInitialDate: false,
+    pickerFinalDate: false,
+    tabs: [ 'Horas Trabalhadas', 'Horas de Almoço', 'Horas Extras' ],
+    frequency: [ 'Semana', 'Mês', 'Ano' ],
+    employees: [ 'Wesley', 'Zeller', 'Bruno', 'João', 'Maria', 'Zé' ],
     selectedEmployesList: [],
     chartData: null,
     chart: null
   }),
-  async beforeMount () {
-    this.chartData = await axios.get('http://localhost:3000/Relatorios')
-    this.chart = await this.chartData.data
-  },
+  // async beforeMount () {
+  //   this.chartData = await this.$_axios.patch(`${this.$_url}appointment`)
+  //   this.chart = await this.chartData.data
+  // },
   methods: {
+    async submit () {
+      console.log('sync1')
+      this.changeData = await this.$_axios.patch(`${this.$_url}appointment`)
+      console.log(this.changeData)
+      console.log('sync2')
+      // this.chartData = this.$_axios.patch(`${this.$_url}appointment`)
+      // this.chart = this.chartData.data
+    },
     selectedEmployes (employee) {
       console.log(employee.indexOf('todos') > -1)
       if (employee.indexOf('todos') > -1) {
@@ -201,40 +239,30 @@ export default {
     },
     changeFrequency (frequency) {
       // this.$children[2].destroyElement()
-      console.log(this.$children[2])
-      let today = new Date()
-      switch (frequency) {
-        case 'Semana':
-          for (let index in this.chart) {
-            for (let date in this.chart[index].data) {
-              // let name = chart[index].name
-              // let hours = chart[index].data[date]
-              if (DateHelper.diffDates(new Date(date), today) > 3) {
-                console.log(`Item removed: ${this.chart[index].data[date]}`)
-                delete this.chart[index].data[date]
-              }
-            }
-          }
-          this.$refs.chartObject1.updateChart()
-          this.$refs.chartObject2.updateChart()
-          this.$refs.chartObject3.updateChart()
-      }
+      // console.log(this.$children[2])
+      // let today = new Date()
+      // switch (frequency) {
+      //   case 'Semana':
+      //     for (let index in this.chart) {
+      //       for (let date in this.chart[index].data) {
+      //         // let name = chart[index].name
+      //         // let hours = chart[index].data[date]
+      //         if (DateHelper.diffDates(new Date(date), today) > 3) {
+      //           console.log(`Item removed: ${this.chart[index].data[date]}`)
+      //           delete this.chart[index].data[date]
+      //         }
+      //       }
+      //     }
+      //     this.$refs.chartObject1.updateChart()
+      //     this.$refs.chartObject2.updateChart()
+      //     this.$refs.chartObject3.updateChart()
+      // }
     }
   },
   computed: {
     chartFinal () {
-      console.log(`Computed: ${JSON.stringify(this.chart)}`)
       return this.chart
     }
   }
 }
 </script>
-
-<style scoped>
-  h1 {
-    font-size: 40px;
-    text-align: center;
-    margin-top: -20px;
-    margin-bottom: 20px;
-  }
-</style>

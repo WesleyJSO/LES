@@ -11,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 import org.springframework.stereotype.Component;
 
@@ -33,6 +34,11 @@ public class Appointment extends DomainEntity {
 	private LocalTime balance;
 	private LocalTime hoursLeft;
 	private LocalTime dayOvertime;
+	
+	/*charts data*/
+	@Transient private List<String> employeeNameList;
+	@Transient private LocalTime initialQueryDate;
+	@Transient private LocalTime finalQueryDate;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy="appointment", cascade=CascadeType.ALL)
@@ -171,5 +177,29 @@ public class Appointment extends DomainEntity {
 
 	public void setDate(LocalDateTime date) {
 		this.date = date;
+	}
+
+	public List<String> getEmployeeNameList() {
+		return employeeNameList;
+	}
+
+	public void setEmployeeNameList(List<String> employeeNameList) {
+		this.employeeNameList = employeeNameList;
+	}
+
+	public LocalTime getInitialQueryDate() {
+		return initialQueryDate;
+	}
+
+	public void setInitialQueryDate(LocalTime initialQueryDate) {
+		this.initialQueryDate = initialQueryDate;
+	}
+
+	public LocalTime getFinalQueryDate() {
+		return finalQueryDate;
+	}
+
+	public void setFinalQueryDate(LocalTime finalQueryDate) {
+		this.finalQueryDate = finalQueryDate;
 	}
 }
