@@ -61,7 +61,7 @@ public Authentication getAuthentication(HttpServletRequest request) {
 			
 			List<Employee> load = genericDAO.find(employee);
 			if (load != null && load.size() > 0) {
-				return new UsernamePasswordAuthenticationToken(load, null, load.get(0).getUser().getRoleList());
+				return new UsernamePasswordAuthenticationToken(load, null, load.get(0).getUser().getAuthorities());
 			}
 		}
 		 
