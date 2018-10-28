@@ -13,11 +13,9 @@ import org.springframework.stereotype.Component;
 @Entity
 @SuppressWarnings("serial")
 public class Role extends DomainEntity implements GrantedAuthority{
-
-	public static final String USER_ROLE = "USER";
-	public static final String ADMIN_ROLE = "ADMIN";
 	
 	private String roleName;
+	private String role;
 
 	@ManyToMany(mappedBy="roleList", fetch=FetchType.LAZY)
 	private List<User> userList;
@@ -28,6 +26,14 @@ public class Role extends DomainEntity implements GrantedAuthority{
 
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
+	}
+	
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 	@Override

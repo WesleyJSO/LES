@@ -1,17 +1,19 @@
 package br.com.les.backend.strategy.employee;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.Employee;
 import br.com.les.backend.entity.Telephone;
+import br.com.les.backend.service.SecurityService;
 import br.com.les.backend.strategy.AbstractStrategy;
-import br.com.les.backend.strategy.IApplicationStrategy;
 import br.com.les.backend.utils.Result;
 import br.com.les.backend.utils.Util;
 
 @Component
 public class SaveEmployeeStrategy extends AbstractStrategy<Employee> {
 
+	@Autowired SecurityService securityService;
 	@Override
 	public Result<Employee> execute(Employee employee) {
 		
@@ -67,6 +69,7 @@ public class SaveEmployeeStrategy extends AbstractStrategy<Employee> {
 			result.setError( Util.INVALID_PASSWORD );
 		
 		if( result.isSuccess() )
+			employee.getUser().setPassword( securityService.encodeUserPassword( employee.getUser().getPassword() ) );
 			result.setSuccess( Util.SAVE_SUCCESSFUL_EMPLOYEE );
 		
 		return result;

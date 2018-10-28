@@ -59,4 +59,6 @@ public class Util {
 
 	public static final String ERROR_NOT_VALID_PARAMETER = "Não existem parâmetros válidos cadastrados no sistema!";
 
+	public static final String INVALID_USER_IDENTIFICATION = "Usuário ou Senha inválidos!";
+
 }
