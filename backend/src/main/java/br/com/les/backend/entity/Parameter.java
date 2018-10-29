@@ -3,6 +3,8 @@ package br.com.les.backend.entity;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 import org.springframework.stereotype.Component;
 
@@ -17,8 +19,17 @@ public class Parameter extends DomainEntity {
 	private Integer relocationRequestLimitTime; // limit to change work days
 	private Integer bankCompensationLimitTime; // limit in months
 	private LocalDateTime endDate;
+	
+	@OneToOne()
+	@JoinColumn(name = "over_time_id")
 	private HourType overTime;
+	
+	@OneToOne()
+	@JoinColumn(name = "comp_time_id")
 	private HourType compTime;
+	
+	@OneToOne()
+	@JoinColumn(name = "both_id")
 	private HourType both;
 	
 	public Double getOvertimePercentage() {

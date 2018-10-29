@@ -30,7 +30,7 @@ public class CalcBankTask extends TimerTask {
 	// Period in milliseconds
  	private final static long PERIOD = 1000 * 60 * 60 * 24;
  	// used to indicate init date
- 	private final static int ONE_DAY = 1;
+ 	private final static int ONE_DAY = 0;
  	// schedule hour
  	private final static int HOUR = 4;
  	// schedule minutes

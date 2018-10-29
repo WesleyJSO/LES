@@ -104,12 +104,12 @@ export default {
       this.registerAppointments()
     },
     registerAppointments () {
+      // let previousList = this.appointments
       this.$_axios.put(`${this.$_url}appointment`, this.appointment)
         .then(response => {
           var result = response.data
           if (result.resultList.length !== 0) {
-            this.appointments = result.resultList
-            this.appointment = this.appointments[0]
+            this.appointment = result.resultList[0]
           }
           if (result.message) {
             this.messages = [...result.message]
@@ -120,7 +120,6 @@ export default {
               this.messageColor = 'warning'
             }
           }
-          this.callApi({monthAndYear: new Date()})
         })
         .catch(error => {
           console.log(error)
