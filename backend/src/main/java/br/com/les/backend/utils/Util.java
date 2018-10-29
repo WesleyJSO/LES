@@ -63,6 +63,4 @@ public class Util {
 
 	public static final String INVALID_USER_IDENTIFICATION = "Usuário ou Senha inválidos!";
 
-	public static final String INVALID_USER_IDENTIFICATION = "Usuário ou Senha inválidos!";
-
 }
