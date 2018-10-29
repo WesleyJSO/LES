@@ -3,6 +3,7 @@ package br.com.les.backend.entity;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 
 import org.springframework.stereotype.Component;
 
@@ -17,9 +18,10 @@ public class Parameter extends DomainEntity {
 	private Integer relocationRequestLimitTime; // limit to change work days
 	private Integer bankCompensationLimitTime; // limit in months
 	private LocalDateTime endDate;
-	private HourType overTime;
-	private HourType compTime;
-	private HourType both;
+	
+	@OneToOne private HourType overTime;
+	@OneToOne private HourType compTime;
+	@OneToOne private HourType bothTypes;
 	
 	public Double getOvertimePercentage() {
 		return overtimePercentage;
@@ -75,10 +77,10 @@ public class Parameter extends DomainEntity {
 	public void setCompTime(HourType compTime) {
 		this.compTime = compTime;
 	}
-	public HourType getBoth() {
-		return both;
+	public HourType getBothTypes() {
+		return bothTypes;
 	}
-	public void setBoth(HourType both) {
-		this.both = both;
+	public void setBothTypes(HourType bothTypes) {
+		this.bothTypes = bothTypes;
 	}	
 }
