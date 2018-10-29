@@ -120,6 +120,7 @@ export default {
               this.messageColor = 'warning'
             }
           }
+          this.callApi({monthAndYear: new Date(this.appointment.monthAndYear)})
         })
         .catch(error => {
           console.log(error)
