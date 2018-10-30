@@ -2,6 +2,7 @@ package br.com.les.backend.strategy.appointment;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -47,12 +48,12 @@ public class UpdateAppointmentStrategy implements IApplicationStrategy<Appointme
 			int timeDiference = 0;
 			LocalTime dateToUpdate = null;
 			LocalTime dateToCompare = null;
+			LocalDateTime now = LocalDateTime.now();
 			try {
 				methodToCompare = dbAppointment.get().getClass().getDeclaredMethod(methodToUpdate.getName());
 				// verify if the value can be updated with the parameter object 
-				dateToUpdate = (LocalTime) methodToUpdate.invoke(dbAppointment.get());
 				dateToCompare = (LocalTime) methodToCompare.invoke(appointment);
-				timeDiference = (int) ChronoUnit.HOURS.between(dateToUpdate, dateToCompare);
+				timeDiference = (int) ChronoUnit.HOURS.between( dateToCompare, now.toLocalTime());
 			} catch (Exception e) {
 				e.printStackTrace();
 				result.setError("Erro durante o processamento!");
@@ -69,7 +70,8 @@ public class UpdateAppointmentStrategy implements IApplicationStrategy<Appointme
 			}
 			
 			if(timeDiference > parameter.getRetroactiveAppointmentLimitTime()
-					|| timeDiference < parameter.getRetroactiveAppointmentLimitTime() * - 1) {
+					|| timeDiference < parameter.getRetroactiveAppointmentLimitTime() * - 1
+					&& appointment.getDate().toLocalDate().equals(now.toLocalDate())) {
 				//save a new AppointmentRequest and send a message back to the user
 				if(result.isSuccess()) {
 					AppointmentRequest appointmentRequest = new AppointmentRequest();
@@ -100,7 +102,7 @@ public class UpdateAppointmentStrategy implements IApplicationStrategy<Appointme
 				try {
 					if(method.getReturnType() == LocalTime.class && dbMethod.getReturnType() == LocalTime.class 
 							&& dbMethod.getName().equals(method.getName()) && method.invoke(appointment) != null
-							&& !dbMethod.invoke(dbAppointment).equals(method.invoke(appointment))) {
+							&& !method.invoke(appointment).equals(dbMethod.invoke(dbAppointment))) {
 							valueToChange = method;
 							break;
 					}

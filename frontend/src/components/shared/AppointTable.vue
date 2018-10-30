@@ -154,7 +154,7 @@ export default {
   },
   methods: {
     createDialogs () {
-      this.tableItemDialogs = []
+      this.dialogs = []
       if (this.appointments.length !== 0) {
         this.appointments.forEach(element => {
           this.dialogs.push({ value: false },
@@ -174,15 +174,6 @@ export default {
         this.$emit('register', this.appointment)
       }
       this.dialogs[index].value = false
-    },
-    closeDialog (appointment, index) {
-      this.appointments.forEach(element => {
-        if (element.id === appointment.id) {
-          alert(JSON.stringify(element))
-          element.dialogs[index].value = false
-          alert(JSON.stringify(element))
-        }
-      })
     },
     mountAppointment (field, time) {
       if (field === 'Entrada Manhã') {
