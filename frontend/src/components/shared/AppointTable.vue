@@ -12,82 +12,52 @@
             <template slot="items" slot-scope="props">
               <tr @click="props.expanded = !props.expanded">
                 <td class="text-xs-center" >{{ props.item.date }}</td>
-                <td class="text-xs-center" >{{ props.item.morningEntrance || empty }}
-                  <v-dialog v-model="dialogs[0].value" max-width="300px" max-height="300px">
-                    <v-icon small
-                      slot="activator"
-                      :key="props.item.index"
-                      light>
-                      edit
-                    </v-icon>
+                <td class="text-xs-center" >
+                  <v-dialog v-model="dialogs[props.index * 8 + 0].value" max-width="300px" max-height="300px">
+                    <a slot="activator">{{ props.item.morningEntrance || empty }}</a>
                     <AppointDialog :value="props.item.morningEntrance || empty"
                       :appointment="props.item"
-                      type="Entrada Manhã" @editAppoint="editAppointment($event, 0)"></AppointDialog>
+                      type="Entrada Manhã" @editAppoint="editAppointment($event, props.index * 8 + 0)"></AppointDialog>
                   </v-dialog>
                 </td>
-                <td class="text-xs-center" >{{ props.item.morningOut || empty }}
-                  <v-dialog v-model="dialogs[1].value" max-width="300px" max-height="300px">
-                    <v-icon small
-                      slot="activator"
-                      :key="props.item.index"
-                      light>
-                      edit
-                    </v-icon>
+                <td class="text-xs-center" >
+                  <v-dialog v-model="dialogs[props.index * 8 + 1].value" max-width="300px" max-height="300px">
+                    <a slot="activator">{{ props.item.morningOut || empty }}</a>
                     <AppointDialog :value="props.item.morningOut || empty"
                       :appointment="props.item"
-                      type="Saída Manhã" @editAppoint="editAppointment($event, 1)"></AppointDialog>
+                      type="Saída Manhã" @editAppoint="editAppointment($event, props.index * 8 + 1)"></AppointDialog>
                   </v-dialog>
                 </td>
-                <td class="text-xs-center" >{{ props.item.afternoonEntrance || empty }}
-                  <v-dialog v-model="dialogs[2].value" max-width="300px" max-height="300px">
-                    <v-icon small
-                      slot="activator"
-                      :key="props.item.index"
-                      light>
-                      edit
-                    </v-icon>
+                <td class="text-xs-center" >
+                  <v-dialog v-model="dialogs[props.index * 8 + 2].value" max-width="300px" max-height="300px">
+                    <a slot="activator">{{ props.item.afternoonEntrance || empty }}</a>
                     <AppointDialog :value="props.item.afternoonEntrance || empty"
                       :appointment="props.item"
-                      type="Entrada Tarde" @editAppoint="editAppointment($event, 2)"></AppointDialog>
+                      type="Entrada Tarde" @editAppoint="editAppointment($event, props.index * 8 + 2)"></AppointDialog>
                   </v-dialog>
                 </td>
-                <td class="text-xs-center" >{{ props.item.afternoonOut || empty }}
-                  <v-dialog v-model="dialogs[3].value" max-width="300px" max-height="300px">
-                    <v-icon small
-                      slot="activator"
-                      :key="props.item.index"
-                      light>
-                      edit
-                    </v-icon>
+                <td class="text-xs-center" >
+                  <v-dialog v-model="dialogs[props.index * 8 + 3].value" max-width="300px" max-height="300px">
+                    <a slot="activator">{{ props.item.afternoonOut || empty }}</a>
                     <AppointDialog :value="props.item.afternoonOut || empty"
                       :appointment="props.item"
-                      type="Saída Tarde" @editAppoint="editAppointment($event, 3)"></AppointDialog>
+                      type="Saída Tarde" @editAppoint="editAppointment($event, props.index * 8 + 3)"></AppointDialog>
                   </v-dialog>
                 </td>
-                <td class="text-xs-center" >{{ props.item.nightEntrance || empty }}
-                  <v-dialog v-model="dialogs[4].value" max-width="300px" max-height="300px">
-                    <v-icon small
-                      slot="activator"
-                      :key="props.item.index"
-                      light>
-                      edit
-                    </v-icon>
+                <td class="text-xs-center" >
+                  <v-dialog v-model="dialogs[props.index * 8 + 4].value" max-width="300px" max-height="300px">
+                    <a slot="activator">{{ props.item.nightEntrance || empty }}</a>
                     <AppointDialog :value="props.item.nightEntrance || empty"
                       :appointment="props.item"
-                      type="Entrada Noite" @editAppoint="editAppointment($event, 4)"></AppointDialog>
+                      type="Entrada Noite" @editAppoint="editAppointment($event, props.index * 8 + 4)"></AppointDialog>
                   </v-dialog>
                 </td>
-                <td class="text-xs-center" >{{ props.item.nightOut || empty }}
-                  <v-dialog v-model="dialogs[5].value" max-width="300px" max-height="300px">
-                    <v-icon small
-                      slot="activator"
-                      :key="props.item.index"
-                      light>
-                      edit
-                    </v-icon>
+                <td class="text-xs-center" >
+                  <v-dialog v-model="dialogs[props.index * 8 + 5].value" max-width="300px" max-height="300px">
+                    <a slot="activator">{{ props.item.nightOut || empty }}</a>
                     <AppointDialog :value="props.item.nightOut || empty"
                       :appointment="props.item"
-                      type="Saída Noite" @editAppoint="editAppointment($event, 5)"></AppointDialog>
+                      type="Saída Noite" @editAppoint="editAppointment($event, props.index * 8 + 5)"></AppointDialog>
                   </v-dialog>
                 </td>
                 <td class="text-xs-center" >{{ props.item.particularExit ? 'SIM' : 'NÃO' }}
@@ -97,35 +67,25 @@
 
             <!-- details -->
             <template slot="expand" slot-scope="props" >
-              <v-card flat dark >
+              <v-card flat class="subRow" >
                 <v-layout class="text-xs-center">
                   <v-flex xs12 sm9 md6 lg6 xl4>
-                    <v-card-text>Saída Particular: {{props.item.particularExit || empty}}
-                    <v-dialog v-model="dialogs[6].value" max-width="300px" max-height="300px">
-                      <v-icon small
-                        slot="activator"
-                        :key="props.item.index"
-                        dark>
-                        edit
-                      </v-icon>
+                    <v-card-text>Saída Particular: 
+                    <v-dialog v-model="dialogs[props.index * 8 + 6].value" max-width="300px" max-height="300px">
+                      <a slot="activator">{{props.item.particularExit || empty}}</a>
                       <AppointDialog :value="props.item.particularExit || empty"
                         :appointment="props.item"
-                        type="Saída Partícular" @editAppoint="editAppointment($event, 6)"></AppointDialog>
+                        type="Saída Partícular" @editAppoint="editAppointment($event, props.index * 8 + 6)"></AppointDialog>
                     </v-dialog>
                   </v-card-text>
                   </v-flex>
                   <v-flex xs12 sm9 md6 lg6 xl4>
-                    <v-card-text>Retorno: {{props.item.particularExitReturn || empty}}
-                      <v-dialog v-model="dialogs[7].value" max-width="300px" max-height="300px">
-                        <v-icon small
-                          slot="activator"
-                          :key="props.item.index"
-                          dark>
-                          edit
-                        </v-icon>
+                    <v-card-text>Retorno: 
+                      <v-dialog v-model="dialogs[props.index * 8 + 7].value" max-width="300px" max-height="300px">
+                        <a slot="activator">{{props.item.particularExitReturn || empty}}</a>
                         <AppointDialog :value="props.item.particularExitReturn || empty"
                           :appointment="props.item"
-                          type="Retorno" @editAppoint="editAppointment($event, 7)"></AppointDialog>
+                          type="Retorno" @editAppoint="editAppointment($event, props.index * 8 + 7)"></AppointDialog>
                       </v-dialog>
                     </v-card-text>
                   </v-flex>
@@ -174,16 +134,8 @@ export default {
       { text: 'Saída Noite', align: 'center', sortable: false },
       { text: 'Saída Partícular', align: 'center', sortable: false }
     ],
-    dialogs: [
-      { value: false },
-      { value: false },
-      { value: false },
-      { value: false },
-      { value: false },
-      { value: false },
-      { value: false },
-      { value: false }
-    ],
+    tableItemDialogs: [],
+    dialogs: [],
     appointment: {},
     employee: {id: 1}
   }),
@@ -193,14 +145,44 @@ export default {
   computed: {
   },
   watch: {
+    appointments () {
+      this.createDialogs()
+    }
+  },
+  created () {
+    this.tableItemDialogs = [this.dialogs]
   },
   methods: {
+    createDialogs () {
+      this.tableItemDialogs = []
+      if (this.appointments.length !== 0) {
+        this.appointments.forEach(element => {
+          this.dialogs.push({ value: false },
+            { value: false },
+            { value: false },
+            { value: false },
+            { value: false },
+            { value: false },
+            { value: false },
+            { value: false })
+        })
+      }
+    },
     editAppointment (appointment, index) {
       if (appointment !== false) {
         this.appointment = appointment
         this.$emit('register', this.appointment)
       }
       this.dialogs[index].value = false
+    },
+    closeDialog (appointment, index) {
+      this.appointments.forEach(element => {
+        if (element.id === appointment.id) {
+          alert(JSON.stringify(element))
+          element.dialogs[index].value = false
+          alert(JSON.stringify(element))
+        }
+      })
     },
     mountAppointment (field, time) {
       if (field === 'Entrada Manhã') {
@@ -237,4 +219,13 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  a {
+    color: black
+  }
+  .subRow {
+    background-color: lightgrey
+  }
+</style>
 

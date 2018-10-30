@@ -50,9 +50,6 @@ public class SaveAppointmentStrategy extends AbstractStrategy<Appointment> {
 			a.setDayOvertime( balance.minusNanos( workload.toNanoOfDay() ) );
 		}
 		
-		if( result.isSuccess() )
-			result.setSuccess( Util.SAVE_SUCCESSFUL_APPOINTMENTS );
-		
 		return result;
 	}
 

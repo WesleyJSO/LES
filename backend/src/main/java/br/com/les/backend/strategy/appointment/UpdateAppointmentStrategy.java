@@ -80,8 +80,6 @@ public class UpdateAppointmentStrategy implements IApplicationStrategy<Appointme
 					appointmentRequestRepository.save(appointmentRequest);
 					result.setError(Util.UPDATE_APPOINTMENT_REQUESTED);
 				}
-			} else {
-				result.setSuccess("Apontamento atualizado com sucesso!");
 			}
 			// else update the requested appointment
 		} else {

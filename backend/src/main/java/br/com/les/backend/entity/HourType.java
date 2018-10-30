@@ -2,9 +2,9 @@ package br.com.les.backend.entity;
 
 import javax.persistence.Entity;
 
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 
-@Controller
+@Component
 @Entity
 public class HourType extends DomainEntity {
 	
