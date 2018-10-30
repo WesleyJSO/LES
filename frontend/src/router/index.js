@@ -15,7 +15,6 @@ import ManageHours from '@/components/admin/ManageHours'
 import Timeline from '@/components/user/Timeline'
 import Appoint from '@/components/user/Appoint'
 // import RegisterSystemParameters from '@/components/admin/RegisterSystemParameters'
-import Authenticator from '@/service/Authenticator'
 
 Vue.use(Router)
 
@@ -35,93 +34,86 @@ export default new Router({
       path: '/Consultar',
       name: 'ConsultarListar',
       component: ConsultarListar,
-      beforeEnter: (to, from, next) => {
-        Authenticator.HAS_ROLE('ROLE_ADMIN') ? next() : next('/Login')
-      }
+      meta: { requiresAuth: true, adminAuth: true, managerAuth: true }
     },
     {
       path: '/alterar',
       name: 'UpdateUser',
       component: UpdateUser,
-      beforeEnter: (to, from, next) => {
-        Authenticator.HAS_ROLE('ROLE_ADMIN') ? next() : next('/Login')
-      }
+      meta: { requiresAuth: true, adminAuth: true, managerAuth: true }
     },
     {
       path: '/cadastro',
       name: 'RegisterUser',
-      component: RegisterUser
+      component: RegisterUser,
+      meta: { requiresAuth: true, adminAuth: true, managerAuth: true }
     },
     {
       path: '/Apontamentos',
       name: 'Appointments',
-      component: Appointments
+      component: Appointments,
+      meta: { requiresAuth: true, employeeAuth: true, adminAuth: true, managerAuth: true }
     },
     {
       path: '/Solicitacao',
       name: 'Request',
-      component: Request
+      component: Request,
+      meta: { requiresAuth: true, adminAuth: true, managerAuth: true }
     },
     {
       path: '/CadastrarEmpresa',
       name: 'RegisterCompany',
       component: RegisterCompany,
-      beforeEnter: (to, from, next) => {
-        Authenticator.HAS_ROLE('ROLE_ADMIN') ? next() : next('/Login')
-      }
+      meta: { requiresAuth: true, adminAuth: true, managerAuth: true }
     },
     {
       path: '/Solicitacoes',
       name: 'RequestView',
-      component: RequestView
+      component: RequestView,
+      meta: { requiresAuth: true, adminAuth: true, managerAuth: true }
     },
     {
       path: '/Graficos',
       name: 'Reports',
-      component: Reports
+      component: Reports,
+      meta: { requiresAuth: true, adminAuth: true, managerAuth: true }
     },
     {
       path: '/CentroDeCustos',
       name: 'CostCentre',
       component: CostCentre,
-      beforeEnter: (to, from, next) => {
-        Authenticator.HAS_ROLE('ROLE_ADMIN') ? next() : next('/Login')
-      }
+      meta: { requiresAuth: true, adminAuth: true, managerAuth: true }
     },
     /* {
       path: '/Parametros',
       name: 'SystemParameters',
       component: SystemParameters,
-      beforeEnter: (to, from, next) => {
-        Authenticator.HAS_ROLE('ROLE_ADMIN') ? next() : next('/Login')
-      }
+      meta: { requiresAuth: true, adminAuth: true, managerAuth: true }
     }, */
     {
       path: '/GerenciarBancoHoras',
       name: 'ManageHours',
       component: ManageHours,
-      beforeEnter: (to, from, next) => {
-        Authenticator.HAS_ROLE('ROLE_ADMIN') ? next() : next('/Login')
-      }
+      meta: { requiresAuth: true, adminAuth: true, managerAuth: true }
     },
     {
       path: '/LinhaDoTempo',
       name: 'Timeline',
-      component: Timeline
+      component: Timeline,
+      meta: { requiresAuth: true, employeeAuth: true, adminAuth: true, managerAuth: true }
     },
     {
       path: '/Apontar',
       name: 'Appoint',
-      component: Appoint
+      component: Appoint,
+      meta: { requiresAuth: true, employeeAuth: true, adminAuth: true, managerAuth: true }
     }/*,
     {
       path: '/CadastroParametros',
       name: 'RegisterSystemParameters',
       component: RegisterSystemParameters,
       props: true,
-      beforeEnter: (to, from, next) => {
-        Authenticator.HAS_ROLE('ROLE_ADMIN') ? next() : next('/Login')
-      }
+      meta: { requiresAuth: true, adminAuth: true, managerAuth: true }
     } */
   ]
 })
