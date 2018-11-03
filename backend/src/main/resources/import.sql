@@ -13,7 +13,7 @@ INSERT INTO `USER` VALUES(HIBERNATE_SEQUENCE.nextval, 1, getDate(), 1, 1, 1, 'ze
 --insert into user_role values (select id from `user` where email='zeller@zeller.com', select id from role where role_name='Gestor')
 --insert into user_role values (select id from `user` where email='zeller@zeller.com', select id from role where role_name='Administrador')
 insert into user_role values (select id from `user` where email='zeller@zeller.com', select id from role where role_name='Colaborador')
-insert into user_role values (select id from `user` where email='bruno@bruno.com', select id from role where role_name='Gestor')
+insert into user_role values (select id from `user` where email='bruno@bruno.com', select id from role where role_name='Administrador')
 insert into user_role values (select id from `user` where email='wesley@wesley.com', select id from role where role_name='Gestor')
 
 --INSERT INTO `USER` VALUES(HIBERNATE_SEQUENCE.nextval, 1, getDate(), 'bruno@bruno.com' , '1234')
