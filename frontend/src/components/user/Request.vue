@@ -1,6 +1,6 @@
 <template>
     <div>
-    <h1>Realizar Solicitação</h1>
+    <h1>{{getTitle}}</h1>
     <li v-for="(message, index) in messages" :key="index">
       <v-alert :color="messageColor"
                :value="haveMessage"
@@ -12,7 +12,7 @@
       <v-layout row wrap>
       <!-- Row 1 -->
       <v-flex xs6>
-          <v-combobox v-model="type"
+          <v-combobox v-model="request.type"
                       prepend-icon="check_circle"
                       :items="getItems"
                       label="Tipo de Solicitação"
@@ -126,6 +126,15 @@
 <script>
 import UserService from '../../service/UserService'
 export default {
+  props: {
+    editItem: {
+      type: Object
+    },
+    edit: {
+      type: Boolean,
+      default: false
+    }
+  },
   data: () => ({
     valid: false,
     requestEntryDate: false,
@@ -135,9 +144,13 @@ export default {
     messages: [],
     message: '',
     request: {},
-    type: ''
+    type: '',
+    isEditing: false
   }),
-  created () {
+  mounted () {
+    if (this.edit) {
+      this.request = this.editItem
+    }
   },
   computed: {
     getItems () {
@@ -164,46 +177,73 @@ export default {
     },
     locale () {
       return 'pt-BR'
+    },
+    getTitle () {
+      return this.isEditing ? '' : 'Realizar Solicitação'
     }
   },
   watch: {
   },
   methods: {
     saveRequest () {
-      // TODO: Change method to "really"
-      // send the request to rest service
-      // Remeber that request can be both
-      // created and edited, this is the
-      // meaning of the variable 'edit'
-      this.request = Object.assign({'status': null, 'type': this.type.id}, this.request)
-      alert(JSON.stringify(this.request, null, ' '))
-      this.$_axios.post(`${this.$_url}request`, this.request).then((response) => {
-        let result = response.data
-        console.log(JSON.stringify(result.resultList), null, ' ')
-        if (result.message) {
-          // alert('Messages everything OK')
-          this.messages = [...result.message]
-          this.haveMessage = true
-          if (result.success) {
-          // retorno mensagem de sucesso
-            this.messageColor = 'info'
-          } else {
-            // retorno mensagem de erro
-            this.messageColor = 'warning'
+      if (!this.edit) {
+        this.request = Object.assign({'status': null, 'type': this.type.id}, this.request)
+        alert(JSON.stringify(this.request, null, ' '))
+        this.$_axios.post(`${this.$_url}request`, this.request).then((response) => {
+          let result = response.data
+          console.log(JSON.stringify(result.resultList), null, ' ')
+          if (result.message) {
+            // alert('Messages everything OK')
+            this.messages = [...result.message]
+            this.haveMessage = true
+            if (result.success) {
+            // retorno mensagem de sucesso
+              this.messageColor = 'info'
+            } else {
+              // retorno mensagem de erro
+              this.messageColor = 'warning'
+            }
           }
-        }
-        this.clearForm()
-      },
-      (response) => {
-        // erro na requisição do serviço
-        console.log(response)
-        this.messages = ['Erro durante execução do serviço!']
-        this.haveMessage = true
-        this.messageColor = 'error'
-      })
+          this.clearForm()
+        },
+        (response) => {
+          // erro na requisição do serviço
+          console.log(response)
+          this.messages = ['Erro durante execução do serviço!']
+          this.haveMessage = true
+          this.messageColor = 'error'
+        })
+      } else {
+        alert(JSON.stringify(this.request, null, ' '))
+        this.$_axios.update(`${this.$_url}request`, this.request).then((response) => {
+          let result = response.data
+          console.log(JSON.stringify(result.resultList), null, ' ')
+          if (result.message) {
+            // alert('Messages everything OK')
+            this.messages = [...result.message]
+            this.haveMessage = true
+            if (result.success) {
+            // retorno mensagem de sucesso
+              this.messageColor = 'info'
+            } else {
+              // retorno mensagem de erro
+              this.messageColor = 'warning'
+            }
+          }
+          this.clearForm()
+        },
+        (response) => {
+          // erro na requisição do serviço
+          console.log(response)
+          this.messages = ['Erro durante execução do serviço!']
+          this.haveMessage = true
+          this.messageColor = 'error'
+        })
+      }
     },
     clearForm () {
       this.$refs.form.reset()
+      this.$emit('onClose')
     }
   }
 }
