@@ -58,13 +58,13 @@ export default new Router({
       path: '/Solicitacao',
       name: 'Request',
       component: Request,
-      meta: { requiresAuth: true, adminAuth: true, managerAuth: true }
+      meta: { requiresAuth: true, adminAuth: true, managerAuth: true, employeeAuth: true }
     },
     {
       path: '/CadastrarEmpresa',
       name: 'RegisterCompany',
       component: RegisterCompany,
-      meta: { requiresAuth: true, adminAuth: true, managerAuth: true, employeeAuth: true }
+      meta: { requiresAuth: true, adminAuth: true, managerAuth: true }
     },
     {
       path: '/Solicitacoes',
