@@ -20,7 +20,7 @@ public class Request extends DomainEntity {
 	private int type;
 	private byte[] attachment;
 	
-	@ManyToOne( fetch=FetchType.LAZY )
+	@ManyToOne( fetch=FetchType.EAGER )
 	@JoinColumn( name="employee_id" )
 	private Employee employee;
 	
