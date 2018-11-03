@@ -10,11 +10,11 @@ import RegisterCompany from '@/components/admin/RegisterCompany'
 import RequestView from '@/components/admin/RequestView'
 import Reports from '@/components/reports/Reports'
 import CostCentre from '@/components/admin/CostCentre'
-// import SystemParameters from '@/components/admin/SystemParameters'
+import SystemParameters from '@/components/admin/SystemParameters'
 import ManageHours from '@/components/admin/ManageHours'
 import Timeline from '@/components/user/Timeline'
 import Appoint from '@/components/user/Appoint'
-// import RegisterSystemParameters from '@/components/admin/RegisterSystemParameters'
+import RegisterSystemParameters from '@/components/admin/RegisterSystemParameters'
 
 Vue.use(Router)
 
@@ -84,12 +84,12 @@ export default new Router({
       component: CostCentre,
       meta: { requiresAuth: true, adminAuth: true, managerAuth: true }
     },
-    /* {
+    {
       path: '/Parametros',
       name: 'SystemParameters',
       component: SystemParameters,
       meta: { requiresAuth: true, adminAuth: true, managerAuth: true }
-    }, */
+    },
     {
       path: '/GerenciarBancoHoras',
       name: 'ManageHours',
@@ -107,13 +107,13 @@ export default new Router({
       name: 'Appoint',
       component: Appoint,
       meta: { requiresAuth: true, employeeAuth: true, adminAuth: true, managerAuth: true }
-    }/*,
+    },
     {
       path: '/CadastroParametros',
       name: 'RegisterSystemParameters',
       component: RegisterSystemParameters,
       props: true,
       meta: { requiresAuth: true, adminAuth: true, managerAuth: true }
-    } */
+    }
   ]
 })

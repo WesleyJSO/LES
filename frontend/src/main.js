@@ -63,7 +63,6 @@ Vue.prototype.$v_role = new RoleValidators()
 axios.interceptors.request.use(
   (config) => {
     let token = sessionStorage.getItem('token')
-    alert(token)
     if (token) {
       config.headers['Authorization'] = token
     }

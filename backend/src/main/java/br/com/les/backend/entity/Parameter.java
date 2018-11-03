@@ -1,8 +1,10 @@
 package br.com.les.backend.entity;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
@@ -15,20 +17,20 @@ public class Parameter extends DomainEntity {
 	private Double overtimePercentage;
 	private Double nightOvertimePercentage;
 	private Double weekEndOvertimePercentage;
-	private Integer retroactiveAppointmentLimitTime;
+	private LocalTime retroactiveAppointmentLimitTime;
 	private Integer relocationRequestLimitTime; // limit to change work days
 	private Integer bankCompensationLimitTime; // limit in months
 	private LocalDateTime endDate;
 	
-	@OneToOne()
+	@OneToOne( fetch=FetchType.EAGER )
 	@JoinColumn(name = "over_time_id")
 	private HourType overTime;
 	
-	@OneToOne()
+	@OneToOne( fetch=FetchType.EAGER )
 	@JoinColumn(name = "comp_time_id")
 	private HourType compTime;
 	
-	@OneToOne()
+	@OneToOne( fetch=FetchType.EAGER )
 	@JoinColumn(name = "both_id")
 	private HourType bothTypes;
 	
@@ -50,10 +52,10 @@ public class Parameter extends DomainEntity {
 	public void setWeekEndOvertimePercentage(Double weekEndOvertimePercentage) {
 		this.weekEndOvertimePercentage = weekEndOvertimePercentage;
 	}
-	public Integer getRetroactiveAppointmentLimitTime() {
+	public LocalTime getRetroactiveAppointmentLimitTime() {
 		return retroactiveAppointmentLimitTime;
 	}
-	public void setRetroactiveAppointmentLimitTime(Integer retroactiveAppointmentLimitTime) {
+	public void setRetroactiveAppointmentLimitTime(LocalTime retroactiveAppointmentLimitTime) {
 		this.retroactiveAppointmentLimitTime = retroactiveAppointmentLimitTime;
 	}
 	public Integer getRelocationRequestLimitTime() {

@@ -97,7 +97,7 @@
             <v-flex xs12 sm9 md6 lg6 xl4>
               <v-text-field
                     v-model="parameters.retroactiveAppointmentLimitTime"
-                    type="number"
+                    type="time"
                     class="px-0"
                     prepend-icon="looks_one"
                     clearable
@@ -153,23 +153,53 @@
       <v-stepper-content step="3">
         <v-card
           class="mb-5">
-          <h3>O tipo de hora configurado será aplicado à todo usuário sem parametro próprio</h3>
+          <h2>Para o tipo {{ hourTypes[0] }}</h2>
           <br/>
           <v-layout>
-          <!-- Row 1 -->
-          <v-flex xs12 sm6 d-flex>
-            <v-select
-              v-model="type"
-              :items="hourTypes"
-              prepend-icon="query_builder"
-              label="Modelo de Horas"
-              :item-value="type"
-              @change="verifyFields">
-            </v-select>
-          </v-flex>
+          <!-- Row 2 -->
+            <v-flex xs12 sm9 md6 lg6 xl4>
+              <v-checkbox
+                :label="`Não aplicar limite`"
+                v-model="checkbox1"
+              ></v-checkbox>
+              <v-text-field
+                    :disabled="checkbox1"
+                    v-model="parameters.overTime.quantityFirst"
+                    type="number"
+                    prepend-icon="looks_one"
+                    clearable
+                    suffix="hrs"
+                    label="Limite diário de horas extras">
+              </v-text-field>
+            </v-flex>
           </v-layout>
+        </v-card>
+        <v-card>
+          <h2>Para o tipo {{ hourTypes[1] }}</h2>
           <br/>
-          <v-layout v-if="bothTypes">
+          <v-layout>
+          <!-- Row 2 -->
+            <v-flex xs12 sm9 md6 lg6 xl4>
+              <v-checkbox
+                :label="`Não aplicar limite`"
+                v-model="checkbox2"
+              ></v-checkbox>
+              <v-text-field
+                    :disabled="checkbox2"
+                    v-model="parameters.compTime.quantityFirst"
+                    type="number"
+                    prepend-icon="looks_one"
+                    clearable
+                    suffix="hrs"
+                    label="Limite diário de banco de horas">
+              </v-text-field>
+            </v-flex>
+          </v-layout>
+        </v-card>
+        <v-card>
+          <h2>Para o tipo {{ hourTypes[2] }}</h2>
+          <br/>
+          <v-layout>
           <!-- Row 4 -->
             <v-flex xs12 sm9 md6 lg6 xl4>
               <span>Qual tipo deve ser aplicado primeiro?</span>
@@ -182,42 +212,38 @@
               </v-radio-group>
             </v-flex>
           </v-layout>
-          <v-layout v-if="overtimeType || bothTypes">
+          <v-layout>
           <!-- Row 2 -->
-            <v-flex xs12 sm9 md6 lg6 xl4>
+            <v-flex xs11 sm8 md5 lg5 xl3>
               <v-checkbox
-                :disabled="blockCheckbox2"
-                :label="`Não aplicar limite de horas extras`"
-                v-model="checkbox2"
-                @change="verifyCheckBoxes"
+                :disabled="blockCheckbox3"
+                :label="`Não aplicar limite`"
+                v-model="checkbox3"
               ></v-checkbox>
               <v-text-field
-                    :disabled="blockOvertimeTypeLimit"
+                    :disabled="checkbox3"
                     v-model="overtimeTypeLimit"
                     type="number"
                     prepend-icon="looks_one"
                     clearable
-                    suffix="horas"
+                    suffix="hrs"
                     label="Limite diário de horas extras">
               </v-text-field>
             </v-flex>
-          </v-layout>
-          <v-layout v-if="bankOfHoursType || bothTypes">
-          <!-- Row 3 -->
-            <v-flex xs12 sm9 md6 lg6 xl4>
+            <v-spacer></v-spacer>
+            <v-flex xs11 sm8 md5 lg5 xl3>
               <v-checkbox
-                :disabled="blockCheckbox3"
-                :label="`Não aplicar limite de banco de horas`"
-                v-model="checkbox3"
-                @change="verifyCheckBoxes"
+                :disabled="blockCheckbox4"
+                :label="`Não aplicar limite`"
+                v-model="checkbox4"
               ></v-checkbox>
               <v-text-field
-                    :disabled="blockBankOfHoursTypeLimit"
+                    :disabled="checkbox4"
                     v-model="bankOfHoursTypeLimit"
                     type="number"
                     prepend-icon="looks_two"
                     clearable
-                    suffix="horas"
+                    suffix="hrs"
                     label="Limite diário de banco de horas">
               </v-text-field>
             </v-flex>
@@ -250,47 +276,29 @@ import DateHelper from '../../helpers/DateHelper'
 export default {
   props: ['parameter'],
   data: () => ({
-    actualDate: '',
     parameterDate: '',
     message: '',
     step: 1,
-    parameters: [],
+    parameters: {},
     haveMessage: false,
     messages: [],
     messageColor: '',
-    edit: false,
-    parametersId: 0,
-    // overtime percenteges
-    overtime: 50,
-    nightOvertime: 20,
-    weekEndOvertime: 100,
-    // deadlines
-    retroactiveAppointment: 1,
-    relocationRequest: 12,
-    bankCompensation: 6,
     // hour type
     hourTypes: [
       'Hora Extra',
       'Banco de Horas',
       'Hora Extra e Banco de Horas'
     ],
-    hoursLimit: 3,
-    overtimeTypeLimit: 1,
-    bankOfHoursTypeLimit: 1,
-    bankOfHoursType: false,
-    overtimeType: true,
-    bothTypes: false,
+    overtimeTypeLimit: null,
+    bankOfHoursTypeLimit: null,
     radio: 'Hora Extra',
     type: 'Hora Extra',
     checkbox1: false,
     checkbox2: false,
     checkbox3: false,
-    blockCheckbox2: false,
+    checkbox4: false,
     blockCheckbox3: false,
-    blockHoursLimit: false,
-    blockOvertimeTypeLimit: false,
-    blockBankOfHoursTypeLimit: false,
-    welcome: 'welcome',
+    blockCheckbox4: false,
     dialog: false,
     blockDialog: false
   }),
@@ -303,112 +311,101 @@ export default {
   },
   watch: {
   },
-  mounted () {
+  beforeMount () {
     if (this.parameter) {
       this.parameters = this.parameter
-      this.hoursLimit = this.parameters.overtimeTypeLimit
-      this.overtimeTypeLimit = this.parameters.overtimeTypeLimit
-      this.bankOfHoursTypeLimit = this.parameters.bankedHourTypeLimit
-      if (this.parameters.hourType !== 'Não cadastrado') {
-        this.type = this.parameters.hourType
-        this.verifyFields()
-        if (this.parameters.hourType === 'Banco de Horas') {
-          this.hoursLimit = this.parameters.bankedHourTypeLimit
-          this.bankOfHoursType = true
-          this.overtimeType = false
-        } else if (this.parameters.hourType === 'Hora Extra e Banco de Horas') {
-          if (!this.parameters.overtimeTypeLimit) {
-            this.checkbox2 = true
-          }
-          if (!this.parameters.bankedHourTypeLimit) {
-            this.checkbox3 = true
-          }
-        } else {
-          if (!this.parameters.overtimeTypeLimit) {
-            this.checkbox2 = true
-          }
+      if (!this.parameters.overTime) {
+        this.parameters.overTime = {
+          both: false,
+          first: 'Hora Extra',
+          quantityFirst: null,
+          quantitySecond: null
         }
       }
-      this.blockOvertimeTypeLimit = this.checkbox2
-      this.blockBankOfHoursTypeLimit = this.checkbox3
+      if (!this.parameters.compTime) {
+        this.parameters.compTime = {
+          both: false,
+          first: 'Banco de Horas',
+          quantityFirst: null,
+          quantitySecond: null
+        }
+      }
+      if (!this.parameters.bothTypes) {
+        this.parameters.bothTypes = {
+          both: true,
+          first: 'Hora Extra',
+          quantityFirst: null,
+          quantitySecond: null
+        }
+      }
+      if (this.parameters.bothTypes.first === 'Hora Extra') {
+        if (!this.parameters.bothTypes.quantityFirst) {
+          this.checkbox3 = true
+        }
+        if (!this.parameters.bothTypes.quantitySecond) {
+          this.checkbox4 = true
+        }
+        this.overtimeTypeLimit = this.parameters.bothTypes.quantityFirst
+        this.bankOfHoursTypeLimit = this.parameters.bothTypes.quantitySecond
+      } else if (this.parameters.bothTypes.first === 'Banco de Horas') {
+        if (!this.parameters.bothTypes.quantityFirst) {
+          this.checkbox4 = true
+        }
+        if (!this.parameters.bothTypes.quantitySecond) {
+          this.checkbox3 = true
+        }
+        this.bankOfHoursTypeLimit = this.parameters.bothTypes.quantityFirst
+        this.overtimeTypeLimit = this.parameters.bothTypes.quantitySecond
+      }
     }
     if (this.parameters.creationDate) {
       let date = this.parameters.creationDate.substring(0, 10).split('/')
       date = `${date[2]}/${date[1]}/${date[0]}`
       this.parameterDate = date
     }
+    console.log(JSON.stringify(this.parameters))
+    this.verifyFields()
   },
   methods: {
     changeRadio () {
       if (this.radio === 'Hora Extra') {
-        this.checkbox2 = false
-        this.blockCheckbox2 = true
-        this.blockCheckbox3 = false
-        this.bankOfHoursTypeLimit = this.parameters.bankedHourTypeLimit
-      } else if (this.radio === 'Banco de Horas') {
-        this.blockCheckbox2 = false
         this.checkbox3 = false
+        this.checkbox4 = true
         this.blockCheckbox3 = true
-        this.overtimeTypeLimit = this.parameters.overtimeTypeLimit
-      }
-      this.verifyCheckBoxes()
-    },
-    verifyCheckBoxes () {
-      this.blockOvertimeTypeLimit = false
-      this.blockBankOfHoursTypeLimit = false
-      if (this.type === 'Hora Extra e Banco de Horas') {
-        if (this.checkbox2 && this.radio !== 'Hora Extra') {
-          this.blockOvertimeTypeLimit = true
-          this.overtimeTypeLimit = null
-        }
-        if (!this.checkbox2) {
-          this.overtimeTypeLimit = this.parameters.overtimeTypeLimit
-        }
-        if (this.checkbox3 && this.radio !== 'Banco de Horas') {
-          this.blockBankOfHoursTypeLimit = true
-          this.bankOfHoursTypeLimit = null
-        }
-        if (!this.checkbox3) {
-          this.bankOfHoursTypeLimit = this.parameters.bankedHourTypeLimit
-        }
-      } else if (this.type === 'Hora Extra') {
-        if (this.checkbox2) {
-          this.blockOvertimeTypeLimit = true
-          this.overtimeTypeLimit = null
-        } else {
-          this.overtimeTypeLimit = this.parameters.overtimeTypeLimit
-        }
-      } else if (this.type === 'Banco de Horas') {
-        if (this.checkbox3) {
-          this.blockBankOfHoursTypeLimit = true
-          this.bankOfHoursTypeLimit = null
-        } else {
-          this.bankOfHoursTypeLimit = this.parameters.bankedHourTypeLimit
-        }
+        this.blockCheckbox4 = false
+        this.bankOfHoursTypeLimit = null
+      } else if (this.radio === 'Banco de Horas') {
+        this.checkbox3 = true
+        this.checkbox4 = false
+        this.blockCheckbox3 = false
+        this.blockCheckbox4 = true
+        this.overtimeTypeLimit = null
       }
     },
-    verifyFields (type) {
-      if (type === 'Hora Extra') {
-        this.overtimeType = true
-        this.bankOfHoursType = false
-        this.bothTypes = false
-        this.overtimeTypeLimit = this.parameters.overtimeTypeLimit
-      } else if (type === 'Banco de Horas') {
-        this.overtimeType = false
-        this.bankOfHoursType = true
-        this.bothTypes = false
-        this.bankOfHoursTypeLimit = this.parameters.bankedHourTypeLimit
+    verifyFields () {
+      if (!this.parameters.overTime.quantityFirst) {
+        this.checkbox1 = true
       }
-      this.blockCheckbox2 = false
-      this.blockCheckbox3 = false
-      if (type === 'Hora Extra e Banco de Horas') {
-        this.overtimeType = false
-        this.bankOfHoursType = false
-        this.bothTypes = true
-        this.changeRadio()
-      } else {
-        this.verifyCheckBoxes()
+      if (!this.parameters.compTime.quantityFirst) {
+        this.checkbox2 = true
       }
+      if (!this.parameters.bothTypes.first === 'Hora Extra') {
+        if (!this.parameters.bothTypes.quantityFirst) {
+          this.checkbox3 = true
+        }
+        if (!this.parameters.bothTypes.quantitySecond) {
+          this.checkbox4 = true
+        }
+      } else if (!this.parameters.bothTypes.first === 'Banco de Horas') {
+        if (!this.parameters.bothTypes.quantityFirst) {
+          this.checkbox4 = true
+        }
+        if (!this.parameters.bothTypes.quantitySecond) {
+          this.checkbox3 = true
+        }
+      }
+      this.radio = this.parameters.bothTypes.first
+      this.changeRadio()
     },
     nextStep () {
       if (this.step === 2 && this.validateDeadlines()) {
@@ -495,11 +492,19 @@ export default {
       this.messages = []
       this.messageColor = ''
       let error = []
-      error = this.$v_parameters.overtimeTypeLimitRules(this.type, this.checkbox2, this.overtimeTypeLimit)
+      error = this.$v_parameters.hoursLimitRules(this.parameters.overTime.first, this.checkbox1, this.parameters.overTime.quantityFirst)
       if (error) {
         this.messages = [...this.messages, ...error]
       }
-      error = this.$v_parameters.bankOfHoursTypeLimitRules(this.type, this.checkbox3, this.bankOfHoursTypeLimit)
+      error = this.$v_parameters.hoursLimitRules(this.parameters.compTime.first, this.checkbox2, this.parameters.compTime.quantityFirst)
+      if (error) {
+        this.messages = [...this.messages, ...error]
+      }
+      error = this.$v_parameters.overtimeTypeLimitRules(this.checkbox3, this.overtimeTypeLimit)
+      if (error) {
+        this.messages = [...this.messages, ...error]
+      }
+      error = this.$v_parameters.bankOfHoursTypeLimitRules(this.checkbox4, this.bankOfHoursTypeLimit)
       if (error) {
         this.messages = [...this.messages, ...error]
       }
@@ -511,14 +516,18 @@ export default {
         return false
       }
     },
-    callApi () {
+    async callApi () {
+      var response = null
+      var result = null
       if (this.parameter.creationDate) {
-        if (DateHelper.diffDates(new Date(this.parameterDate), new Date()) >= 0) {
-          this.$_axios.put(`${this.$_url}parameterSaveUpdate`, this.parameters).then(response => {
-            var result = response.data
-            if (result.listaResultado.length !== 0) {
+        if (DateHelper.diffDates(new Date(this.parameterDate), new Date()) > 0) {
+          alert(DateHelper.diffDates(new Date(this.parameterDate), new Date()))
+          try {
+            response = await this.$_axios.put(`${this.$_url}parameter`, this.parameter)
+            result = response.data
+            if (result.resultList.length !== 0) {
               // retorno ok /
-              this.parameters = result.listaResultado
+              this.parameters = result.resultList
             }
             if (result.mensagem) {
               this.messages = [...result.message]
@@ -531,19 +540,11 @@ export default {
                 this.messageColor = 'warning'
               }
             }
-          },
-          response => {
-            // erro na requisição do serviço /
-            this.messages = ['Erro durante execução do serviço!']
-            this.haveMessage = true
-            this.messageColor = 'error'
-          })
-          this.$_axios.post(`${this.$_url}parameter`, this.parameters).then(response => {
-            var result = response.data
-            this.$router.push('/Parametros')
-            if (result.listaResultado.length !== 0) {
+            response = await this.$_axios.post(`${this.$_url}parameter`, this.parameters)
+            result = response.data
+            if (result.resultList.length !== 0) {
               // retorno ok /
-              this.parameters = result.listaResultado
+              this.parameters = result.resultList
               this.$router.push('/Parametros')
             }
             if (result.mensagem) {
@@ -557,20 +558,19 @@ export default {
                 this.messageColor = 'warning'
               }
             }
-          },
-          response => {
-            // erro na requisição do serviço /
+          } catch (err) {
             this.messages = ['Erro durante execução do serviço!']
             this.haveMessage = true
             this.messageColor = 'error'
-          })
+            console.log(JSON.stringify(err))
+          }
         } else {
-          this.$_axios.put(`${this.$_url}parameter`, this.parameters).then(response => {
-            var result = response.data
-            this.$router.push('/Parametros')
-            if (result.listaResultado.length !== 0) {
+          try {
+            response = await this.$_axios.put(`${this.$_url}parameter`, this.parameters)
+            result = response.data
+            if (result.resultList.length !== 0) {
               // retorno ok /
-              this.parameters = result.listaResultado
+              this.parameters = result.resultList
               this.$router.push('/Parametros')
             }
             if (result.mensagem) {
@@ -584,21 +584,21 @@ export default {
                 this.messageColor = 'warning'
               }
             }
-          },
-          response => {
-            // erro na requisição do serviço /
+          } catch (err) {
             this.messages = ['Erro durante execução do serviço!']
             this.haveMessage = true
             this.messageColor = 'error'
-          })
+            console.log(JSON.stringify(err))
+          }
         }
       } else {
-        this.$_axios.post(`${this.$_url}parameter`, this.parameters).then(response => {
-          var result = response.data
+        try {
+          response = await this.$_axios.post(`${this.$_url}parameter`, this.parameters)
+          result = response.data
           this.$router.push('/Parametros')
-          if (result.listaResultado.length !== 0) {
+          if (result.resultList.length !== 0) {
             // retorno ok /
-            this.parameters = result.listaResultado
+            this.parameters = result.resultList
             this.$router.push('/Parametros')
           }
           if (result.mensagem) {
@@ -612,30 +612,23 @@ export default {
               this.messageColor = 'warning'
             }
           }
-        },
-        response => {
-          // erro na requisição do serviço /
+        } catch (err) {
           this.messages = ['Erro durante execução do serviço!']
           this.haveMessage = true
           this.messageColor = 'error'
-        })
+          console.log(JSON.stringify(err))
+        }
       }
     },
     saveParameters (event) {
       if (this.validateHourType()) {
-        this.parameters.hourType = this.type
-        if (this.parameters.hourType === 'Hora Extra') {
-          this.parameters.overtimeTypeLimit = this.overtimeTypeLimit
-          this.parameters.bankedHourTypeLimit = null
-          this.parameters.firstTypeApplied = null
-        } else if (this.parameters.hourType === 'Banco de Horas') {
-          this.parameters.overtimeTypeLimit = null
-          this.parameters.bankedHourTypeLimit = this.bankOfHoursTypeLimit
-          this.parameters.firstTypeApplied = null
-        } else if (this.parameters.hourType === 'Hora Extra e Banco de Horas') {
-          this.parameters.overtimeTypeLimit = this.overtimeTypeLimit
-          this.parameters.bankedHourTypeLimit = this.bankOfHoursTypeLimit
-          this.parameters.firstTypeApplied = this.radio
+        this.parameters.bothTypes.first = this.radio
+        if (this.parameters.bothTypes.first === 'Hora Extra') {
+          this.parameters.bothTypes.quantityFirst = this.overtimeTypeLimit
+          this.parameters.bothTypes.quantitySecond = this.bankOfHoursTypeLimit
+        } else {
+          this.parameters.bothTypes.quantityFirst = this.bankOfHoursTypeLimit
+          this.parameters.bothTypes.quantitySecond = this.overtimeTypeLimit
         }
         this.callApi()
       }

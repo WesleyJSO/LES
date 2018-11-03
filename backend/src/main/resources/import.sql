@@ -13,13 +13,14 @@ INSERT INTO `USER` VALUES(HIBERNATE_SEQUENCE.nextval, 1, getDate(), 1, 1, 1, 'ze
 --insert into user_role values (select id from `user` where email='zeller@zeller.com', select id from role where role_name='Gestor')
 --insert into user_role values (select id from `user` where email='zeller@zeller.com', select id from role where role_name='Administrador')
 insert into user_role values (select id from `user` where email='zeller@zeller.com', select id from role where role_name='Colaborador')
-insert into user_role values (select id from `user` where email='bruno@bruno.com', select id from role where role_name='Gestor')
+insert into user_role values (select id from `user` where email='bruno@bruno.com', select id from role where role_name='Administrador')
 insert into user_role values (select id from `user` where email='wesley@wesley.com', select id from role where role_name='Gestor')
 
 --INSERT INTO `USER` VALUES(HIBERNATE_SEQUENCE.nextval, 1, getDate(), 'bruno@bruno.com' , '1234')
 --insert into employee values(HIBERNATE_SEQUENCE.nextval, 1, getDate(), getDate(), 'Holanda', 'Bruno', 123456789, null, null, (select id from user where email='bruno@bruno.com'))
-insert into employee values(HIBERNATE_SEQUENCE.nextval, 1, getDate(), getDate(), 'Holanda', 'Bruno', 123456789, null, null, (select id from user where email='bruno@bruno.com'))
 --insert into employee values(HIBERNATE_SEQUENCE.nextval, 1, getDate(), getDate(), 'Wesley', 'José', 123456789, null, null, (select id from user where email='wesley@wesley.com'))
+insert into employee values(HIBERNATE_SEQUENCE.nextval, 1, getDate(), getDate(), 'Holanda', 'Bruno', 123456789, null, null, (select id from user where email='bruno@bruno.com'))
+
 insert into BASE_HOUR_CALCULATION values(HIBERNATE_SEQUENCE.nextval, 1, getDate(), getDate(), null, null, 10000, null, 8, (select e.id from employee e inner join user u on e.user_id = u.id where u.email='bruno@bruno.com'), null)
 
 --insert into MONTHLY_BALANCE values(HIBERNATE_SEQUENCE.nextval,1,getDate(),3,'2018-07',(select e.id from employee e inner join user u on e.user_id = u.id where u.email='bruno@bruno.com'))
