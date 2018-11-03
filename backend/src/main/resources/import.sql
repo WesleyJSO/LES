@@ -11,7 +11,7 @@ INSERT INTO `USER` VALUES(HIBERNATE_SEQUENCE.nextval, 1, getDate(), 1, 1, 1, 'we
 INSERT INTO `USER` VALUES(HIBERNATE_SEQUENCE.nextval, 1, getDate(), 1, 1, 1, 'zeller@zeller.com', 1, '$2a$16$pzxobnpJsCrSiXV.t97iweXy3yytjsPUN.8IgI/Cokx6KxXbg65H.')
 
 --insert into user_role values (select id from `user` where email='zeller@zeller.com', select id from role where role_name='Gestor')
-insert into user_role values (select id from `user` where email='zeller@zeller.com', select id from role where role_name='Administrador')
+--insert into user_role values (select id from `user` where email='zeller@zeller.com', select id from role where role_name='Administrador')
 insert into user_role values (select id from `user` where email='zeller@zeller.com', select id from role where role_name='Colaborador')
 insert into user_role values (select id from `user` where email='bruno@bruno.com', select id from role where role_name='Gestor')
 insert into user_role values (select id from `user` where email='wesley@wesley.com', select id from role where role_name='Gestor')

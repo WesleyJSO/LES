@@ -35,11 +35,6 @@ public class Appointment extends DomainEntity {
 	private LocalTime hoursLeft;
 	private LocalTime dayOvertime;
 	
-	/*charts data*/
-	@Transient private List<String> employeeNameList;
-	@Transient private LocalTime initialQueryDate;
-	@Transient private LocalTime finalQueryDate;
-	
 	private Double previousBalanceInserted;
 	private Boolean calculated;
 	
@@ -153,30 +148,6 @@ public class Appointment extends DomainEntity {
 
 	public void setDayOvertime(LocalTime dayOvertime) {
 		this.dayOvertime = dayOvertime;
-	}
-
-	public List<String> getEmployeeNameList() {
-		return employeeNameList;
-	}
-
-	public void setEmployeeNameList(List<String> employeeNameList) {
-		this.employeeNameList = employeeNameList;
-	}
-
-	public LocalTime getInitialQueryDate() {
-		return initialQueryDate;
-	}
-
-	public void setInitialQueryDate(LocalTime initialQueryDate) {
-		this.initialQueryDate = initialQueryDate;
-	}
-
-	public LocalTime getFinalQueryDate() {
-		return finalQueryDate;
-	}
-
-	public void setFinalQueryDate(LocalTime finalQueryDate) {
-		this.finalQueryDate = finalQueryDate;
 	}
 
 	public Double getPreviousBalanceInserted() {

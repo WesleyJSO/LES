@@ -23,6 +23,7 @@ import CompanyValidators from '@/validators/CompanyValidators'
 import AddressValidators from '@/validators/AddressValidators'
 import RequestValidator from './validators/RequestValidator'
 import RoleValidators from './validators/RoleValidators'
+import Authenticator from '@/service/Authenticator'
 
 Vue.use(VueChartkick, {adapter: Chart})
 
@@ -61,8 +62,8 @@ Vue.prototype.$v_role = new RoleValidators()
 // Request
 axios.interceptors.request.use(
   (config) => {
-    let token = sessionStorage.token
-    console.log(token)
+    let token = sessionStorage.getItem('token')
+    alert(token)
     if (token) {
       config.headers['Authorization'] = token
     }
@@ -104,4 +105,35 @@ new Vue({
   router,
   components: { App },
   template: '<App/>'
+})
+
+router.beforeEach((to, from, next) => {
+  let token = sessionStorage.getItem('token')
+  if (to.meta.requiresAuth) {
+    console.log('#### -- Requires Authentication -- ####')
+    if (!token) {
+      console.log('#### -- Invalid or Null Token -- ####')
+      next({
+        name: '/Login'
+      })
+    } else if (to.meta.adminAuth || to.meta.managerAuth) {
+      console.log('#### -- Admin | Manager Access -- ####')
+      if (Authenticator.HAS_ROLE('ROLE_MANAGER') || Authenticator.HAS_ROLE('ROLE_ADMIN')) {
+        next()
+      } else {
+        console.log('#### -- Unauthorized User -- ####')
+        next('/Login')
+      }
+    } else if (to.meta.employeeAuth) {
+      console.log('#### -- Employe Access -- ####')
+      if (Authenticator.HAS_ROLE('ROLE_EMPLOYEE')) {
+        next()
+      } else {
+        console.log('#### -- Unauthenticated User -- ####')
+        next('/Login')
+      }
+    }
+  } else {
+    next()
+  }
 })

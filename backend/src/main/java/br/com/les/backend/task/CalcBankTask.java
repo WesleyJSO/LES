@@ -1,5 +1,6 @@
 package br.com.les.backend.task;
 
+import java.lang.reflect.InvocationTargetException;
 import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
@@ -71,7 +72,12 @@ public class CalcBankTask extends TimerTask {
 			LocalTime workload = LocalTime.of(employeeWorkload, 0);
 			
 			bank = new BankedHours(employee);
-			bank = bankedHoursDAO.find(bank).get(0);
+			try {
+				bank = bankedHoursDAO.find(bank).get(0);
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			
 			// get new or edited appointments
 			List< Appointment > appointmentList = appointmentRepository.findPending();

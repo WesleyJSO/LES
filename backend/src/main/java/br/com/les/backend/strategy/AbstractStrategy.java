@@ -9,7 +9,6 @@ public abstract class AbstractStrategy<T extends DomainEntity> implements IAppli
 	
 	protected DomainEntity authenticatedUser () {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		@SuppressWarnings("unchecked")
 		DomainEntity entity = (DomainEntity) authentication.getPrincipal();
 		
 		return entity;

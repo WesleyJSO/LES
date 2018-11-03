@@ -1,5 +1,6 @@
 package br.com.les.backend.service;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,12 @@ public class GenericService<T extends DomainEntity> implements IService<T> {
 	
 	@Override
 	public List<T> find(T entity) {
-		return genericDAO.find(entity);
+		try {
+			return genericDAO.find(entity);
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}	
 
 	@Override

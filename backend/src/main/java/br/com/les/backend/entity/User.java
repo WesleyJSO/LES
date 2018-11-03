@@ -1,5 +1,6 @@
 package br.com.les.backend.entity;
 
+
 import java.util.Collection;
 import java.util.List;
 
@@ -10,7 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -86,10 +86,6 @@ public class User extends DomainEntity implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return this.enabled;
-	}
-
-	public void setAccountNonExpired(boolean accountNonExpired) {
-		this.accountNonExpired = accountNonExpired;
 	}
 
 	public void setAccountNonLocked(boolean accountNonLocked) {

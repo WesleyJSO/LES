@@ -30,7 +30,7 @@ public class Parameter extends DomainEntity {
 	
 	@OneToOne()
 	@JoinColumn(name = "both_id")
-	private HourType both;
+	private HourType bothTypes;
 	
 	public Double getOvertimePercentage() {
 		return overtimePercentage;
@@ -86,10 +86,10 @@ public class Parameter extends DomainEntity {
 	public void setCompTime(HourType compTime) {
 		this.compTime = compTime;
 	}
-	public HourType getBoth() {
-		return both;
+	public HourType getBothTypes() {
+		return bothTypes;
 	}
-	public void setBoth(HourType both) {
-		this.both = both;
+	public void setBothTypes(HourType bothTypes) {
+		this.bothTypes = bothTypes;
 	}	
 }

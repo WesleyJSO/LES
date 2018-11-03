@@ -12,7 +12,7 @@
                 prepend-icon="supervisor_account"
                 :items="employees"
                 multiple small-chips
-                v-model="appointment.employeeNameList"
+                v-model="employeeNameList"
               ></v-select>
             </v-flex>
           </v-layout>
@@ -28,9 +28,9 @@
                 transition="scale-transition"
                 min-width="290px"
               >
-                <v-text-field @click="console.log('wer')"
+                <v-text-field
                   label="Data inicial"
-                  v-model="appointment.initialQueryDate"
+                  v-model="initialQueryDate"
                   slot="activator"
                   prepend-icon="event"
                   readonly
@@ -39,7 +39,7 @@
                 <v-date-picker
                   locale="pt-br"
                   header-color="black"
-                  v-model="appointment.initialQueryDate"
+                  v-model="initialQueryDate"
                   @input="pickerInitialDate = false"
                 ></v-date-picker>
               </v-menu>
@@ -57,7 +57,7 @@
               >
                 <v-text-field
                   label="Data final"
-                  v-model="appointment.finalQueryDate"
+                  v-model="finalQueryDate"
                   slot="activator"
                   prepend-icon="event"
                   readonly
@@ -66,7 +66,7 @@
                 <v-date-picker
                   locale="pt-br"
                   header-color="black"
-                  v-model="appointment.finalQueryDate"
+                  v-model="finalQueryDate"
                   @input="pickerFinalDate = false"
                 ></v-date-picker>
               </v-menu>
@@ -205,9 +205,12 @@
 export default {
   data: () => ({
     valid: false,
-    appointment: {},
     pickerInitialDate: false,
     pickerFinalDate: false,
+    initialQueryDate: null,
+    finalQueryDate: null,
+    employeeNameList: [],
+    chartFilter: {},
     tabs: [ 'Horas Trabalhadas', 'Horas de Almoço', 'Horas Extras' ],
     frequency: [ 'Semana', 'Mês', 'Ano' ],
     employees: [ 'Wesley', 'Zeller', 'Bruno', 'João', 'Maria', 'Zé' ],
@@ -221,12 +224,12 @@ export default {
   // },
   methods: {
     async submit () {
-      console.log('sync1')
-      this.changeData = await this.$_axios.patch(`${this.$_url}appointment`)
-      console.log(this.changeData)
-      console.log('sync2')
-      // this.chartData = this.$_axios.patch(`${this.$_url}appointment`)
-      // this.chart = this.chartData.data
+      this.chartFilter.initialQueryDate = new Date(this.initialQueryDate)
+      this.chartFilter.finalQueryDate = new Date(this.finalQueryDate)
+      this.chartFilter.employeeNameList = this.employeeNameList
+      this.chartData = await this.$_axios.patch(`${this.$_url}chartfilter`, this.chartFilter)
+      this.chart = await this.chartData.data
+      console.log(this.chart)
     },
     selectedEmployes (employee) {
       console.log(employee.indexOf('todos') > -1)

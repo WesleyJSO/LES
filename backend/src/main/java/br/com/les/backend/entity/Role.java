@@ -38,7 +38,7 @@ public class Role extends DomainEntity implements GrantedAuthority{
 
 	@Override
 	public String getAuthority() {
-		return getId().toString();
+		return this.role;
 	}
 	
 }
