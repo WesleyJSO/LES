@@ -12,9 +12,4 @@ public class UserController extends AbstractController<User> {
 	public UserController() {
 		super(User.class);
 	}
-	
-	/*@PatchMapping
-	public @ResponseBody Result<User> newPassword(User entity) {
-		return run(Actions.NEW_PASSWORD.getValue()).execute(entity);
-	}*/
 }

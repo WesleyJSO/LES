@@ -1,7 +1,5 @@
 package br.com.les.backend.facade;
 
-import java.lang.reflect.InvocationTargetException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -58,11 +56,7 @@ public class Facade<T extends DomainEntity> implements IFacade<T> {
     public Result<T> find(T clazz) {
     	validate( clazz, Actions.FIND.getValue());
     	if ( result.isSuccess() )
-			try {
-				result.getResultList().addAll( genericDAO.find( clazz ) );
-			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				e.printStackTrace();
-			}
+			result.getResultList().addAll( genericDAO.find( clazz ) );	
     	return result;
     	
     }

@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.Employee;
-import br.com.les.backend.entity.Telephone;
 import br.com.les.backend.service.SecurityService;
 import br.com.les.backend.strategy.AbstractStrategy;
 import br.com.les.backend.utils.Result;
@@ -47,20 +46,7 @@ public class SaveEmployeeStrategy extends AbstractStrategy<Employee> {
 		if( employee.getManager().getName().equals("") )
 			result.setError( Util.ERROR_MANAGER_NAME );
 		
-		if( employee.getTelephoneList().isEmpty() )
-			result.setError( Util.ERROR_PHONE );
-		else {
-			employee.getTelephoneList().forEach(Employee -> Employee.setUser(employee));
 			
-			for( Telephone telephone : employee.getTelephoneList() )
-				if( telephone.getNumber().length() != 0 
-					&& telephone.getNumber().length() != 8 
-					&& telephone.getNumber().length() != 9 ) {
-					result.setError( Util.INVALID_PHONE.concat( telephone.toString() ) );
-					break;
-				}
-			
-		}			
 		if( employee.getJoiningDate().toString().isEmpty() ) {
 				result.setError( Util.ERROR_JOINING_DATE );
 		}

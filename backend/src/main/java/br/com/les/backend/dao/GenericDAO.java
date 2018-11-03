@@ -57,13 +57,13 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 					.toLowerCase()
 					.equals(clazz.getClass().getSimpleName().toLowerCase()))
 				return e.getValue();
-		
 		return null;
 	}
 
 	@Override
-	public void delete(T entity) {
+	public T delete(T entity) {
 		getRepository(entity).delete(entity);
+		return entity;
 	}
 	
 	@Override
@@ -77,7 +77,7 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<T> find(T clazz) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public List<T> find(T clazz) {
 		String sql = "";
 		Query q = clazz.getClass().getAnnotation(Query.class);
 		if(q != null)
@@ -92,18 +92,22 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 		List<Field> fieldList = getFieldsFromClass(clazz);
 		Map<Field, Method> attributesMap = MakeMapToMethods(methodList, fieldList);
 
-		for (Entry<Field, Method> item : attributesMap.entrySet()) {
-			if(item.getValue().invoke(clazz) != null && !item.getValue().invoke(clazz).equals("") && !item.getValue().invoke(clazz).equals(0)) {
-				sql += queryForString(item.getKey(), item.getValue(), clazz);
-				sql += queryForNumber(item.getKey(), item.getValue(), clazz);
-				sql += queryForList(item.getKey(), item.getValue(), clazz);
-				storeDateTimeTypes(item.getKey(), item.getValue(), clazz);
-				storeDateTypes(item.getKey(), item.getValue(), clazz);
-			}			
-		}
-		sql += queryForMonth();
-		sql += queryForDateTime();
-		sql += queryForAnotation(methodList, clazz);
+		try {
+			for (Entry<Field, Method> item : attributesMap.entrySet()) {
+				if(item.getValue().invoke(clazz) != null && !item.getValue().invoke(clazz).equals("") && !item.getValue().invoke(clazz).equals(0)) {
+					sql += queryForString(item.getKey(), item.getValue(), clazz);
+					sql += queryForNumber(item.getKey(), item.getValue(), clazz);
+					sql += queryForList(item.getKey(), item.getValue(), clazz);
+					storeDateTimeTypes(item.getKey(), item.getValue(), clazz);
+					storeDateTypes(item.getKey(), item.getValue(), clazz);
+				}
+						
+			}
+			sql += queryForMonth();
+			sql += queryForDateTime();
+			sql += queryForAnotation(methodList, clazz);
+			
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) { e.printStackTrace(); }
 		return (List<T>) em.createQuery(sql).getResultList(); 
 	}
 

@@ -3,14 +3,15 @@ package br.com.les.backend.command;
 import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.DomainEntity;
+import br.com.les.backend.navigator.INavigationCase;
 import br.com.les.backend.utils.Result;
 
 @Component
 public class SaveCommand<T extends DomainEntity> extends AbstractCommand<T> {
 	
 	@Override
-	public Result<T> execute(T entity) {
-		return facade.save( entity );
+	public Result<T> execute(T entity,INavigationCase<T> bCase) {
+		return applicationFacade.save( entity, bCase );
 	}
 
 }

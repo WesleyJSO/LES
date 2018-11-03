@@ -264,24 +264,27 @@ export default {
     managerList: null,
     roleList: null
   }),
-  beforeMount () {
-    this.$_axios.patch(`${this.$_url}role`, {active: true})
-      .then(response => {
-        this.roleList = response.data.resultList
-        for (let role of this.roleList) {
-          role.active = false
-        }
-        this.$_axios.patch(`${this.$_url}user`, {active: true})
-          .then(response => {
-            this.managerList = response.data.resultList
-          })
+  async beforeMount () {
+    try {
+      this.roleList = await this.$_axios.patch(`${this.$_url}role`, {active: true}).data.resultList
+      for (let role of this.roleList) {
+        role.active = false
+      }
+      this.managerList = await this.$_axios.patch(`${this.$_url}user`, {active: true}).data.resultList
+      this.managerList = this.managerList.filter((roles, index, array) => {
+        console.log('ROLES ' + JSON.stringify(roles))
+        console.log('INDEX ' + JSON.stringify(index))
+        console.log('ARRAY ' + JSON.stringify(array))
+        roles.filter((role, index, array) => {
+          if (role.role === 'ROLE_MANAGER') return role
+        })
       })
-      .catch(error => {
-        console.log(JSON.stringify(error))
-        this.messages = ['Erro durante execução do serviço!']
-        this.haveMessage = true
-        this.messageColor = 'error'
-      })
+    } catch (err) {
+      console.log(JSON.stringify(err))
+      this.messages = ['Erro durante execução do serviço!']
+      this.haveMessage = true
+      this.messageColor = 'error'
+    }
   },
   computed: {
     computedDateFormatted () { return this.formatDate(this.employee.joiningDate) },
@@ -325,43 +328,34 @@ export default {
         this.isEmployee = false
       }
     },
-    submit () {
+    async submit () {
       for (let item of this.hourTypeList) {
         if (this.employee.baseHourCalculation.hourType === item.name) {
           this.employee.baseHourCalculation.hourType = item.id
         }
       }
-      let url = `${this.$_url}employee`
-      if (this.isManager) {
-        url = `${this.$_url}user`
-        if (this.isEmployee) {
-          url = `${this.$_url}employee`
+      try {
+        let result = await this.$_axios.post(`${this.$_url}employee`, this.employee).data
+        if (result.resultList.length !== 0) {
+          this.employee = result.resultList[0]
+          this.employee.telephoneList = [ {type: '', number: ''}, {type: '', number: ''}, {type: '', number: ''} ]
         }
-      }
-      this.$_axios.post(url, this.employee)
-        .then((response) => {
-          let result = response.data
-          if (result.resultList.length !== 0) {
-            this.employee = result.resultList[0]
-            this.employee.telephoneList = [ {type: '', number: ''}, {type: '', number: ''}, {type: '', number: ''} ]
-          }
-          if (result.message) {
-            this.messages = [...result.message]
-            this.haveMessage = true
-            if (result.success) {
-              this.messageColor = 'info'
-              this.clearForm()
-            } else {
-              this.messageColor = 'warning'
-            }
-          }
-        })
-        .catch(error => {
-          console.log(JSON.stringify(error))
-          this.messages = ['Erro durante execução do serviço!']
+        if (result.message) {
+          this.messages = [...result.message]
           this.haveMessage = true
-          this.messageColor = 'error'
-        })
+          if (result.success) {
+            this.messageColor = 'info'
+            this.clearForm()
+          } else {
+            this.messageColor = 'warning'
+          }
+        }
+      } catch (err) {
+        console.log(JSON.stringify(err))
+        this.messages = ['Erro durante execução do serviço!']
+        this.haveMessage = true
+        this.messageColor = 'error'
+      }
     },
     clearForm () {
       this.$refs.form.reset()

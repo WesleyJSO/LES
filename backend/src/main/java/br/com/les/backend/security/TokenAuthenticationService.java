@@ -1,7 +1,6 @@
 package br.com.les.backend.security;
 
 import java.sql.Date;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,9 +10,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import br.com.les.backend.dao.GenericDAO;
 import br.com.les.backend.entity.Employee;
-import br.com.les.backend.entity.User;
 import br.com.les.backend.repository.EmployeeRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -43,7 +40,7 @@ public class TokenAuthenticationService {
 		
 	}
 	
-public Authentication getAuthentication(HttpServletRequest request) {
+	public Authentication getAuthentication(HttpServletRequest request) {
 				
 		String token = request.getHeader(HEADER_STRING);
 		

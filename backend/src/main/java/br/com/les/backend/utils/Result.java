@@ -46,7 +46,7 @@ public class Result<T extends DomainEntity> {
     public boolean isSuccess() {
        return success;
     }
-
+    
     public void setResultList( List<T> resultList ) {
         this.resultList = resultList;
     }
@@ -62,4 +62,8 @@ public class Result<T extends DomainEntity> {
     	} else 
     		return null;
     }
+
+	public void addResult(T entity) {
+		this.resultList.add(entity);
+	}
 }

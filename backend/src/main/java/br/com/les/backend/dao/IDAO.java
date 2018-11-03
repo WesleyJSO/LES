@@ -7,7 +7,7 @@ import br.com.les.backend.entity.DomainEntity;
 
 public interface IDAO<T extends DomainEntity> {
 
-	void delete(T aEntity);
+	T delete(T aEntity);
 	
 	T save(T aEntity);
 
