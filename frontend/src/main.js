@@ -118,7 +118,7 @@ router.beforeEach((to, from, next) => {
       })
     } else if (to.meta.adminAuth && to.meta.managerAuth && to.meta.employeeAuth) {
       console.log('#### -- Admin | Manager | Employee Access -- ####')
-      if (Authenticator.HAS_ROLE('ROLE_MANAGER') && Authenticator.HAS_ROLE('ROLE_ADMIN') && Authenticator.HAS_ROLE('ROLE_EMPLOYEE')) {
+      if (Authenticator.HAS_ROLE('ROLE_MANAGER') || Authenticator.HAS_ROLE('ROLE_ADMIN') || Authenticator.HAS_ROLE('ROLE_EMPLOYEE')) {
         next()
       } else {
         console.log('#### -- Unauthorized User -- ####')
