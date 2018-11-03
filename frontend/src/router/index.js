@@ -70,7 +70,7 @@ export default new Router({
       path: '/Solicitacoes',
       name: 'RequestView',
       component: RequestView,
-      meta: { requiresAuth: true, adminAuth: true, managerAuth: true }
+      meta: { requiresAuth: true, adminAuth: true, managerAuth: true, employeeAuth: true }
     },
     {
       path: '/Graficos',
