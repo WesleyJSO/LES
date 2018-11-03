@@ -8,9 +8,8 @@ import org.springframework.stereotype.Component;
 @Entity
 public class HourType extends DomainEntity {
 	
-	static final String BANKEDHOURS = "Banco de horas";
-	static final String EXTRATIME = "Hora extra";
-	static final String BOTH = "Ambos";
+	static final String BANKEDHOURS = "Banco de Horas";
+	static final String EXTRATIME = "Hora Extra";
 	
 	private Boolean both;
 	private String first;

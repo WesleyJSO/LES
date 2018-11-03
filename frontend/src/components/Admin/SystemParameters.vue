@@ -17,8 +17,9 @@
                     class="elevation-10" >
             <template slot="items" slot-scope="props">
               <tr>
-                <td v-if="props.item.show">{{ props.item.parameterName }}</td>
-                <td class="text-xs-left" v-if="props.item.show">{{ props.item.value }}</td>
+                <td v-if="!props.item.title">{{ props.item.parameterName }}</td>                
+                <td class="title" v-if="props.item.title">{{ props.item.parameterName }}</td>
+                <td class="text-xs-left">{{ props.item.value }}</td>
               </tr>
             </template>
           </v-data-table>
@@ -55,11 +56,80 @@ export default {
         value: 'value' }
     ],
     parameters: [],
+    noLimit: 'Sem limite de horas',
+    notRegistered: 'N/A',
     message: '',
     haveMessage: false
   }),
   created () {
     this.$vuetify.goTo(0)
+    this.parameters = [
+      {
+        parameterName: 'Adicional de Hora Extra',
+        value: this.notRegistered,
+        title: false
+      },
+      {
+        parameterName: 'Adicional Noturno',
+        value: this.notRegistered,
+        title: false
+      },
+      {
+        parameterName: 'Adicional de Domingo e Feriado',
+        value: this.notRegistered,
+        title: false
+      },
+      {
+        parameterName: 'Prazo Limite para Apontamento Retroativo',
+        value: this.notRegistered,
+        title: false
+      },
+      {
+        parameterName: 'Prazo Limite para Solicitação de Remanejamento',
+        value: this.notRegistered,
+        title: false
+      },
+      {
+        parameterName: 'Prazo Limite Compensação do Banco de Horas',
+        value: this.notRegistered,
+        title: false
+      },
+      {
+        parameterName: 'Horas Extras',
+        value: null,
+        title: true
+      },
+      {
+        parameterName: 'Limite diário',
+        value: this.notRegistered,
+        title: false
+      },
+      {
+        parameterName: 'Banco de Horas',
+        value: null,
+        title: true
+      },
+      {
+        parameterName: 'Limite diário',
+        value: this.notRegistered,
+        title: false
+      },
+      {
+        parameterName: 'Horas Extras e Banco de Horas',
+        value: null,
+        title: true
+      },
+      {
+        parameterName: 'Limite diário de Horas Extras',
+        value: this.notRegistered,
+        title: false
+      },
+      {
+        parameterName: 'Limite diário de Banco de Horas',
+        value: this.notRegistered,
+        title: false
+      }
+    ]
     this.callApi()
   },
   computed: {
@@ -74,72 +144,20 @@ export default {
           // retorno ok /
           this.parameter = result.resultList[0]
           this.parameterId = this.parameter.id
-          this.parameters = [
-            {
-              parameterName: 'Adicional de Hora Extra',
-              value: this.parameter.overtimePercentage + '%',
-              show: true
-            },
-            {
-              parameterName: 'Adicional Noturno',
-              value: this.parameter.nightOvertimePercentage + '%',
-              show: true
-            },
-            {
-              parameterName: 'Adicional de Domingo e Feriado',
-              value: this.parameter.weekEndOvertimePercentage + '%',
-              show: true
-            },
-            {
-              parameterName: 'Prazo Limite para Apontamento Retroativo',
-              value: this.parameter.retroactiveAppointmentLimitTime + ' hora(s)',
-              show: true
-            },
-            {
-              parameterName: 'Prazo Limite para Solicitação de Remanejamento',
-              value: this.parameter.relocationRequestLimitTime + ' hora(s)',
-              show: true
-            },
-            {
-              parameterName: 'Prazo Limite Compensação do Banco de Horas',
-              value: this.parameter.bankCompensationLimitTime + ' meses',
-              show: true
-            },
-            {
-              parameterName: 'Tipo de Hora',
-              value: this.parameter.hourType,
-              show: true
-            },
-            {
-              parameterName: 'Primeiro Tipo Aplicado',
-              value: this.parameter.firstTypeApplied,
-              show: false
-            },
-            {
-              parameterName: 'Limite Diário de Horas Extras',
-              value: this.parameter.overtimeTypeLimit + ' hora(s)',
-              show: false
-            },
-            {
-              parameterName: 'Limite Diário de Horas no Banco',
-              value: this.parameter.bankedHourTypeLimit + ' hora(s)',
-              show: false
-            }
-          ]
-          if (this.parameter.hourType === 'Hora Extra e Banco de Horas') {
-            this.parameters[7].show = true
-          }
-          if (this.parameter.hourType === 'Hora Extra' || this.parameter.hourType === 'Hora Extra e Banco de Horas') {
-            this.parameters[8].show = true
-            if (!this.parameter.overtimeTypeLimit) {
-              this.parameters[8].value = 'N/A'
-            }
-          }
-          if (this.parameter.hourType === 'Banco de Horas' || this.parameter.hourType === 'Hora Extra e Banco de Horas') {
-            this.parameters[9].show = true
-            if (!this.parameter.bankedHourTypeLimit) {
-              this.parameters[9].value = 'N/A'
-            }
+          this.parameters[0].value = this.parameter.overtimePercentage + '%'
+          this.parameters[1].value = this.parameter.nightOvertimePercentage + '%'
+          this.parameters[2].value = this.parameter.weekEndOvertimePercentage + '%'
+          this.parameters[3].value = this.parameter.retroactiveAppointmentLimitTime.substring(0, 5) + ' hora(s)'
+          this.parameters[4].value = this.parameter.relocationRequestLimitTime + ' hora(s)'
+          this.parameters[5].value = this.parameter.bankCompensationLimitTime + ' meses'
+          this.parameters[7].value = this.parameter.overTime.quantityFirst ? this.parameter.overTime.quantityFirst + ' hora(s)' : this.noLimit
+          this.parameters[9].value = this.parameter.compTime.quantityFirst ? this.parameter.compTime.quantityFirst + ' hora(s)' : this.noLimit
+          if (this.parameter.bothTypes.first === 'Hora Extra') {
+            this.parameters[11].value = this.parameter.bothTypes.quantityFirst ? this.parameter.bothTypes.quantityFirst + ' hora(s)' : this.noLimit
+            this.parameters[12].value = this.parameter.bothTypes.quantitySecond ? this.parameter.bothTypes.quantitySecond + ' hora(s)' : this.noLimit
+          } else {
+            this.parameters[12].value = this.parameter.bothTypes.quantityFirst ? this.parameter.bothTypes.quantityFirst + ' hora(s)' : this.noLimit
+            this.parameters[11].value = this.parameter.bothTypes.quantitySecond ? this.parameter.bothTypes.quantitySecond + ' hora(s)' : this.noLimit
           }
         }
         if (result.mensagem) {
@@ -171,5 +189,8 @@ export default {
     text-align: center;
     margin-top: -20px;
     margin-bottom: 20px;
+  }
+  .title {
+    font-weight: bold;
   }
 </style>

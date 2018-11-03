@@ -41,20 +41,20 @@ export default class ParametersValidators {
     if (type === 'Banco de Horas' || type === 'Hora Extra') {
       if (!notSetLimit) {
         if (!hoursLimit) {
-          return ['Informe o limite de horas!']
+          return ['Informe o limite de ' + type + '!']
         }
       }
     }
   }
-  overtimeTypeLimitRules (type, notSetLimit, overtimeTypeLimit) {
-    if (type === 'Hora Extra e Banco de Horas' && !notSetLimit) {
+  overtimeTypeLimitRules (notSetLimit, overtimeTypeLimit) {
+    if (!notSetLimit) {
       if (!overtimeTypeLimit || overtimeTypeLimit <= 0) {
         return ['Informe o limite diário de horas extras!']
       }
     }
   }
-  bankOfHoursTypeLimitRules (type, notSetLimit, bankOfHoursTypeLimit) {
-    if (type === 'Hora Extra e Banco de Horas' && !notSetLimit) {
+  bankOfHoursTypeLimitRules (notSetLimit, bankOfHoursTypeLimit) {
+    if (!notSetLimit) {
       if (!bankOfHoursTypeLimit || bankOfHoursTypeLimit <= 0) {
         return ['Informe o limite diário de horas do banco!']
       }

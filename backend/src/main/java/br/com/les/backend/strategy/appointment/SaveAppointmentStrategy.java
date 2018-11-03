@@ -8,7 +8,6 @@ import br.com.les.backend.entity.Appointment;
 import br.com.les.backend.entity.Employee;
 import br.com.les.backend.strategy.AbstractStrategy;
 import br.com.les.backend.utils.Result;
-import br.com.les.backend.utils.Util;
 
 @Component
 public class SaveAppointmentStrategy extends AbstractStrategy<Appointment> {
