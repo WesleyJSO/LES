@@ -7,13 +7,13 @@ import org.springframework.context.annotation.Configuration;
 import br.com.les.backend.entity.Parameter;
 import br.com.les.backend.navigator.Navigation;
 import br.com.les.backend.navigator.NavigationBuilder;
-import br.com.les.backend.validator.parameter.BothTypesValues;
-import br.com.les.backend.validator.parameter.CompTimeValues;
-import br.com.les.backend.validator.parameter.InferiorLimits;
-import br.com.les.backend.validator.parameter.OvertimeValues;
-import br.com.les.backend.validator.parameter.SaveHourTypes;
-import br.com.les.backend.validator.parameter.SetIdNull;
-import br.com.les.backend.validator.parameter.VerifyDate;
+import br.com.les.backend.strategy.parameter.BothTypesValues;
+import br.com.les.backend.strategy.parameter.CompTimeValues;
+import br.com.les.backend.strategy.parameter.InferiorLimits;
+import br.com.les.backend.strategy.parameter.OvertimeValues;
+import br.com.les.backend.strategy.parameter.SaveHourTypes;
+import br.com.les.backend.strategy.parameter.SetIdNull;
+import br.com.les.backend.strategy.parameter.VerifyDate;
 
 @Configuration
 public class ParameterNavigation {

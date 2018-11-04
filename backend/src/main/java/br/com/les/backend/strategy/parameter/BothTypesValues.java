@@ -1,4 +1,4 @@
-package br.com.les.backend.validator.parameter;
+package br.com.les.backend.strategy.parameter;
 
 import org.springframework.context.annotation.Configuration;
 
