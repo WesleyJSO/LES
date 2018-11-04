@@ -7,14 +7,14 @@ import org.springframework.context.annotation.Configuration;
 import br.com.les.backend.entity.Request;
 import br.com.les.backend.navigator.Navigation;
 import br.com.les.backend.navigator.NavigationBuilder;
-import br.com.les.backend.validator.request.RequestToChangeAppointment;
-import br.com.les.backend.validator.request.RequestToCompTime;
-import br.com.les.backend.validator.request.RequestToRealocateWorkDay;
-import br.com.les.backend.validator.request.RequestToSaveAppointment;
-import br.com.les.backend.validator.request.RequestToSaveCompTime;
-import br.com.les.backend.validator.request.RequestToSaveRealocateDay;
-import br.com.les.backend.validator.request.RequestToSaveWorkOvertime;
-import br.com.les.backend.validator.request.RequestToWorkOvertime;
+import br.com.les.backend.strategy.request.RequestToChangeAppointment;
+import br.com.les.backend.strategy.request.RequestToCompTime;
+import br.com.les.backend.strategy.request.RequestToRealocateWorkDay;
+import br.com.les.backend.strategy.request.RequestToSaveAppointment;
+import br.com.les.backend.strategy.request.RequestToSaveCompTime;
+import br.com.les.backend.strategy.request.RequestToSaveRealocateDay;
+import br.com.les.backend.strategy.request.RequestToSaveWorkOvertime;
+import br.com.les.backend.strategy.request.RequestToWorkOvertime;
 
 @Configuration
 public class RequestNavigation {

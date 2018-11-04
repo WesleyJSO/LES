@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import br.com.les.backend.entity.CostCentre;
 import br.com.les.backend.navigator.Navigation;
 import br.com.les.backend.navigator.NavigationBuilder;
-import br.com.les.backend.validator.constcentre.VerifyNameAndCode;
+import br.com.les.backend.strategy.costcenter.VerifyNameAndCode;
 
 @Configuration
 public class CostCentreNavigation {

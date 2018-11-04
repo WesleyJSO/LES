@@ -7,17 +7,17 @@ import org.springframework.context.annotation.Configuration;
 import br.com.les.backend.entity.Employee;
 import br.com.les.backend.navigator.Navigation;
 import br.com.les.backend.navigator.NavigationBuilder;
-import br.com.les.backend.validator.employee.EmailExistence;
-import br.com.les.backend.validator.employee.EmailFormat;
-import br.com.les.backend.validator.employee.IdActivate;
-import br.com.les.backend.validator.employee.IdExistence;
-import br.com.les.backend.validator.employee.IdInactivate;
-import br.com.les.backend.validator.employee.NameValidator;
-import br.com.les.backend.validator.employee.PasswordLength;
-import br.com.les.backend.validator.employee.PisLength;
-import br.com.les.backend.validator.employee.SalaryValidator;
-import br.com.les.backend.validator.employee.TelephoneExistence;
-import br.com.les.backend.validator.employee.WorkLoadLimit;
+import br.com.les.backend.strategy.employee.EmailExistence;
+import br.com.les.backend.strategy.employee.EmailFormat;
+import br.com.les.backend.strategy.employee.IdActivate;
+import br.com.les.backend.strategy.employee.IdExistence;
+import br.com.les.backend.strategy.employee.IdInactivate;
+import br.com.les.backend.strategy.employee.NameValidator;
+import br.com.les.backend.strategy.employee.PasswordLength;
+import br.com.les.backend.strategy.employee.PisLength;
+import br.com.les.backend.strategy.employee.SalaryValidator;
+import br.com.les.backend.strategy.employee.TelephoneExistence;
+import br.com.les.backend.strategy.employee.WorkLoadLimit;
 
 
 @Configuration

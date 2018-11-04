@@ -7,8 +7,8 @@ import org.springframework.context.annotation.Configuration;
 import br.com.les.backend.entity.Appointment;
 import br.com.les.backend.navigator.Navigation;
 import br.com.les.backend.navigator.NavigationBuilder;
-import br.com.les.backend.validator.appointment.CalculateBalance;
-import br.com.les.backend.validator.appointment.ChangeSpecificAppointment;
+import br.com.les.backend.strategy.appointment.CalculateBalance;
+import br.com.les.backend.strategy.appointment.ChangeSpecificAppointment;
 
 @Configuration
 public class AppointmentNavigation {

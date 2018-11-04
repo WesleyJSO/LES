@@ -7,10 +7,10 @@ import org.springframework.context.annotation.Configuration;
 import br.com.les.backend.entity.Company;
 import br.com.les.backend.navigator.Navigation;
 import br.com.les.backend.navigator.NavigationBuilder;
-import br.com.les.backend.validator.ValidationForDelete;
-import br.com.les.backend.validator.company.CNPJAlreadyRegistred;
-import br.com.les.backend.validator.company.SocialRegistrationAlreadyRegistred;
-import br.com.les.backend.validator.company.ValidateCNPJLength;
+import br.com.les.backend.strategy.ValidationForDelete;
+import br.com.les.backend.strategy.company.CNPJAlreadyRegistred;
+import br.com.les.backend.strategy.company.SocialRegistrationAlreadyRegistred;
+import br.com.les.backend.strategy.company.ValidateCNPJLength;
 
 @Configuration
 @SuppressWarnings({ "unchecked", "rawtypes" })
