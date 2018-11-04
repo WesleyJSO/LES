@@ -162,8 +162,8 @@
             <v-tab-item>
               <v-form flat>
                 <line-chart ref="chartObject1" :download="true"
-                  :stacked="false"
                   :title="getReportTitle.workedHours"
+                  :stacked="false"
                   :xtitle="getReportAxis.x.days"
                   :ytitle="getReportAxis.y.hours"
                   discrete="true"
