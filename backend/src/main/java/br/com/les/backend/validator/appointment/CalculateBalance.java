@@ -17,12 +17,14 @@ public class CalculateBalance implements IStrategy<Appointment> {
 	@Override
 	public void process(Appointment aEntity, INavigationCase<Appointment> aCase) {
 
-		if (aEntity != null) {
+		if (aEntity != null && aEntity.getMorningEntrance() != null && aEntity.getMorningOut() != null 
+							&& aEntity.getAfternoonEntrance() != null && aEntity.getAfternoonOut() != null 
+							&& aEntity.getNightEntrance() != null && aEntity.getNightOut() != null
+							&& aEntity.getParticularExit() != null && aEntity.getParticularExitReturn() != null) {
 
 			Employee employee = (Employee) authenticatedUser();
 			int employeeWorkload = employee.getBaseHourCalculation().getWorkload();
 			
-
 			LocalTime balance = LocalTime.MIN;
 			LocalTime workload = LocalTime.of(employeeWorkload, 0);
 			
@@ -51,7 +53,7 @@ public class CalculateBalance implements IStrategy<Appointment> {
 			return;
 		}
 		aCase.suspendExecution();
-		aCase.getResult().setError("Apontamento inexistente!");
+		aCase.getResult().setError("Apontamento necessário para realização do cálculo inexistente!");
 		return;
 	}
 	
