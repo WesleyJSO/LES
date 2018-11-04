@@ -1,6 +1,7 @@
 package br.com.les.backend.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,7 +17,7 @@ public interface GenericRepository<T extends DomainEntity> extends JpaRepository
 	List<T> findByInactive();
 
 	@Query("select t from #{#entityName} t where t.active = true and id = ?2")
-	T findActiveById(Long id);
+	Optional<T> findActiveById(Long id);
 	
 	@Query("update #{#entityName} t set t.active = true where id = ?2")
 	boolean setActiveById(Long id);
