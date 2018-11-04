@@ -9,6 +9,7 @@ import br.com.les.backend.entity.Request;
 import br.com.les.backend.entity.RequestStatus;
 import br.com.les.backend.navigator.INavigationCase;
 import br.com.les.backend.navigator.IStrategy;
+import br.com.les.backend.service.SecurityService;
 import br.com.les.backend.utils.RequestType;
 import br.com.les.backend.utils.Util;
 
@@ -17,7 +18,7 @@ public class RequestToSaveRealocateDay implements IStrategy<Request> {
 	@Override
 	public void process(Request aEntity, INavigationCase<Request> aCase) {
 		if (aEntity != null) {
-			aEntity.setEmployee( (Employee) authenticatedUser());
+			aEntity.setEmployee( (Employee) SecurityService.getAuthenticatedUser());
 			if (aEntity.getType() == RequestType.REALOCATION_DAYS) {
 				if( null == aEntity.getStartDate() ) 
 					aCase.getResult().setError(Util.ERROR_ENTRY_DATE);

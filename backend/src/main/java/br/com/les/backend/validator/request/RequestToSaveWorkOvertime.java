@@ -2,8 +2,6 @@ package br.com.les.backend.validator.request;
 
 import java.time.LocalDate;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.google.common.base.Strings;
 
 import br.com.les.backend.entity.Employee;
@@ -11,7 +9,7 @@ import br.com.les.backend.entity.Request;
 import br.com.les.backend.entity.RequestStatus;
 import br.com.les.backend.navigator.INavigationCase;
 import br.com.les.backend.navigator.IStrategy;
-import br.com.les.backend.repository.RequestRepository;
+import br.com.les.backend.service.SecurityService;
 import br.com.les.backend.utils.RequestType;
 import br.com.les.backend.utils.Util;
 
@@ -20,7 +18,7 @@ public class RequestToSaveWorkOvertime implements IStrategy<Request> {
 	@Override
 	public void process(Request aEntity, INavigationCase<Request> aCase) {
 		if (aEntity != null) {
-			aEntity.setEmployee( (Employee) authenticatedUser());
+			aEntity.setEmployee( (Employee) SecurityService.getAuthenticatedUser());
 			if (aEntity.getType() == RequestType.WORK_OVERTIME) {
 				if( null == aEntity.getStartDate() ) 
 					aCase.getResult().setError(Util.ERROR_ENTRY_DATE);

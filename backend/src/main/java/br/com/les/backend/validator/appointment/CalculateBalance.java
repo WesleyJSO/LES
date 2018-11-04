@@ -2,14 +2,11 @@ package br.com.les.backend.validator.appointment;
 
 import java.time.LocalTime;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-
 import br.com.les.backend.entity.Appointment;
-import br.com.les.backend.entity.DomainEntity;
 import br.com.les.backend.entity.Employee;
 import br.com.les.backend.navigator.INavigationCase;
 import br.com.les.backend.navigator.IStrategy;
+import br.com.les.backend.service.SecurityService;
 
 public class CalculateBalance implements IStrategy<Appointment> {
 
@@ -22,7 +19,7 @@ public class CalculateBalance implements IStrategy<Appointment> {
 							&& aEntity.getNightEntrance() != null && aEntity.getNightOut() != null
 							&& aEntity.getParticularExit() != null && aEntity.getParticularExitReturn() != null) {
 
-			Employee employee = (Employee) authenticatedUser();
+			Employee employee = (Employee) SecurityService.getAuthenticatedUser();
 			int employeeWorkload = employee.getBaseHourCalculation().getWorkload();
 			
 			LocalTime balance = LocalTime.MIN;
@@ -55,13 +52,5 @@ public class CalculateBalance implements IStrategy<Appointment> {
 		aCase.suspendExecution();
 		aCase.getResult().setError("Apontamento necessário para realização do cálculo inexistente!");
 		return;
-	}
-	
-	protected DomainEntity authenticatedUser () {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		DomainEntity entity = (DomainEntity) authentication.getPrincipal();
-		
-		return entity;
-		
 	}
 }
