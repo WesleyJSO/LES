@@ -1,6 +1,5 @@
 package br.com.les.backend.dao;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import br.com.les.backend.entity.DomainEntity;
@@ -13,5 +12,9 @@ public interface IDAO<T extends DomainEntity> {
 
 	T update(T aEntity);
 
-	List<T> find(T entity) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException;	
+	List<T> find(T entity);
+	
+	List<T> findAllActive(T entity);
+
+	List<T> findAllInactive(T entity);
 }

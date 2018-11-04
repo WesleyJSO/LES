@@ -12,88 +12,36 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-
 import br.com.les.backend.annotation.DateQuery;
 import br.com.les.backend.annotation.ListQuery;
 import br.com.les.backend.annotation.Query;
 import br.com.les.backend.annotation.StringQuery;
 import br.com.les.backend.entity.DomainEntity;
-import br.com.les.backend.repository.GenericRepository;
 
-@Component
-@Service
-@Transactional
-public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
-	
+public class GenericDAOHelper<T extends DomainEntity> {
 	
 	private Map<String, LocalDateTime> dateTimeMap; 	// for dates that will query for days and time of a day
 	private Map<String, LocalDate> dateMap; 			// for dates that will query for month
 	private static DateTimeFormatter datePettern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 	private static DateTimeFormatter monthYearPettern = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	
-	@PersistenceContext
-	private EntityManager em;
-
-	@Autowired
-	protected Map<String, GenericRepository<T>> repositoryMap;
 	
-	private GenericRepository<T> getRepository(T clazz) {
-		for (Entry<String, GenericRepository<T>> e : repositoryMap.entrySet())
-			if(e.getKey()
-					.substring(0, clazz.getClass().getSimpleName().length())
-					.toLowerCase()
-					.equals(clazz.getClass().getSimpleName().toLowerCase()))
-				return e.getValue();
-		return null;
-	}
+	// public List<T> find(T clazz) {
+	public void find(T clazz) {
 
-	@Override
-	public T delete(T entity) {
-		getRepository(entity).setInactiveById(entity.getId());
-		return entity;
-	}
-	
-	@Override
-	public T save(T entity) {
-		return getRepository(entity).save(entity);
-	}
-	
-	@Override
-	public T update(T entity) {
-		return em.merge(entity);
-	}
-
-	@Override
-	public List<T> findAllActive(T entity) {
-		return getRepository(entity).findAllActive();
-	}
-
-	@Override
-	public List<T> findAllInactive(T entity) {
-		return getRepository(entity).findAllActive();
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<T> find(T clazz) {
 		String sql = "";
 		Query q = clazz.getClass().getAnnotation(Query.class);
 		if(q != null)
-			sql = "select t from " + q.value() + " t where 1!=1";
+			sql = "select t from " + q.value() + " t where 1=1 ";
 		else 
-			sql = "select t from " + clazz.getClass().getSimpleName() + " t where 1!=1";
+			sql = "select t from " + clazz.getClass().getSimpleName() + " t where 1=1 ";
 			
 	    
 		dateMap = new HashMap<>();
@@ -116,11 +64,9 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 			sql += queryForMonth();
 			sql += queryForDateTime();
 			sql += queryForAnotation(methodList, clazz);
-			sql = validateSqlStatement(sql);
 			
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) { e.printStackTrace(); }
-
-		return (List<T>) em.createQuery(sql).getResultList(); 
+		//return (List<T>) em.createQuery(sql).getResultList(); 
 	}
 
 	private String queryForDateTime() {
@@ -255,6 +201,11 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 		return methodMap;
 	}
 
+	/**
+	 * Get all method for the given class and its super classes
+	 * @param clazz
+	 * @return List<Method>
+	 */
 	private List<Method> getMethodsFromClass(T clazz) {
 		
 		List<Method> methods = new ArrayList<>();
@@ -264,6 +215,29 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 	        Collections.addAll(methods, entity.getDeclaredMethods());
 	        entity = entity.getSuperclass();
 	    }
+		return methods;
+	}
+	
+	// do this on Field
+	private List<Method> getMethodsFromChildren(T clazz, List<Method> methods) {
+		
+		List<Method> methodFilterList = new ArrayList<>();
+		methodFilterList = methods;
+		List<DomainEntity> childList = new ArrayList<>();
+		methodFilterList.stream()
+			.filter(e -> {
+				try {
+					return Collection.class.isAssignableFrom((Class<?>) e.invoke(clazz));
+				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) { e1.printStackTrace(); }
+				return false;
+			})
+			.forEach(e -> {
+				if(DomainEntity.class.isAssignableFrom(e.getClass())) {
+					try {
+						childList.add((DomainEntity) e.invoke(clazz));
+					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) { e1.printStackTrace(); }
+				}
+		});
 		return methods;
 	}
 
@@ -277,14 +251,5 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 	        entity = entity.getSuperclass();
 	    }
 		return fields;
-	}
-	
-	private String validateSqlStatement ( String sql ) {
-		if ( sql.trim().endsWith( "where" ) ) {
-			sql += "1=1";
-		} else if (sql.trim().endsWith("1!=1")) {
-			sql = sql.replace("1!=1", "1=1");
-		}
-		return sql;
 	}
 }

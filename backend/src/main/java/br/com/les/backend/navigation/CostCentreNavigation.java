@@ -1,15 +1,19 @@
 package br.com.les.backend.navigation;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import br.com.les.backend.entity.CostCentre;
 import br.com.les.backend.navigator.Navigation;
 import br.com.les.backend.navigator.NavigationBuilder;
+import br.com.les.backend.strategy.costcenter.VerifyNameAndCode;
 
 @Configuration
 public class CostCentreNavigation {
 
+	@Autowired private VerifyNameAndCode verifyNameAndCode;
+	
 	@Bean("FIND_COSTCENTRE")
 	public Navigation<CostCentre> findCostCentreValidator() {
 		return new NavigationBuilder<CostCentre>().build();
@@ -17,7 +21,9 @@ public class CostCentreNavigation {
 
 	@Bean("SAVE_COSTCENTRE")
 	public Navigation<CostCentre> saveCostCentreValidator() {
-		return new NavigationBuilder<CostCentre>().build();
+		return new NavigationBuilder<CostCentre>()
+				.next(verifyNameAndCode)
+				.build();
 	}
 
 	@Bean("UPDATE_COSTCENTRE")
