@@ -38,6 +38,7 @@
 import AppointButton from '@/components/shared/AppointButton.vue'
 import AppointDialog from '@/components/shared/AppointDialog.vue'
 import AppointTable from '@/components/shared/AppointTable.vue'
+import DateHelper from '../../helpers/DateHelper'
 
 export default {
   data: () => ({
@@ -119,6 +120,7 @@ export default {
       } else if (field === 'Retorno') {
         this.appointment.particularExitReturn = time
       }
+      this.appointment.date = DateHelper.formatISODate(this.appointment.date)
       this.verifyButtons()
       this.registerAppointments()
     },
@@ -159,43 +161,48 @@ export default {
         this.buttons[6].disable = false
       }
     },
-    registerAppointments () {
+    async registerAppointments () {
+      var response = null
+      var result = null
       if (!this.appointment.id) {
         // this.appointment.employee = this.employee
-        console.log(JSON.stringify(this.appointment))
-        this.$_axios.post(`${this.$_url}appointment`, this.appointment).then(response => {
+        try {
+          response = await this.$_axios.post(`${this.$_url}appointment`, this.appointment)
           console.log('post')
-          let result = response.data
+          result = response.data
           if (result.resultList.length !== 0) {
             this.appointments = result.resultList
             this.appointment = this.appointments[0]
           }
-        }).catch(error => {
+        } catch (error) {
           console.log(error)
           this.messages = ['Erro durante execução do serviço!']
           this.haveMessage = true
           this.messageColor = 'error'
-        })
+        }
       } else {
-        console.log(JSON.stringify(this.appointment))
-        this.$_axios.put(`${this.$_url}appointment`, this.appointment).then(response => {
+        try {
+          response = await this.$_axios.put(`${this.$_url}appointment`, this.appointment)
           console.log('put')
-          let result = response.data
+          result = response.data
           if (result.resultList.length !== 0) {
             this.appointments = result.resultList
             this.appointment = this.appointments[0]
           }
-        }).catch(error => {
+        } catch (error) {
           console.log(error)
           this.messages = ['Erro durante execução do serviço!']
           this.haveMessage = true
           this.messageColor = 'error'
-        })
+        }
       }
     },
-    callApi (appointment) {
-      this.$_axios.patch(`${this.$_url}appointment`, appointment).then(response => {
-        var result = response.data
+    async callApi (appointment) {
+      var response = null
+      var result = null
+      try {
+        response = await this.$_axios.patch(`${this.$_url}appointment`, appointment)
+        result = response.data
         if (result.resultList.length !== 0) {
           // retorno ok /
           this.appointments = result.resultList
@@ -218,13 +225,13 @@ export default {
             this.messageColor = 'warning'
           }
         }
-      }).catch(error => {
+      } catch (error) {
         // erro na requisição do serviço /
         console.log(error)
         this.messages = ['Erro durante execução do serviço!']
         this.haveMessage = true
         this.messageColor = 'error'
-      })
+      }
     }
   }
 }
