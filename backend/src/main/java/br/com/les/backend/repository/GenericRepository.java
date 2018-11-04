@@ -32,5 +32,4 @@ public interface GenericRepository<T extends DomainEntity> extends JpaRepository
 	@Modifying
 	@Query("update #{#entityName} t set t.active = false where id = ?2")
 	boolean setInactiveById(Long id);
-	
 }
