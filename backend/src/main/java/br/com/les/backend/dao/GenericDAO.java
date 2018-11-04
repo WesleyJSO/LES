@@ -81,9 +81,9 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 		String sql = "";
 		Query q = clazz.getClass().getAnnotation(Query.class);
 		if(q != null)
-			sql = "select t from " + q.value() + " t where 1=1 ";
+			sql = "select t from " + q.value() + " t where 1!=1";
 		else 
-			sql = "select t from " + clazz.getClass().getSimpleName() + " t where 1=1 ";
+			sql = "select t from " + clazz.getClass().getSimpleName() + " t where 1!=1";
 			
 	    
 		dateMap = new HashMap<>();
@@ -106,8 +106,10 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 			sql += queryForMonth();
 			sql += queryForDateTime();
 			sql += queryForAnotation(methodList, clazz);
+			sql = validateSqlStatement(sql);
 			
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) { e.printStackTrace(); }
+
 		return (List<T>) em.createQuery(sql).getResultList(); 
 	}
 
@@ -265,5 +267,14 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 	        entity = entity.getSuperclass();
 	    }
 		return fields;
+	}
+	
+	private String validateSqlStatement ( String sql ) {
+		if ( sql.trim().endsWith( "where" ) ) {
+			sql += "1=1";
+		} else if (sql.trim().endsWith("1!=1")) {
+			sql = sql.replace("1!=1", "1=1");
+		}
+		return sql;
 	}
 }
