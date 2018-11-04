@@ -19,7 +19,7 @@ public class ChartFilter extends DomainEntity {
 	private LocalDate initialQueryDate;
 	private LocalDate finalQueryDate;
 	
-	@ListQuery(name="t.employee.name") 
+	@ListQuery(name="t.employee.id") 
 	public List<String> getEmployeeNameList() {
 		return employeeNameList;
 	}
