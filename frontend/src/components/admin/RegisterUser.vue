@@ -266,11 +266,13 @@ export default {
   }),
   async beforeMount () {
     try {
-      this.roleList = await this.$_axios.patch(`${this.$_url}role`, {active: true}).data.resultList
+      let response = await this.$_axios.patch(`${this.$_url}role`, {active: true})
+      this.roleList = response.resultList
       for (let role of this.roleList) {
         role.active = false
       }
-      this.managerList = await this.$_axios.patch(`${this.$_url}user`, {active: true}).data.resultList
+      response = await this.$_axios.patch(`${this.$_url}user`, {active: true})
+      this.managerList = response.resultList
       this.managerList = this.managerList.filter((roles, index, array) => {
         console.log('ROLES ' + JSON.stringify(roles))
         console.log('INDEX ' + JSON.stringify(index))
