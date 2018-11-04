@@ -19,7 +19,7 @@
 
       <v-divider></v-divider>
 
-      <v-stepper-step step="3">Tipo de Hora</v-stepper-step>
+      <v-stepper-step step="3">Tipos de Hora</v-stepper-step>
     </v-stepper-header>
 
     <v-stepper-items>
@@ -161,6 +161,7 @@
               <v-checkbox
                 :label="`Não aplicar limite`"
                 v-model="checkbox1"
+                @change="verifyCheckboxes"
               ></v-checkbox>
               <v-text-field
                     :disabled="checkbox1"
@@ -174,7 +175,8 @@
             </v-flex>
           </v-layout>
         </v-card>
-        <v-card>
+        <v-card
+          class="mb-5">
           <h2>Para o tipo {{ hourTypes[1] }}</h2>
           <br/>
           <v-layout>
@@ -183,6 +185,7 @@
               <v-checkbox
                 :label="`Não aplicar limite`"
                 v-model="checkbox2"
+                @change="verifyCheckboxes"
               ></v-checkbox>
               <v-text-field
                     :disabled="checkbox2"
@@ -196,7 +199,8 @@
             </v-flex>
           </v-layout>
         </v-card>
-        <v-card>
+        <v-card
+          class="mb-5">
           <h2>Para o tipo {{ hourTypes[2] }}</h2>
           <br/>
           <v-layout>
@@ -219,6 +223,7 @@
                 :disabled="blockCheckbox3"
                 :label="`Não aplicar limite`"
                 v-model="checkbox3"
+                @change="verifyCheckboxes"
               ></v-checkbox>
               <v-text-field
                     :disabled="checkbox3"
@@ -236,6 +241,7 @@
                 :disabled="blockCheckbox4"
                 :label="`Não aplicar limite`"
                 v-model="checkbox4"
+                @change="verifyCheckboxes"
               ></v-checkbox>
               <v-text-field
                     :disabled="checkbox4"
@@ -270,14 +276,12 @@
 </template>
 
 <script>
-import Parameters from '../../objects/Parameters'
 import DateHelper from '../../helpers/DateHelper'
 
 export default {
   props: ['parameter'],
   data: () => ({
     parameterDate: '',
-    message: '',
     step: 1,
     parameters: {},
     haveMessage: false,
@@ -314,6 +318,7 @@ export default {
   beforeMount () {
     if (this.parameter) {
       this.parameters = this.parameter
+      console.log(JSON.stringify(this.parameters))
       if (!this.parameters.overTime) {
         this.parameters.overTime = {
           both: false,
@@ -339,23 +344,17 @@ export default {
         }
       }
       if (this.parameters.bothTypes.first === 'Hora Extra') {
-        if (!this.parameters.bothTypes.quantityFirst) {
-          this.checkbox3 = true
-        }
-        if (!this.parameters.bothTypes.quantitySecond) {
-          this.checkbox4 = true
-        }
         this.overtimeTypeLimit = this.parameters.bothTypes.quantityFirst
         this.bankOfHoursTypeLimit = this.parameters.bothTypes.quantitySecond
       } else if (this.parameters.bothTypes.first === 'Banco de Horas') {
-        if (!this.parameters.bothTypes.quantityFirst) {
-          this.checkbox4 = true
-        }
-        if (!this.parameters.bothTypes.quantitySecond) {
-          this.checkbox3 = true
-        }
         this.bankOfHoursTypeLimit = this.parameters.bothTypes.quantityFirst
         this.overtimeTypeLimit = this.parameters.bothTypes.quantitySecond
+      }
+      if (!this.overtimeTypeLimit) {
+        this.checkbox3 = true
+      }
+      if (!this.bankOfHoursTypeLimit) {
+        this.checkbox4 = true
       }
     }
     if (this.parameters.creationDate) {
@@ -370,17 +369,14 @@ export default {
     changeRadio () {
       if (this.radio === 'Hora Extra') {
         this.checkbox3 = false
-        this.checkbox4 = true
         this.blockCheckbox3 = true
         this.blockCheckbox4 = false
-        this.bankOfHoursTypeLimit = null
       } else if (this.radio === 'Banco de Horas') {
-        this.checkbox3 = true
         this.checkbox4 = false
         this.blockCheckbox3 = false
         this.blockCheckbox4 = true
-        this.overtimeTypeLimit = null
       }
+      this.verifyCheckboxes()
     },
     verifyFields () {
       if (!this.parameters.overTime.quantityFirst) {
@@ -418,22 +414,19 @@ export default {
     backStep () {
       this.step -= 1
     },
-    createParameters () {
-      let parameters =
-        new Parameters(
-          this.parametersId,
-          this.overtime,
-          this.nightOvertime,
-          this.weekEndOvertime,
-          this.retroactiveAppointment,
-          this.relocationRequest,
-          this.bankCompensation,
-          this.type,
-          this.hoursLimit,
-          this.overtime,
-          this.bankOfHoursTypeLimit
-        )
-      return parameters
+    verifyCheckboxes () {
+      if (this.checkbox1) {
+        this.parameters.overTime.quantityFirst = null
+      }
+      if (this.checkbox2) {
+        this.parameters.compTime.quantityFirst = null
+      }
+      if (this.checkbox3) {
+        this.overtimeTypeLimit = null
+      }
+      if (this.checkbox4) {
+        this.bankOfHoursTypeLimit = null
+      }
     },
     validateDeadlines () {
       this.haveMessage = false
@@ -521,7 +514,6 @@ export default {
       var result = null
       if (this.parameter.creationDate) {
         if (DateHelper.diffDates(new Date(this.parameterDate), new Date()) > 0) {
-          alert(DateHelper.diffDates(new Date(this.parameterDate), new Date()))
           try {
             response = await this.$_axios.put(`${this.$_url}parameter`, this.parameter)
             result = response.data
@@ -529,7 +521,7 @@ export default {
               // retorno ok /
               this.parameters = result.resultList
             }
-            if (result.mensagem) {
+            if (result.message) {
               this.messages = [...result.message]
               this.haveMessage = true
               if (result.success) {
@@ -547,7 +539,7 @@ export default {
               this.parameters = result.resultList
               this.$router.push('/Parametros')
             }
-            if (result.mensagem) {
+            if (result.message) {
               this.messages = [...result.message]
               this.haveMessage = true
               if (result.success) {
@@ -573,7 +565,7 @@ export default {
               this.parameters = result.resultList
               this.$router.push('/Parametros')
             }
-            if (result.mensagem) {
+            if (result.message) {
               this.messages = [...result.message]
               this.haveMessage = true
               if (result.success) {
@@ -601,7 +593,7 @@ export default {
             this.parameters = result.resultList
             this.$router.push('/Parametros')
           }
-          if (result.mensagem) {
+          if (result.message) {
             this.messages = [...result.message]
             this.haveMessage = true
             if (result.success) {
@@ -626,9 +618,11 @@ export default {
         if (this.parameters.bothTypes.first === 'Hora Extra') {
           this.parameters.bothTypes.quantityFirst = this.overtimeTypeLimit
           this.parameters.bothTypes.quantitySecond = this.bankOfHoursTypeLimit
+          this.parameters.bothTypes.second = 'Banco de Horas'
         } else {
           this.parameters.bothTypes.quantityFirst = this.bankOfHoursTypeLimit
           this.parameters.bothTypes.quantitySecond = this.overtimeTypeLimit
+          this.parameters.bothTypes.second = 'Hora Extra'
         }
         this.callApi()
       }

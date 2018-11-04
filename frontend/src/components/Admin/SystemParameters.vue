@@ -1,10 +1,12 @@
 <template>
     <div>
     <h1>Parametros do Sistema</h1>
-    <v-alert color="success"
+    <li v-for="(message, index) in messages" :key="index">
+      <v-alert :color="messageColor"
                :value="haveMessage"
                v-text="message"
                transition="scale-transition" />
+    </li>
     <br/>
     <v-form>
       <v-layout>
@@ -120,6 +122,11 @@ export default {
         title: true
       },
       {
+        parameterName: 'Primeiro tipo aplicado',
+        value: this.notRegistered,
+        title: false
+      },
+      {
         parameterName: 'Limite diário de Horas Extras',
         value: this.notRegistered,
         title: false
@@ -152,15 +159,16 @@ export default {
           this.parameters[5].value = this.parameter.bankCompensationLimitTime + ' meses'
           this.parameters[7].value = this.parameter.overTime.quantityFirst ? this.parameter.overTime.quantityFirst + ' hora(s)' : this.noLimit
           this.parameters[9].value = this.parameter.compTime.quantityFirst ? this.parameter.compTime.quantityFirst + ' hora(s)' : this.noLimit
+          this.parameters[11].value = this.parameter.bothTypes.first
           if (this.parameter.bothTypes.first === 'Hora Extra') {
-            this.parameters[11].value = this.parameter.bothTypes.quantityFirst ? this.parameter.bothTypes.quantityFirst + ' hora(s)' : this.noLimit
-            this.parameters[12].value = this.parameter.bothTypes.quantitySecond ? this.parameter.bothTypes.quantitySecond + ' hora(s)' : this.noLimit
-          } else {
             this.parameters[12].value = this.parameter.bothTypes.quantityFirst ? this.parameter.bothTypes.quantityFirst + ' hora(s)' : this.noLimit
-            this.parameters[11].value = this.parameter.bothTypes.quantitySecond ? this.parameter.bothTypes.quantitySecond + ' hora(s)' : this.noLimit
+            this.parameters[13].value = this.parameter.bothTypes.quantitySecond ? this.parameter.bothTypes.quantitySecond + ' hora(s)' : this.noLimit
+          } else {
+            this.parameters[13].value = this.parameter.bothTypes.quantityFirst ? this.parameter.bothTypes.quantityFirst + ' hora(s)' : this.noLimit
+            this.parameters[12].value = this.parameter.bothTypes.quantitySecond ? this.parameter.bothTypes.quantitySecond + ' hora(s)' : this.noLimit
           }
         }
-        if (result.mensagem) {
+        if (result.menssage) {
           this.messages = [...result.message]
           this.haveMessage = true
           if (result.success) {
