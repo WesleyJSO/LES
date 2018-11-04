@@ -350,6 +350,12 @@ export default {
         this.bankOfHoursTypeLimit = this.parameters.bothTypes.quantityFirst
         this.overtimeTypeLimit = this.parameters.bothTypes.quantitySecond
       }
+      if (!this.overtimeTypeLimit) {
+        this.checkbox3 = true
+      }
+      if (!this.bankOfHoursTypeLimit) {
+        this.checkbox4 = true
+      }
     }
     if (this.parameters.creationDate) {
       let date = this.parameters.creationDate.substring(0, 10).split('/')
@@ -362,9 +368,11 @@ export default {
   methods: {
     changeRadio () {
       if (this.radio === 'Hora Extra') {
+        this.checkbox3 = false
         this.blockCheckbox3 = true
         this.blockCheckbox4 = false
       } else if (this.radio === 'Banco de Horas') {
+        this.checkbox4 = false
         this.blockCheckbox3 = false
         this.blockCheckbox4 = true
       }
