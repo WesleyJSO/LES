@@ -63,7 +63,7 @@ public class ChangeSpecificAppointment implements IStrategy<Appointment> {
 				}
 				
 				// validate with the list of requests if it's a change to this column was already requested
-				List<AppointmentRequest> appointmentRequestList = appointmentRequestRepository.findByIdAppointment(aEntity.getId());
+				List<AppointmentRequest> appointmentRequestList = appointmentRequestRepository.findByAppointmentId(aEntity.getId());
 				for (AppointmentRequest appointmentRequest : appointmentRequestList) {
 					if(!appointmentRequest.getIsAproved() && appointmentRequest.getFieldToChange().equals(methodToUpdate.getName())) {
 						aCase.suspendExecution();
