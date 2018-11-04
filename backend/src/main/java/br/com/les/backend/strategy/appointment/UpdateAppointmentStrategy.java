@@ -53,7 +53,7 @@ public class UpdateAppointmentStrategy implements IApplicationStrategy<Appointme
 				methodToCompare = dbAppointment.get().getClass().getDeclaredMethod(methodToUpdate.getName());
 				// verify if the value can be updated with the parameter object 
 				dateToCompare = (LocalTime) methodToCompare.invoke(appointment);
-				timeDiference = (int) ChronoUnit.HOURS.between( dateToCompare, now.toLocalTime());
+				timeDiference = (int) ChronoUnit.MINUTES.between( dateToCompare, now.toLocalTime());
 			} catch (Exception e) {
 				e.printStackTrace();
 				result.setError("Erro durante o processamento!");
@@ -69,8 +69,11 @@ public class UpdateAppointmentStrategy implements IApplicationStrategy<Appointme
 				}
 			}
 			
-			if(timeDiference > parameter.getRetroactiveAppointmentLimitTime()
-					|| timeDiference < parameter.getRetroactiveAppointmentLimitTime() * - 1
+			LocalTime retroactiveLimit = parameter.getRetroactiveAppointmentLimitTime();
+			int retroactiveLimitInMinutes = (retroactiveLimit.getHour() * 60) + retroactiveLimit.getMinute();
+			
+			if(timeDiference > retroactiveLimitInMinutes
+					|| timeDiference < retroactiveLimitInMinutes * - 1
 					&& appointment.getDate().toLocalDate().equals(now.toLocalDate())) {
 				//save a new AppointmentRequest and send a message back to the user
 				if(result.isSuccess()) {

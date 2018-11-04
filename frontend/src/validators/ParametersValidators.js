@@ -21,7 +21,7 @@ export default class ParametersValidators {
     }
   }
   retroactiveAppointmentRules (retroactiveAppointment) {
-    if (!retroactiveAppointment || retroactiveAppointment <= 0) {
+    if (!retroactiveAppointment || retroactiveAppointment === '00:00') {
       return ['Informe o prazo de apontamento retroativo!']
     }
   }
