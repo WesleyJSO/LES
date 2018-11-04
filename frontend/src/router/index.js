@@ -58,7 +58,7 @@ export default new Router({
       path: '/Solicitacao',
       name: 'Request',
       component: Request,
-      meta: { requiresAuth: true, adminAuth: true, managerAuth: true }
+      meta: { requiresAuth: true, adminAuth: true, managerAuth: true, employeeAuth: true }
     },
     {
       path: '/CadastrarEmpresa',
@@ -70,7 +70,7 @@ export default new Router({
       path: '/Solicitacoes',
       name: 'RequestView',
       component: RequestView,
-      meta: { requiresAuth: true, adminAuth: true, managerAuth: true }
+      meta: { requiresAuth: true, adminAuth: true, managerAuth: true, employeeAuth: true }
     },
     {
       path: '/Graficos',

@@ -33,32 +33,44 @@ public class SaveRequestStrategy extends AbstractStrategy<Request> {
 		
 		switch ( request.getType() ) {
 		case RequestType.CHANGE_APPOINTMENT:
-			if( null == request.getStartDate() ) 
+			if( null == request.getStartDate() ) {
 				result.setError(Util.ERROR_ENTRY_DATE);
-			if( request.getStartDate().compareTo(LocalDate.now()) <= 0) {
+			} else if( request.getStartDate().compareTo(LocalDate.now()) <= 0) {
 				result.setError(Util.INVALID_ENTRY_DATE);
 			}
-			if( null == request.getDescription() )
+			
+			if( null == request.getDescription() ) {
 				result.setError(Util.ERROR_DESCRIPTION);
-			if( null != request.getDescription() ) {
+			} else if( null != request.getDescription() ) {
 				if( request.getDescription().trim().equals("") )
 					result.setError(Util.INVALID_DESCRIPTION);
 			}
+			
+			if( null == request.getEndDate() ) {
+				result.setError(Util.ERROR_END_DATE);
+			} else if( request.getEndDate().compareTo( request.getStartDate() ) <= 0) {
+				result.setError(Util.INVALID_END_DATE);
+			}
+			
 			request.setStatus(RequestStatus.SENT.getValue());
 			break;
 		case RequestType.WORK_OVERTIME:
 			if( null == request.getStartDate() ) 
 				result.setError(Util.ERROR_ENTRY_DATE);
+			
 			if( request.getStartDate().compareTo(LocalDate.now()) <= 0) {
 				result.setError(Util.INVALID_ENTRY_DATE);
 			}
+			
 			if( null != request.getEndDate() ) {
-				if( request.getStartDate().compareTo(request.getEndDate()) <= 0 ) {
+				if( request.getEndDate().compareTo(request.getStartDate()) <= 0 ) {
 					result.setError(Util.INVALID_END_DATE);
 				}
 			}
+			
 			if( null == request.getDescription() )
 				result.setError(Util.ERROR_DESCRIPTION);
+			
 			if( null != request.getDescription() ) {
 				if( request.getDescription().trim().equals("") )
 					result.setError(Util.INVALID_DESCRIPTION);
@@ -74,7 +86,7 @@ public class SaveRequestStrategy extends AbstractStrategy<Request> {
 			}
 			
 			if( null != request.getEndDate() ) {
-				if( request.getStartDate().compareTo(request.getEndDate()) <= 0 ) {
+				if( request.getEndDate().compareTo(request.getStartDate()) <= 0 ) {
 					result.setError(Util.INVALID_END_DATE);
 				}
 			}
@@ -87,19 +99,21 @@ public class SaveRequestStrategy extends AbstractStrategy<Request> {
 			request.setStatus(RequestStatus.SENT.getValue());
 			break;
 		case RequestType.REALOCATION_DAYS:
-			if( null == request.getStartDate() ) 
+			if( null == request.getStartDate() ) {
 				result.setError(Util.ERROR_ENTRY_DATE);
-			if( request.getStartDate().compareTo(LocalDate.now()) <= 0) {
+			} else if( request.getStartDate().compareTo(LocalDate.now()) <= 0) {
 				result.setError(Util.INVALID_ENTRY_DATE);
 			}
-			if( request.getStartDate().compareTo(request.getEndDate()) <= 0 ) {
+			
+			if( null == request.getEndDate() ) {
+				result.setError(Util.ERROR_END_DATE);
+			} else if( request.getEndDate().compareTo(request.getStartDate()) <= 0 ) {
 				result.setError(Util.INVALID_END_DATE);
 			}
-			if( request.getStartDate().compareTo(request.getEndDate()) <= 0 ) {
-				result.setError(Util.INVALID_END_DATE);
-			}
+			
 			if( null == request.getDescription() )
 				result.setError(Util.ERROR_DESCRIPTION);
+			
 			if( null != request.getDescription() ) {
 				if( request.getDescription().trim().equals("") )
 					result.setError(Util.INVALID_DESCRIPTION);

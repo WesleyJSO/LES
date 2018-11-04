@@ -18,10 +18,13 @@ insert into user_role values (select id from `user` where email='wesley@wesley.c
 
 --INSERT INTO `USER` VALUES(HIBERNATE_SEQUENCE.nextval, 1, getDate(), 'bruno@bruno.com' , '1234')
 --insert into employee values(HIBERNATE_SEQUENCE.nextval, 1, getDate(), getDate(), 'Holanda', 'Bruno', 123456789, null, null, (select id from user where email='bruno@bruno.com'))
---insert into employee values(HIBERNATE_SEQUENCE.nextval, 1, getDate(), getDate(), 'Wesley', 'José', 123456789, null, null, (select id from user where email='wesley@wesley.com'))
+insert into employee values(HIBERNATE_SEQUENCE.nextval, 1, getDate(), getDate(), 'Zeller', 'José', 123456789, null, null, (select id from user where email='zeller@zeller.com'))
+insert into employee values(HIBERNATE_SEQUENCE.nextval, 1, getDate(), getDate(), 'Wesley', 'José', 123456789, null, null, (select id from user where email='wesley@wesley.com'))
 insert into employee values(HIBERNATE_SEQUENCE.nextval, 1, getDate(), getDate(), 'Holanda', 'Bruno', 123456789, null, null, (select id from user where email='bruno@bruno.com'))
 
 insert into BASE_HOUR_CALCULATION values(HIBERNATE_SEQUENCE.nextval, 1, getDate(), getDate(), null, null, 10000, null, 8, (select e.id from employee e inner join user u on e.user_id = u.id where u.email='bruno@bruno.com'), null)
+insert into BASE_HOUR_CALCULATION values(HIBERNATE_SEQUENCE.nextval, 1, getDate(), getDate(), null, null, 10000, null, 8, (select e.id from employee e inner join user u on e.user_id = u.id where u.email='wesley@wesley.com'), null)
+insert into BASE_HOUR_CALCULATION values(HIBERNATE_SEQUENCE.nextval, 1, getDate(), getDate(), null, null, 10000, null, 8, (select e.id from employee e inner join user u on e.user_id = u.id where u.email='zeller@zeller.com'), null)
 
 --insert into MONTHLY_BALANCE values(HIBERNATE_SEQUENCE.nextval,1,getDate(),3,'2018-07',(select e.id from employee e inner join user u on e.user_id = u.id where u.email='bruno@bruno.com'))
 --insert into MONTHLY_BALANCE values(HIBERNATE_SEQUENCE.nextval,1,getDate(),5,'2018-08',(select e.id from employee e inner join user u on e.user_id = u.id where u.email='bruno@bruno.com'))
@@ -29,6 +32,8 @@ insert into BASE_HOUR_CALCULATION values(HIBERNATE_SEQUENCE.nextval, 1, getDate(
 --insert into MONTHLY_BALANCE values(HIBERNATE_SEQUENCE.nextval,1,getDate(),1,'2018-10',(select e.id from employee e inner join user u on e.user_id = u.id where u.email='bruno@bruno.com'))
 
 insert into BANKED_HOURS values(HIBERNATE_SEQUENCE.nextval,1,getDate(),0,(select e.id from employee e inner join user u on e.user_id = u.id where u.email='bruno@bruno.com'))
+insert into BANKED_HOURS values(HIBERNATE_SEQUENCE.nextval,1,getDate(),0,(select e.id from employee e inner join user u on e.user_id = u.id where u.email='zeller@zeller.com'))
+insert into BANKED_HOURS values(HIBERNATE_SEQUENCE.nextval,1,getDate(),0,(select e.id from employee e inner join user u on e.user_id = u.id where u.email='wesley@wesley.com'))
 
 insert into APPOINTMENT values(HIBERNATE_SEQUENCE.nextval,1,getDate(), '13:00:00', '19:00:00', '09:00:00', 0, '2018-07-01', '01:00:00', '00:00:00', '2018-07-01', '09:00:00', '12:00:00', null, null, null, null, 0, (select e.id from employee e inner join user u on e.user_id = u.id where u.email='bruno@bruno.com'))
 insert into APPOINTMENT values(HIBERNATE_SEQUENCE.nextval,1,getDate(), '13:00:00', '17:15:00', '07:15:00', 0, '2018-07-02', '00:00:00', '00:45:00', '2018-07-02', '09:00:00', '12:00:00', null, null, null, null, 0, (select e.id from employee e inner join user u on e.user_id = u.id where u.email='bruno@bruno.com'))

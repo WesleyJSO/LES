@@ -34,7 +34,7 @@ public class Employee extends DomainEntity {
 	@JsonManagedReference
 	private List<Telephone> telephoneList;
 	
-	@ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="manager_id")
 	private Employee manager;
 

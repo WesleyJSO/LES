@@ -18,8 +18,8 @@ export const PAGINATION = { sortBy: 'id' }
 export const APPOINTMENTS = { title: 'Apontamento de Horas', table: 'Lista de Apontamentos', addAppointments: 'Apontar Horas', types: ['Entrada', 'Almoço', 'Retorno Almoço', 'Saída', 'Saída Particular'] }
 export const REQUEST = [
   {id: 1, description: 'Hora Extra'},
-  {id: 3, description: 'Banco de Horas'},
-  {id: 2, description: 'Remanejamento de Horas/Dias'}
+  {id: 2, description: 'Banco de Horas'},
+  {id: 4, description: 'Remanejamento de Horas/Dias'}
 ]
 export default class UserService {
   static get HEADERS () { return HEADERS }
