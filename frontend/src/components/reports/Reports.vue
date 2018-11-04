@@ -1,6 +1,13 @@
 <template>
   <div>
-  <h1>Gráficos</h1>
+     <li v-for="(message, index) in messages" :key="index">
+      <v-alert :color="messageColor"
+               :value="haveMessage"
+               v-text="message"
+               transition="scale-transition" />
+    </li>
+    <br/>
+    <h1>{{getTitles.report}}</h1>
     <v-container fluid>
       <v-layout wrap column >
 
@@ -8,12 +15,15 @@
           <v-layout >
             <v-flex xs12 d-flex>
               <v-select
-                label="Funcionários"
+                :label="getLabels.employees"
                 prepend-icon="supervisor_account"
                 :items="employees"
                 multiple small-chips
-                v-model="employeeNameList"
-              ></v-select>
+                type="Object"
+                item-text="lastName"
+                item-value="id"
+                v-model="chartFilter.employeeNameList">
+              </v-select>
             </v-flex>
           </v-layout>
 
@@ -26,22 +36,21 @@
                 :nudge-right="40"
                 lazy offset-y full-width
                 transition="scale-transition"
-                min-width="290px"
-              >
+                min-width="290px">
                 <v-text-field
-                  label="Data inicial"
-                  v-model="initialQueryDate"
+                  :label="getLabels.startDate"
+                  v-model="chartFilter.initialQueryDate"
                   slot="activator"
                   prepend-icon="event"
-                  readonly
-                ></v-text-field>
+                  readonly>
+                </v-text-field>
 
                 <v-date-picker
-                  locale="pt-br"
-                  header-color="black"
-                  v-model="initialQueryDate"
-                  @input="pickerInitialDate = false"
-                ></v-date-picker>
+                  :locale="getDateConfig.locale"
+                  :header-color="getColors.black"
+                  v-model="chartFilter.initialQueryDate"
+                  @input="pickerInitialDate = false">                  
+                </v-date-picker>
               </v-menu>
             </v-flex>
 
@@ -53,22 +62,22 @@
                 :nudge-right="40"
                 lazy offset-y full-width
                 transition="scale-transition"
-                min-width="290px"
-              >
+                min-width="290px">
                 <v-text-field
-                  label="Data final"
-                  v-model="finalQueryDate"
+                  :label="getLabels.endDate"
+                  v-model="chartFilter.finalQueryDate"
                   slot="activator"
                   prepend-icon="event"
-                  readonly
-                ></v-text-field>
+                  readonly>
+                  </v-text-field>
 
                 <v-date-picker
-                  locale="pt-br"
-                  header-color="black"
-                  v-model="finalQueryDate"
-                  @input="pickerFinalDate = false"
-                ></v-date-picker>
+                  :locale="getDateConfig.locale"
+                  :min="minEndDate"
+                  :header-color="getColors.black"
+                  v-model="chartFilter.finalQueryDate"
+                  @input="pickerFinalDate = false">
+                  </v-date-picker>
               </v-menu>
             </v-flex>
           </v-layout>
@@ -76,8 +85,8 @@
           <v-layout pb-5>
             <v-btn
               id="submit"
-              type="submit"
-              color="info"
+              type="button"
+              :color="getColors.info"
               :disabled="!valid"
               @click="submit"
             >Consultar</v-btn>
@@ -146,7 +155,7 @@
 
         <v-flex xs12>
           <v-tabs dark slider-color="yellow" >
-            <v-tab v-for="tabName in tabs" :key="tabName" ripple>
+            <v-tab v-for="tabName in getTabsName" :key="tabName" ripple>
               {{ tabName }}
             </v-tab>
 
@@ -154,12 +163,12 @@
               <v-form flat>
                 <line-chart ref="chartObject1" :download="true"
                   :stacked="false"
-                  title="Horas Trabalhadas"
-                  xtitle="Dias"
-                  ytitle="Horas"
+                  :title="getReportTitle.workedHours"
+                  :xtitle="getReportAxis.x.days"
+                  :ytitle="getReportAxis.y.hours"
                   discrete="true"
                   height="400px"
-                  :data="chart"
+                  :data="getWokedHours"
                 />
               </v-form>
             </v-tab-item>
@@ -168,12 +177,12 @@
               <v-form flat>
                 <column-chart ref="chartObject2" :download="true"
                   :stacked="false"
-                  title="Horas de Almoço"
-                  xtitle="Dias"
-                  ytitle="Horas"
+                  :title="getReportTitle.lunchHours"
+                  :xtitle="getReportAxis.x.days"
+                  :ytitle="getReportAxis.y.hours"
                   discrete="true"
                   height="400px"
-                  :data="chartFinal"
+                  :data="getLunchHours"
                 />
               </v-form>
             </v-tab-item>
@@ -182,12 +191,12 @@
               <v-form flat>
                 <bar-chart ref="chartObject3" :download="true"
                   :stacked="false"
-                  title="Horas Extras"
-                  xtitle="Horas"
-                  ytitle="Dias"
+                  :title="getReportTitle.workOvertime"
+                  :ytitle="getReportAxis.x.days"
+                  :xtitle="getReportAxis.y.hours"
                   discrete="true"
                   height="400px"
-                  :data="chartFinal"
+                  :data="getWorkOvertime"
                 />
               </v-form>
             </v-tab-item>
@@ -202,43 +211,41 @@
 
 <script>
 // import DateHelper from '../../helpers/DateHelper.js'
+import ReportService from '@/service/ReportService'
 export default {
   data: () => ({
+    messages: [],
     valid: false,
     pickerInitialDate: false,
     pickerFinalDate: false,
-    initialQueryDate: null,
-    finalQueryDate: null,
-    employeeNameList: [],
+    startDate: null,
+    endDate: null,
+    employeesList: [],
+    employees: [],
     chartFilter: {},
-    tabs: [ 'Horas Trabalhadas', 'Horas de Almoço', 'Horas Extras' ],
-    frequency: [ 'Semana', 'Mês', 'Ano' ],
-    employees: [ 'Wesley', 'Zeller', 'Bruno', 'João', 'Maria', 'Zé' ],
     selectedEmployesList: [],
     chartData: null,
-    chart: null
+    chart: {
+      workOvertime: {},
+      workedHours: {},
+      lunchHours: {}
+    }
   }),
   // async beforeMount () {
   //   this.chartData = await this.$_axios.patch(`${this.$_url}appointment`)
   //   this.chart = await this.chartData.data
   // },
+  mounted () {
+    this.getEmployees()
+  },
   methods: {
     async submit () {
-      this.chartFilter.initialQueryDate = new Date(this.initialQueryDate)
-      this.chartFilter.finalQueryDate = new Date(this.finalQueryDate)
-      this.chartFilter.employeeNameList = this.employeeNameList
-      this.chartData = await this.$_axios.patch(`${this.$_url}chartfilter`, this.chartFilter)
-      this.chart = await this.chartData.data
-      console.log(this.chart)
-    },
-    selectedEmployes (employee) {
-      console.log(employee.indexOf('todos') > -1)
-      if (employee.indexOf('todos') > -1) {
-        this.selectedEmployesList = []
-        console.log(this.selectedEmployesList)
-        this.selectedEmployesList.push(...this.employees)
-      }
-      console.log(this.selectedEmployesList)
+      let result = await this.$_axios.patch(`${this.$_url}chartfilter`, this.chartFilter)
+      let chartData = {}
+      chartData.workedHours = this.workedHours(result.data.resultList)
+      chartData.workOvertime = this.workOvertime(result.data.resultList)
+      chartData.lunchHours = this.lunchHours(result.data.resultList)
+      this.chart = await chartData
     },
     changeFrequency (frequency) {
       // this.$children[2].destroyElement()
@@ -260,11 +267,167 @@ export default {
       //     this.$refs.chartObject2.updateChart()
       //     this.$refs.chartObject3.updateChart()
       // }
+    },
+    getEmployees () {
+      let employee = {}
+      this.$_axios.patch(`${this.$_url}employee`, employee).then((response) => {
+        let resultado = response.data
+        if (resultado.resultList.length >= 0) {
+          this.employees = resultado.resultList
+        }
+        if (resultado.message) {
+          this.messages = [...resultado.message]
+          this.haveMessage = true
+          if (resultado.sucesso) {
+            // Success message
+            this.messageColor = 'info'
+          } else {
+            // Waring message
+            this.messageColor = 'warning'
+          }
+        }
+      },
+      (response) => {
+        console.log(JSON.stringify(response, null, ' '))
+        // Error during request
+        this.messages = ['Houve um erro ao carregar a lista de Colaboradores!']
+        this.haveMessage = true
+        this.messageColor = 'error'
+      })
+    },
+    workOvertime (list) {
+      let dates = list.map(i => {
+        let parsedDate = {}
+        parsedDate.employee = i.employee.id
+        parsedDate.name = i.employee.name + ' ' + i.employee.lastName
+        parsedDate.date = i.date.substring(0, this.getDateConfig.date)
+        parsedDate.dayOvertime = i.dayOvertime.substring(0, this.getDateConfig.hour).replace(':', '.')
+        return parsedDate
+      })
+      let parsedItem = []
+      let dataItem = {}
+      dataItem.data = {}
+      dataItem.name = ''
+      for (let i = 0; i < dates.length; i++) {
+        if (!dataItem.name) {
+          dataItem.name = dates[i].name
+        }
+        if (dataItem.name === dates[i].name) {
+          dataItem.data[dates[i].date] = dates[i].dayOvertime
+        } else if (dataItem.name !== dates[i].name) {
+          parsedItem.push(Object.assign({}, dataItem))
+          dataItem.name = dates[i].name
+          dataItem.data = {}
+          dataItem.data[dates[i].date] = dates[i].dayOvertime
+        }
+        if (i === (dates.length - 1)) {
+          parsedItem.push(Object.assign({}, dataItem))
+        }
+      }
+      return parsedItem
+    },
+    workedHours (list) {
+      let dates = list.map(i => {
+        let parsedDate = {}
+        parsedDate.employee = i.employee.id
+        parsedDate.name = i.employee.name + ' ' + i.employee.lastName
+        parsedDate.date = i.date.substring(0, this.getDateConfig.date)
+        parsedDate.balance = i.balance.substring(0, this.getDateConfig.hour).replace(':', '.')
+        return parsedDate
+      })
+      let parsedItem = []
+      let dataItem = {}
+      dataItem.data = {}
+      dataItem.name = ''
+      for (let i = 0; i < dates.length; i++) {
+        if (!dataItem.name) {
+          dataItem.name = dates[i].name
+        }
+        if (dataItem.name === dates[i].name) {
+          dataItem.data[dates[i].date] = dates[i].balance
+        } else if (dataItem.name !== dates[i].name) {
+          parsedItem.push(Object.assign({}, dataItem))
+          dataItem.name = dates[i].name
+          dataItem.data = {}
+          dataItem.data[dates[i].date] = dates[i].balance
+        }
+        if (i === (dates.length - 1)) {
+          parsedItem.push(Object.assign({}, dataItem))
+        }
+      }
+      return parsedItem
+    },
+    lunchHours (list) {
+      let dates = list.map(i => {
+        let parsedDate = {}
+        parsedDate.employee = i.employee.id
+        parsedDate.name = i.employee.name + ' ' + i.employee.lastName
+        parsedDate.date = i.date.substring(0, this.getDateConfig.date)
+        let morning = Number(i.morningOut.substring(0, this.getDateConfig.hour).replace(':', '.'))
+        let afterNoon = Number(i.afternoonEntrance.substring(0, this.getDateConfig.hour).replace(':', '.'))
+        parsedDate.lunch = afterNoon - morning
+        return parsedDate
+      })
+      let parsedItem = []
+      let dataItem = {}
+      dataItem.data = {}
+      dataItem.name = ''
+      for (let i = 0; i < dates.length; i++) {
+        if (!dataItem.name) {
+          dataItem.name = dates[i].name
+        }
+        if (dataItem.name === dates[i].name) {
+          dataItem.data[dates[i].date] = dates[i].lunch
+        } else if (dataItem.name !== dates[i].name) {
+          parsedItem.push(Object.assign({}, dataItem))
+          dataItem.name = dates[i].name
+          dataItem.data = {}
+          dataItem.data[dates[i].date] = dates[i].lunch
+        }
+        if (i === (dates.length - 1)) {
+          parsedItem.push(Object.assign({}, dataItem))
+        }
+      }
+      return parsedItem
     }
   },
   computed: {
-    chartFinal () {
-      return this.chart
+    getWorkOvertime () {
+      return this.chart.workOvertime
+    },
+    getWokedHours () {
+      return this.chart.workedHours
+    },
+    getLunchHours () {
+      return this.chart.lunchHours
+    },
+    getTitles () {
+      return ReportService.TITLES
+    },
+    getLabels () {
+      return ReportService.LABELS
+    },
+    getDateConfig () {
+      return ReportService.DATE_CONFIG
+    },
+    getColors () {
+      return ReportService.COLORS
+    },
+    getTabsName () {
+      return ReportService.TABS_NAME
+    },
+    getFrequency () {
+      return ReportService.FREQUECY
+    },
+    getReportTitle () {
+      return ReportService.REPORT_TITLE
+    },
+    getReportAxis () {
+      return ReportService.REPORT_AXIS
+    },
+    minEndDate () {
+      let endDate = !this.chartFilter.initialQueryDate ? new Date() : new Date(this.chartFilter.initialQueryDate)
+      return endDate.toISOString()
     }
   }
 }
