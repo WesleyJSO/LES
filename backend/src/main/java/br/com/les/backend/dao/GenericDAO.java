@@ -62,7 +62,7 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 
 	@Override
 	public T delete(T entity) {
-		getRepository(entity).delete(entity);
+		getRepository(entity).deleteById(entity.getId());
 		return entity;
 	}
 	
