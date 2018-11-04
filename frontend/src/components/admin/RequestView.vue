@@ -35,7 +35,7 @@
         <template slot="items" slot-scope="props">
           <tr @onclick="props.expanded = !props.expanded">
             <td>{{ props.item.employee.name }} {{ props.item.employee.lastName }}</td>
-            <td class="text-xs-left">{{ getType(props.item.type).description }}</td>
+            <td class="text-xs-left">{{ getType(props.item.type) }}</td>
             <td class="text-xs-left">{{ getStatus(props.item.status) }}</td>
             <td class="text-xs-center" v-if="hasRole('ROLE_EMPLOYEE')">
             <v-dialog v-model="dialogEdit" 

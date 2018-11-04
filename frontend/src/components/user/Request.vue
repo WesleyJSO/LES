@@ -12,26 +12,16 @@
       <v-layout row wrap>
       <!-- Row 1 -->
       <v-flex xs6>
-          <v-combobox v-model="request.type"
-                      prepend-icon="check_circle"
-                      :items="getItems"
-                      label="Tipo de Solicitação"
-                      item-text="description"
-                      chips>
-            <template slot="selection"
-                      slot-scope="data">
-              <v-chip :selected="data.selected"
-                      :disabled="data.disabled"
-                      :key="JSON.stringify(data.item)"
-                      class="v-chip--select-multi"
-                      @input="data.parent.selectItem(data.item)">
-                <v-avatar class="accent white--text"
-                          v-text="data.item.description.slice(0, 1).toUpperCase()">
-                </v-avatar>
-                  {{ data.item.description }}
-              </v-chip>
-            </template>
-          </v-combobox>
+
+        <v-combobox
+          v-model="type"
+          :items="getItems"
+          item-text="description"
+          item-value="id"
+          prepend-icon="check_circle"
+          label="Tipo de Solicitação"
+          chips> 
+        </v-combobox>
         </v-flex>
         <v-flex xs6>
           <v-menu ref="requestEntryDate"
