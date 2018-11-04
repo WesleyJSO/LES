@@ -13,13 +13,13 @@ import br.com.les.backend.entity.DomainEntity;
 
 public interface GenericRepository<T extends DomainEntity> extends JpaRepository <T, Long> {
 	
-	@Query("select t from #{#entityName} t where t.active = true")
-	List<T> findByActive();
+	@Query("from #{#entityName} t where t.active = true")
+	List<T> findAllActive();
 	
-	@Query("select t from #{#entityName} t where t.active = false")
-	List<T> findByInactive();
+	@Query("from #{#entityName} t where t.active = false")
+	List<T> findAllInactive();
 
-	@Query("select t from #{#entityName} t where t.active = true and id = ?2")
+	@Query("from #{#entityName} t where t.active = true and id = ?2")
 	Optional<T> findActiveById(Long id);
 
 	// https://www.logicbig.com/tutorials/spring-framework/spring-data/modifying-queries.html

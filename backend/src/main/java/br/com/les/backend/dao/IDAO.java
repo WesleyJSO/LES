@@ -12,5 +12,9 @@ public interface IDAO<T extends DomainEntity> {
 
 	T update(T aEntity);
 
-	List<T> find(T entity);	
+	List<T> find(T entity);
+	
+	List<T> findAllActive(T entity);
+
+	List<T> findAllInactive(T entity);
 }

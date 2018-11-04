@@ -36,7 +36,7 @@ public class ChangeSpecificAppointment implements IStrategy<Appointment> {
 			Result<Appointment> result = new Result<>();
 			
 			// find the active parameter in the system, it need's to have only one in this state
-			List<Parameter> parameterList = parameterRepository.findByActive();
+			List<Parameter> parameterList = parameterRepository.findAllActive();
 			if(!parameterList.isEmpty()) {
 			
 				Parameter parameter = parameterList.get(0);

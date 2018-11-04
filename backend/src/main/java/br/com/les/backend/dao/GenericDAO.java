@@ -76,6 +76,16 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 		return em.merge(entity);
 	}
 
+	@Override
+	public List<T> findAllActive(T entity) {
+		return getRepository(entity).findAllActive();
+	}
+
+	@Override
+	public List<T> findAllInactive(T entity) {
+		return getRepository(entity).findAllActive();
+	}
+	
 	@SuppressWarnings("unchecked")
 	public List<T> find(T clazz) {
 		String sql = "";
