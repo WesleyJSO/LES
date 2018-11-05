@@ -280,11 +280,10 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 	}
 	
 	private String validateSqlStatement ( String sql ) {
-		if ( sql.trim().endsWith( "where" ) ) {
-			sql += "1=1";
-		} else if (sql.trim().endsWith("1!=1")) {
+		if(sql.endsWith("1!=1")) {
 			sql = sql.replace("1!=1", "1=1");
 		}
+		sql = sql.replace("1!=1 and", "1=1 and");
 		return sql;
 	}
 }
