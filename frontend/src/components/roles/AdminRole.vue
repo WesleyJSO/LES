@@ -144,6 +144,17 @@
             </router-link>
           </v-list-tile-content>
         </v-list-tile>
+
+        <v-list-tile>
+          <v-list-tile-action>
+            <v-icon>dns</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <router-link to="VisualizarApontamentos">
+              <v-list-tile-title>Visualizar Apontamentos</v-list-tile-title>
+            </router-link>
+          </v-list-tile-content>
+        </v-list-tile>
       </v-list>
 
 </template>
