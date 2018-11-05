@@ -16,7 +16,7 @@ public class Parameter extends DomainEntity {
 
 	private Double overtimePercentage;
 	private Double nightOvertimePercentage;
-	private Double weekEndOvertimePercentage;
+	private Double weekendOvertimePercentage;
 	private LocalTime retroactiveAppointmentLimitTime;
 	private Integer relocationRequestLimitTime; // limit to change work days
 	private Integer bankCompensationLimitTime; // limit in months
@@ -45,12 +45,6 @@ public class Parameter extends DomainEntity {
 	}
 	public void setNightOvertimePercentage(Double nightOvertimePercentage) {
 		this.nightOvertimePercentage = nightOvertimePercentage;
-	}
-	public Double getWeekEndOvertimePercentage() {
-		return weekEndOvertimePercentage;
-	}
-	public void setWeekEndOvertimePercentage(Double weekEndOvertimePercentage) {
-		this.weekEndOvertimePercentage = weekEndOvertimePercentage;
 	}
 	public LocalTime getRetroactiveAppointmentLimitTime() {
 		return retroactiveAppointmentLimitTime;
@@ -93,5 +87,11 @@ public class Parameter extends DomainEntity {
 	}
 	public void setBothTypes(HourType bothTypes) {
 		this.bothTypes = bothTypes;
+	}
+	public Double getWeekendOvertimePercentage() {
+		return weekendOvertimePercentage;
+	}
+	public void setWeekendOvertimePercentage(Double weekendOvertimePercentage) {
+		this.weekendOvertimePercentage = weekendOvertimePercentage;
 	}	
 }
