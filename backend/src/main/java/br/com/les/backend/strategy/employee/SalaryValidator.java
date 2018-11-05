@@ -18,7 +18,6 @@ public class SalaryValidator implements IStrategy<Employee> {
 				&& !Strings.isNullOrEmpty(aEntity.getBaseHourCalculation().getSalary().toString())) {
 		
 			if(aEntity.getBaseHourCalculation().getSalary() <= 0) {
-				aCase.suspendExecution();
 				aCase.getResult().setError("Salário informado deve ser maior que R$ "
 						.concat(aEntity.getBaseHourCalculation().getSalary().toString()).concat("!"));
 			}

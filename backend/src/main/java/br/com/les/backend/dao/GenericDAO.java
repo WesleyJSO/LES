@@ -284,6 +284,7 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 			sql = sql.replace("1!=1", "1=1");
 
 		sql = sql.replace("1!=1 and", "1=1 and");
+		sql += " and t.active=true";
 		return sql;
 	}
 }

@@ -1,12 +1,14 @@
 package br.com.les.backend.strategy.employee;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.context.annotation.Configuration;
 
 import br.com.les.backend.entity.Employee;
 import br.com.les.backend.entity.Telephone;
 import br.com.les.backend.navigator.INavigationCase;
 import br.com.les.backend.navigator.IStrategy;
-import br.com.les.backend.utils.Util;
 
 @Configuration
 public class TelephoneExistence implements IStrategy<Employee> {
@@ -18,15 +20,15 @@ public class TelephoneExistence implements IStrategy<Employee> {
 		
 			aEntity.getTelephoneList().forEach(e -> e.setUser(aEntity));
 			
-			for( Telephone telephone : aEntity.getTelephoneList() )
-				if( telephone.getNumber().length() != 0 
-					&& telephone.getNumber().length() != 8 
-					&& telephone.getNumber().length() != 9 ) {
-
-					aCase.suspendExecution();
-					aCase.getResult().setError(Util.INVALID_PHONE.concat(telephone.toString()));
-					break;
-				}
+			List<Telephone> telephoneList = aEntity.getTelephoneList().stream()
+					.filter(t -> t.getNumber().length() == 8 || t.getNumber().length() == 9)
+					.collect(Collectors.toList());
+			
+			aEntity.getTelephoneList().clear();
+			if(telephoneList.size() == 0)
+				aCase.getResult().setError("Nenhum telefone válido foi informado!");
+			else
+				aEntity.setTelephoneList(telephoneList);
 			return;
 		}
 		aCase.suspendExecution();

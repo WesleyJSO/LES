@@ -22,7 +22,6 @@ public class IdInactivate implements IStrategy<Employee> {
 		
 			Optional<Employee> employee = employeeRepository.findById(aEntity.getId());
 			if(employee.isPresent() && !employee.filter(e -> !e.getActive()).isPresent()) {
-				aCase.suspendExecution();
 				aCase.getResult().setError("Colaborador já está inativo!");
 			}
 			return;

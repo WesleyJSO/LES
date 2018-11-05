@@ -48,11 +48,11 @@
         </v-flex>
         <v-flex xs12 sm9 md6 lg6 xl4>
           <v-text-field id="email"
-                v-model="employee.email"
+                v-model="employee.user.email"
                 type="email"
                 prepend-icon="email"
                 clearable
-                :rules="$v_user.emailRules(employee.email)"
+                :rules="$v_user.emailRules(employee.user.email)"
                 label="E-mail"
                 required>
           </v-text-field>
@@ -130,18 +130,24 @@
 
         <v-flex xs12 sm9 md6 lg6 xl4>
           <v-select v-if="managerList" id="supervisor"
-            v-model="select"
-            :items="managerList.map(x => x.name)"
+            v-model="employee.manager.id"
+            :items="managerList"
+            item-text="name"
+            item-value="id"
             prepend-icon="person"
+            no-data-text="Não existem gestores cadastrados"
             label="Gestor">
           </v-select>
         </v-flex>
 
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-select id="hourType"
-            v-model="employee.baseHourCalculation.hourType"
-            :items="hourTypeList.map(x => x.name)"
+          <v-select v-if="hourTypeList" id="hourType"
+            v-model="employee.baseHourCalculation.hourType.id"
+            :items="hourTypeList"
+            item-text="description"
+            item-value="id"
             prepend-icon="timer"
+            no-data-text="Não existem tipos de horas cadastrados"
             label="Tipo de Hora"
             :rules="$v_baseHour.hourTypeRules(employee.baseHourCalculation.hourType)">
           </v-select>
@@ -179,12 +185,12 @@
       <v-layout xs12 sm9 md6 lg6 xl4>
         <v-flex>
           <v-text-field id="password"
-              v-model="employee.password"
+              v-model="employee.user.password"
               color="cyan darken"
               label="Senha"
               type="password"
               prepend-icon="fingerprint"
-              :rules="$v_user.passwordRules(employee.password)"
+              :rules="$v_user.passwordRules(employee.user.password)"
               placeholder="Informe a Senha do Colaborador"
               loading >
             <v-progress-linear
@@ -202,7 +208,7 @@
               label="Senha de Confirmação"
               type="password"
               prepend-icon="fingerprint"
-              :rules="$v_user.passwordValidationRules(employee.password, passwordValidator)"
+              :rules="$v_user.passwordValidationRules(employee.user.password, passwordValidator)"
               placeholder="Confirme a Senha do Colaborador"
               loading >
             <v-progress-linear
@@ -234,11 +240,7 @@
 <script>
 export default {
   data: () => ({
-    hourTypeList: [
-      { name: 'Banco de Horas', id: 0 },
-      { name: 'Hora extra', id: 1 },
-      { name: 'Ambos', id: 2 }
-    ],
+    hourTypeList: [],
     isManager: false,
     isEmployee: false,
     joiningDateHelper: false,
@@ -248,10 +250,9 @@ export default {
     passwordValidator: '',
     employee: {
       joiningDate: null,
-      password: '',
-      baseHourCalculation: [],
-      manager: [],
-      roleList: [],
+      manager: {},
+      baseHourCalculation: {hourType: {}},
+      user: {roleList: [], password: ''},
       telephoneList: [ {type: '', number: ''}, {type: '', number: ''}, {type: '', number: ''} ]
     },
     menu: false,
@@ -261,28 +262,29 @@ export default {
     messageColor: '',
     edit: false,
     valid: false,
-    managerList: null,
+    managerList: [],
     roleList: null
   }),
   async beforeMount () {
     try {
-      let response = await this.$_axios.patch(`${this.$_url}role`, {active: true})
-      this.roleList = response.resultList
-      for (let role of this.roleList) {
+      let response = await this.$_axios.patch(`${this.$_url}role`, {})
+      for (let role of response.data.resultList) {
         role.active = false
       }
-      response = await this.$_axios.patch(`${this.$_url}user`, {active: true})
-      this.managerList = response.resultList
-      this.managerList = this.managerList.filter((roles, index, array) => {
-        console.log('ROLES ' + JSON.stringify(roles))
-        console.log('INDEX ' + JSON.stringify(index))
-        console.log('ARRAY ' + JSON.stringify(array))
-        roles.filter((role, index, array) => {
-          if (role.role === 'ROLE_MANAGER') return role
+      this.roleList = response.data.resultList
+      response = await this.$_axios.patch(`${this.$_url}hourtype`, {})
+      this.hourTypeList = response.data.resultList
+      response = await this.$_axios.patch(`${this.$_url}employee`, {})
+      response.data.resultList.map(employee => {
+        employee.user.authorities.map(authority => {
+          if (authority.role === 'ROLE_MANAGER') {
+            delete authority.authority
+            this.managerList.push(employee)
+          }
         })
       })
     } catch (err) {
-      console.log(JSON.stringify(err))
+      console.log({err})
       this.messages = ['Erro durante execução do serviço!']
       this.haveMessage = true
       this.messageColor = 'error'
@@ -300,7 +302,7 @@ export default {
     }
   },
   methods: {
-    progress () { return Math.min(100, this.employee.password.length * 10) },
+    progress () { return Math.min(100, this.employee.user.password.length * 10) },
     progressValidation () { return Math.min(100, this.passwordValidator.length * 10) },
     formatDate (date) {
       if (!date) return null
@@ -313,11 +315,12 @@ export default {
       return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
     },
     checkboxToggle (item) {
-      let index = this.employee.roleList.indexOf(item)
+      let index = this.employee.user.roleList.indexOf(item)
       if (item.active === false && index !== -1) {
-        this.employee.roleList.splice(index, 1)
+        this.employee.user.roleList.splice(index, 1)
       } else if (item.active === true && index === -1) {
-        this.employee.roleList.push(item)
+        let role = {id: item.id}
+        this.employee.user.roleList.push(role)
       }
       if (item.active === true && item.roleName === 'Gestor') {
         this.isManager = true
@@ -337,7 +340,9 @@ export default {
         }
       }
       try {
-        let result = await this.$_axios.post(`${this.$_url}employee`, this.employee).data
+        console.log(JSON.stringify(this.employee))
+        let response = await this.$_axios.post(`${this.$_url}employee`, this.employee)
+        let result = response.data
         if (result.resultList.length !== 0) {
           this.employee = result.resultList[0]
           this.employee.telephoneList = [ {type: '', number: ''}, {type: '', number: ''}, {type: '', number: ''} ]
@@ -366,7 +371,6 @@ export default {
         joiningDate: null,
         password: '',
         baseHourCalculation: [],
-        manager: [],
         roleList: [],
         telephoneList: [ {type: '', number: ''}, {type: '', number: ''}, {type: '', number: ''} ]
       }
