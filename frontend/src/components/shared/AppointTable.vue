@@ -114,6 +114,8 @@
 
 <script>
 import AppointDialog from '@/components/shared/AppointDialog.vue'
+import DateHelper from '../../helpers/DateHelper'
+import TimeHelper from '../../helpers/TimeHelper'
 
 export default {
   props: {
@@ -147,12 +149,30 @@ export default {
   watch: {
     appointments () {
       this.createDialogs()
+      this.formatDatesAndTimes()
     }
   },
   created () {
     this.tableItemDialogs = [this.dialogs]
   },
   methods: {
+    formatDatesAndTimes () {
+      if (this.appointments.length !== 0) {
+        this.appointments.forEach(element => {
+          element.date = DateHelper.formatShortDate(element.date)
+          element.morningEntrance = TimeHelper.formatTime(element.morningEntrance)
+          element.morningOut = TimeHelper.formatTime(element.morningOut)
+          element.afternoonEntrance = TimeHelper.formatTime(element.afternoonEntrance)
+          element.afternoonOut = TimeHelper.formatTime(element.afternoonOut)
+          element.nightEntrance = TimeHelper.formatTime(element.nightEntrance)
+          element.nightOut = TimeHelper.formatTime(element.nightOut)
+          element.particularExit = TimeHelper.formatTime(element.particularExit)
+          element.particularExitReturn = TimeHelper.formatTime(element.particularExitReturn)
+          element.hoursLeft = TimeHelper.formatTime(element.hoursLeft)
+          element.dayOvertime = TimeHelper.formatTime(element.dayOvertime)
+        })
+      }
+    },
     createDialogs () {
       this.dialogs = []
       if (this.appointments.length !== 0) {
@@ -170,42 +190,11 @@ export default {
     },
     editAppointment (appointment, index) {
       if (appointment !== false) {
+        appointment.date = DateHelper.formatISODate(appointment.date)
         this.appointment = appointment
         this.$emit('register', this.appointment)
       }
       this.dialogs[index].value = false
-    },
-    mountAppointment (field, time) {
-      if (field === 'Entrada Manhã') {
-        this.appointment.morningEntrance = time
-      } else if (field === 'Saída Manhã') {
-        this.appointment.morningOut = time
-      } else if (field === 'Entrada Tarde') {
-        this.appointment.afternoonEntrance = time
-      } else if (field === 'Saída Tarde') {
-        if (!this.appointment.morningOut) {
-          this.appointment.morningOut = '12:00'
-          this.appointment.afternoonEntrance = '12:00'
-        }
-        this.appointment.afternoonOut = time
-      } else if (field === 'Entrada Noite') {
-        this.appointment.nightEntrance = time
-      } else if (field === 'Saída Noite') {
-        if (!this.appointment.morningOut && this.appointment.morningEntrance) {
-          this.appointment.morningOut = '12:00'
-          this.appointment.afternoonEntrance = '12:00'
-        }
-        if (!this.appointment.afternoonOut && !this.appointment.nightEntrance) {
-          this.appointment.afternoonOut = '18:00'
-          this.appointment.nightEntrance = '18:00'
-        }
-        this.appointment.nightOut = time
-      } else if (field === 'Saída Partícular') {
-        this.appointment.particularExit = time
-      } else if (field === 'Retorno') {
-        this.appointment.particularExitReturn = time
-      }
-      this.$emit('register', this.appointment)
     }
   }
 }
