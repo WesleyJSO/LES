@@ -22,7 +22,6 @@ public class IdExistence implements IStrategy<Employee> {
 		
 			Optional<Employee> employee = employeeRepository.findById(aEntity.getId());
 			if(!employee.isPresent()) {
-				aCase.suspendExecution();
 				aCase.getResult().setError("Colaborador não foi encontrado!");
 			}
 			return;

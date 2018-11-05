@@ -23,7 +23,6 @@ public class EmailExistence implements IStrategy<Employee> {
 		
 			User user = userRepository.findByEmail(aEntity.getUser().getEmail());    	
 			if( user != null) {
-				aCase.suspendExecution();
 				aCase.getResult().setError("Email já cadastrado!");
 			}
 			return;

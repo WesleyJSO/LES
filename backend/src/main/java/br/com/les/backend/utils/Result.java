@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.google.common.base.Strings;
+
 import br.com.les.backend.entity.DomainEntity;
 
 @Component
@@ -17,11 +19,12 @@ public class Result<T extends DomainEntity> {
     
     public Result() {
     	success = true;
+    	message.add("Ação realizada com sucesso!");
     }
 
     public void setSuccess( String message ) {
     	
-        if ( message != null && !message.equals("") ) {
+        if ( Strings.isNullOrEmpty(message)) {
         	
         	if ( !success )
         		this.message = new ArrayList<>();
@@ -32,8 +35,8 @@ public class Result<T extends DomainEntity> {
     }
 
     public void setError( String message ) {
-    	
-        if ( message != null && !message.equals("") ) {
+
+        if ( Strings.isNullOrEmpty(message)) {
         	
         	if ( success )
         		this.message = new ArrayList<>();

@@ -15,10 +15,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Component
 @Entity
+// https://stackoverflow.com/questions/24994440/no-serializer-found-for-class-org-hibernate-proxy-pojo-javassist-javassist
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User extends DomainEntity implements UserDetails {
 
 	@Transient private static final long serialVersionUID = -2363520425505851014L;
@@ -31,8 +34,8 @@ public class User extends DomainEntity implements UserDetails {
 	private boolean enabled;
 	
 	@ManyToMany(fetch=FetchType.EAGER, cascade={ CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE })
-	@JoinTable(name = "USER_ROLE", joinColumns = { @JoinColumn(name = "USER_ID") }, inverseJoinColumns = {
-			@JoinColumn(name = "ROLE_ID") })
+	@JoinTable(name = "user_role", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
+			@JoinColumn(name = "role_id") })
 	@JsonProperty("authorities")
 	private List<Role> roleList;
 

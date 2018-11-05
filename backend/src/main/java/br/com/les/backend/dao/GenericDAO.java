@@ -66,14 +66,22 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 		return entity;
 	}
 	
+	// https://www.baeldung.com/hibernate-save-persist-update-merge-saveorupdate
+	// https://stackoverflow.com/questions/4509086/what-is-the-difference-between-persist-and-merge-in-hibernate
+	/**
+	 *  verify if id exists, if true, then persist
+	 */
 	@Override
 	public T save(T entity) {
 		return getRepository(entity).save(entity);
 	}
 	
+	/**
+	 *  verify if id exists, if false, then merge
+	 */
 	@Override
 	public T update(T entity) {
-		return em.merge(entity);
+		return getRepository(entity).save(entity);
 	}
 
 	@Override
@@ -284,6 +292,7 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 			sql = sql.replace("1!=1", "1=1");
 
 		sql = sql.replace("1!=1 and", "1=1 and");
+		sql += " and t.active=true";
 		return sql;
 	}
 }

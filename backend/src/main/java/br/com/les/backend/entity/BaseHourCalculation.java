@@ -2,14 +2,19 @@ package br.com.les.backend.entity;
 
 import java.time.LocalDate;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Component
 @Entity
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class BaseHourCalculation extends DomainEntity {
 
 	private Integer workload;
@@ -19,12 +24,12 @@ public class BaseHourCalculation extends DomainEntity {
 	private Double nightOvertimePercentage;
 	private Double weekEndOvertimePercentage;
 
-	@OneToOne
-	@JoinColumn(name = "hour_type_id")
+	@OneToOne(cascade={ CascadeType.MERGE, CascadeType.DETACH } )
+	@JoinColumn(name="hour_type_id")
 	private HourType hourType;
 
 	@OneToOne
-	@JoinColumn(name = "employee_id")
+	@JoinColumn(name="employee_id")
 	private Employee employee;
 
 	

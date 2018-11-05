@@ -8,18 +8,21 @@ import javax.persistence.ManyToOne;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Component
 @Entity
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Telephone extends DomainEntity {
 
 	private String type;
 	private String number;
 	
 	@ManyToOne( fetch=FetchType.LAZY )
-	@JoinColumn( name="user_id" )
+	@JoinColumn( name="employee_id" )
 	@JsonBackReference
-	private Employee user;
+	private Employee employee;
 
 	
 	public String getType() {
@@ -38,11 +41,11 @@ public class Telephone extends DomainEntity {
 		this.number = number;
 	}
 
-	public Employee getUser() {
-		return user;
+	public Employee getEmployee() {
+		return employee;
 	}
 
-	public void setUser(Employee user) {
-		this.user = user;
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
 	}
 }

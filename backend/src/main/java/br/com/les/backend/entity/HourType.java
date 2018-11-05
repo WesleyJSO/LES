@@ -11,6 +11,7 @@ public class HourType extends DomainEntity {
 	static final String BANKEDHOURS = "Banco de Horas";
 	static final String EXTRATIME = "Hora Extra";
 	
+	private String description;
 	private Boolean both;
 	private String first;
 	private Integer quantityFirst;
@@ -46,5 +47,11 @@ public class HourType extends DomainEntity {
 	}
 	public void setQuantitySecond(Integer quantitySecond) {
 		this.quantitySecond = quantitySecond;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }

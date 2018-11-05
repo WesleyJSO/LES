@@ -17,11 +17,10 @@ public class EmailFormat implements IStrategy<Employee>{
 	@Override
 	public void process(Employee aEntity, INavigationCase<Employee> aCase) {
 		
-		if (aEntity != null && aEntity.getUser() != null && !Strings.isNullOrEmpty(aEntity.getUser().getEmail())) {
+		if (aEntity != null && !Strings.isNullOrEmpty(aEntity.getUser().getEmail())) {
 			
 			Matcher matcher = Regex.VALID_EMAIL_ADDRESS_REGEX.matcher(aEntity.getUser().getEmail());
 	        if(!matcher.find()) {
-	    		aCase.suspendExecution();
 	    		aCase.getResult().setError("Formato de e-mail inválido!");
 	        }
 	        return;

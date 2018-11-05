@@ -14,27 +14,30 @@ import javax.persistence.OneToOne;
 
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+/**
+ * @url https://www.baeldung.com/jackson-bidirectional-relationships-and-infinite-recursion
+ * @annotation @JsonIdentityInfo
+ */
 @Component
 @Entity
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Employee extends DomainEntity {
 	
 	private String pis;
 	private Date  joiningDate;
-	
-	@OneToOne()
-	@JoinColumn(name = "user_id")
-	private User user;
 	private String name;
 	private String lastName;
 	
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-	@JsonManagedReference
+	@OneToOne(fetch=FetchType.LAZY, cascade=CascadeType.PERSIST)
+	@JoinColumn(name="user_id")
+	private User user;
+	
+	@OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Telephone> telephoneList;
 	
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne(cascade=CascadeType.MERGE)
 	@JoinColumn(name="manager_id")
 	private Employee manager;
 
@@ -44,28 +47,23 @@ public class Employee extends DomainEntity {
 	@ManyToMany( mappedBy="notificatedColaboratorsList", fetch=FetchType.LAZY )
 	private List< Request > notifiedEmployeesRequestList;
 	
-	@JsonIgnore
 	@OneToMany( cascade=CascadeType.ALL )
 	private List< Appointment > appointmentList;
-	
-	@JsonIgnore
+
 	@OneToOne(mappedBy="employee", fetch=FetchType.LAZY, cascade=CascadeType.PERSIST)
 	private BaseHourCalculation baseHourCalculation;
 	
-	@JsonIgnore
 	@OneToOne(mappedBy="employee", fetch=FetchType.LAZY, cascade=CascadeType.PERSIST)
 	private BankedHours bankedHours;
 
 	@OneToMany( cascade=CascadeType.ALL )
 	private List< CompTime > monthlyCompTimeList;
 	
-	@JsonIgnore
 	@ManyToOne (fetch = FetchType.LAZY)
-	@JoinColumn(name = "costCentre_id")
+	@JoinColumn(name = "cost_centre_id")
 	private CostCentre costCentre;
 	
-	@JsonIgnore
-	@OneToMany( cascade=CascadeType.ALL )
+	@OneToMany( cascade={ CascadeType.MERGE, CascadeType.PERSIST } )
 	private List< MonthlyBalance > monthBalanceList;
 
 	public List<MonthlyBalance> getMonthBalanceList() {
@@ -184,6 +182,14 @@ public class Employee extends DomainEntity {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+
+	public BankedHours getBankedHours() {
+		return bankedHours;
+	}
+
+	public void setBankedHours(BankedHours bankedHours) {
+		this.bankedHours = bankedHours;
 	}
 	
 }
