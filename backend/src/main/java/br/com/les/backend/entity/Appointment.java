@@ -15,8 +15,9 @@ import javax.persistence.OneToMany;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+import br.com.les.backend.annotation.EmployeeQuery;
 
 @Component
 @Entity
@@ -175,6 +176,7 @@ public class Appointment extends DomainEntity {
 		this.appointmentRequestList = appointmentRequestList;
 	}
 
+	@EmployeeQuery(name="t.employee.id")
 	public Employee getEmployee() {
 		return employee;
 	}

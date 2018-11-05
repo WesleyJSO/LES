@@ -1,7 +1,5 @@
 <template>
   <div>
-    <h1>Apontamento de Horas</h1>
-    <br/>
     <li v-for="(message, index) in messages" :key="index">
       <v-alert :color="messageColor"
                :value="haveMessage"
@@ -35,7 +33,7 @@
               <v-spacer></v-spacer>
               <v-btn flat color="primary" @click="modal = false">Cancelar</v-btn>
               <v-btn flat color="primary"
-                @mouseup="callApi({monthAndYear: new Date(`${appointment.monthAndYear}-01`)})"
+                @mouseup="beforeCallApi(appointment.monthAndYear)"
                 @click="$refs.dialog.save(appointment.monthAndYear)"
               >OK</v-btn>
             </v-date-picker>
@@ -46,7 +44,7 @@
       </v-toolbar>
       <v-layout>
         <v-flex center >
-          <AppointTable :editable="true" :appointments="appointments" @register="takeAppointment($event)"></AppointTable>
+          <AppointTable :editable="false" :appointments="appointments" @register="takeAppointment($event)"></AppointTable>
           <v-card class="elevation-10" >
             <v-layout class="text-xs-center">
               <v-flex xs12 sm9 md6 lg6 xl4>
@@ -74,11 +72,15 @@ import AppointDialog from '@/components/shared/AppointDialog.vue'
 import AppointTable from '@/components/shared/AppointTable.vue'
 
 export default {
+  props: [
+    'employeeId'
+  ],
   data: () => ({
     modal: false,
     appointment: {
       monthAndYear: null
     },
+    monthAndYear: '',
     messages: [],
     haveMessage: false,
     messageColor: '',
@@ -98,7 +100,16 @@ export default {
   beforeMount () {
     this.callApi({monthAndYear: new Date()})
   },
+  watch: {
+    employeeId () {
+      this.beforeCallApi(this.monthYear)
+    }
+  },
   methods: {
+    beforeCallApi (monthYear) {
+      this.monthYear = monthYear
+      this.callApi({employee: {id: this.employeeId}, monthAndYear: new Date(`${monthYear}-01`)})
+    },
     takeAppointment (appointment) {
       this.appointment = appointment
       this.registerAppointments()
