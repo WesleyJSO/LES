@@ -22,7 +22,7 @@ public class BaseHourCalculation extends DomainEntity {
 	private Double salary;
 	private Double overtimePercentage;
 	private Double nightOvertimePercentage;
-	private Double weekEndOvertimePercentage;
+	private Double weekendOvertimePercentage;
 
 	@OneToOne(cascade={ CascadeType.MERGE, CascadeType.DETACH } )
 	@JoinColumn(name="hour_type_id")
@@ -89,11 +89,11 @@ public class BaseHourCalculation extends DomainEntity {
 		this.nightOvertimePercentage = nightOvertimePercentage;
 	}
 
-	public Double getWeekEndOvertimePercentage() {
-		return weekEndOvertimePercentage;
+	public Double getWeekendOvertimePercentage() {
+		return weekendOvertimePercentage;
 	}
 
-	public void setWeekEndOvertimePercentage(Double weekEndOvertimePercentage) {
-		this.weekEndOvertimePercentage = weekEndOvertimePercentage;
+	public void setWeekendOvertimePercentage(Double weekendOvertimePercentage) {
+		this.weekendOvertimePercentage = weekendOvertimePercentage;
 	}
 }
