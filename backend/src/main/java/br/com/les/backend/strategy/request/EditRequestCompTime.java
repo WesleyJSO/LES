@@ -15,7 +15,7 @@ import br.com.les.backend.utils.RequestType;
 import br.com.les.backend.utils.Util;
 
 @Configuration
-public class RequestToCompTime implements IStrategy<Request> {
+public class EditRequestCompTime implements IStrategy<Request> {
 
 	@Autowired private RequestRepository requestRepository;
 
@@ -23,7 +23,7 @@ public class RequestToCompTime implements IStrategy<Request> {
 	public void process(Request aEntity, INavigationCase<Request> aCase) {
 		if (aEntity != null && aEntity.getId() != 0 && !Strings.isNullOrEmpty(String.valueOf(aEntity.getId()))) {
 			requestRepository.findActiveById(aEntity.getId()).ifPresent(r -> {
-				if (aEntity.getType() == RequestType.COMP_TIME) {
+				if (aEntity.getType() == RequestType.COMP_TIME && aEntity.getType() == r.getType() ) {
 					if (null == aEntity.getStartDate())
 						aCase.getResult().setError(Util.ERROR_ENTRY_DATE);
 
@@ -41,6 +41,9 @@ public class RequestToCompTime implements IStrategy<Request> {
 					else if (r.getDescription() != aEntity.getDescription()
 							&& (aEntity.getDescription().trim().equals("") || aEntity.getDescription().length() < 10))
 						aCase.getResult().setError(Util.INVALID_DESCRIPTION);
+					
+					if (aCase.getResult().isSuccess())
+						aCase.getResult().setSuccess(Util.UPDATE_SUCCESSFUL_REQUEST);
 				}
 				return;
 			});

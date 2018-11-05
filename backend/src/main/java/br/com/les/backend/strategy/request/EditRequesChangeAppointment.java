@@ -15,7 +15,7 @@ import br.com.les.backend.utils.RequestType;
 import br.com.les.backend.utils.Util;
 
 @Configuration
-public class RequestToChangeAppointment implements IStrategy<Request> {
+public class EditRequesChangeAppointment implements IStrategy<Request> {
 
 	@Autowired private RequestRepository requestRepository;
 
@@ -37,6 +37,9 @@ public class RequestToChangeAppointment implements IStrategy<Request> {
 					else if (r.getDescription() != aEntity.getDescription()
 							&& (aEntity.getDescription().trim().equals("") || aEntity.getDescription().length() < 10))
 						aCase.getResult().setError(Util.INVALID_DESCRIPTION);
+					
+					if (aCase.getResult().isSuccess())
+						aCase.getResult().setSuccess(Util.UPDATE_SUCCESSFUL_REQUEST);
 				}
 			});
 			return;

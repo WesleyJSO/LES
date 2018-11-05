@@ -15,7 +15,7 @@ import br.com.les.backend.utils.RequestType;
 import br.com.les.backend.utils.Util;
 
 @Configuration
-public class RequestToRealocateWorkDay implements IStrategy<Request> {
+public class EditRequestRealocateWorkDay implements IStrategy<Request> {
 
 	@Autowired private RequestRepository requestRepository;
 
@@ -23,7 +23,7 @@ public class RequestToRealocateWorkDay implements IStrategy<Request> {
 	public void process(Request aEntity, INavigationCase<Request> aCase) {
 		if (aEntity != null && aEntity.getId() != 0 && !Strings.isNullOrEmpty(String.valueOf(aEntity.getId()))) {
 			requestRepository.findActiveById(aEntity.getId()).ifPresent(r -> {
-				if (aEntity.getType() == RequestType.REALOCATION_DAYS) {
+				if (aEntity.getType() == RequestType.REALOCATE_DAY) {
 					if (null == aEntity.getStartDate())
 						aCase.getResult().setError(Util.ERROR_ENTRY_DATE);
 	
@@ -47,6 +47,9 @@ public class RequestToRealocateWorkDay implements IStrategy<Request> {
 					else if (r.getDescription() != aEntity.getDescription()
 							&& (aEntity.getDescription().trim().equals("") || aEntity.getDescription().length() < 10))
 						aCase.getResult().setError(Util.INVALID_DESCRIPTION);
+					
+					if (aCase.getResult().isSuccess())
+						aCase.getResult().setSuccess(Util.UPDATE_SUCCESSFUL_REQUEST);
 				}
 				return;
 			});
