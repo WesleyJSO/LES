@@ -12,7 +12,6 @@
       <v-layout row wrap>
       <!-- Row 1 -->
       <v-flex xs6>
-
         <v-combobox
           v-model="type"
           :items="getItems"
@@ -140,6 +139,7 @@ export default {
   mounted () {
     if (this.edit) {
       this.request = this.editItem
+      this.type = this.editItem.type
     }
   },
   computed: {
@@ -178,7 +178,7 @@ export default {
     saveRequest () {
       if (!this.edit) {
         this.request = Object.assign({'status': null, 'type': this.type.id}, this.request)
-        alert(JSON.stringify(this.request, null, ' '))
+        console.log(JSON.stringify(this.request, null, ' '))
         this.$_axios.post(`${this.$_url}request`, this.request).then((response) => {
           let result = response.data
           console.log(JSON.stringify(result.resultList), null, ' ')
@@ -189,12 +189,12 @@ export default {
             if (result.success) {
             // retorno mensagem de sucesso
               this.messageColor = 'info'
+              this.clearForm()
             } else {
               // retorno mensagem de erro
               this.messageColor = 'warning'
             }
           }
-          this.clearForm()
         },
         (response) => {
           // erro na requisição do serviço
@@ -204,7 +204,6 @@ export default {
           this.messageColor = 'error'
         })
       } else {
-        alert(JSON.stringify(this.request, null, ' '))
         this.$_axios.update(`${this.$_url}request`, this.request).then((response) => {
           let result = response.data
           console.log(JSON.stringify(result.resultList), null, ' ')
@@ -215,12 +214,12 @@ export default {
             if (result.success) {
             // retorno mensagem de sucesso
               this.messageColor = 'info'
+              this.clearForm()
             } else {
               // retorno mensagem de erro
               this.messageColor = 'warning'
             }
           }
-          this.clearForm()
         },
         (response) => {
           // erro na requisição do serviço

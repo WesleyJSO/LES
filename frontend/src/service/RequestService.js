@@ -17,19 +17,23 @@ export const TITLES = {
   workDay: 'Trabalhar em - ',
   description: 'Descrição: ',
   employee: 'Colaborador - ',
-  edit: 'Editar Solicitação'
+  edit: 'Editar Solicitação',
+  managerMessage: 'Detalhe'
 
 }
 export const SUB_HEADERS = [
   { text: 'Descrição', align: 'center', value: 'description' }
 ]
+export const LABELS = {
+  managerMessage: 'Observações: '
+}
 export const DATE_FORMATS = [ {year: 'numeric', month: 'numeric', day: 'numeric'} ]
 // Using key value as number cause type attribute from backend object cames like this
-export const TYPE_NAME = [
-  { id: 1, description: 'Hora Extra' },
-  { id: 2, description: 'Banco de Hora' },
-  { id: 4, description: 'Remanejamento de Dia' }
-]
+export const TYPE_NAME = {
+  1: 'Hora Extra',
+  2: 'Banco de Hora',
+  4: 'Remanejamento de Dia'
+}
 export const PREFIXES = {
   dialogTitle: 'Solicitação de ',
   begin: 'Início: ',
@@ -44,7 +48,13 @@ export const STATUS = {
 export const BUTTONS = {
   approve: 'Aprovar',
   deny: 'Reprovar',
-  close: 'Fechar'
+  close: 'Fechar',
+  sendBack: 'Desfazer',
+  confirm: 'Confirmar'
+}
+export const STATUS_VALUE = {
+  approved: 2,
+  denyed: 3
 }
 
 export default class RequestService {
@@ -56,4 +66,6 @@ export default class RequestService {
   static get TITLES () { return TITLES }
   static get BUTTONS () { return BUTTONS }
   static get PREFIXES () { return PREFIXES }
+  static get STATUS_VALUE () { return STATUS_VALUE }
+  static get LABELS () { return LABELS }
 }
