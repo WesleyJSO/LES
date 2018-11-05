@@ -174,6 +174,17 @@ export default {
             this.appointments = result.resultList
             this.appointment = this.appointments[0]
           }
+          if (result.message) {
+            this.messages = [...result.message]
+            this.haveMessage = true
+            if (result.success) {
+            // retorno mensagem de sucesso /
+              this.messageColor = 'info'
+            } else {
+              // retorno mensagem de erro /
+              this.messageColor = 'warning'
+            }
+          }
         } catch (error) {
           console.log(error)
           this.messages = ['Erro durante execução do serviço!']
@@ -189,6 +200,17 @@ export default {
             this.appointments = result.resultList
             this.appointment = this.appointments[0]
           }
+          if (result.message) {
+            this.messages = [...result.message]
+            this.haveMessage = true
+            if (result.success) {
+            // retorno mensagem de sucesso /
+              this.messageColor = 'info'
+            } else {
+              // retorno mensagem de erro /
+              this.messageColor = 'warning'
+            }
+          }
         } catch (error) {
           console.log(error)
           this.messages = ['Erro durante execução do serviço!']
@@ -196,6 +218,7 @@ export default {
           this.messageColor = 'error'
         }
       }
+      this.callApi({id: this.appointment.id})
     },
     async callApi (appointment) {
       var response = null

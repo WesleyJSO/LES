@@ -11,9 +11,9 @@ insert into user_role values (select id from `user` where email='zeller@zeller.c
 insert into user_role values (select id from `user` where email='bruno@bruno.com', select id from role where role_name='Administrador')
 insert into user_role values (select id from `user` where email='wesley@wesley.com', select id from role where role_name='Gestor')
 
-insert into employee values(HIBERNATE_SEQUENCE.nextval, 1, getDate(), getDate(), 'Zeller', 'José', 123456789, null, null, (select id from user where email='zeller@zeller.com'))
 insert into employee values(HIBERNATE_SEQUENCE.nextval, 1, getDate(), getDate(), 'Wesley', 'José', 123456789, null, null, (select id from user where email='wesley@wesley.com'))
-insert into employee values(HIBERNATE_SEQUENCE.nextval, 1, getDate(), getDate(), 'Holanda', 'Bruno', 123456789, null, null, (select id from user where email='bruno@bruno.com'))
+insert into employee values(HIBERNATE_SEQUENCE.nextval, 1, getDate(), getDate(), 'Holanda', 'Bruno', 123456789, null, (select id from employee where last_name='Wesley'), (select id from user where email='bruno@bruno.com'))
+insert into employee values(HIBERNATE_SEQUENCE.nextval, 1, getDate(), getDate(), 'Zeller', 'José', 123456789, null, (select id from employee where last_name='Wesley'), (select id from user where email='zeller@zeller.com'))
 
 insert into BASE_HOUR_CALCULATION values(HIBERNATE_SEQUENCE.nextval, 1, getDate(), getDate(), null, null, 10000, null, 8, (select e.id from employee e inner join user u on e.user_id = u.id where u.email='bruno@bruno.com'), null)
 insert into BASE_HOUR_CALCULATION values(HIBERNATE_SEQUENCE.nextval, 1, getDate(), getDate(), null, null, 10000, null, 8, (select e.id from employee e inner join user u on e.user_id = u.id where u.email='wesley@wesley.com'), null)

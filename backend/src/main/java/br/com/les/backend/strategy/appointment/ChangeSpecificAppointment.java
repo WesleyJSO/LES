@@ -76,7 +76,7 @@ public class ChangeSpecificAppointment implements IStrategy<Appointment> {
 				int retroactiveLimitInMinutes = (retroactiveLimit.getHour() * 60) + retroactiveLimit.getMinute();
 				
 				if(timeDiference > retroactiveLimitInMinutes || timeDiference < retroactiveLimitInMinutes * - 1
-						&& aEntity.getDate().toLocalDate().equals(now.toLocalDate())) {
+						|| !aEntity.getDate().toLocalDate().equals(now.toLocalDate())) {
 					//save a new AppointmentRequest and send a message back to the user
 					if(result.isSuccess()) {
 						AppointmentRequest appointmentRequest = new AppointmentRequest();
@@ -85,7 +85,9 @@ public class ChangeSpecificAppointment implements IStrategy<Appointment> {
 						appointmentRequest.setReplacement(dateToUpdate);
 						appointmentRequest.setIsAproved(false);
 						appointmentRequestRepository.save(appointmentRequest);
-						result.setError(Util.UPDATE_APPOINTMENT_REQUESTED);
+						aCase.suspendExecution();
+						aCase.getResult().setSuccess(Util.UPDATE_APPOINTMENT_REQUESTED);
+						return;
 					}
 				}
 			} else {
