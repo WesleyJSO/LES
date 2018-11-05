@@ -198,8 +198,7 @@
                     <v-card-actions>
                       <v-btn color="primary" 
                         flat
-                        @click.stop="processRequest()",
-                        processRequest()">{{getButtons.confirm}}</v-btn>
+                        @click.stop="processRequest()">{{getButtons.confirm}}</v-btn>
                     </v-card-actions>
                   </v-card>
                 </v-dialog>

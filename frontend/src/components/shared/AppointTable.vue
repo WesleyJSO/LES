@@ -131,9 +131,6 @@ export default {
     editable: true
   },
   data: () => ({
-    messages: [],
-    haveMessage: false,
-    messageColor: '',
     empty: '--:--',
     headers: [
       { text: 'Data', align: 'center', sortable: false },
@@ -147,8 +144,7 @@ export default {
     ],
     tableItemDialogs: [],
     dialogs: [],
-    appointment: {},
-    employee: {id: 1}
+    appointment: {}
   }),
   components: {
     AppointDialog
@@ -160,9 +156,6 @@ export default {
       this.createDialogs()
       this.formatDatesAndTimes()
     }
-  },
-  created () {
-    this.tableItemDialogs = [this.dialogs]
   },
   methods: {
     formatDatesAndTimes () {

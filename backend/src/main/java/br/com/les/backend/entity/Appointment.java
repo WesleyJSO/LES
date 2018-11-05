@@ -176,7 +176,7 @@ public class Appointment extends DomainEntity {
 		this.appointmentRequestList = appointmentRequestList;
 	}
 
-	@EmployeeQuery(name="t.employee.id")
+	@EmployeeQuery(name="t.employee.user.id")
 	public Employee getEmployee() {
 		return employee;
 	}

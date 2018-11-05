@@ -44,7 +44,7 @@
       </v-toolbar>
       <v-layout>
         <v-flex center >
-          <AppointTable :editable="false" :appointments="appointments" @register="takeAppointment($event)"></AppointTable>
+          <AppointTable :editable="editable" :appointments="appointments" @register="takeAppointment($event)"></AppointTable>
           <v-card class="elevation-10" >
             <v-layout class="text-xs-center">
               <v-flex xs12 sm9 md6 lg6 xl4>
@@ -73,7 +73,8 @@ import AppointTable from '@/components/shared/AppointTable.vue'
 
 export default {
   props: [
-    'employeeId'
+    'employeeId',
+    'editable'
   ],
   data: () => ({
     modal: false,
@@ -81,6 +82,7 @@ export default {
       monthAndYear: null
     },
     monthAndYear: '',
+    monthYear: '',
     messages: [],
     haveMessage: false,
     messageColor: '',

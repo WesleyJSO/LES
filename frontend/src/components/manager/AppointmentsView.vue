@@ -19,13 +19,14 @@
 
       </v-card>
       <br>
-      <MonthAppointments :employeeId="employeeId"></MonthAppointments>
+      <MonthAppointments :editable="false" :employeeId="employeeId"></MonthAppointments>
     </v-form>
   </div>
 </template>
 
 <script>
 import MonthAppointments from '@/components/shared/MonthAppointments.vue'
+import Authenticator from '../../service/Authenticator'
 
 export default {
   data: () => ({
@@ -38,7 +39,7 @@ export default {
     MonthAppointments
   },
   beforeMount () {
-    this.callApi({manager: {id: 7}})
+    this.callApi({manager: {id: Authenticator.GET_AUTHENTICATED().id}})
   },
   watch: {
     employees () {
