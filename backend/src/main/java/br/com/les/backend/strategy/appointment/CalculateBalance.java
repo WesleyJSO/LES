@@ -13,14 +13,10 @@ import br.com.les.backend.service.SecurityService;
 @Configuration
 public class CalculateBalance implements IStrategy<Appointment> {
 
-
 	@Override
 	public void process(Appointment aEntity, INavigationCase<Appointment> aCase) {
 
-		if (aEntity != null && aEntity.getMorningEntrance() != null && aEntity.getMorningOut() != null 
-							&& aEntity.getAfternoonEntrance() != null && aEntity.getAfternoonOut() != null 
-							&& aEntity.getNightEntrance() != null && aEntity.getNightOut() != null
-							&& aEntity.getParticularExit() != null && aEntity.getParticularExitReturn() != null) {
+		if (aEntity != null) {
 
 			Employee employee = (Employee) SecurityService.getAuthenticatedUser();
 			int employeeWorkload = employee.getBaseHourCalculation().getWorkload();
@@ -30,16 +26,16 @@ public class CalculateBalance implements IStrategy<Appointment> {
 			
 			aEntity.setCalculated(false);
 			
-			if ( aEntity.getMorningOut() != null ) {
+			if ( aEntity.getMorningOut() != null && aEntity.getMorningEntrance() != null) {
 				balance = balance.plusNanos( (aEntity.getMorningOut().minusNanos(aEntity.getMorningEntrance().toNanoOfDay())).toNanoOfDay() );			
 			}
-			if ( aEntity.getAfternoonOut() != null ) {
+			if ( aEntity.getAfternoonOut() != null && aEntity.getAfternoonEntrance() != null) {
 				balance = balance.plusNanos( (aEntity.getAfternoonOut().minusNanos(aEntity.getAfternoonEntrance().toNanoOfDay())).toNanoOfDay() );			
 			}
-			if ( aEntity.getNightOut() != null ) {
+			if ( aEntity.getNightOut() != null && aEntity.getNightEntrance() != null) {
 				balance = balance.plusNanos( (aEntity.getNightOut().minusNanos(aEntity.getNightEntrance().toNanoOfDay())).toNanoOfDay() );
 			}
-			if ( aEntity.getParticularExitReturn() != null ) {
+			if ( aEntity.getParticularExitReturn() != null && aEntity.getParticularExit() != null) {
 				balance = balance.minusNanos( (aEntity.getParticularExitReturn().minusNanos(aEntity.getParticularExit().toNanoOfDay())).toNanoOfDay() );			
 			}
 			
