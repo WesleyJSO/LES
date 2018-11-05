@@ -15,9 +15,10 @@ public class NameValidator implements IStrategy<Employee> {
 	public void process(Employee aEntity, INavigationCase<Employee> aCase) {
 			
 		if (aEntity != null) {
-			if(!Strings.isNullOrEmpty(aEntity.getName()) && !Strings.isNullOrEmpty(aEntity.getLastName())) {
-				aCase.getResult().setError("Nome e sobrenome não foram preenchidos!");
+			if(Strings.isNullOrEmpty(aEntity.getName()) || Strings.isNullOrEmpty(aEntity.getLastName())) {
+				aCase.getResult().setError("Nome e sobrenome devem ser preenchidos!");
 			}
+			return;
 		}
 		aCase.suspendExecution();
 		aCase.getResult().setError("Colaborador inexistente!");

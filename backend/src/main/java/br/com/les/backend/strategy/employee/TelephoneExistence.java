@@ -18,7 +18,7 @@ public class TelephoneExistence implements IStrategy<Employee> {
 
 		if (aEntity != null && aEntity.getTelephoneList() != null) {
 		
-			aEntity.getTelephoneList().forEach(e -> e.setUser(aEntity));
+			aEntity.getTelephoneList().forEach(e -> e.setEmployee(aEntity));
 			
 			List<Telephone> telephoneList = aEntity.getTelephoneList().stream()
 					.filter(t -> t.getNumber().length() == 8 || t.getNumber().length() == 9)

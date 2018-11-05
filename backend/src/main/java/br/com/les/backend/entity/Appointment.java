@@ -14,10 +14,13 @@ import javax.persistence.OneToMany;
 
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Component
 @Entity
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Appointment extends DomainEntity {
 	
 	private LocalDateTime date;
@@ -37,7 +40,6 @@ public class Appointment extends DomainEntity {
 	private Double previousBalanceInserted;
 	private Boolean calculated;
 	
-	@JsonIgnore
 	@OneToMany(mappedBy="appointment", cascade=CascadeType.ALL)
 	private List<AppointmentRequest> appointmentRequestList;
 	

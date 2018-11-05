@@ -56,8 +56,8 @@ public class ApplicationFacade<T extends DomainEntity> implements IApplicationFa
 		
 		navigator.run(aEntity, aCase);
 		if(aCase.getResult().isSuccess() && !aCase.isSuspendExecution()) {
-			List<T> updated = genericDAO.find(aEntity);
-			aCase.getResult().setResultList(updated);
+			List<T> found = genericDAO.find(aEntity);
+			aCase.getResult().setResultList(found);
 		}
 		return aCase.getResult();
 	}
