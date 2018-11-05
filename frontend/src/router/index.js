@@ -15,7 +15,7 @@ import ManageHours from '@/components/admin/ManageHours'
 import Timeline from '@/components/user/Timeline'
 import Appoint from '@/components/user/Appoint'
 import RegisterSystemParameters from '@/components/admin/RegisterSystemParameters'
-import AppointmentsView from '@/components/manager/AppointmentsView'
+// import AppointmentsView from '@/components/manager/AppointmentsView'
 
 Vue.use(Router)
 
@@ -115,12 +115,12 @@ export default new Router({
       component: RegisterSystemParameters,
       props: true,
       meta: { requiresAuth: true, adminAuth: true, managerAuth: true }
-    },
-    {
-      path: '/VisualizarApontamentos',
-      name: 'AppointmentsView',
-      component: AppointmentsView,
-      meta: { requiresAuth: true, employeeAuth: true, adminAuth: true, managerAuth: true }
-    }
+    }// ,
+    // {
+    //   path: '/VisualizarApontamentos',
+    //   name: 'AppointmentsView',
+    //   component: AppointmentsView,
+    //   meta: { requiresAuth: true, employeeAuth: true, adminAuth: true, managerAuth: true }
+    // }
   ]
 })

@@ -25,4 +25,19 @@ export default class BaseHourCalculationValidators {
       return ['Data de expiração da regra atual deve ser definida!']
     }
   }
+  a (a) {
+    if (!a) {
+      return ['Informe uma porcentagem válida!']
+    }
+  }
+  b (b) {
+    if (!b) {
+      return ['Informe uma porcentagem válida!']
+    }
+  }
+  c (c) {
+    if (!c) {
+      return ['Informe uma porcentagem válida!']
+    }
+  }
 }

@@ -182,6 +182,47 @@
       </v-layout>
 
       <!-- Row 5 -->
+      <v-layout>
+        <v-flex xs12 sm9 md6 lg6 xl4>
+
+          <v-text-field
+            v-model="employee.baseHourCalculation.overtimePercentage"
+            label="Porcentagem hora extra"
+            prepend-icon="percent"
+            type="number"
+            clearable
+            required
+            :rules="$v_baseHour.a(employee.baseHourCalculation.overtimePercentage)">
+          ></v-text-field>
+        </v-flex>
+
+        <v-flex xs12 sm9 md6 lg6 xl4>
+          <v-text-field
+            v-model="employee.baseHourCalculation.nightOvertimePercentage"
+            label="Porcentagem hora extra noturna"
+            prepend-icon="percent"
+            type="number"
+            clearable
+            required
+            :rules="$v_baseHour.b(employee.baseHourCalculation.nightOvertimePercentage)">
+          ></v-text-field>
+        </v-flex>
+
+        <v-flex xs12 sm9 md6 lg6 xl4>
+          <v-text-field
+            v-model="employee.baseHourCalculation.weekendOvertimePercentage"
+            label="Porcentagem hora extra fim de semana"
+            prepend-icon="percent"
+            type="number"
+            clearable
+            required
+            :rules="$v_baseHour.c(employee.baseHourCalculation.weekendOvertimePercentage)">
+          ></v-text-field>
+
+        </v-flex>
+      </v-layout>
+
+      <!-- Row 6 -->
       <v-layout xs12 sm9 md6 lg6 xl4>
         <v-flex>
           <v-text-field id="password"
@@ -220,6 +261,7 @@
           </v-text-field>
         </v-flex>
       </v-layout>
+
       <div v-if="!edit">
         <v-btn
           id="submit"
@@ -251,7 +293,11 @@ export default {
     employee: {
       joiningDate: null,
       manager: {},
-      baseHourCalculation: {hourType: {}},
+      baseHourCalculation: {
+        hourType: {},
+        overtimePercentage: 0,
+        nightOvertimePercentage: 0,
+        weekendOvertimePercentage: 0},
       user: {roleList: [], password: ''},
       telephoneList: [ {type: '', number: ''}, {type: '', number: ''}, {type: '', number: ''} ]
     },
@@ -271,6 +317,12 @@ export default {
       for (let role of response.data.resultList) {
         role.active = false
       }
+      let parameter = await this.$_axios.patch(`${this.$_url}parameter`, {})
+      parameter = parameter.data.resultList[0]
+      console.log(JSON.stringify(parameter))
+      this.employee.baseHourCalculation.overtimePercentage = parameter.overtimePercentage
+      this.employee.baseHourCalculation.nightOvertimePercentage = parameter.nightOvertimePercentage
+      this.employee.baseHourCalculation.weekendOvertimePercentage = parameter.weekendOvertimePercentage
       this.roleList = response.data.resultList
       response = await this.$_axios.patch(`${this.$_url}hourtype`, {})
       this.hourTypeList = response.data.resultList

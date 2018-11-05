@@ -26,8 +26,8 @@ public class InferiorLimits implements IStrategy<Parameter> {
 					|| aEntity.getNightOvertimePercentage() < 20) {
 				aCase.getResult().setError("O adicional noturno deve ser no minimo 20%");
 			}
-			if (Strings.isNullOrEmpty(String.valueOf(aEntity.getWeekEndOvertimePercentage())) 
-					|| aEntity.getWeekEndOvertimePercentage() < 100) {
+			if (Strings.isNullOrEmpty(String.valueOf(aEntity.getWeekendOvertimePercentage())) 
+					|| aEntity.getWeekendOvertimePercentage() < 100) {
 				aCase.getResult().setError("O adicional de domingos e feriados deve ser no minimo 100%");
 			}
 			if (Strings.isNullOrEmpty(String.valueOf(aEntity.getRetroactiveAppointmentLimitTime())) 
