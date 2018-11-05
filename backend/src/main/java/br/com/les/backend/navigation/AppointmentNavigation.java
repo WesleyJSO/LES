@@ -9,11 +9,13 @@ import br.com.les.backend.navigator.Navigation;
 import br.com.les.backend.navigator.NavigationBuilder;
 import br.com.les.backend.strategy.appointment.CalculateBalance;
 import br.com.les.backend.strategy.appointment.ChangeSpecificAppointment;
+import br.com.les.backend.strategy.appointment.LoggedUser;
 
 @Configuration
 public class AppointmentNavigation {
 	@Autowired private ChangeSpecificAppointment changeSpecificAppointment;
 	@Autowired private CalculateBalance calculateBalance;
+	@Autowired private LoggedUser loggedUser;
 	
 	@Bean("FIND_APPOINTMENT")
 	public Navigation<Appointment> findAppointmentValidator() {
@@ -23,6 +25,7 @@ public class AppointmentNavigation {
 	@Bean("SAVE_APPOINTMENT")
 	public Navigation<Appointment> saveAppointmentValidator() {
 		return new NavigationBuilder<Appointment>()
+				.next(loggedUser)
 				.next(calculateBalance)
 				.build();
 	}
