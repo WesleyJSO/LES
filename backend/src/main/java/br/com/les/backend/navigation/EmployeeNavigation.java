@@ -61,7 +61,6 @@ public class EmployeeNavigation {
 	@Bean("FIND_EMPLOYEE")
 	public Navigation<Employee> findEmployeeValidator() {
 		return new NavigationBuilder<Employee>()
-				.next(emailFormat)
 				.build();
 	}
 	
