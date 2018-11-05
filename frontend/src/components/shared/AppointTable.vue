@@ -12,7 +12,7 @@
             <template slot="items" slot-scope="props">
               <tr @click="props.expanded = !props.expanded">
                 <td class="text-xs-center" >{{ props.item.date }}</td>
-                <td class="text-xs-center" >
+                <td class="text-xs-center" v-if="editable">
                   <v-dialog v-model="dialogs[props.index * 8 + 0].value" max-width="300px" max-height="300px">
                     <a slot="activator">{{ props.item.morningEntrance || empty }}</a>
                     <AppointDialog :value="props.item.morningEntrance || empty"
@@ -20,7 +20,8 @@
                       type="Entrada Manhã" @editAppoint="editAppointment($event, props.index * 8 + 0)"></AppointDialog>
                   </v-dialog>
                 </td>
-                <td class="text-xs-center" >
+                <td class="text-xs-center" v-else>{{ props.item.morningEntrance || empty }}
+                <td class="text-xs-center" v-if="editable">
                   <v-dialog v-model="dialogs[props.index * 8 + 1].value" max-width="300px" max-height="300px">
                     <a slot="activator">{{ props.item.morningOut || empty }}</a>
                     <AppointDialog :value="props.item.morningOut || empty"
@@ -28,7 +29,8 @@
                       type="Saída Manhã" @editAppoint="editAppointment($event, props.index * 8 + 1)"></AppointDialog>
                   </v-dialog>
                 </td>
-                <td class="text-xs-center" >
+                <td class="text-xs-center" v-else>{{ props.item.morningOut || empty }}
+                <td class="text-xs-center" v-if="editable">
                   <v-dialog v-model="dialogs[props.index * 8 + 2].value" max-width="300px" max-height="300px">
                     <a slot="activator">{{ props.item.afternoonEntrance || empty }}</a>
                     <AppointDialog :value="props.item.afternoonEntrance || empty"
@@ -36,7 +38,8 @@
                       type="Entrada Tarde" @editAppoint="editAppointment($event, props.index * 8 + 2)"></AppointDialog>
                   </v-dialog>
                 </td>
-                <td class="text-xs-center" >
+                <td class="text-xs-center" v-else>{{ props.item.afternoonEntrance || empty }}
+                <td class="text-xs-center" v-if="editable">
                   <v-dialog v-model="dialogs[props.index * 8 + 3].value" max-width="300px" max-height="300px">
                     <a slot="activator">{{ props.item.afternoonOut || empty }}</a>
                     <AppointDialog :value="props.item.afternoonOut || empty"
@@ -44,7 +47,8 @@
                       type="Saída Tarde" @editAppoint="editAppointment($event, props.index * 8 + 3)"></AppointDialog>
                   </v-dialog>
                 </td>
-                <td class="text-xs-center" >
+                <td class="text-xs-center" v-else>{{ props.item.afternoonOut || empty }}
+                <td class="text-xs-center" v-if="editable">
                   <v-dialog v-model="dialogs[props.index * 8 + 4].value" max-width="300px" max-height="300px">
                     <a slot="activator">{{ props.item.nightEntrance || empty }}</a>
                     <AppointDialog :value="props.item.nightEntrance || empty"
@@ -52,7 +56,8 @@
                       type="Entrada Noite" @editAppoint="editAppointment($event, props.index * 8 + 4)"></AppointDialog>
                   </v-dialog>
                 </td>
-                <td class="text-xs-center" >
+                <td class="text-xs-center" v-else>{{ props.item.nightEntrance || empty }}
+                <td class="text-xs-center" v-if="editable">
                   <v-dialog v-model="dialogs[props.index * 8 + 5].value" max-width="300px" max-height="300px">
                     <a slot="activator">{{ props.item.nightOut || empty }}</a>
                     <AppointDialog :value="props.item.nightOut || empty"
@@ -60,6 +65,7 @@
                       type="Saída Noite" @editAppoint="editAppointment($event, props.index * 8 + 5)"></AppointDialog>
                   </v-dialog>
                 </td>
+                <td class="text-xs-center" v-else>{{ props.item.nightOut || empty }}
                 <td class="text-xs-center" >{{ props.item.particularExit ? 'SIM' : 'NÃO' }}
                 </td>
               </tr>
@@ -71,22 +77,24 @@
                 <v-layout class="text-xs-center">
                   <v-flex xs12 sm9 md6 lg6 xl4>
                     <v-card-text>Saída Particular: 
-                    <v-dialog v-model="dialogs[props.index * 8 + 6].value" max-width="300px" max-height="300px">
+                    <v-dialog v-if="editable" v-model="dialogs[props.index * 8 + 6].value" max-width="300px" max-height="300px">
                       <a slot="activator">{{props.item.particularExit || empty}}</a>
                       <AppointDialog :value="props.item.particularExit || empty"
                         :appointment="props.item"
                         type="Saída Partícular" @editAppoint="editAppointment($event, props.index * 8 + 6)"></AppointDialog>
                     </v-dialog>
+                    <span class="text-xs-center" v-else>{{props.item.particularExit || empty}}</span>
                   </v-card-text>
                   </v-flex>
                   <v-flex xs12 sm9 md6 lg6 xl4>
                     <v-card-text>Retorno: 
-                      <v-dialog v-model="dialogs[props.index * 8 + 7].value" max-width="300px" max-height="300px">
+                      <v-dialog v-if="editable" v-model="dialogs[props.index * 8 + 7].value" max-width="300px" max-height="300px">
                         <a slot="activator">{{props.item.particularExitReturn || empty}}</a>
                         <AppointDialog :value="props.item.particularExitReturn || empty"
                           :appointment="props.item"
                           type="Retorno" @editAppoint="editAppointment($event, props.index * 8 + 7)"></AppointDialog>
                       </v-dialog>
+                      <span class="text-xs-center" v-else>{{props.item.particularExit || empty}}</span>
                     </v-card-text>
                   </v-flex>
                   <v-flex xs12 sm9 md6 lg6 xl4>
@@ -119,7 +127,8 @@ import TimeHelper from '../../helpers/TimeHelper'
 
 export default {
   props: {
-    appointments: Array
+    appointments: Array,
+    editable: true
   },
   data: () => ({
     messages: [],

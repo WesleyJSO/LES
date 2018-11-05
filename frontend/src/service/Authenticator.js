@@ -9,4 +9,12 @@ export default class Authenticator {
       return false
     }
   }
+
+  static GET_AUTHENTICATED () {
+    let token = sessionStorage.getItem('token')
+    if (token) {
+      let user = JSON.parse(sessionStorage.getItem('principal'))
+      return user
+    }
+  }
 }

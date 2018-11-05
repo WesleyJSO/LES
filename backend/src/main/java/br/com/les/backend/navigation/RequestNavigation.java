@@ -7,30 +7,40 @@ import org.springframework.context.annotation.Configuration;
 import br.com.les.backend.entity.Request;
 import br.com.les.backend.navigator.Navigation;
 import br.com.les.backend.navigator.NavigationBuilder;
-import br.com.les.backend.strategy.request.RequestToChangeAppointment;
-import br.com.les.backend.strategy.request.RequestToCompTime;
-import br.com.les.backend.strategy.request.RequestToRealocateWorkDay;
+import br.com.les.backend.strategy.request.ApproveRequestCompTime;
+import br.com.les.backend.strategy.request.ApproveRequestRealocateDay;
+import br.com.les.backend.strategy.request.ApproveRequestWorkOvertime;
+import br.com.les.backend.strategy.request.EditRequesChangeAppointment;
+import br.com.les.backend.strategy.request.EditRequestCompTime;
+import br.com.les.backend.strategy.request.EditRequestRealocateWorkDay;
 import br.com.les.backend.strategy.request.RequestToSaveAppointment;
-import br.com.les.backend.strategy.request.RequestToSaveCompTime;
-import br.com.les.backend.strategy.request.RequestToSaveRealocateDay;
-import br.com.les.backend.strategy.request.RequestToSaveWorkOvertime;
-import br.com.les.backend.strategy.request.RequestToWorkOvertime;
+import br.com.les.backend.strategy.request.RequestCompTime;
+import br.com.les.backend.strategy.request.RequestRealocateDay;
+import br.com.les.backend.strategy.request.RequestWorkOvertime;
+import br.com.les.backend.strategy.request.EditRequestWorkOvertime;
+import br.com.les.backend.strategy.request.FindRequest;
 
 @Configuration
 public class RequestNavigation {
 
-	@Autowired private RequestToRealocateWorkDay requestToRealocateWorkDay; 
-	@Autowired private RequestToCompTime requestToCompTime;
-	@Autowired private RequestToWorkOvertime requestToWorkOvertime;
-	@Autowired private RequestToChangeAppointment requestToChangeAppointment;
+	@Autowired private EditRequestRealocateWorkDay requestToRealocateWorkDay; 
+	@Autowired private EditRequestCompTime requestToCompTime;
+	@Autowired private EditRequestWorkOvertime requestToWorkOvertime;
+	@Autowired private EditRequesChangeAppointment requestToChangeAppointment;
 	@Autowired private RequestToSaveAppointment requestToSaveAppointment;
-	@Autowired private RequestToSaveWorkOvertime requestToSaveWorkOvertime;
-	@Autowired private RequestToSaveCompTime requestoToSaveCompTime;
-	@Autowired private RequestToSaveRealocateDay requestToSaveRealocateDay;
+	@Autowired private RequestWorkOvertime requestToSaveWorkOvertime;
+	@Autowired private RequestCompTime requestoToSaveCompTime;
+	@Autowired private RequestRealocateDay requestToSaveRealocateDay;
+	@Autowired private ApproveRequestCompTime approveRequestComptime;
+	@Autowired private ApproveRequestRealocateDay approveRequestRealocateDay;
+	@Autowired private ApproveRequestWorkOvertime approveRequestWorkOvertime;
+	@Autowired private FindRequest findRequest;
 	
 	@Bean("FIND_REQUEST")
 	public Navigation<Request> findRequestValidator() {
-		return new NavigationBuilder<Request>().build();
+		return new NavigationBuilder<Request>()
+				.next(findRequest)
+				.build();
 	}
 
 	@Bean("SAVE_REQUEST")
@@ -50,6 +60,9 @@ public class RequestNavigation {
 				.next(requestToCompTime)
 				.next(requestToRealocateWorkDay)
 				.next(requestToWorkOvertime)
+				.next(approveRequestComptime)
+				.next(approveRequestRealocateDay)
+				.next(approveRequestWorkOvertime)
 				.build();
 	}
 

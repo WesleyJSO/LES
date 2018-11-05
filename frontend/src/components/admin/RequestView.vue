@@ -61,7 +61,7 @@
               </v-card>
             </v-dialog>
             </td>
-            <td class="text-xs-center" v-if="hasRole('ROLE_ADMIN') || hasRole('ROLE_MANAGER')">
+            <td class="text-xs-center">
                 <v-dialog v-model="dialogRequests[props.item.id]" 
                           max-width="600px" 
                           max-height="300px"
@@ -70,7 +70,7 @@
                     slot="activator"
                     :key="props.item.id"
                     light>
-                    edit
+                    {{getIcon}}
                 </v-icon>
 
                 <v-card>
@@ -157,20 +157,51 @@
 
                     <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn
+                    <v-btn v-if="hasRole('ROLE_ADMIN') || hasRole('ROLE_MANAGER')"
+                        color="green"
+                        flat
+                        @click.stop="setDescription(props.item)">
+                        {{ getButtons.approve }}
+                    </v-btn>
+                    <v-btn v-if="hasRole('ROLE_ADMIN') || hasRole('ROLE_MANAGER')"
                         color="red"
                         flat
                         @click.stop="$set(dialogRequests, props.item.id, false)">
                         {{ getButtons.deny }}
                     </v-btn>
-                    <v-btn
+                    <v-btn v-if="!hasRole('ROLE_ADMIN') || !hasRole('ROLE_MANAGER')"
                         color="green"
                         flat
-                        @click="$set(dialogRequests, props.item.id, false), approveRequest(props.item, true)">
-                        {{ getButtons.approve }}
+                        @click.stop="$set(dialogRequests, props.item.id, false)">
+                        {{ getButtons.close }}
                     </v-btn>
                     </v-card-actions>
                 </v-card>
+                </v-dialog>
+                <v-dialog v-model="messageDialog" max-width="500px">
+                  <v-card>
+                    <v-card-title
+                      class="headline grey lighten-2"
+                      primary-title>
+                      <span>{{getTitles.managerMessage}}</span>
+                      <v-spacer></v-spacer>
+                    </v-card-title>
+                    <v-card-text>
+                        <v-textarea v-model="managerMessage"
+                          box
+                          outline
+                          :rules="$v_request.description(request.description)"
+                          name="input-7-4"
+                          :label="getLabels.managerMessage">
+                        </v-textarea>
+                    </v-card-text>
+                    <v-card-actions>
+                      <v-btn color="primary" 
+                        flat
+                        @click.stop="processRequest()",
+                        processRequest()">{{getButtons.confirm}}</v-btn>
+                    </v-card-actions>
+                  </v-card>
                 </v-dialog>
             </td>
           </tr>
@@ -189,7 +220,7 @@
             <td>{{ props.item.employee.name }} {{ props.item.employee.lastName }}</td>
             <td class="text-xs-left">{{ getType(props.item.type) }}</td>
             <td class="text-xs-left" font-color="green">{{ getStatus(props.item.status) }}</td>
-            <td class="text-xs-center" v-if="">
+            <td class="text-xs-center">
                 <v-dialog v-model="dialogApproved[props.item.id]"
                           max-width="600px"
                           max-height="300px"
@@ -198,7 +229,7 @@
                     slot="activator"
                     :key="props.item.id"
                     light>
-                    edit
+                    {{getIcon}}
                 </v-icon>
 
                 <v-card>
@@ -288,7 +319,7 @@
                     <v-btn
                         color="green"
                         flat
-                        @click.stop="$set(dialogApproved, props.item.id, false)">
+                        @click.stop="$set(dialogRequests, props.item.id, false)">
                         {{ getButtons.close }}
                     </v-btn>
                     </v-card-actions>
@@ -315,6 +346,8 @@ export default {
       dialogApproved: {},
       dialogRequests: {},
       dialogEdit: false,
+      messageDialog: false,
+      managerMessage: '',
       messages: [],
       haveMessage: false,
       searchFilter: '',
@@ -326,7 +359,7 @@ export default {
       edit: false
     }
   },
-  created () {
+  mounted () {
     this.$_axios.patch(`${this.$_url}request`, this.request).then((response) => {
       let resultado = response.data
       // alert(JSON.stringify(resultado, null, ' '))
@@ -365,6 +398,9 @@ export default {
     getTitles () {
       return RequestService.TITLES
     },
+    getLabels () {
+      return RequestService.LABELS
+    },
     getPrefixes () {
       return RequestService.PREFIXES
     },
@@ -379,16 +415,42 @@ export default {
     },
     getEditedItem () {
       return this.request
+    },
+    getIcon () {
+      return this.hasRole('ROLE_ADMIN') || this.hasRole('ROLE_MANAGER') ? 'edit' : 'remove_red_eye'
+    },
+    getStatusValue () {
+      return RequestService.STATUS_VALUE
     }
   },
   methods: {
-    approveRequest (item, val) {
-      if (val) {
-        item.status = 'Aprovado'
-      } else {
-        item.status = 'Reprovado'
+    async processRequest () {
+      try {
+        this.request = Object.assign({'observation': this.managerMessage}, this.request)
+        this.request.status = this.getStatusValue.approved
+        let result = await this.$_axios.put(`${this.$_url}request`, this.request).data
+        if (result.message) {
+          this.messages = [...result.message]
+          this.haveMessage = true
+          if (result.success) {
+            this.messageColor = 'info'
+          } else {
+            this.messageColor = 'warning'
+          }
+        }
+      } catch (err) {
+        console.log(JSON.stringify(err))
+        this.messages = ['Erro durante execução do serviço!']
+        this.haveMessage = true
+        this.messageColor = 'error'
       }
-      this.dialog = false
+    },
+    setDescription (item) {
+      alert(JSON.stringify(item, null, ''))
+      this.request = Object.assign({}, item)
+      this.messageDialog = true
+    },
+    sendBack () {
     },
     getType (item) {
       return RequestService.TYPE_NAME[item]

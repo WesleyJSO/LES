@@ -16,6 +16,8 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+import br.com.les.backend.annotation.EmployeeQuery;
 /**
  * @url https://www.baeldung.com/jackson-bidirectional-relationships-and-infinite-recursion
  * @annotation @JsonIdentityInfo
@@ -88,6 +90,7 @@ public class Employee extends DomainEntity {
 		this.pis = pis;
 	}
 
+	@EmployeeQuery(name="t.manager.id")
 	public Employee getManager() {
 		return manager;
 	}

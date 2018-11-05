@@ -16,29 +16,30 @@ import br.com.les.backend.utils.RequestType;
 import br.com.les.backend.utils.Util;
 
 @Configuration
-public class RequestToSaveRealocateDay implements IStrategy<Request> {
+public class RequestRealocateDay implements IStrategy<Request> {
 
 	@Override
 	public void process(Request aEntity, INavigationCase<Request> aCase) {
 		if (aEntity != null) {
-			aEntity.setEmployee( (Employee) SecurityService.getAuthenticatedUser());
-			if (aEntity.getType() == RequestType.REALOCATION_DAYS) {
-				if( null == aEntity.getStartDate() ) 
+			if (aEntity.getType() == RequestType.REALOCATE_DAY) {
+				if( null == aEntity.getStartDate() ) {
 					aCase.getResult().setError(Util.ERROR_ENTRY_DATE);
-				
-				if( aEntity.getStartDate().compareTo(LocalDate.now()) <= 0) 
+				} else if( aEntity.getStartDate().compareTo(LocalDate.now()) <= 0) { 
 					aCase.getResult().setError(Util.INVALID_ENTRY_DATE);
-				
-				if( aEntity.getStartDate().compareTo(aEntity.getEndDate()) <= 0 )
+				}
+				if ( null == aEntity.getEndDate()) {
+					aCase.getResult().setError(Util.ERROR_END_DATE);
+				} else if( aEntity.getEndDate().compareTo(aEntity.getStartDate()) <= 0 ) {
 					aCase.getResult().setError(Util.INVALID_END_DATE);
+				}
 
-				if( aEntity.getStartDate().compareTo(aEntity.getEndDate()) <= 0 )
-					aCase.getResult().setError(Util.INVALID_END_DATE);
-				
 				if(Strings.isNullOrEmpty(aEntity.getDescription()))
 					aCase.getResult().setError(Util.INVALID_DESCRIPTION);
-				
-				aEntity.setStatus(RequestStatus.SENT.getValue());
+				if (aCase.getResult().isSuccess()) {
+					aEntity.setStatus(RequestStatus.SENT.getValue());
+					aEntity.setEmployee( (Employee) SecurityService.getAuthenticatedUser());
+					aCase.getResult().setSuccess(Util.SAVE_SUCCESSFUL_REQUEST);
+				}
 			}
 			return;
 		}

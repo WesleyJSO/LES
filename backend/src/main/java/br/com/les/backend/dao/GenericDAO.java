@@ -27,6 +27,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import br.com.les.backend.annotation.DateQuery;
+import br.com.les.backend.annotation.EmployeeQuery;
 import br.com.les.backend.annotation.ListQuery;
 import br.com.les.backend.annotation.Query;
 import br.com.les.backend.annotation.StringQuery;
@@ -235,6 +236,12 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 				List<Object> aList =  (List<Object>) method.invoke(clazz);
 				for (Object object : aList) {
 					sql += l.multipleSelector() + l.name() + l.comparator() + object.toString() + "'";
+				}
+			} else if(method.getAnnotation(EmployeeQuery.class) != null) {
+				EmployeeQuery d = method.getAnnotation(EmployeeQuery.class);
+				DomainEntity de = (DomainEntity) method.invoke(clazz);
+				if (de != null) {
+					sql += d.multipleSelector() + d.name() + d.comparator() + de.getId() ;
 				}
 			}
 		}

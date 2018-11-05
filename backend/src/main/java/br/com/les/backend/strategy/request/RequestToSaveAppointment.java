@@ -21,7 +21,6 @@ public class RequestToSaveAppointment implements IStrategy<Request> {
 	@Override
 	public void process(Request aEntity, INavigationCase<Request> aCase) {
 		if (aEntity != null) {
-			aEntity.setEmployee( (Employee) SecurityService.getAuthenticatedUser());
 			if (aEntity.getType() == RequestType.CHANGE_APPOINTMENT) {
 				if (Strings.isNullOrEmpty(String.valueOf(aEntity.getStartDate())))
 					aCase.getResult().setError(Util.ERROR_ENTRY_DATE);
@@ -32,7 +31,11 @@ public class RequestToSaveAppointment implements IStrategy<Request> {
 				if (Strings.isNullOrEmpty(aEntity.getDescription()))
 					aCase.getResult().setError(Util.INVALID_DESCRIPTION);
 
-				aEntity.setStatus(RequestStatus.SENT.getValue());
+				if (aCase.getResult().isSuccess()) {
+					aEntity.setStatus(RequestStatus.SENT.getValue());
+					aEntity.setEmployee( (Employee) SecurityService.getAuthenticatedUser());
+					aCase.getResult().setSuccess(Util.UPDATE_SUCCESSFUL_REQUEST);
+				}
 			}
 			return;
 		}

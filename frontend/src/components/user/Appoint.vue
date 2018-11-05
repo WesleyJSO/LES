@@ -16,7 +16,7 @@
 			</v-toolbar>
       <v-layout>
         <v-flex center >
-          <AppointTable :appointments="appointments" @register="takeAppointment($event)"></AppointTable>
+          <AppointTable :editable="true" :appointments="appointments" @register="takeAppointment($event)"></AppointTable>
           <v-flex class="text-xs-center">
             <v-card class="elevation-10">       
 							<v-flex>

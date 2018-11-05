@@ -14,6 +14,10 @@ import org.springframework.stereotype.Component;
 @SuppressWarnings("serial")
 public class Role extends DomainEntity implements GrantedAuthority{
 	
+	public static final String ROLE_ADMIN = "ROLE_ADMIN";
+	public static final String ROLE_EMPLOYEE = "ROLE_EMPLOYEE";
+	public static final String ROLE_MANAGER = "ROLE_MANAGER";
+	
 	private String roleName;
 	private String role;
 

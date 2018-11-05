@@ -16,24 +16,26 @@ import br.com.les.backend.utils.RequestType;
 import br.com.les.backend.utils.Util;
 
 @Configuration
-public class RequestToSaveCompTime implements IStrategy<Request> {
+public class RequestCompTime implements IStrategy<Request> {
 
 	@Override
 	public void process(Request aEntity, INavigationCase<Request> aCase) {
 		if (aEntity != null) {
-			aEntity.setEmployee( (Employee) SecurityService.getAuthenticatedUser());
 			if (aEntity.getType() == RequestType.COMP_TIME) {
 				
 				if( null == aEntity.getStartDate() && aEntity.getStartDate().compareTo(LocalDate.now()) <= 0)
 					aCase.getResult().setError(Util.INVALID_ENTRY_DATE);
 			
-				if( null != aEntity.getEndDate() && aEntity.getStartDate().compareTo(aEntity.getEndDate()) <= 0 ) 
+				if( null != aEntity.getEndDate() && aEntity.getEndDate().compareTo(aEntity.getStartDate()) <= 0 ) 
 						aCase.getResult().setError(Util.INVALID_END_DATE);
 				
 				if(Strings.isNullOrEmpty(aEntity.getDescription()))
 						aCase.getResult().setError(Util.INVALID_DESCRIPTION);
-	
-				aEntity.setStatus(RequestStatus.SENT.getValue());
+				if (aCase.getResult().isSuccess()) {
+					aEntity.setStatus(RequestStatus.SENT.getValue());
+					aEntity.setEmployee( (Employee) SecurityService.getAuthenticatedUser());
+					aCase.getResult().setSuccess(Util.SAVE_SUCCESSFUL_REQUEST);
+				}
 			}
 			return;
 		}

@@ -14,6 +14,9 @@ import javax.persistence.ManyToOne;
 public class Request extends DomainEntity {
 
 	private String description;
+	// User by managers to specify details after
+	// approve or reprove requests
+	private String observation;
 	private int status;
 	private LocalDate startDate;
 	private LocalDate endDate;
@@ -89,5 +92,14 @@ public class Request extends DomainEntity {
 
 	public void setStartDate(LocalDate startDate) {
 		this.startDate = startDate;
-	}	
+	}
+
+	public String getObservation() {
+		return observation;
+	}
+
+	public void setObservation(String observation) {
+		this.observation = observation;
+	}
+	
 }

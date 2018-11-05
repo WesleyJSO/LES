@@ -1,0 +1,91 @@
+<template>
+  <div>
+    <h1>Apontamentos</h1>
+    <br/>
+
+    <v-form>
+      <v-card>
+        <v-flex xs12 sm6 d-flex>
+          <v-select
+            v-model="employeeName"
+            :items="employeesNames"
+            prepend-icon="person"
+            label="Colaborador"
+            :item-value="employeeName"
+            @change="setEmployee">
+          </v-select>
+        </v-flex>
+        <v-spacer></v-spacer>
+
+      </v-card>
+      <br>
+      <MonthAppointments :employeeId="employeeId"></MonthAppointments>
+    </v-form>
+  </div>
+</template>
+
+<script>
+import MonthAppointments from '@/components/shared/MonthAppointments.vue'
+
+export default {
+  data: () => ({
+    employeeName: '',
+    employeesNames: [],
+    employees: [],
+    employeeId: ''
+  }),
+  components: {
+    MonthAppointments
+  },
+  beforeMount () {
+    this.callApi({manager: {id: 7}})
+  },
+  watch: {
+    employees () {
+      this.employeesNames = []
+      this.employees.forEach(element => {
+        this.employeesNames.push(element.name + ' ' + element.lastName)
+      })
+    }
+  },
+  methods: {
+    setEmployee () {
+      let name = this.employeeName.split(' ')
+      this.employees.forEach(element => {
+        if (element.name === name[0] && element.lastName === name[1]) {
+          this.employeeId = element.id
+        }
+      })
+    },
+    async callApi (employee) {
+      var response = null
+      var result = null
+      try {
+        response = await this.$_axios.patch(`${this.$_url}employee`, employee)
+        result = response.data
+        if (result.resultList.length !== 0) {
+          // retorno ok /
+          this.employees = result.resultList
+        }
+        if (result.mensagem) {
+          this.messages = [...result.message]
+          this.haveMessage = true
+          if (result.success) {
+          // retorno mensagem de sucesso /
+            this.messageColor = 'info'
+          } else {
+            // retorno mensagem de erro /
+            this.messageColor = 'warning'
+          }
+        }
+      } catch (error) {
+        // erro na requisição do serviço /
+        console.log(error)
+        this.messages = ['Erro durante execução do serviço!']
+        this.haveMessage = true
+        this.messageColor = 'error'
+      }
+    }
+  }
+}
+</script>
