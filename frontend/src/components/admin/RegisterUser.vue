@@ -334,19 +334,13 @@ export default {
       }
     },
     async submit () {
-      for (let item of this.hourTypeList) {
-        if (this.employee.baseHourCalculation.hourType === item.name) {
-          this.employee.baseHourCalculation.hourType = item.id
-        }
-      }
       try {
-        console.log(JSON.stringify(this.employee))
+        this.messages = []
+        this.haveMessage = false
+        this.messageColor = ''
         let response = await this.$_axios.post(`${this.$_url}employee`, this.employee)
+        console.log(JSON.stringify(response))
         let result = response.data
-        if (result.resultList.length !== 0) {
-          this.employee = result.resultList[0]
-          this.employee.telephoneList = [ {type: '', number: ''}, {type: '', number: ''}, {type: '', number: ''} ]
-        }
         if (result.message) {
           this.messages = [...result.message]
           this.haveMessage = true
@@ -369,9 +363,9 @@ export default {
       this.passwordValidator = ''
       this.employee = {
         joiningDate: null,
-        password: '',
-        baseHourCalculation: [],
-        roleList: [],
+        manager: {},
+        baseHourCalculation: {hourType: {}},
+        user: {roleList: [], password: ''},
         telephoneList: [ {type: '', number: ''}, {type: '', number: ''}, {type: '', number: ''} ]
       }
     }
