@@ -11,12 +11,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Component
 @Entity
@@ -36,7 +36,6 @@ public class User extends DomainEntity implements UserDetails {
 	@ManyToMany(fetch=FetchType.EAGER, cascade={ CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE })
 	@JoinTable(name = "user_role", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "role_id") })
-	@JsonProperty("authorities")
 	private List<Role> roleList;
 
 
@@ -66,6 +65,10 @@ public class User extends DomainEntity implements UserDetails {
 		return this.roleList;
 	}
 
+	public List<Role> getRoleList() {
+		return roleList;
+	}
+	
 	@Override
 	public String getUsername() {
 		return this.email;

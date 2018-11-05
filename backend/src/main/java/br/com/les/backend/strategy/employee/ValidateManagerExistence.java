@@ -14,16 +14,15 @@ import br.com.les.backend.navigator.IStrategy;
 import br.com.les.backend.repository.RoleRepository;
 
 @Configuration
-public class SalaryValidator implements IStrategy<Employee> {
-	
+public class ValidateManagerExistence implements IStrategy<Employee> {
+
 	@Autowired private RoleRepository roleRepository;
 	
 	@Override
 	public void process(Employee aEntity, INavigationCase<Employee> aCase) {
 
-		if (aEntity != null && aEntity.getBaseHourCalculation() != null 
-				&& !Strings.isNullOrEmpty(String.valueOf(aEntity.getBaseHourCalculation().getSalary()))) {
-		
+		if (aEntity != null && !Strings.isNullOrEmpty(aEntity.getPis())) {
+	
 			Optional<Role> r = Optional.empty();
 			for (Role role : aEntity.getUser().getRoleList()) {
 				r = roleRepository.findActiveById(role.getId());
@@ -34,15 +33,14 @@ public class SalaryValidator implements IStrategy<Employee> {
 			}
 			if(r.isPresent()) {
 				
-				if(aEntity.getBaseHourCalculation().getSalary() <= 0) {
-					aCase.getResult().setError("Salário informado deve ser maior que R$ "
-							.concat(aEntity.getBaseHourCalculation().getSalary().toString()).concat("!"));
-				}
+				if(aEntity.getManager().getId() == null)
+					aCase.getResult().setError("Gestor deve ser informado!");
 			}
 			return;
 		}
 		aCase.suspendExecution();
-		aCase.getResult().setError("Salário não definido!");
+		aCase.getResult().setError("Número do PIS não definido!");
 		return;
 	}
 }
+

@@ -19,17 +19,17 @@ public interface GenericRepository<T extends DomainEntity> extends JpaRepository
 	@Query("from #{#entityName} t where t.active = false")
 	List<T> findAllInactive();
 
-	@Query("from #{#entityName} t where t.active = true and id = ?2")
+	@Query("from #{#entityName} t where t.active = true and id = ?1")
 	Optional<T> findActiveById(Long id);
 
 	// https://www.logicbig.com/tutorials/spring-framework/spring-data/modifying-queries.html
 	@Transactional
 	@Modifying
-	@Query("update #{#entityName} t set t.active = true where id = ?2")
+	@Query("update #{#entityName} t set t.active = true where id = ?1")
 	boolean setActiveById(Long id);
 
 	@Transactional
 	@Modifying
-	@Query("update #{#entityName} t set t.active = false where id = ?2")
+	@Query("update #{#entityName} t set t.active = false where id = ?1")
 	boolean setInactiveById(Long id);
 }
