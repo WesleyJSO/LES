@@ -2,8 +2,9 @@ package br.com.les.backend.strategy.request;
 
 import java.time.LocalDate;
 
-import org.assertj.core.util.Strings;
 import org.springframework.context.annotation.Configuration;
+
+import com.google.common.base.Strings;
 
 import br.com.les.backend.entity.Employee;
 import br.com.les.backend.entity.Request;
