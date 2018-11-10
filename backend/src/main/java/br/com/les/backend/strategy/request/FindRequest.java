@@ -1,8 +1,5 @@
 package br.com.les.backend.strategy.request;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +18,7 @@ public class FindRequest implements IStrategy < Request > {
 	public void process(Request aEntity, INavigationCase<Request> aCase) {
 		if (aEntity != null ) {
 			Employee emp = (Employee) SecurityService.getAuthenticatedUser();
+			@SuppressWarnings("unchecked")
 			List <Role> roles = ( List< Role > ) emp.getUser().getAuthorities();
 			for (Role r : roles) {
 				if (Role.ROLE_EMPLOYEE.equals(r.getRole())) {

@@ -234,7 +234,6 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 				sql += d.multipleSelector() + d.name() + d.comparator() + method.invoke(clazz) + "'";
 			} else if(method.getAnnotation(ListQuery.class) != null) {
 				ListQuery l = method.getAnnotation(ListQuery.class);
-				@SuppressWarnings("unchecked")
 				List<Object> aList =  (List<Object>) method.invoke(clazz);
 				for (Object object : aList) {
 					sql += l.multipleSelector() + l.name() + l.comparator() + object.toString() + "'";

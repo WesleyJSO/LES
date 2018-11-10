@@ -1,7 +1,5 @@
 package br.com.les.backend.strategy.appointment;
 
-import java.time.LocalTime;
-
 import org.springframework.context.annotation.Configuration;
 
 import br.com.les.backend.entity.Appointment;
