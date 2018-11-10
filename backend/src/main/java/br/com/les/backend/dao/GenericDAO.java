@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import br.com.les.backend.annotation.DateQuery;
-import br.com.les.backend.annotation.EmployeeQuery;
+import br.com.les.backend.annotation.DeepSearchQuery;
 import br.com.les.backend.annotation.ListQuery;
 import br.com.les.backend.annotation.Query;
 import br.com.les.backend.annotation.StringQuery;
@@ -221,8 +221,10 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 		return "";
 	}
 
+	@SuppressWarnings("unchecked")
 	private String queryForAnotation(List<Method> methodList, T clazz) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		String sql = "";
+		DeepSearchQuery deepSearchQuery = null;
 		for (Method method : methodList) {
 			if(method.getAnnotation(StringQuery.class) != null) {
 				StringQuery s = method.getAnnotation(StringQuery.class);
@@ -237,15 +239,40 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 				for (Object object : aList) {
 					sql += l.multipleSelector() + l.name() + l.comparator() + object.toString() + "'";
 				}
-			} else if(method.getAnnotation(EmployeeQuery.class) != null) {
-				EmployeeQuery d = method.getAnnotation(EmployeeQuery.class);
+			} else if( null != (deepSearchQuery = method.getAnnotation(DeepSearchQuery.class)) ) {
 				DomainEntity de = (DomainEntity) method.invoke(clazz);
 				if (de != null) {
-					sql += d.multipleSelector() + d.name() + d.comparator() + de.getId() ;
+					sql += deepSearchQuery.multipleSelector() + deepSearchQuery.name() 
+						+ deepSearchQuery.dot() + deepSearchQuery( (T) de, deepSearchQuery );
 				}
 			}
 		}
 		return sql;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private String deepSearchQuery(T clazz, DeepSearchQuery previousAnnotation) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		String sql = "";
+		Boolean insertIdOnQuery = true;
+		DeepSearchQuery deepSearchQuery = null;
+		dateTimeMap = new HashMap<>();
+		List<Method> methodList = getMethodsFromClass(clazz);
+		for (Method method : methodList) {
+			if( null != (deepSearchQuery = method.getAnnotation(DeepSearchQuery.class)) ) {
+				DomainEntity de = (DomainEntity) method.invoke(clazz);
+				if (de != null) {
+					sql += deepSearchQuery.name() + deepSearchQuery.dot() + deepSearchQuery( (T) de, deepSearchQuery );
+					insertIdOnQuery = false;
+					break;
+				}
+			}
+		}
+		if (insertIdOnQuery) {
+			DomainEntity de = (DomainEntity) clazz;
+			if ( null != de.getId() )
+				sql += previousAnnotation.idName() + previousAnnotation.comparator() + de.getId();
+		}
+		return sql;		
 	}
 	
 	private Map<Field, Method> MakeMapToMethods(List<Method> methodList, List<Field> fieldList) {
@@ -299,6 +326,7 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 			sql = sql.replace("1!=1", "1=1");
 
 		sql = sql.replace("1!=1 and", "1=1 and");
+		sql = sql.replace(".t.", ".");
 		sql += " and t.active=true";
 		return sql;
 	}

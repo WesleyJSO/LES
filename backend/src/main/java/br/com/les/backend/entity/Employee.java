@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-import br.com.les.backend.annotation.EmployeeQuery;
+import br.com.les.backend.annotation.DeepSearchQuery;
 /**
  * @url https://www.baeldung.com/jackson-bidirectional-relationships-and-infinite-recursion
  * @annotation @JsonIdentityInfo
@@ -90,7 +90,7 @@ public class Employee extends DomainEntity {
 		this.pis = pis;
 	}
 
-	@EmployeeQuery(name="t.manager.id")
+	@DeepSearchQuery(name="t.manager")
 	public Employee getManager() {
 		return manager;
 	}
@@ -163,6 +163,7 @@ public class Employee extends DomainEntity {
 		this.telephoneList = telephoneList;
 	}
 
+	@DeepSearchQuery(name="t.user")
 	public User getUser() {
 		return user;
 	}

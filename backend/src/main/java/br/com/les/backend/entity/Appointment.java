@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-import br.com.les.backend.annotation.EmployeeQuery;
+import br.com.les.backend.annotation.DeepSearchQuery;
 
 @Component
 @Entity
@@ -176,7 +176,7 @@ public class Appointment extends DomainEntity {
 		this.appointmentRequestList = appointmentRequestList;
 	}
 
-	@EmployeeQuery(name="t.employee.user.id")
+	@DeepSearchQuery(name="t.employee")
 	public Employee getEmployee() {
 		return employee;
 	}

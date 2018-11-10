@@ -7,7 +7,10 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface EmployeeQuery {
+public @interface DeepSearchQuery {
+
+	String idName() default "id";
+	String dot() default ".";
 	String name() default "";
 	String comparator() default " = ";
 	String multipleSelector() default " and ";

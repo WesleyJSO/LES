@@ -99,9 +99,6 @@ export default {
     AppointDialog,
     AppointTable
   },
-  beforeMount () {
-    this.callApi({monthAndYear: new Date()})
-  },
   watch: {
     employeeId () {
       this.beforeCallApi(this.monthYear)
@@ -110,7 +107,9 @@ export default {
   methods: {
     beforeCallApi (monthYear) {
       this.monthYear = monthYear
-      this.callApi({employee: {id: this.employeeId}, monthAndYear: new Date(`${monthYear}-01`)})
+      if (this.employeeId) {
+        this.callApi({employee: {id: this.employeeId}, monthAndYear: new Date(`${monthYear}-01`)})
+      }
     },
     takeAppointment (appointment) {
       this.appointment = appointment

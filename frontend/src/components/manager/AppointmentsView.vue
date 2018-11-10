@@ -39,7 +39,10 @@ export default {
     MonthAppointments
   },
   beforeMount () {
-    this.callApi({manager: {id: Authenticator.GET_AUTHENTICATED().id}})
+    var user = {
+      id: Authenticator.GET_AUTHENTICATED().id
+    }
+    this.callApi({manager: {user: user}})
   },
   watch: {
     employees () {
