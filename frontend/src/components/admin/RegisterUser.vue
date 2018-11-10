@@ -95,7 +95,7 @@
       </v-layout>
 
       <!-- Row 3 -->
-      <v-layout v-if="!isManager || isEmployee">
+      <v-layout v-if="isEmployee">
         <v-flex xs12 sm9 md6 lg6 xl4>
           <v-text-field id="salary"
                         v-model="employee.baseHourCalculation.salary"
@@ -126,7 +126,7 @@
       </v-layout>
 
       <!-- Row 4 -->
-      <v-layout v-if="!isManager || isEmployee">
+      <v-layout v-if="isEmployee">
 
         <v-flex xs12 sm9 md6 lg6 xl4>
           <v-select v-if="managerList" id="supervisor"
@@ -182,7 +182,7 @@
       </v-layout>
 
       <!-- Row 5 -->
-      <v-layout>
+      <v-layout v-if="isEmployee">
         <v-flex xs12 sm9 md6 lg6 xl4>
 
           <v-text-field
@@ -390,6 +390,7 @@ export default {
         this.messages = []
         this.haveMessage = false
         this.messageColor = ''
+        console.log(JSON.stringify(this.employee))
         let response = await this.$_axios.post(`${this.$_url}employee`, this.employee)
         console.log(JSON.stringify(response))
         let result = response.data
