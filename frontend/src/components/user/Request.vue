@@ -23,65 +23,59 @@
         </v-combobox>
         </v-flex>
         <v-flex xs6>
-          <v-menu ref="requestEntryDate"
-                  :close-on-content-click="false"
-                  v-model="requestEntryDate"
-                  :nudge-right="40"
-                  :return-value.sync="request.startDate"
-                  lazy
-                  transition="scale-transition"
-                  offset-y
-                  full-width
-                  min-width="290px">
-            <v-text-field slot="activator"
-                        v-model="request.startDate"
-                        label="Data Alvo"
-                        :rules="$v_request.startDate(request.startDate)"
-                        prepend-icon="event"
-                        readonly>
-            </v-text-field>
-            <v-date-picker v-model="request.startDate"
-                            :locale="locale"
-                            :min="minStartDate"
-                            :reactive="reactive"
-                            no-title scrollable>
-              <v-spacer></v-spacer>
-              <v-btn flat color="primary" @click="requestEntryDate = false">Cancel</v-btn>
-              <v-btn flat color="primary" @click="$refs.requestEntryDate.save(request.startDate)">Confirmar</v-btn>
-            </v-date-picker>
-          </v-menu>
+          <v-menu
+                :close-on-content-click="false"
+                v-model="requestEntryDate"
+                :nudge-right="40"
+                lazy offset-y full-width
+                transition="scale-transition"
+                min-width="290px">
+                <v-text-field
+                  :label="getLabels.startDate"
+                  v-model="request.startDate"
+                  :rules="$v_request.startDate(request.startDate)"
+                  slot="activator"
+                  prepend-icon="event"
+                  readonly>
+                </v-text-field>
+
+                <v-date-picker
+                  :locale="locale"
+                  :header-color="getColors.black"
+                  :reactive="reactive"
+                  scrollable
+                  v-model="request.startDate"
+                  @input="requestEntryDate = false">                  
+                </v-date-picker>
+              </v-menu>
         </v-flex>
         <!-- Row 2 -->
         <v-flex xs6>
-          <v-menu ref="requestChangeDate"
-                  :close-on-content-click="false"
-                  v-model="requestChangeDate"
-                  :nudge-right="40"
-                  :return-value.sync="request.endDate"
-                  lazy
-                  transition="scale-transition"
-                  offset-y
-                  full-width
-                  min-width="290px">
-            <v-text-field slot="activator"
-                        v-model="request.endDate"
-                        label="Data Troca"
-                        prepend-icon="event"
-                        :disabled="enableEndDate"
-                        :rules="$v_request.endDate(request.startDate, request.endDate)"
-                        readonly>
-            </v-text-field>
-            <v-date-picker v-model="request.endDate"
-                            :reactive="reactive"
-                            :locale="locale"
-                            :min="minChangeDate"
-                            lazy
-                            no-title scrollable>
-              <v-spacer></v-spacer>
-              <v-btn flat color="primary" @click="requestChangeDate = false">Cancel</v-btn>
-              <v-btn flat color="primary" @click="$refs.requestChangeDate.save(request.endDate)">Confirmar</v-btn>
-            </v-date-picker>
-          </v-menu>
+          <v-menu
+                :close-on-content-click="false"
+                v-model="requestChangeDate"
+                :nudge-right="40"
+                lazy offset-y full-width
+                transition="scale-transition"
+                min-width="290px">
+                <v-text-field
+                  :label="getLabels.endDate"
+                  v-model="request.endDate"
+                  :rules="$v_request.endDate(request.startDate, request.endDate)"
+                  slot="activator"
+                  prepend-icon="event"
+                  readonly>
+                </v-text-field>
+
+                <v-date-picker
+                  :locale="locale"
+                  :header-color="getColors.black"
+                  :reactive="reactive"
+                  v-model="request.endDate"
+                  scrollable
+                  @input="requestChangeDate = false">                  
+                </v-date-picker>
+              </v-menu>
         </v-flex>
         <v-flex xs6>
           <v-text-field v-model="request.attachment"
@@ -113,7 +107,7 @@
 </template>
 
 <script>
-import UserService from '../../service/UserService'
+import RequestService from '@/service/RequestService'
 export default {
   props: {
     editItem: {
@@ -144,7 +138,7 @@ export default {
   },
   computed: {
     getItems () {
-      return UserService.REQUEST
+      return RequestService.REQUEST
     },
     showEntryDates () {
       return this.request.type === this.getItems[0] || this.request.type === this.getItems[1] || this.request.type === this.getItems[3]
@@ -170,6 +164,12 @@ export default {
     },
     getTitle () {
       return this.isEditing ? '' : 'Realizar Solicitação'
+    },
+    getLabels () {
+      return RequestService.LABELS
+    },
+    getColors () {
+      return RequestService.COLORS
     }
   },
   watch: {
