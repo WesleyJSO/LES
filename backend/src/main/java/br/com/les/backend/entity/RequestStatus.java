@@ -6,13 +6,13 @@ public enum RequestStatus {
 	APPROVED(2),
 	DENIED(3);
 	
-	private int value;
+	private Integer value;
 	
-	private RequestStatus (int value) {
+	private RequestStatus (Integer value) {
 		this.value = value;
 	}
 
-	public int getValue() {
+	public Integer getValue() {
 		return value;
 	}
 	
