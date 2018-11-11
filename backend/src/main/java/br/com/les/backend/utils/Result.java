@@ -19,7 +19,6 @@ public class Result<T extends DomainEntity> {
     
     public Result() {
     	success = true;
-    	message.add("Ação realizada com sucesso!");
     }
 
     public void setSuccess( String message ) {
