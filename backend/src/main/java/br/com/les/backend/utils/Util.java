@@ -38,6 +38,8 @@ public class Util {
 	// Request
 	public static final String SAVE_SUCCESSFUL_REQUEST = "Solicitação registrada com Sucesso!!";
 	public static final String UPDATE_SUCCESSFUL_REQUEST = "Solicitação Atualizada com Sucesso!";
+	public static final String APPROVE_SUCCESSFUL_REQUEST = "Solicitação Aprovada com Sucesso!";
+	public static final String DENY_SUCCESSFUL_REQUEST = "Solicitação Reprovada com Sucesso!";
 	public static final String ERROR_ENTRY_DATE = "Informe uma data alvo!!";
 	public static final String ERROR_END_DATE = "Infome uma data para troca!";
 	public static final String ERROR_DESCRIPTION = "Informe uma descrição!!";
@@ -62,5 +64,7 @@ public class Util {
 	public static final String ERROR_BANKED_HOURS_UPDATE = "Erro na atualização do banco de horas!";
 
 	public static final String INVALID_USER_IDENTIFICATION = "Usuário ou Senha inválidos!";
+
+	public static final String FIND_SUCCESSFUL_REQUEST = "Consulta Realizada com Sucesso!";
 
 }
