@@ -39,6 +39,8 @@ public class CalculateBalance implements IStrategy<Appointment> {
 				balance = balance.minusNanos( (aEntity.getParticularExitReturn().minusNanos(aEntity.getParticularExit().toNanoOfDay())).toNanoOfDay() );			
 			}
 			
+			aEntity.setBalance(balance);
+			
 			if ( balance.isBefore( workload ) ) {
 				aEntity.setHoursLeft( workload.minusNanos( balance.toNanoOfDay() ) );
 				aEntity.setDayOvertime( LocalTime.MIN );

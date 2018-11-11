@@ -23,6 +23,8 @@ import br.com.les.backend.repository.EmployeeRepository;
 @Component
 public class CalcBankTask extends TimerTask {
 	
+	@Autowired AutoAppointmentTask autoAppointmentTask;
+	
 	@Autowired GenericDAO<BankedHours> bankedHoursDAO;
 	@Autowired EmployeeRepository employeeRepository;
 	@Autowired AppointmentRepository appointmentRepository;
@@ -58,6 +60,8 @@ public class CalcBankTask extends TimerTask {
 	@Override
     public void run() {
     	
+		autoAppointmentTask.run();
+		
     	BankedHours bank = null;
 		
 		List< Employee > employeeList = employeeRepository.findAll();
@@ -70,11 +74,14 @@ public class CalcBankTask extends TimerTask {
 			int employeeWorkload = employee.getBaseHourCalculation().getWorkload();
 			LocalTime workload = LocalTime.of(employeeWorkload, 0);
 			
-			bank = new BankedHours(employee);
+			bank = new BankedHours();
+			Employee emp = new Employee();
+			emp.setId(employee.getId());
+			bank.setEmployee(emp);
 			bank = bankedHoursDAO.find(bank).get(0);
 			
 			// get new or edited appointments
-			List< Appointment > appointmentList = appointmentRepository.findPending();
+			List< Appointment > appointmentList = appointmentRepository.findPending(employee);
 			
 			for (Appointment appointment: appointmentList) {
 				

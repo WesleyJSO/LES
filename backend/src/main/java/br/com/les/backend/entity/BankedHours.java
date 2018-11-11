@@ -6,6 +6,8 @@ import javax.persistence.OneToOne;
 
 import org.springframework.stereotype.Component;
 
+import br.com.les.backend.annotation.DeepSearchQuery;
+
 @Component
 @Entity
 public class BankedHours extends DomainEntity {
@@ -31,6 +33,7 @@ public class BankedHours extends DomainEntity {
 		this.balance = balance;
 	}
 
+	@DeepSearchQuery (name="t.employee")
 	public Employee getEmployee() {
 		return employee;
 	}
