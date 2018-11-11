@@ -16,16 +16,11 @@ export const SUB_HEADERS = [
 export const DATE_FORMATS = [ {year: 'numeric', month: 'numeric', day: 'numeric'} ]
 export const PAGINATION = { sortBy: 'id' }
 export const APPOINTMENTS = { title: 'Apontamento de Horas', table: 'Lista de Apontamentos', addAppointments: 'Apontar Horas', types: ['Entrada', 'Almoço', 'Retorno Almoço', 'Saída', 'Saída Particular'] }
-export const REQUEST = [
-  {id: 1, description: 'Hora Extra'},
-  {id: 2, description: 'Banco de Horas'},
-  {id: 4, description: 'Remanejamento de Horas/Dias'}
-]
+
 export default class UserService {
   static get HEADERS () { return HEADERS }
   static get SUB_HEADERS () { return SUB_HEADERS }
   static get DATE_FORMATS () { return SUB_HEADERS }
   static get PAGINATION () { return PAGINATION }
   static get APPOINTMENTS () { return APPOINTMENTS }
-  static get REQUEST () { return REQUEST }
 }

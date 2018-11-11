@@ -5,7 +5,7 @@ export const HEADERS = [
 ]
 export const TITLES = {
   requests: 'Solicitações',
-  approved: 'Aprovadas',
+  approved: 'Todas',
   pending: 'Pendentes',
   entryDate: 'Data Afetada - ',
   endDate: 'Nova Data - ',
@@ -18,14 +18,19 @@ export const TITLES = {
   description: 'Descrição: ',
   employee: 'Colaborador - ',
   edit: 'Editar Solicitação',
-  managerMessage: 'Detalhe'
+  managerMessage: 'Detalhe: ',
+  viewManagerMessage: 'Observações sobre a Solicitação: ',
+  approvedManager: 'Atualizado por -  ',
+  lastUpdate: 'Útilma atualização -  '
 
 }
 export const SUB_HEADERS = [
   { text: 'Descrição', align: 'center', value: 'description' }
 ]
 export const LABELS = {
-  managerMessage: 'Observações: '
+  managerMessage: 'Observações sobre a Solicitação: ',
+  startDate: 'Data Alvo',
+  endDate: 'Data Troca'
 }
 export const DATE_FORMATS = [ {year: 'numeric', month: 'numeric', day: 'numeric'} ]
 // Using key value as number cause type attribute from backend object cames like this
@@ -53,8 +58,22 @@ export const BUTTONS = {
   confirm: 'Confirmar'
 }
 export const STATUS_VALUE = {
+  sent: 1,
   approved: 2,
-  denyed: 3
+  denied: 3
+}
+export const MESSAGE = {
+  consultError: 'Houve um erro ao consultar as Solicitações!',
+  approveError: 'Houve um erro ao aprovar a solicitação!'
+}
+export const REQUEST = [
+  {id: 1, description: 'Hora Extra'},
+  {id: 2, description: 'Banco de Horas'},
+  {id: 4, description: 'Remanejamento de Horas/Dias'}
+]
+export const COLORS = {
+  black: 'black',
+  info: 'info'
 }
 
 export default class RequestService {
@@ -68,4 +87,7 @@ export default class RequestService {
   static get PREFIXES () { return PREFIXES }
   static get STATUS_VALUE () { return STATUS_VALUE }
   static get LABELS () { return LABELS }
+  static get MESSAGE () { return MESSAGE }
+  static get REQUEST () { return REQUEST }
+  static get COLORS () { return COLORS }
 }
