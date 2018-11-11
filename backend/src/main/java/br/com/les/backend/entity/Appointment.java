@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import br.com.les.backend.annotation.DeepSearchQuery;
+import br.com.les.backend.annotation.TimeIgnore;
 
 @Component
 @Entity
@@ -128,6 +129,7 @@ public class Appointment extends DomainEntity {
 		this.particularExitReturn = particularExitReturn;
 	}
 
+	@TimeIgnore
 	public LocalTime getBalance() {
 		return balance;
 	}
@@ -136,6 +138,7 @@ public class Appointment extends DomainEntity {
 		this.balance = balance;
 	}
 
+	@TimeIgnore
 	public LocalTime getHoursLeft() {
 		return hoursLeft;
 	}
@@ -144,6 +147,7 @@ public class Appointment extends DomainEntity {
 		this.hoursLeft = hoursLeft;
 	}
 
+	@TimeIgnore
 	public LocalTime getDayOvertime() {
 		return dayOvertime;
 	}

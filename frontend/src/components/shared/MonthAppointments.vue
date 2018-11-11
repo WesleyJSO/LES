@@ -134,6 +134,7 @@ export default {
               this.messageColor = 'warning'
             }
           }
+          this.callApi(this.appointWithMonth)
         })
         .catch(error => {
           console.log(error)
@@ -141,7 +142,6 @@ export default {
           this.haveMessage = true
           this.messageColor = 'error'
         })
-      this.callApi(this.appointWithMonth)
     },
     callApi (appointment) {
       console.log(JSON.stringify(appointment))

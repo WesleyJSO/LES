@@ -11,6 +11,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
+import br.com.les.backend.annotation.TimeIgnore;
 import br.com.les.backend.entity.Appointment;
 import br.com.les.backend.entity.AppointmentRequest;
 import br.com.les.backend.entity.Parameter;
@@ -110,7 +111,8 @@ public class ChangeSpecificAppointment implements IStrategy<Appointment> {
 				try {
 					if(method.getReturnType() == LocalTime.class && dbMethod.getReturnType() == LocalTime.class 
 							&& dbMethod.getName().equals(method.getName()) && method.invoke(appointment) != null
-							&& !method.invoke(appointment).equals(dbMethod.invoke(dbAppointment))) {
+							&& !method.invoke(appointment).equals(dbMethod.invoke(dbAppointment))
+							&& null == method.getAnnotation(TimeIgnore.class)) {
 							valueToChange = method;
 							break;
 					}

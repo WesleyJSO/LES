@@ -123,6 +123,7 @@ export default {
         this.appointment.particularExitReturn = time
       }
       this.appointment.date = DateHelper.formatISODate(this.appointment.date)
+      this.appointment.employee = null
       this.verifyButtons()
       this.registerAppointments()
     },
