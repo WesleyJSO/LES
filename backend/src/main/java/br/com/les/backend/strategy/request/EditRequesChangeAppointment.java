@@ -7,10 +7,12 @@ import org.springframework.context.annotation.Configuration;
 
 import com.google.common.base.Strings;
 
+import br.com.les.backend.entity.Employee;
 import br.com.les.backend.entity.Request;
 import br.com.les.backend.navigator.INavigationCase;
 import br.com.les.backend.navigator.IStrategy;
 import br.com.les.backend.repository.RequestRepository;
+import br.com.les.backend.service.SecurityService;
 import br.com.les.backend.utils.RequestType;
 import br.com.les.backend.utils.Util;
 
@@ -22,8 +24,8 @@ public class EditRequesChangeAppointment implements IStrategy<Request> {
 	@Override
 	public void process(Request aEntity, INavigationCase<Request> aCase) {
 		if (aEntity != null && aEntity.getId() != 0 && !Strings.isNullOrEmpty(String.valueOf(aEntity.getId()))) {
-			requestRepository.findActiveById(aEntity.getId()).ifPresent(r -> {
-				if (aEntity.getType() == RequestType.CHANGE_APPOINTMENT) {
+			Request r = requestRepository.findActiveById(aEntity.getId()).get();
+				if ( r.getType() == RequestType.CHANGE_APPOINTMENT && aEntity.getStatus() == r.getStatus() ) {
 					if (null == aEntity.getStartDate())
 						aCase.getResult().setError(Util.ERROR_ENTRY_DATE);
 					
@@ -38,10 +40,11 @@ public class EditRequesChangeAppointment implements IStrategy<Request> {
 							&& (aEntity.getDescription().trim().equals("") || aEntity.getDescription().length() < 10))
 						aCase.getResult().setError(Util.INVALID_DESCRIPTION);
 					
-					if (aCase.getResult().isSuccess())
+					if (aCase.getResult().isSuccess()) {
 						aCase.getResult().setSuccess(Util.UPDATE_SUCCESSFUL_REQUEST);
+						aEntity.setUpdatedDate(LocalDate.now());
+					}
 				}
-			});
 			return;
 		}
 		aCase.suspendExecution();

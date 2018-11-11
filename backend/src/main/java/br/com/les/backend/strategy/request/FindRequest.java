@@ -1,5 +1,6 @@
 package br.com.les.backend.strategy.request;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +11,7 @@ import br.com.les.backend.entity.Role;
 import br.com.les.backend.navigator.INavigationCase;
 import br.com.les.backend.navigator.IStrategy;
 import br.com.les.backend.service.SecurityService;
+import br.com.les.backend.utils.Util;
 
 @Configuration
 public class FindRequest implements IStrategy < Request > {
@@ -22,12 +24,17 @@ public class FindRequest implements IStrategy < Request > {
 			List <Role> roles = ( List< Role > ) emp.getUser().getAuthorities();
 			for (Role r : roles) {
 				if (Role.ROLE_EMPLOYEE.equals(r.getRole())) {
-					aEntity.setEmployee(emp);
+					Employee userRequest = new Employee(emp.getId());
+					aEntity.setEmployee(userRequest);
 				} else if ( Role.ROLE_ADMIN.equals(r.getRole() ) || Role.ROLE_MANAGER.equals(r.getRole() ) ) {
 					Employee userRequest = new Employee ();
-					userRequest.setManager(emp);
+					Employee manager = new Employee(emp.getId());
+					userRequest.setManager(manager);
 					aEntity.setEmployee(userRequest);
 				}
+				
+				if (aCase.getResult().isSuccess())
+					aCase.getResult().setSuccess(Util.FIND_SUCCESSFUL_REQUEST);
 			}
 			return;
 		}
