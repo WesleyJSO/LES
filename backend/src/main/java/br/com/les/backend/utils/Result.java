@@ -36,7 +36,7 @@ public class Result<T extends DomainEntity> {
 
     public void setError( String message ) {
 
-        if ( Strings.isNullOrEmpty(message)) {
+        if ( !Strings.isNullOrEmpty(message)) {
         	
         	if ( success )
         		this.message = new ArrayList<>();
