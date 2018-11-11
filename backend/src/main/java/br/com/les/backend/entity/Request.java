@@ -1,6 +1,7 @@
 package br.com.les.backend.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -9,18 +10,34 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import br.com.les.backend.annotation.DeepSearchQuery;
 
 @Entity
 public class Request extends DomainEntity {
 
 	private String description;
-	// User by managers to specify details after
-	// approve or reprove requests
+	/**
+	 * User by managers to specify details after
+	 * approve or reprove requests
+	 */
 	private String observation;
-	private int status;
+	
+	private LocalDate updatedDate;
+	
+	private String managerName;
+	
+	private Integer status;
+	
 	private LocalDate startDate;
+	
 	private LocalDate endDate;
+	
 	private int type;
+	
 	private byte[] attachment;
 	
 	@ManyToOne( fetch=FetchType.EAGER )
@@ -37,7 +54,7 @@ public class Request extends DomainEntity {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
+	@DeepSearchQuery(name="t.employee")
 	public Employee getEmployee() {
 		return employee;
 	}
@@ -70,11 +87,11 @@ public class Request extends DomainEntity {
 		this.type = type;
 	}
 
-	public int getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
 
-	public void setStatus(int status) {
+	public void setStatus(Integer status) {
 		this.status = status;
 	}
 
@@ -101,5 +118,23 @@ public class Request extends DomainEntity {
 	public void setObservation(String observation) {
 		this.observation = observation;
 	}
+
+	public LocalDate getUpdatedDate() {
+		return updatedDate;
+	}
+	
+	public void setUpdatedDate(LocalDate updatedDate) {
+		this.updatedDate = updatedDate;
+	}
+
+	public String getManagerName() {
+		return managerName;
+	}
+
+	public void setManagerName(String managerName) {
+		this.managerName = managerName;
+	}
+	
+	
 	
 }
