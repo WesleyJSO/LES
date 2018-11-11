@@ -25,6 +25,7 @@ public class EditRequestCompTime implements IStrategy<Request> {
 	public void process(Request aEntity, INavigationCase<Request> aCase) {
 		if (aEntity != null && aEntity.getId() != 0 && !Strings.isNullOrEmpty(String.valueOf(aEntity.getId()))) {
 			Request r = requestRepository.findActiveById(aEntity.getId()).get();
+
 				if ( aEntity.getType() == RequestType.COMP_TIME && aEntity.getStatus() == r.getStatus() ) {
 					if (null == aEntity.getStartDate()) {
 						aCase.getResult().setError(Util.ERROR_ENTRY_DATE);
