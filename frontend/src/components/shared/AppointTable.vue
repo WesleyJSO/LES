@@ -194,6 +194,7 @@ export default {
       if (appointment !== false) {
         appointment.date = DateHelper.formatISODate(appointment.date)
         this.appointment = appointment
+        this.appointment.employee = null
         this.$emit('register', this.appointment)
       }
       this.dialogs[index].value = false

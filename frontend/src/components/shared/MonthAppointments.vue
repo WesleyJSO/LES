@@ -70,14 +70,16 @@
 <script>
 import AppointDialog from '@/components/shared/AppointDialog.vue'
 import AppointTable from '@/components/shared/AppointTable.vue'
+import moment from 'moment'
 
 export default {
   props: [
-    'employeeId',
+    'employee',
     'editable'
   ],
   data: () => ({
     modal: false,
+    appointWithMonth: {},
     appointment: {
       monthAndYear: null
     },
@@ -88,7 +90,6 @@ export default {
     messageColor: '',
     empty: '--:--',
     tittle: 'Lista de Apontamentos',
-    employee: {id: 1},
     appointments: [],
     months: [],
     month: '',
@@ -99,16 +100,20 @@ export default {
     AppointDialog,
     AppointTable
   },
+  beforeMount () {
+    this.beforeCallApi(moment().format('YYYY-MM'))
+  },
   watch: {
-    employeeId () {
+    employee () {
       this.beforeCallApi(this.monthYear)
     }
   },
   methods: {
     beforeCallApi (monthYear) {
       this.monthYear = monthYear
-      if (this.employeeId) {
-        this.callApi({employee: {id: this.employeeId}, monthAndYear: new Date(`${monthYear}-01`)})
+      if (this.employee) {
+        this.appointWithMonth = {employee: this.employee, monthAndYear: new Date(`${monthYear}-01`)}
+        this.callApi(this.appointWithMonth)
       }
     },
     takeAppointment (appointment) {
@@ -120,9 +125,6 @@ export default {
       this.$_axios.put(`${this.$_url}appointment`, this.appointment)
         .then(response => {
           var result = response.data
-          if (result.resultList.length !== 0) {
-            this.appointment = result.resultList[0]
-          }
           if (result.message) {
             this.messages = [...result.message]
             this.haveMessage = true
@@ -132,7 +134,6 @@ export default {
               this.messageColor = 'warning'
             }
           }
-          this.callApi({monthAndYear: new Date(this.appointment.monthAndYear)})
         })
         .catch(error => {
           console.log(error)
@@ -140,6 +141,7 @@ export default {
           this.haveMessage = true
           this.messageColor = 'error'
         })
+      this.callApi(this.appointWithMonth)
     },
     callApi (appointment) {
       console.log(JSON.stringify(appointment))

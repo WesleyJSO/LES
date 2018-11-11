@@ -33,6 +33,7 @@ public class AppointmentNavigation {
 	@Bean("UPDATE_APPOINTMENT")
 	public Navigation<Appointment> updateAppointmentValidator() {
 		return new NavigationBuilder<Appointment>()
+				.next(loggedUser)
 				.next(changeSpecificAppointment)
 				.next(calculateBalance)
 				.build();

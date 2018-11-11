@@ -19,7 +19,7 @@
 
       </v-card>
       <br>
-      <MonthAppointments :editable="false" :employeeId="employeeId"></MonthAppointments>
+      <MonthAppointments :editable="false" :employee="employee"></MonthAppointments>
     </v-form>
   </div>
 </template>
@@ -33,7 +33,7 @@ export default {
     employeeName: '',
     employeesNames: [],
     employees: [],
-    employeeId: ''
+    employee: null
   }),
   components: {
     MonthAppointments
@@ -57,7 +57,7 @@ export default {
       let name = this.employeeName.split(' ')
       this.employees.forEach(element => {
         if (element.name === name[0] && element.lastName === name[1]) {
-          this.employeeId = element.id
+          this.employee = {id: element.id}
         }
       })
     },

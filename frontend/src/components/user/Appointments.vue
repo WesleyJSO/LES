@@ -4,7 +4,7 @@
     <br/>
 
     <v-form>
-      <MonthAppointments :editable="true" :employeeId="employeeId"></MonthAppointments>
+      <MonthAppointments :editable="true" :employee="employee"></MonthAppointments>
     </v-form>
   </div>
 </template>
@@ -15,13 +15,14 @@ import Authenticator from '../../service/Authenticator'
 
 export default {
   data: () => ({
-    employeeId: ''
+    employee: {}
   }),
   components: {
     MonthAppointments
   },
   beforeMount () {
-    this.employeeId = Authenticator.GET_AUTHENTICATED().id
+    var emp = {user: {id: Authenticator.GET_AUTHENTICATED().id}}
+    this.employee = emp
   }
 }
 </script>

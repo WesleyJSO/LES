@@ -22,7 +22,7 @@ public class AutoAppointmentTask {
 	@Autowired EmployeeRepository employeeRepository;
 	@Autowired AppointmentRepository appointmentRepository;
 
- 	private final static int HOURRANGE = 1;
+ 	private final static int HOURRANGE = 2;
  	
  	private final static int MINUTERANGE = 59;
  	

@@ -39,6 +39,7 @@ import AppointButton from '@/components/shared/AppointButton.vue'
 import AppointDialog from '@/components/shared/AppointDialog.vue'
 import AppointTable from '@/components/shared/AppointTable.vue'
 import DateHelper from '../../helpers/DateHelper'
+import Authenticator from '../../service/Authenticator'
 
 export default {
   data: () => ({
@@ -58,7 +59,7 @@ export default {
       { name: 'Saída Partícular', disable: true }
     ],
     appointment: {},
-    employee: {id: 1},
+    employee: {user: {id: null}},
     appointments: []
   }),
   components: {
@@ -71,7 +72,8 @@ export default {
   watch: {
   },
   created () {
-    this.callApi({date: new Date(), monthAndYear: new Date()})
+    this.employee.user.id = Authenticator.GET_AUTHENTICATED().id
+    this.callApi({monthAndYear: new Date(), date: new Date(), employee: this.employee})
   },
   methods: {
     takeAppointment (appointment) {
@@ -165,7 +167,6 @@ export default {
       var response = null
       var result = null
       if (!this.appointment.id) {
-        // this.appointment.employee = this.employee
         try {
           response = await this.$_axios.post(`${this.$_url}appointment`, this.appointment)
           console.log('post')
