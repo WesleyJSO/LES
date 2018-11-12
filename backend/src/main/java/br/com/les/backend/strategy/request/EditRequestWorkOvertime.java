@@ -25,15 +25,15 @@ public class EditRequestWorkOvertime implements IStrategy<Request> {
 	public void process(Request aEntity, INavigationCase<Request> aCase) {
 		if (aEntity != null && aEntity.getId() != 0 && !Strings.isNullOrEmpty(String.valueOf(aEntity.getId()))) {
 			Request r = requestRepository.findActiveById(aEntity.getId()).get();
-				if ( r.getType() == RequestType.WORK_OVERTIME && aEntity.getStatus() == r.getStatus() ) {
-					if (null == aEntity.getStartDate())
+				if ( aEntity.getType() == RequestType.WORK_OVERTIME && aEntity.getStatus() == r.getStatus() ) {
+					if (null == aEntity.getStartDate()) {
 						aCase.getResult().setError(Util.ERROR_ENTRY_DATE);
-					
-					else if (r.getStartDate().compareTo(aEntity.getStartDate()) != 0
-							&& aEntity.getStartDate().compareTo(LocalDate.now()) <= 0)
+					} else if (r.getStartDate().compareTo(aEntity.getStartDate()) != 0
+							&& aEntity.getStartDate().compareTo(LocalDate.now()) <= 0) {
 						aCase.getResult().setError(Util.INVALID_ENTRY_DATE);
+					}
 					
-					if (null != aEntity.getEndDate() && aEntity.getStartDate().compareTo(aEntity.getEndDate()) <= 0) 
+					if (null != aEntity.getEndDate() && aEntity.getEndDate().compareTo(aEntity.getStartDate()) <= 0) 
 						aCase.getResult().setError(Util.INVALID_END_DATE);
 					
 					if (null == aEntity.getDescription())
@@ -42,6 +42,7 @@ public class EditRequestWorkOvertime implements IStrategy<Request> {
 					else if (r.getDescription() != aEntity.getDescription()
 							&& (aEntity.getDescription().trim().equals("") || aEntity.getDescription().length() < 10))
 						aCase.getResult().setError(Util.INVALID_DESCRIPTION);
+					
 					if (aCase.getResult().isSuccess()) {
 						aCase.getResult().setSuccess(Util.UPDATE_SUCCESSFUL_REQUEST);
 						aEntity.setUpdatedDate(LocalDate.now());

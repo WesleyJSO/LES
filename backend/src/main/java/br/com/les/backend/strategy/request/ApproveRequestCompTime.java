@@ -37,7 +37,7 @@ public class ApproveRequestCompTime implements IStrategy<Request> {
 					}
 					
 					if (aCase.getResult().isSuccess()) {
-						aCase.getResult().setSuccess(r.getStatus() == RequestStatus.APPROVED.getValue() ? 
+						aCase.getResult().setSuccess(aEntity.getStatus() == RequestStatus.APPROVED.getValue() ? 
 								Util.APPROVE_SUCCESSFUL_REQUEST : 
 								Util.DENY_SUCCESSFUL_REQUEST);
 						Employee manager = (Employee) SecurityService.getAuthenticatedUser();
