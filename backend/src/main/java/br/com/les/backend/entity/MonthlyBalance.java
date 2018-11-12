@@ -26,6 +26,7 @@ public class MonthlyBalance extends DomainEntity {
 	private Integer balanceMinutes;
 	private Integer abscenseMinutes;
 	private Integer overtimeMinutes;
+	private Integer monthWorkload;
 
 	@ManyToOne( fetch=FetchType.EAGER )
 	@JoinColumn( name="employee_id" )
@@ -38,6 +39,7 @@ public class MonthlyBalance extends DomainEntity {
 		this.balanceMinutes = 0;
 		this.abscenseMinutes = 0;
 		this.overtimeMinutes = 0;
+		this.monthWorkload = 0;
 	}
 
 	public LocalDate getMonthAndYear() {
@@ -53,7 +55,7 @@ public class MonthlyBalance extends DomainEntity {
 	}
 
 	public void setBalanceHours(Integer balanceHours) {
-		this.balanceHours = balanceHours;
+		this.balanceHours += balanceHours;
 	}
 
 	public Integer getAbscenseHours() {
@@ -61,7 +63,7 @@ public class MonthlyBalance extends DomainEntity {
 	}
 
 	public void setAbscenseHours(Integer abscenseHours) {
-		this.abscenseHours = abscenseHours;
+		this.abscenseHours += abscenseHours;
 	}
 
 	public Integer getOvertimeHours() {
@@ -69,11 +71,7 @@ public class MonthlyBalance extends DomainEntity {
 	}
 
 	public void setOvertimeHours(Integer overtimeHours) {
-		this.overtimeHours = overtimeHours;
-		if ( this.overtimeMinutes >= 60 ) {
-			this.overtimeMinutes = this.overtimeMinutes % 60;
-			this.overtimeHours += this.overtimeHours / 60;
-		}
+		this.overtimeHours += overtimeHours;
 	}
 
 	public Integer getBalanceMinutes() {
@@ -81,10 +79,10 @@ public class MonthlyBalance extends DomainEntity {
 	}
 
 	public void setBalanceMinutes(Integer balanceMinutes) {
-		this.balanceMinutes = balanceMinutes;
+		this.balanceMinutes += balanceMinutes;
 		if ( this.balanceMinutes >= 60 ) {
+			this.balanceHours += this.balanceMinutes / 60;
 			this.balanceMinutes = this.balanceMinutes % 60;
-			this.balanceHours += this.balanceHours / 60;
 		}
 	}
 
@@ -93,10 +91,10 @@ public class MonthlyBalance extends DomainEntity {
 	}
 
 	public void setAbscenseMinutes(Integer abscenseMinutes) {
-		this.abscenseMinutes = abscenseMinutes;
+		this.abscenseMinutes += abscenseMinutes;
 		if ( this.abscenseMinutes >= 60 ) {
+			this.abscenseHours += this.abscenseMinutes / 60;
 			this.abscenseMinutes = this.abscenseMinutes % 60;
-			this.abscenseHours += this.abscenseHours / 60;
 		}
 	}
 
@@ -105,7 +103,11 @@ public class MonthlyBalance extends DomainEntity {
 	}
 
 	public void setOvertimeMinutes(Integer overtimeMinutes) {
-		this.overtimeMinutes = overtimeMinutes;
+		this.overtimeMinutes += overtimeMinutes;
+		if ( this.overtimeMinutes >= 60 ) {
+			this.overtimeHours += this.overtimeMinutes / 60;
+			this.overtimeMinutes = this.overtimeMinutes % 60;
+		}
 	}
 
 	@DeepSearchQuery(name="t.employee")
@@ -117,5 +119,12 @@ public class MonthlyBalance extends DomainEntity {
 		this.employee = employee;
 	}
 
+	public Integer getMonthWorkload() {
+		return monthWorkload;
+	}
+
+	public void setMonthWorkload(Appointment a) {
+		this.monthWorkload += 8;
+	}
 	
 }
