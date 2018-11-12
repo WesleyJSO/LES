@@ -49,7 +49,7 @@
                   :locale="getDateConfig.locale"
                   :header-color="getColors.black"
                   v-model="chartFilter.initialQueryDate"
-                  @input="pickerInitialDate = false">                  
+                  @input="pickerInitialDate = false">
                 </v-date-picker>
               </v-menu>
             </v-flex>
@@ -222,6 +222,7 @@ export default {
     endDate: null,
     employeesList: [],
     employees: [],
+    a: null,
     chartFilter: {},
     selectedEmployesList: [],
     chartData: null,
@@ -298,8 +299,11 @@ export default {
     workOvertime (list) {
       let dates = list.map(i => {
         let parsedDate = {}
-        parsedDate.employee = i.employee.id
-        parsedDate.name = i.employee.name + ' ' + i.employee.lastName
+        if (!this.a || this.a.id !== i.employee) {
+          this.a = i.employee
+        }
+        parsedDate.employee = this.a.id
+        parsedDate.name = this.a.name + ' ' + this.a.lastName
         parsedDate.date = i.date.substring(0, this.getDateConfig.date)
         parsedDate.dayOvertime = i.dayOvertime.substring(0, this.getDateConfig.hour).replace(':', '.')
         return parsedDate
@@ -329,8 +333,11 @@ export default {
     workedHours (list) {
       let dates = list.map(i => {
         let parsedDate = {}
-        parsedDate.employee = i.employee.id
-        parsedDate.name = i.employee.name + ' ' + i.employee.lastName
+        if (!this.a || this.a.id !== i.employee) {
+          this.a = i.employee
+        }
+        parsedDate.employee = this.a.id
+        parsedDate.name = this.a.name + ' ' + this.a.lastName
         parsedDate.date = i.date.substring(0, this.getDateConfig.date)
         parsedDate.balance = i.balance.substring(0, this.getDateConfig.hour).replace(':', '.')
         return parsedDate
@@ -360,8 +367,11 @@ export default {
     lunchHours (list) {
       let dates = list.map(i => {
         let parsedDate = {}
-        parsedDate.employee = i.employee.id
-        parsedDate.name = i.employee.name + ' ' + i.employee.lastName
+        if (!this.a || this.a.id !== i.employee) {
+          this.a = i.employee
+        }
+        parsedDate.employee = this.a.id
+        parsedDate.name = this.a.name + ' ' + this.a.lastName
         parsedDate.date = i.date.substring(0, this.getDateConfig.date)
         let morning = Number(i.morningOut.substring(0, this.getDateConfig.hour).replace(':', '.'))
         let afterNoon = Number(i.afternoonEntrance.substring(0, this.getDateConfig.hour).replace(':', '.'))

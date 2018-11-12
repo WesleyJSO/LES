@@ -6,6 +6,7 @@ public enum Actions {
     UPDATE("Update"), 
     DELETE("Delete"), 
 	FIND("Find"),
+	GET("Get"),
 	NEW_PASSWORD("NewPassword"); 
 	
 	

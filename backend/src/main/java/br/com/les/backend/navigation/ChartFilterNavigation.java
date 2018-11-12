@@ -10,6 +10,11 @@ import br.com.les.backend.navigator.NavigationBuilder;
 @Configuration
 public class ChartFilterNavigation {
 
+	@Bean("GET_CHARTFILTER")
+	public Navigation<ChartFilter> getChartFilterValidator() {
+		return new NavigationBuilder<ChartFilter>().build();
+	}
+	
 	@Bean("FIND_CHARTFILTER")
 	public Navigation<ChartFilter> findChartFilterValidator() {
 		return new NavigationBuilder<ChartFilter>().build();

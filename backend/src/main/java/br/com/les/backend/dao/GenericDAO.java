@@ -46,7 +46,7 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 	private static DateTimeFormatter monthYearPettern = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	
 	@PersistenceContext
-	private EntityManager em;
+	protected EntityManager em;
 
 	@Autowired
 	protected Map<String, GenericRepository<T>> repositoryMap;

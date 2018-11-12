@@ -5,8 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import br.com.les.backend.dao.FilterDAO;
 import br.com.les.backend.dao.GenericDAO;
+import br.com.les.backend.entity.Appointment;
 import br.com.les.backend.entity.DomainEntity;
+import br.com.les.backend.filter.ChartFilter;
 import br.com.les.backend.navigator.INavigationCase;
 import br.com.les.backend.navigator.INavigator;
 import br.com.les.backend.utils.Result;
@@ -14,6 +17,7 @@ import br.com.les.backend.utils.Result;
 @Component
 public class ApplicationFacade<T extends DomainEntity> implements IApplicationFacade<T> {
 
+	@Autowired private FilterDAO filterDAO;
 	@Autowired private GenericDAO<T> genericDAO;
 	
 	@Autowired private INavigator<T> navigator;
@@ -60,6 +64,18 @@ public class ApplicationFacade<T extends DomainEntity> implements IApplicationFa
 			aCase.getResult().setResultList(found);
 		}
 		return aCase.getResult();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Result<Appointment> get(T aEntity, INavigationCase<T> aCase) {
+
+		navigator.run(aEntity, aCase);
+		if(aCase.getResult().isSuccess() && !aCase.isSuspendExecution()) {
+			List<Appointment> found = filterDAO.get((ChartFilter)aEntity);
+			aCase.getResult().setResultList((List<T>) found);
+		}
+		return (Result<Appointment>) aCase.getResult();
 	}
 
 }

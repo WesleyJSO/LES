@@ -49,7 +49,7 @@ public class Employee extends DomainEntity {
 	@ManyToMany( mappedBy="notificatedColaboratorsList", fetch=FetchType.LAZY )
 	private List< Request > notifiedEmployeesRequestList;
 	
-	@OneToMany( cascade=CascadeType.ALL )
+	@OneToMany( cascade=CascadeType.ALL)
 	private List< Appointment > appointmentList;
 
 	@OneToOne(mappedBy="employee", fetch=FetchType.LAZY, cascade=CascadeType.PERSIST)
