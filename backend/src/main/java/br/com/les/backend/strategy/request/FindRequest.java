@@ -33,8 +33,8 @@ public class FindRequest implements IStrategy < Request > {
 					aEntity.setEmployee(userRequest);
 				}
 				
-				if (aCase.getResult().isSuccess())
-					aCase.getResult().setSuccess(Util.FIND_SUCCESSFUL_REQUEST);
+//				if (aCase.getResult().isSuccess())
+//					aCase.getResult().setSuccess(Util.FIND_SUCCESSFUL_REQUEST);
 			}
 			return;
 		}
