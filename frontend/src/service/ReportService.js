@@ -50,7 +50,7 @@ export const REPORT_AXIS = {
   }
 }
 
-export default class RequestService {
+export default class ReportService {
   static get LABELS () { return LABELS }
   static get TITLES () { return TITLES }
   static get BUTTONS () { return BUTTONS }

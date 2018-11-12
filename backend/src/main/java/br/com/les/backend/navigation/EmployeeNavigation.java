@@ -13,6 +13,7 @@ import br.com.les.backend.strategy.employee.IdActivate;
 import br.com.les.backend.strategy.employee.IdExistence;
 import br.com.les.backend.strategy.employee.IdInactivate;
 import br.com.les.backend.strategy.employee.NameValidator;
+import br.com.les.backend.strategy.employee.NewUserConfig;
 import br.com.les.backend.strategy.employee.PasswordLength;
 import br.com.les.backend.strategy.employee.PisLength;
 import br.com.les.backend.strategy.employee.SalaryValidator;
@@ -34,6 +35,7 @@ public class EmployeeNavigation {
 	@Autowired private IdExistence idExistence;
 	@Autowired private IdActivate idActivate;
 	@Autowired private IdInactivate idInactivate;
+	@Autowired private NewUserConfig newUserConfig;
 	
 	@Bean("ACTIVATE_EMPLOYEE")
 	public Navigation<Employee> activateEmployeeValidator() {
@@ -75,6 +77,7 @@ public class EmployeeNavigation {
 				.next(nameValidator)
 				.next(pisLength)
 				.next(salaryValidator)
+				.next(newUserConfig)
 				.build();
 	}
 	

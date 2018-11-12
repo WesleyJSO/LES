@@ -19,16 +19,20 @@ public class EmailExistence implements IStrategy<Employee> {
 	@Override
 	public void process(Employee aEntity, INavigationCase<Employee> aCase) {
 
-		if (aEntity != null && aEntity.getUser() != null && !Strings.isNullOrEmpty(aEntity.getUser().getEmail())) {
+		if (aEntity != null && aEntity.getUser() != null) {
 		
-			User user = userRepository.findByEmail(aEntity.getUser().getEmail());    	
-			if( user != null) {
-				aCase.getResult().setError("Email já cadastrado!");
+			if(!Strings.isNullOrEmpty(aEntity.getUser().getEmail())) {
+				
+				User user = userRepository.findByEmail(aEntity.getUser().getEmail());    	
+				if(user != null) {
+					aCase.getResult().setError("E-mail já cadastrado!");
+				}
+				return;
 			}
-			return;
+			aCase.getResult().setError("E-mail deve ser informado!");			
 		}
 		aCase.suspendExecution();
-		aCase.getResult().setError("E-mail inexistente!");
+		aCase.getResult().setError("Funcionário inexistente!");
 		return;
 	}
 }

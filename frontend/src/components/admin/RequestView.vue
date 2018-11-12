@@ -17,6 +17,7 @@
       </v-text-field>
     </v-toolbar>
     <template>
+    
     <v-tabs fixed-tabs
             color="black"
             dark
@@ -25,7 +26,7 @@
         <v-tab>{{ this.getTitles.pending }}</v-tab>
         <v-tab>{{ this.getTitles.approved }}</v-tab>
     <v-tabs-items v-model="tabs">
-      <v-tab-item :key="1">
+      <v-tab-item key="1">
         <v-data-table :headers="getHeaders"
                   :items="getRequests"
                   item-key="id"
@@ -33,29 +34,28 @@
                   :search="searchFilter"
                   class="elevation-10" >
         <template slot="items" slot-scope="props">
-          <tr @onclick="props.expanded = !props.expanded">
             <td>{{ props.item.employee.name }} {{ props.item.employee.lastName }}</td>
-            <td class="text-xs-left">{{ getType(props.item.type) }}</td>
+            <td class="text-xs-left">{{ getType (props.item.type) }}</td>
             <td class="text-xs-left">{{ getStatus(props.item.status) }}</td>
             <td class="text-xs-center" v-if="hasRole('ROLE_EMPLOYEE')">
+            <v-icon
+                  :key="props.item.id"
+                  slot="activator"
+                  light
+                  @click.stop="editItem(props.item)">
+                  edit
+            </v-icon>
             <v-dialog v-model="dialogEdit" 
                       @keydown.esc="dialogEdit = !dialogEdit">
-              <v-icon
-                    :key="props.item.id"
-                    slot="activator"
-                    light
-                    @click.stop="editItem(props.item)">
-                    edit
-              </v-icon>                      
               <v-card>
                 <v-card-title class="headline grey lighten-2"
                               primary-title >
                     {{ getTitles.edit }}
                 </v-card-title>
                 <v-card-text >
-                  <request :editedItem="props.item"
-                           :edit="edit"
-                           @onClose="dialogEdit = !dialogEdit">
+                  <request :item="request"
+                           :edit="true"
+                           @onClose="finishEdit($event)">
                   </request>
                 </v-card-text>
               </v-card>
@@ -153,6 +153,16 @@
                         {{ props.item.endDate}}
                     </v-card-text> -->
 
+                    <v-card-text v-if="hasRole('ROLE_ADMIN') || hasRole('ROLE_MANAGER')" >
+                      <b>{{ getLabels.managerMessage }}</b>
+                      <v-textarea v-model="props.item.observation"
+                          box
+                          outline
+                          name="input-7-4"
+                          :label="getTitles.managerMessage">
+                      </v-textarea>
+                    </v-card-text>
+
                     <v-divider></v-divider>
 
                     <v-card-actions>
@@ -160,16 +170,16 @@
                     <v-btn v-if="hasRole('ROLE_ADMIN') || hasRole('ROLE_MANAGER')"
                         color="green"
                         flat
-                        @click.stop="setDescription(props.item)">
+                        @click.stop="approveRequest(props.item, getStatusValue.approved), $set(dialogRequests, props.item.id, false)">
                         {{ getButtons.approve }}
                     </v-btn>
                     <v-btn v-if="hasRole('ROLE_ADMIN') || hasRole('ROLE_MANAGER')"
                         color="red"
                         flat
-                        @click.stop="$set(dialogRequests, props.item.id, false)">
+                        @click.stop="approveRequest(props.item, getStatusValue.denied), $set(dialogRequests, props.item.id, false)">
                         {{ getButtons.deny }}
                     </v-btn>
-                    <v-btn v-if="!hasRole('ROLE_ADMIN') || !hasRole('ROLE_MANAGER')"
+                    <v-btn v-if="hasRole('ROLE_EMPLOYEE')"
                         color="green"
                         flat
                         @click.stop="$set(dialogRequests, props.item.id, false)">
@@ -178,30 +188,6 @@
                     </v-card-actions>
                 </v-card>
                 </v-dialog>
-                <v-dialog v-model="messageDialog" max-width="500px">
-                  <v-card>
-                    <v-card-title
-                      class="headline grey lighten-2"
-                      primary-title>
-                      <span>{{getTitles.managerMessage}}</span>
-                      <v-spacer></v-spacer>
-                    </v-card-title>
-                    <v-card-text>
-                        <v-textarea v-model="managerMessage"
-                          box
-                          outline
-                          :rules="$v_request.description(request.description)"
-                          name="input-7-4"
-                          :label="getLabels.managerMessage">
-                        </v-textarea>
-                    </v-card-text>
-                    <v-card-actions>
-                      <v-btn color="primary" 
-                        flat
-                        @click.stop="processRequest()">{{getButtons.confirm}}</v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </v-dialog>
             </td>
           </tr>
         </template>
@@ -209,7 +195,7 @@
       </v-tab-item>
       <v-tab-item :key="2">
         <v-data-table :headers="getHeaders"
-                  :items="getApproved"
+                  :items="getProcessed"
                   item-key="id"
                   hide-actions
                   :search="searchFilter"
@@ -220,15 +206,15 @@
             <td class="text-xs-left">{{ getType(props.item.type) }}</td>
             <td class="text-xs-left" font-color="green">{{ getStatus(props.item.status) }}</td>
             <td class="text-xs-center">
-                <v-dialog v-model="dialogApproved[props.item.id]"
+                <v-dialog v-model="dialogRequests[props.item.id]"
                           max-width="600px"
                           max-height="300px"
-                          @keydown.esc="$set(dialogApproved, props.item.id, false)">
+                          @keydown.esc="$set(dialogRequests, props.item.id, false)">
                 <v-icon
                     slot="activator"
                     :key="props.item.id"
                     light>
-                    {{getIcon}}
+                    remove_red_eye
                 </v-icon>
 
                 <v-card>
@@ -311,6 +297,26 @@
                         {{ props.item.endDate}}
                     </v-card-text> -->
 
+                    <!-- Last Update -->
+                     <v-card-text v-if="props.item.updatedDate">
+                        <b>{{ getTitles.lastUpdate }}</b>
+                        
+                        {{ props.item.updatedDate}}
+                    </v-card-text>
+
+                    <!-- Manager Name -->
+                     <v-card-text v-if="props.item.managerName">
+                        <b>{{ getTitles.approvedManager }}</b>
+                        {{ props.item.managerName}}
+                    </v-card-text>
+
+                    <!-- Manager Observation -->
+                     <v-card-text v-if="props.item.observation">
+                        <b>{{ getTitles.viewManagerMessage }}</b>
+                        <br>
+                        {{ props.item.observation}}
+                    </v-card-text>
+
                     <v-divider></v-divider>
 
                     <v-card-actions>
@@ -350,42 +356,16 @@ export default {
       messages: [],
       haveMessage: false,
       searchFilter: '',
-      approvedRequests: [],
       active: 0,
       request: {},
       tabs: 0,
       requests: [],
+      processedRequests: [],
       edit: false
     }
   },
   mounted () {
-    this.$_axios.patch(`${this.$_url}request`, this.request).then((response) => {
-      let resultado = response.data
-      // alert(JSON.stringify(resultado, null, ' '))
-      if (resultado.resultList.length >= 0) {
-        // Fetch a list of cost centres from backend
-        this.requests = resultado.resultList
-        console.table(this.requests)
-      }
-      if (resultado.message) {
-        this.messages = [...resultado.message]
-        this.haveMessage = true
-        if (resultado.sucesso) {
-          // Success message
-          this.messageColor = 'info'
-        } else {
-          // Waring message
-          this.messageColor = 'warning'
-        }
-      }
-    },
-    (response) => {
-      console.log(JSON.stringify(response, null, ' '))
-      // Error during request
-      this.messages = ['Erro durante execução do serviço!']
-      this.haveMessage = true
-      this.messageColor = 'error'
-    })
+    this.findRequests()
   },
   computed: {
     getHeaders () {
@@ -406,8 +386,8 @@ export default {
     getButtons () {
       return RequestService.BUTTONS
     },
-    getApproved () {
-      return this.approvedRequests
+    getProcessed () {
+      return this.processedRequests
     },
     getRequests () {
       return this.requests
@@ -420,34 +400,38 @@ export default {
     },
     getStatusValue () {
       return RequestService.STATUS_VALUE
+    },
+    getMessages () {
+      return RequestService.MESSAGE
     }
   },
   methods: {
-    async processRequest () {
+    async approveRequest (item, status) {
       try {
-        this.request = Object.assign({'observation': this.managerMessage}, this.request)
-        this.request.status = this.getStatusValue.approved
-        let result = await this.$_axios.put(`${this.$_url}request`, this.request).data
-        if (result.message) {
-          this.messages = [...result.message]
-          this.haveMessage = true
-          if (result.success) {
+        let i = Object.assign({}, item)
+        delete i.status
+        delete i.employee.user
+        delete i.employee.manager
+        let updatedRequest = Object.assign({'status': status, 'observation': item.observation}, i)
+        let result = this.$_axios.put(`${this.$_url}request`, updatedRequest)
+        let [response] = await Promise.all([result])
+        if (response.data.message) {
+          let resultMessage = !result.response.data.message ? [] : result.response.data.message
+          this.messages = [...resultMessage]
+          this.haveMessage = resultMessage.length > 0
+          if (result.response.data.success) {
             this.messageColor = 'info'
           } else {
             this.messageColor = 'warning'
           }
         }
       } catch (err) {
-        console.log(JSON.stringify(err))
-        this.messages = ['Erro durante execução do serviço!']
-        this.haveMessage = true
+        console.log(JSON.stringify(err, null, ''))
+        // this.messages = [this.getMessages.approveError]
+        this.haveMessage = false
         this.messageColor = 'error'
       }
-    },
-    setDescription (item) {
-      alert(JSON.stringify(item, null, ''))
-      this.request = Object.assign({}, item)
-      this.messageDialog = true
+      this.findRequests()
     },
     sendBack () {
     },
@@ -463,8 +447,42 @@ export default {
     editItem (item) {
       this.request = Object.assign({}, item)
       this.edit = true
-      // alert(JSON.stringify(this.request, null, ''))
+      alert(JSON.stringify(this.request, null, ''))
       this.dialogEdit = true
+    },
+    finishEdit (event) {
+      this.messages = [...event]
+      this.messageColor = 'info'
+      this.dialogEdit = !this.dialogEdit
+      this.findRequests()
+    },
+    async findRequests () {
+      try {
+        let pending = this.$_axios.patch(`${this.$_url}request`, {'status': this.getStatusValue.sent})
+        let approved = this.$_axios.patch(`${this.$_url}request`, {'status': this.getStatusValue.approved})
+        let denied = this.$_axios.patch(`${this.$_url}request`, {'status': this.getStatusValue.denied})
+        let [sent, approve, deny] = await Promise.all([pending, approved, denied])
+        this.processedRequests = [...approve.data.resultList, ...deny.data.resultList]
+        this.requests = [...sent.data.resultList]
+        let message1 = !sent.data.message ? [] : sent.data.message
+        let message2 = !approve.data.message ? [] : approve.data.message
+        let message3 = !deny.data.message ? [] : deny.data.message
+        let messageList = [...message1, ...message2, ...message3]
+        if (messageList) {
+          // this.messages = [...messageList]
+          this.haveMessage = true
+          if (sent.success || approve.success || deny.success) {
+            this.messageColor = 'info'
+          } else {
+            this.messageColor = 'warning'
+          }
+        }
+      } catch (err) {
+        console.log(JSON.stringify(err, null, ''))
+        this.messages = [this.getMessages.consultError]
+        this.haveMessage = true
+        this.messageColor = 'error'
+      }
     }
   },
   components: {

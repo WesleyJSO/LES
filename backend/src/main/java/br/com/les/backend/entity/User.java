@@ -79,6 +79,10 @@ public class User extends DomainEntity implements UserDetails {
 		return this.accountNonExpired;
 	}
 
+	public void setAccountNonExpired(boolean accountNonExpired) {
+		this.accountNonExpired = accountNonExpired;
+	}
+	
 	@Override
 	public boolean isAccountNonLocked() {
 		return this.accountNonLocked;
