@@ -24,7 +24,6 @@ public class Result<T extends DomainEntity> {
     public void setSuccess( String message ) {
     	
         if ( !Strings.isNullOrEmpty(message)) {
-        	
         	if ( !success )
         		this.message = new ArrayList<>();
 	        
@@ -36,7 +35,6 @@ public class Result<T extends DomainEntity> {
     public void setError( String message ) {
 
         if ( !Strings.isNullOrEmpty(message)) {
-        	
         	if ( success )
         		this.message = new ArrayList<>();
 	    	

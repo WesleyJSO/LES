@@ -101,10 +101,11 @@ export default {
         })
       }
     },
-    login () {
+    async login () {
       this.messages = []
       this.haveMessage = false
-      this.$_axios.post(`${this.$_url}login`, {email: this.user.email, password: this.user.password}).then(response => {
+      try {
+        let response = await this.$_axios.post(`${this.$_url}login`, {email: this.user.email, password: this.user.password})
         let result = response.data
         if (result.message) {
           this.messages = result.message
@@ -121,14 +122,15 @@ export default {
         } else {
           this.$router.push('/Graficos')
         }
-      }).catch(error => {
-        console.log(error)
-        // if the request fails, remove any possible user token if possible
+      } catch (err) {
+        console.log(JSON.stringify(err, null, ''))
+        // this.messages = [this.getMessages.approveError]
         localStorage.removeItem('user-token')
+        this.$router.push('/Login')
+        this.messageColor = 'error'
         this.messages = ['Erro durante execução do serviço!']
         this.haveMessage = true
-        this.messageColor = 'error'
-      })
+      }
     },
     /* submit () {
       this.messages = []

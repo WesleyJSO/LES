@@ -76,6 +76,10 @@ public class CalcBankTask extends TimerTask {
 		List< Employee > employeeList = employeeRepository.findAll();
 		
 		for ( Employee employee: employeeList) {
+			
+			if ( null == employee.getBaseHourCalculation() ) {
+				continue;
+			}
 
 			Double balanceToInsert = 0d;
 			
@@ -129,12 +133,13 @@ public class CalcBankTask extends TimerTask {
 				appointment.setPreviousBalanceInserted(balanceToInsert);
 				appointment.setCalculated(true);
 				
-				monthlyBalance.setBalanceHours(monthlyBalance.getBalanceHours() + appointment.getBalance().getHour());
-				monthlyBalance.setBalanceMinutes(monthlyBalance.getBalanceMinutes() + appointment.getBalance().getMinute());
-				monthlyBalance.setAbscenseHours(monthlyBalance.getAbscenseHours() + appointment.getHoursLeft().getHour());
-				monthlyBalance.setAbscenseMinutes(monthlyBalance.getAbscenseMinutes() + appointment.getHoursLeft().getMinute());
-				monthlyBalance.setOvertimeHours(monthlyBalance.getOvertimeHours() + appointment.getDayOvertime().getHour());
-				monthlyBalance.setOvertimeMinutes(monthlyBalance.getOvertimeMinutes() + appointment.getDayOvertime().getMinute());
+				monthlyBalance.setBalanceHours(appointment.getBalance().getHour());
+				monthlyBalance.setBalanceMinutes(appointment.getBalance().getMinute());
+				monthlyBalance.setAbscenseHours(appointment.getHoursLeft().getHour());
+				monthlyBalance.setAbscenseMinutes(appointment.getHoursLeft().getMinute());
+				monthlyBalance.setOvertimeHours(appointment.getDayOvertime().getHour());
+				monthlyBalance.setOvertimeMinutes(appointment.getDayOvertime().getMinute());
+				monthlyBalance.setMonthWorkload(appointment);
 			}
 			
 			monthlyBalance = null;

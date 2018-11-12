@@ -136,7 +136,14 @@
             item-value="id"
             prepend-icon="person"
             no-data-text="Não existem gestores cadastrados"
-            label="Gestor">
+            label="Gestor"
+          >
+            <template slot="selection" slot-scope="data">
+              {{ data.item.name }} {{ data.item.lastName }}
+            </template>
+            <template slot="item" slot-scope="data">
+              {{ data.item.name }} {{ data.item.lastName }}
+            </template>
           </v-select>
         </v-flex>
 
