@@ -6,7 +6,8 @@ export const HEADERS = [
 ]
 export const TITLES = {
   requests: 'Solicitações',
-  approved: 'Todas',
+  myRequest: 'Minhas Solicitações',
+  approved: 'Avalidas',
   pending: 'Pendentes',
   entryDate: 'Data Afetada - ',
   endDate: 'Nova Data - ',

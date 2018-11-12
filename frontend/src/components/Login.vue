@@ -52,6 +52,7 @@
 </template>
 
 <script>
+import Authenticator from '@/service/Authenticator'
 export default {
   data: () => ({
     user: {},
@@ -65,6 +66,9 @@ export default {
     this.user.password = '1234'
   },
   methods: {
+    hasRole (role) {
+      return Authenticator.HAS_ROLE(role)
+    },
     sendForgotPasswordEmail () {
       this.messages = []
       this.haveMessage = false
@@ -112,7 +116,11 @@ export default {
             this.messageColor = 'warning'
           }
         }
-        this.$router.push('/LinhaDoTempo')
+        if (this.hasRole('ROLE_EMPLOYEE')) {
+          this.$router.push('/LinhaDoTempo')
+        } else {
+          this.$router.push('/Graficos')
+        }
       }).catch(error => {
         console.log(error)
         // if the request fails, remove any possible user token if possible

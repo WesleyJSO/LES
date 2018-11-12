@@ -7,7 +7,7 @@
                transition="scale-transition" />
     </li>
     <v-toolbar flat color="white">
-      <v-toolbar-title>{{ this.getTitles.requests }}</v-toolbar-title>
+      <v-toolbar-title>Minhas Solicitações</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-text-field v-model="searchFilter"
                     append-icon="search"
@@ -37,7 +37,7 @@
             <td>{{ props.item.employee.name }} {{ props.item.employee.lastName }}</td>
             <td class="text-xs-left">{{ getType (props.item.type) }}</td>
             <td class="text-xs-left">{{ getStatus(props.item.status) }}</td>
-            <td class="text-xs-center" v-if="getUser.id === props.item.id">
+            <td class="text-xs-center" v-if="hasRole('ROLE_EMPLOYEE')">
             <v-icon
                   :key="props.item.id"
                   slot="activator"
@@ -70,7 +70,7 @@
                     slot="activator"
                     :key="props.item.id"
                     light>
-                    {{getIcon}}
+                    remove_red_eye
                 </v-icon>
 
                 <v-card>
@@ -136,6 +136,10 @@
                         <br>
                         <b>{{ getTitles.workDay }}</b>
                         {{ props.item.endDate}}
+                        <br>
+                        <br>
+                        <b>{{ getTitles.file }}</b>
+                        <a href="">{{ getTitles.fileName }}</a>
                     </v-card-text>
 
                     <!-- There is no  File -->
@@ -149,33 +153,11 @@
                         {{ props.item.endDate}}
                     </v-card-text> -->
 
-                    <v-card-text v-if="hasRole('ROLE_MANAGER')" >
-                      <b>{{ getLabels.managerMessage }}</b>
-                      <v-textarea v-model="props.item.observation"
-                          box
-                          outline
-                          name="input-7-4"
-                          :label="getTitles.managerMessage">
-                      </v-textarea>
-                    </v-card-text>
-
                     <v-divider></v-divider>
 
                     <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn v-if="hasRole('ROLE_MANAGER')"
-                        color="green"
-                        flat
-                        @click.stop="approveRequest(props.item, getStatusValue.approved), $set(dialogRequests, props.item.id, false)">
-                        {{ getButtons.approve }}
-                    </v-btn>
-                    <v-btn v-if="hasRole('ROLE_MANAGER')"
-                        color="red"
-                        flat
-                        @click.stop="approveRequest(props.item, getStatusValue.denied), $set(dialogRequests, props.item.id, false)">
-                        {{ getButtons.deny }}
-                    </v-btn>
-                    <v-btn v-if="hasRole('ROLE_EMPLOYEE')"
+                    <v-btn
                         color="green"
                         flat
                         @click.stop="$set(dialogRequests, props.item.id, false)">
@@ -240,13 +222,20 @@
                         <br>
                         <b>{{ getPrefixes.end }}</b>
                         {{ props.item.endDate}}
+                        <br>
+                        <br>
+                        <b>{{ getTitles.file }}</b>
+                        <a href="">{{ getTitles.fileName }}</a>
                     </v-card-text>
 
                     <!-- There is no 'endDate' -->
                     <v-card-text v-if="(props.item.type === 1 || props.item.type === 2) && !props.item.endDate">
                         <b>{{ getTitles.entryDate }}</b>
                         {{ props.item.startDate}}
-
+                        <br>
+                        <br>
+                        <b>{{ getTitles.file }}</b>
+                        <a href="">{{ getTitles.fileName }}</a>
                     </v-card-text>
 
                     <!-- There is no File -->
@@ -269,7 +258,10 @@
                         <br>
                         <b>{{ getTitles.workDay }}</b>
                         {{ props.item.endDate}}
-
+                        <br>
+                        <br>
+                        <b>{{ getTitles.file }}</b>
+                        <a href="">{{ getTitles.fileName }}</a>
                     </v-card-text>
 
                     <!-- There is no  File -->
@@ -329,8 +321,8 @@
 
 <script>
 import RequestService from '@/service/RequestService'
-import Request from '@/components/user/Request'
 import Authenticator from '@/service/Authenticator'
+import Request from '@/components/user/Request'
 export default {
   data () {
     return {
@@ -382,45 +374,19 @@ export default {
       return this.request
     },
     getIcon () {
-      return this.hasRole('ROLE_MANAGER') ? 'edit' : 'remove_red_eye'
+      return this.hasRole('ROLE_ADMIN') || this.hasRole('ROLE_MANAGER') ? 'edit' : 'remove_red_eye'
     },
     getStatusValue () {
       return RequestService.STATUS_VALUE
     },
     getMessages () {
       return RequestService.MESSAGE
+    },
+    getUser () {
+      return Authenticator.GET_AUTHENTICATED
     }
   },
   methods: {
-    async approveRequest (item, status) {
-      try {
-        let i = Object.assign({}, item)
-        delete i.status
-        delete i.employee.user
-        delete i.employee.manager
-        let updatedRequest = Object.assign({'status': status, 'observation': item.observation}, i)
-        let result = this.$_axios.put(`${this.$_url}request`, updatedRequest)
-        let [response] = await Promise.all([result])
-        if (response.data.message) {
-          let resultMessage = !result.response.data.message ? [] : result.response.data.message
-          this.messages = [...resultMessage]
-          this.haveMessage = resultMessage.length > 0
-          if (result.response.data.success) {
-            this.messageColor = 'info'
-          } else {
-            this.messageColor = 'warning'
-          }
-        }
-      } catch (err) {
-        console.log(JSON.stringify(err, null, ''))
-        // this.messages = [this.getMessages.approveError]
-        this.haveMessage = false
-        this.messageColor = 'error'
-      }
-      this.findRequests()
-    },
-    sendBack () {
-    },
     getType (item) {
       return RequestService.TYPE_NAME[item]
     },
@@ -429,9 +395,6 @@ export default {
     },
     hasRole (role) {
       return Authenticator.HAS_ROLE(role)
-    },
-    getUser () {
-      return Authenticator.GET_AUTHENTICATED
     },
     editItem (item) {
       this.request = Object.assign({}, item)
@@ -448,13 +411,8 @@ export default {
     async findRequests () {
       let user = {id: Authenticator.GET_AUTHENTICATED().id}
       let emp = Object.assign({}, {})
-      if (this.hasRole('ROLE_MANAGER')) {
-        let manager = Object.assign({'user': user}, {})
-        emp = Object.assign({'manager': manager}, {})
-      } else {
-        emp = Object.assign({'user': user}, {})
-      }
       try {
+        emp = Object.assign({'user': user}, {})
         let pending = this.$_axios.patch(`${this.$_url}request`, {'status': this.getStatusValue.sent, 'employee': emp})
         let approved = this.$_axios.patch(`${this.$_url}request`, {'status': this.getStatusValue.approved, 'employee': emp})
         let denied = this.$_axios.patch(`${this.$_url}request`, {'status': this.getStatusValue.denied, 'employee': emp})

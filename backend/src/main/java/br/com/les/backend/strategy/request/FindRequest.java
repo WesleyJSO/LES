@@ -19,23 +19,32 @@ public class FindRequest implements IStrategy < Request > {
 	@Override
 	public void process(Request aEntity, INavigationCase<Request> aCase) {
 		if (aEntity != null ) {
-			Employee emp = (Employee) SecurityService.getAuthenticatedUser();
-			@SuppressWarnings("unchecked")
-			List <Role> roles = ( List< Role > ) emp.getUser().getAuthorities();
-			for (Role r : roles) {
-				if (Role.ROLE_EMPLOYEE.equals(r.getRole())) {
-					Employee userRequest = new Employee(emp.getId());
-					aEntity.setEmployee(userRequest);
-				} else if ( Role.ROLE_ADMIN.equals(r.getRole() ) || Role.ROLE_MANAGER.equals(r.getRole() ) ) {
-					Employee userRequest = new Employee ();
-					Employee manager = new Employee(emp.getId());
-					userRequest.setManager(manager);
-					aEntity.setEmployee(userRequest);
-				}
-				
-//				if (aCase.getResult().isSuccess())
-//					aCase.getResult().setSuccess(Util.FIND_SUCCESSFUL_REQUEST);
-			}
+//			Employee emp = (Employee) SecurityService.getAuthenticatedUser();
+//			@SuppressWarnings("unchecked")
+//			List <Role> roles = ( List< Role > ) emp.getUser().getAuthorities();
+//			
+//			if ( null != roles.stream().filter(r -> Role.ROLE_MANAGER.equals(r.getRole() ) ).findAny() ) {
+//				Employee userRequest = new Employee ();
+//				Employee manager = new Employee(emp.getId());
+//				userRequest.setManager(manager);
+//				aEntity.setEmployee(userRequest);
+//			}
+//			
+//			if ( null != roles.stream().filter(r -> Role.ROLE_EMPLOYEE.equals(r.getRole() ) ).findAny() ) {
+//				Employee userRequest = new Employee(emp.getId());
+//				aEntity.setEmployee(userRequest);
+//			}
+//			
+//			for (Role r : roles) {
+//				if (Role.ROLE_EMPLOYEE.equals(r.getRole())) {
+//					
+//				} else if ( Role.ROLE_ADMIN.equals(r.getRole() ) || Role.ROLE_MANAGER.equals(r.getRole() ) ) {
+//					
+//				}
+//				
+////				if (aCase.getResult().isSuccess())
+////					aCase.getResult().setSuccess(Util.FIND_SUCCESSFUL_REQUEST);
+//			}
 			return;
 		}
 		aCase.suspendExecution();

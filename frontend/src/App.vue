@@ -2,10 +2,12 @@
   <v-app id="inspire">
     <v-navigation-drawer
       fixed app v-model="drawer"
-      :clipped="$vuetify.breakpoint.mdAndUp"
-    >
-      <admin-role v-if="true"></admin-role>
-      <user-role v-else-if="isUsuarioAtivo"></user-role>
+      :clipped="$vuetify.breakpoint.mdAndUp">
+
+      <admin-role v-if="this.hasRole('ROLE_ADMIN')"></admin-role>
+      <user-role v-else-if="this.hasRole('ROLE_EMPLOYEE') && !this.hasRole('ROLE_MANAGER') && !this.hasRole('ROLE_ADMIN')"></user-role>
+      <manager-role v-else-if="this.hasRole('ROLE_MANAGER')"></manager-role>
+
     </v-navigation-drawer>
 
     <v-toolbar dark dense app fixed
@@ -17,8 +19,7 @@
       <v-icon large color="blue lighten-2" >{{ account_circle }}</v-icon>
       <v-spacer></v-spacer> <!-- separete left and right -->
       <div class="hidden-sm-and-down">
-        <v-btn v-if="lblLogin == 'LOGIN'" flat>{{ lblLogin }}</v-btn>
-        <v-btn v-else-if="lblLogin == 'LOGOUT'" @click="logout" flat>{{ lblLogin }}</v-btn>
+        <v-btn @click.stop="logOut()"flat>LOGOUT</v-btn>
       </div>
     </v-toolbar>
 
@@ -42,6 +43,9 @@
 <script>
 import AdminRole from '@/components/roles/AdminRole'
 import UserRole from '@/components/roles/UserRole'
+import ManagerRole from '@/components/roles/ManagerRole'
+import Authenticator from '@/service/Authenticator'
+import router from './router'
 
 export default {
   data () {
@@ -60,9 +64,18 @@ export default {
   },
   components: {
     AdminRole,
-    UserRole
+    UserRole,
+    ManagerRole
   },
   methods: {
+    logOut () {
+      sessionStorage.removeItem('token')
+      sessionStorage.removeItem('principal')
+      router.push('/')
+    },
+    hasRole (role) {
+      return Authenticator.HAS_ROLE(role)
+    },
     setUsuarioLogado (user) {
       this.lblLogin = 'LOGOUT'
       this.drawer = true

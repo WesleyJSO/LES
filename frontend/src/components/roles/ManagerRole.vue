@@ -1,10 +1,5 @@
 <template>
-  <div>
-    <v-navigation-drawer
-      fixed clipped
-      class="grey lighten-4"
-      app
-    >
+
       <v-list dense>
         <v-list-tile>
           <v-list-tile-action>
@@ -22,7 +17,7 @@
             <v-icon>account_box</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <router-link to="CadastrarUsuario">
+            <router-link to="cadastro">
               <v-list-tile-title>Cadastro de usuários</v-list-tile-title>
             </router-link>
           </v-list-tile-content>
@@ -39,18 +34,7 @@
           </v-list-tile-content>
         </v-list-tile>
 
-        <v-list-tile>
-          <v-list-tile-action>
-            <v-icon>touch_app</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <router-link to="Apontamentos">
-              <v-list-tile-title>Realizar apontamentos</v-list-tile-title>
-            </router-link>
-          </v-list-tile-content>
-        </v-list-tile>
-
-        <v-list-tile>
+        <v-list-tile v-if="this.hasRole('ROLE_EMPLOYEE')">
           <v-list-tile-action>
             <v-icon>assignment</v-icon>
           </v-list-tile-action>
@@ -61,18 +45,16 @@
           </v-list-tile-content>
         </v-list-tile>
 
-
-        <v-list-tile>
+        <v-list-tile v-if="this.hasRole('ROLE_EMPLOYEE')">
           <v-list-tile-action>
-            <v-icon>group_add</v-icon>
+            <v-icon>assignment</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <router-link to="CentroDeCustos">
-              <v-list-tile-title>Centro de Custos</v-list-tile-title>
+            <router-link to="MinhasSolicitacoes">
+              <v-list-tile-title>Minhas Solicitações</v-list-tile-title>
             </router-link>
           </v-list-tile-content>
         </v-list-tile>
-
 
         <v-list-tile>
           <v-list-tile-action>
@@ -81,6 +63,17 @@
           <v-list-tile-content>
             <router-link to="Solicitacoes">
               <v-list-tile-title>Solicitações</v-list-tile-title>
+            </router-link>
+          </v-list-tile-content>
+        </v-list-tile>
+
+        <v-list-tile>
+          <v-list-tile-action>
+            <v-icon>group_add</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <router-link to="CentroDeCustos">
+              <v-list-tile-title>Centro de Custos</v-list-tile-title>
             </router-link>
           </v-list-tile-content>
         </v-list-tile>
@@ -98,7 +91,7 @@
 
         <v-list-tile>
           <v-list-tile-action>
-            <v-icon>bar_chart</v-icon>
+            <v-icon>insert_chart</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <router-link to="Graficos">
@@ -109,45 +102,28 @@
 
         <v-list-tile>
           <v-list-tile-action>
-            <v-icon>assignment</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <router-link to="Parametros">
-              <v-list-tile-title>Parametros do Sistema</v-list-tile-title>
-            </router-link>
-          </v-list-tile-content>
-        </v-list-tile>
-
-        <v-list-tile>
-          <v-list-tile-action>
             <v-icon>dns</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <router-link to="GerenciarBancoHoras">
-              <v-list-tile-title>Banco de Horas</v-list-tile-title>
-            </router-link>
-          </v-list-tile-content>
-        </v-list-tile>
-
-        <v-list-tile>
-          <v-list-tile-action>
-            <v-icon>timeline</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <router-link to="LinhaDoTempo">
-              <v-list-tile-title>Linha do Tempo</v-list-tile-title>
+            <router-link to="VisualizarApontamentos">
+              <v-list-tile-title>Visualizar Apontamentos</v-list-tile-title>
             </router-link>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
-    </v-navigation-drawer>
-  </div>
+
 </template>
 
 <script>
+  import Authenticator from '@/service/Authenticator'
   export default {
     data: function () {
       return {
+      }
+    },
+    methods: {
+      hasRole (role) {
+        return Authenticator.HAS_ROLE(role)
       }
     }
   }
