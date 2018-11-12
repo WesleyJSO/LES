@@ -64,7 +64,7 @@
                 :rules="$v_address.zipCodeRules(company.address.zipCode)"
                 :counter="8"
                 type="text"
-                prepend-icon="list_alt"
+                prepend-icon="event_note"
                 clearable
                 label="CEP"
                 required
@@ -76,7 +76,7 @@
                         v-model="company.address.number"
                         :rules="$v_address.numberRules(company.address.number)"
                         type="number"
-                        prepend-icon="money"
+                        prepend-icon="filter_1"
                         clearable
                         label="Número"
                         required>
@@ -126,10 +126,8 @@
       </v-flex>
 
     </v-form>
-    <v-flex xs12 right>
       <br/><br/><br/><br/>
       <CompanyList @emitCompany="updateCompany($event)" ref="companyList"></CompanyList>
-    </v-flex>
   </div>
 </template>
 

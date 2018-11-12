@@ -33,7 +33,9 @@ public class WorkLoadLimit implements IStrategy<Employee> {
 					r = Optional.empty();
 			}
 			if(r.isPresent()) {
-
+				
+				aEntity.getBaseHourCalculation().setEmployee(aEntity);
+				
 				if(aEntity.getBaseHourCalculation().getWorkload() <= 0)
 					aCase.getResult().setError("Carga horária diaria deve ser maior que zero!");
 				
