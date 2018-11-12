@@ -97,10 +97,11 @@ export default {
         })
       }
     },
-    login () {
+    async login () {
       this.messages = []
       this.haveMessage = false
-      this.$_axios.post(`${this.$_url}login`, {email: this.user.email, password: this.user.password}).then(response => {
+      try {
+        let response = await this.$_axios.post(`${this.$_url}login`, {email: this.user.email, password: this.user.password})
         let result = response.data
         if (result.message) {
           this.messages = result.message
@@ -113,14 +114,13 @@ export default {
           }
         }
         this.$router.push('/LinhaDoTempo')
-      }).catch(error => {
-        console.log(error)
-        // if the request fails, remove any possible user token if possible
+      } catch (err) {
+        console.log(err)
         localStorage.removeItem('user-token')
         this.messages = ['Erro durante execução do serviço!']
         this.haveMessage = true
         this.messageColor = 'error'
-      })
+      }
     },
     /* submit () {
       this.messages = []
