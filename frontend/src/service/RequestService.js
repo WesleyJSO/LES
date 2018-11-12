@@ -1,7 +1,8 @@
 export const HEADERS = [
   { text: 'Solicitante', align: 'left', sortable: false, value: 'employee.name' },
   { text: 'Tipo', align: 'left', value: 'type' },
-  { text: 'Status', align: 'left', value: 'status' }
+  { text: 'Status', align: 'left', value: 'status' },
+  { text: 'Ação', align: 'righ', value: 'acao' }
 ]
 export const TITLES = {
   requests: 'Solicitações',
@@ -71,6 +72,12 @@ export const REQUEST = [
   {id: 2, description: 'Banco de Horas'},
   {id: 4, description: 'Remanejamento de Horas/Dias'}
 ]
+
+export const REQUEST_VALUE = {
+  1: {id: 1, description: 'Hora Extra'},
+  2: {id: 2, description: 'Banco de Horas'},
+  4: {id: 4, description: 'Remanejamento de Horas/Dias'}
+}
 export const COLORS = {
   black: 'black',
   info: 'info'
@@ -90,4 +97,5 @@ export default class RequestService {
   static get MESSAGE () { return MESSAGE }
   static get REQUEST () { return REQUEST }
   static get COLORS () { return COLORS }
+  static get REQUEST_VALUE () { return REQUEST_VALUE }
 }
