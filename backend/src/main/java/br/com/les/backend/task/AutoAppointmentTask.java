@@ -44,6 +44,10 @@ public class AutoAppointmentTask {
 		
 		for ( Employee employee: employeeList) {
 
+			if ( null == employee.getBaseHourCalculation() ) {
+				continue;
+			}
+			
 			for (LocalDate date = LocalDate.of(2018, 7, 1); 
 					date.isBefore(LocalDate.now()) || date.isEqual(LocalDate.now()); 
 					date = date.plusDays(1l)) {

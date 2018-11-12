@@ -48,16 +48,19 @@
           <v-card class="elevation-10" >
             <v-layout class="text-xs-center">
               <v-flex xs12 sm9 md6 lg6 xl4>
-                <v-card-text>Carga Horaria: {{workload}}</v-card-text>
+                <v-card-text>Carga Horaria: {{ workload }}</v-card-text>
               </v-flex>
               <v-flex xs12 sm9 md6 lg6 xl4>
-                <v-card-text>Total Faltas: 00:00</v-card-text>
+                <v-card-text>Carga Horaria Mensal: {{ monthWorkload }}</v-card-text>
               </v-flex>
               <v-flex xs12 sm9 md6 lg6 xl4>
-                <v-card-text>Total Extras: 00:00</v-card-text>
+                <v-card-text>Total Faltas: {{ abscenses }}</v-card-text>
               </v-flex>
               <v-flex xs12 sm9 md6 lg6 xl4>
-                <v-card-text>Saldo Mensal: 00:00</v-card-text>
+                <v-card-text>Total Extras: {{ overtime }}</v-card-text>
+              </v-flex>
+              <v-flex xs12 sm9 md6 lg6 xl4>
+                <v-card-text>Saldo Mensal: {{ balance }}</v-card-text>
               </v-flex>
             </v-layout>
           </v-card>
@@ -79,7 +82,11 @@ export default {
   ],
   data: () => ({
     modal: false,
-    workload: '00:00',
+    monthWorkload: '0',
+    workload: '0',
+    abscenses: '00:00',
+    overtime: '00:00',
+    balance: '00:00',
     appointWithMonth: {},
     appointment: {
       monthAndYear: null
@@ -115,6 +122,7 @@ export default {
       if (this.employee) {
         this.appointWithMonth = {employee: this.employee, monthAndYear: new Date(`${monthYear}-01`)}
         this.findWorkload(this.employee)
+        this.findMonthlyBalanceData(this.appointWithMonth)
         this.callApi(this.appointWithMonth)
       }
     },
@@ -181,7 +189,7 @@ export default {
         if (result.resultList.length !== 0) {
           // retorno ok /
           employee = result.resultList[0]
-          this.workload = '0' + employee.baseHourCalculation.workload + ':00'
+          this.workload = employee.baseHourCalculation.workload
         }
         if (result.mensagem) {
           this.messages = [...result.message]
@@ -201,6 +209,44 @@ export default {
         this.haveMessage = true
         this.messageColor = 'error'
       }
+    },
+    findMonthlyBalanceData (monthlyBalance) {
+      this.$_axios.patch(`${this.$_url}monthlybalance`, monthlyBalance)
+        .then(response => {
+          var result = response.data
+          var monthData = null
+          if (result.resultList.length > 0) {
+            monthData = result.resultList[0]
+            this.mountData(monthData)
+          }
+          if (result.message) {
+            this.messages = [...result.message]
+            this.haveMessage = true
+            if (result.success) {
+              this.messageColor = 'info'
+            } else {
+              this.messageColor = 'warning'
+            }
+          }
+        })
+        .catch(error => {
+          console.log(error)
+          this.messages = ['Erro durante execução do serviço!']
+          this.haveMessage = true
+          this.messageColor = 'error'
+        })
+    },
+    mountData (monthData) {
+      this.abscenses = monthData.abscenseHours < 10 ? '0' + monthData.abscenseHours + ':' : monthData.abscenseHours + ':'
+      this.abscenses += monthData.abscenseMinutes < 10 ? '0' + monthData.abscenseMinutes : monthData.abscenseMinutes
+      this.overtime = monthData.overtimeHours < 10 ? '0' + monthData.overtimeHours + ':' : monthData.overtimeHours + ':'
+      this.overtime += monthData.overtimeMinutes < 10 ? '0' + monthData.overtimeMinutes : monthData.overtimeMinutes
+      this.balance = monthData.balanceHours < 10 ? '0' + monthData.balanceHours + ':' : monthData.balanceHours + ':'
+      this.balance += monthData.balanceMinutes < 10 ? '0' + monthData.balanceMinutes : monthData.balanceMinutes
+      if (monthData.monthWorkload < 150) {
+        monthData.monthWorkload = 176
+      }
+      this.monthWorkload = monthData.monthWorkload
     }
   }
 }
