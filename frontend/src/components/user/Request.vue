@@ -33,10 +33,9 @@
                 <v-text-field
                   :label="getLabels.startDate"
                   v-model="request.startDate"
-                  :rules="$v_request.startDate(request.startDate)"
+                  :rules="$v_request.startDate(request.startDate, edit)"
                   slot="activator"
-                  prepend-icon="event"
-                  readonly>
+                  prepend-icon="event">
                 </v-text-field>
 
                 <v-date-picker
@@ -63,8 +62,7 @@
                   v-model="request.endDate"
                   :rules="$v_request.endDate(request.startDate, request.endDate)"
                   slot="activator"
-                  prepend-icon="event"
-                  readonly>
+                  prepend-icon="event">
                 </v-text-field>
 
                 <v-date-picker
@@ -110,9 +108,7 @@
 import RequestService from '@/service/RequestService'
 export default {
   props: {
-    editItem: {
-      type: Object
-    },
+    item: Object,
     edit: {
       type: Boolean,
       default: false
@@ -130,12 +126,6 @@ export default {
     type: '',
     isEditing: false
   }),
-  mounted () {
-    if (this.edit) {
-      this.request = this.editItem
-      this.type = this.editItem.type
-    }
-  },
   computed: {
     getItems () {
       return RequestService.REQUEST
@@ -163,16 +153,24 @@ export default {
       return 'pt-BR'
     },
     getTitle () {
-      return this.isEditing ? '' : 'Realizar Solicitação'
+      return this.edit ? '' : 'Realizar Solicitação'
     },
     getLabels () {
       return RequestService.LABELS
     },
     getColors () {
       return RequestService.COLORS
+    },
+    getRequestValue () {
+      return RequestService.REQUEST_VALUE
     }
   },
   watch: {
+    item (value) {
+      this.request = Object.assign({}, value)
+      this.type = this.getRequestValue[value.type]
+      this.edit = true
+    }
   },
   methods: {
     saveRequest () {
@@ -204,15 +202,20 @@ export default {
           this.messageColor = 'error'
         })
       } else {
-        this.$_axios.update(`${this.$_url}request`, this.request).then((response) => {
+        let i = Object.assign({}, this.request)
+        delete i.employee
+        i.type = this.type.id
+        let updateRequest = Object.assign({'employee': {}}, i)
+        updateRequest.employee.id = this.request.employee.id
+        alert(JSON.stringify(updateRequest, null, ' '))
+        this.$_axios.put(`${this.$_url}request`, updateRequest).then((response) => {
           let result = response.data
-          console.log(JSON.stringify(result.resultList), null, ' ')
           if (result.message) {
-            // alert('Messages everything OK')
             this.messages = [...result.message]
             this.haveMessage = true
             if (result.success) {
-            // retorno mensagem de sucesso
+              // retorno mensagem de sucesso
+              // alert('Messages everything OK')
               this.messageColor = 'info'
               this.clearForm()
             } else {
@@ -232,7 +235,7 @@ export default {
     },
     clearForm () {
       this.$refs.form.reset()
-      this.$emit('onClose')
+      this.$emit('onClose', this.messages)
     }
   }
 }

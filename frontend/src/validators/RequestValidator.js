@@ -1,9 +1,9 @@
 export default class RequestValidator {
-  startDate (startDate) {
+  startDate (startDate, edit) {
     let start = new Date(startDate)
     if (!startDate) {
       return ['Informe a Data Alvo da solicitação!']
-    } else if (start < new Date()) {
+    } else if (start < new Date() && !edit) {
       return ['A Data Alvo deve ser maior que a data atual!']
     }
   }
