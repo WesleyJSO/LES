@@ -22,22 +22,21 @@ public class WorkLoadLimit implements IStrategy<Employee> {
 	@Override
 	public void process(Employee aEntity, INavigationCase<Employee> aCase) {
 
-		if (aEntity != null && aEntity.getBaseHourCalculation() != null
-				&& !Strings.isNullOrEmpty(String.valueOf(aEntity.getBaseHourCalculation().getWorkload()))) {
+		if (aEntity != null && aEntity.getBaseHourCalculation() != null) {
 			
 			Optional<Role> r = Optional.empty();
 			for (Role role : aEntity.getUser().getRoleList()) {
 				r = roleRepository.findActiveById(role.getId());
-				if(r.get().equals(Role.ROLE_EMPLOYEE))
+				if(r.get().getRole().equals(Role.ROLE_EMPLOYEE))
 					break;
 				else
 					r = Optional.empty();
 			}
 			if(r.isPresent()) {
 
-				if(aEntity.getBaseHourCalculation().getWorkload() <= 0) {
+				if(aEntity.getBaseHourCalculation().getWorkload() <= 0)
 					aCase.getResult().setError("Carga horária diaria deve ser maior que zero!");
-				}
+				
 				if(aEntity.getBaseHourCalculation().getWorkload() > WORKLOAD_LIMIT) 
 					aCase.getResult().setError("Carga horária diaria maior que o limite de ".concat(WORKLOAD_LIMIT.toString()));
 				

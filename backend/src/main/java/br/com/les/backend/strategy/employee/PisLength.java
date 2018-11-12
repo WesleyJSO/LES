@@ -27,7 +27,7 @@ public class PisLength implements IStrategy<Employee> {
 			Optional<Role> r = Optional.empty();
 			for (Role role : aEntity.getUser().getRoleList()) {
 				r = roleRepository.findActiveById(role.getId());
-				if(r.get().equals(Role.ROLE_EMPLOYEE))
+				if(r.get().getRole().equals(Role.ROLE_EMPLOYEE))
 					break;
 				else
 					r = Optional.empty();
