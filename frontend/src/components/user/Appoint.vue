@@ -11,7 +11,7 @@
 				<v-toolbar-title>{{ tittle }}</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-flex xs3 sm3 md3 lg3 xl3 class="text-xs-right">
-          <v-text-field value="Carga Horária: 08:00" :readonly="true"></v-text-field>
+          <v-card-text>Carga Horaria: {{workload}}</v-card-text>
         </v-flex>
 			</v-toolbar>
       <v-layout>
@@ -45,6 +45,7 @@ export default {
   data: () => ({
     messages: [],
     haveMessage: false,
+    workload: '00:00',
     messageColor: '',
     empty: '--:--',
     tittle: 'Apontamento Rápido',
@@ -73,6 +74,7 @@ export default {
   },
   created () {
     this.employee.user.id = Authenticator.GET_AUTHENTICATED().id
+    this.findWorkload(this.employee)
     this.callApi({monthAndYear: new Date(), date: new Date(), employee: this.employee})
   },
   methods: {
@@ -239,6 +241,36 @@ export default {
           this.registerAppointments()
         }
         this.verifyButtons()
+        if (result.mensagem) {
+          this.messages = [...result.message]
+          this.haveMessage = true
+          if (result.success) {
+          // retorno mensagem de sucesso /
+            this.messageColor = 'info'
+          } else {
+            // retorno mensagem de erro /
+            this.messageColor = 'warning'
+          }
+        }
+      } catch (error) {
+        // erro na requisição do serviço /
+        console.log(error)
+        this.messages = ['Erro durante execução do serviço!']
+        this.haveMessage = true
+        this.messageColor = 'error'
+      }
+    },
+    async findWorkload (employee) {
+      var response = null
+      var result = null
+      try {
+        response = await this.$_axios.patch(`${this.$_url}employee`, employee)
+        result = response.data
+        if (result.resultList.length !== 0) {
+          // retorno ok /
+          employee = result.resultList[0]
+          this.workload = '0' + employee.baseHourCalculation.workload + ':00'
+        }
         if (result.mensagem) {
           this.messages = [...result.message]
           this.haveMessage = true

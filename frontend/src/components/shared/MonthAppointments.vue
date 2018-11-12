@@ -48,7 +48,7 @@
           <v-card class="elevation-10" >
             <v-layout class="text-xs-center">
               <v-flex xs12 sm9 md6 lg6 xl4>
-                <v-card-text>Carga Horaria: 00:00</v-card-text>
+                <v-card-text>Carga Horaria: {{workload}}</v-card-text>
               </v-flex>
               <v-flex xs12 sm9 md6 lg6 xl4>
                 <v-card-text>Total Faltas: 00:00</v-card-text>
@@ -79,6 +79,7 @@ export default {
   ],
   data: () => ({
     modal: false,
+    workload: '00:00',
     appointWithMonth: {},
     appointment: {
       monthAndYear: null
@@ -113,6 +114,7 @@ export default {
       this.monthYear = monthYear
       if (this.employee) {
         this.appointWithMonth = {employee: this.employee, monthAndYear: new Date(`${monthYear}-01`)}
+        this.findWorkload(this.employee)
         this.callApi(this.appointWithMonth)
       }
     },
@@ -169,6 +171,36 @@ export default {
           this.haveMessage = true
           this.messageColor = 'error'
         })
+    },
+    async findWorkload (employee) {
+      var response = null
+      var result = null
+      try {
+        response = await this.$_axios.patch(`${this.$_url}employee`, employee)
+        result = response.data
+        if (result.resultList.length !== 0) {
+          // retorno ok /
+          employee = result.resultList[0]
+          this.workload = '0' + employee.baseHourCalculation.workload + ':00'
+        }
+        if (result.mensagem) {
+          this.messages = [...result.message]
+          this.haveMessage = true
+          if (result.success) {
+          // retorno mensagem de sucesso /
+            this.messageColor = 'info'
+          } else {
+            // retorno mensagem de erro /
+            this.messageColor = 'warning'
+          }
+        }
+      } catch (error) {
+        // erro na requisição do serviço /
+        console.log(error)
+        this.messages = ['Erro durante execução do serviço!']
+        this.haveMessage = true
+        this.messageColor = 'error'
+      }
     }
   }
 }

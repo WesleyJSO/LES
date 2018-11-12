@@ -1,6 +1,7 @@
 package br.com.les.backend.task;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -17,17 +18,21 @@ import br.com.les.backend.dao.GenericDAO;
 import br.com.les.backend.entity.Appointment;
 import br.com.les.backend.entity.BankedHours;
 import br.com.les.backend.entity.Employee;
+import br.com.les.backend.entity.MonthlyBalance;
 import br.com.les.backend.repository.AppointmentRepository;
 import br.com.les.backend.repository.EmployeeRepository;
+import br.com.les.backend.repository.MonthlyBalanceRepository;
 
 @Component
 public class CalcBankTask extends TimerTask {
 	
 	@Autowired AutoAppointmentTask autoAppointmentTask;
-	
+
+	@Autowired GenericDAO<MonthlyBalance> monthlyBalanceDAO;
 	@Autowired GenericDAO<BankedHours> bankedHoursDAO;
 	@Autowired EmployeeRepository employeeRepository;
 	@Autowired AppointmentRepository appointmentRepository;
+	@Autowired MonthlyBalanceRepository monthlyBalanceRepository;
 
 	// Period in milliseconds
  	private final static long PERIOD = 1000 * 60 * 60 * 24;
@@ -62,6 +67,10 @@ public class CalcBankTask extends TimerTask {
     	
 		autoAppointmentTask.run();
 		
+		MonthlyBalance monthlyBalance = null;
+		
+		List< MonthlyBalance > monthlyBalanceListHelper = null;
+		
     	BankedHours bank = null;
 		
 		List< Employee > employeeList = employeeRepository.findAll();
@@ -82,8 +91,28 @@ public class CalcBankTask extends TimerTask {
 			
 			// get new or edited appointments
 			List< Appointment > appointmentList = appointmentRepository.findPending(employee);
+
+			List< MonthlyBalance > monthlyBalanceList = new ArrayList<>();
 			
 			for (Appointment appointment: appointmentList) {
+				
+				if ( null == monthlyBalance || !monthlyBalance.getMonthAndYear().isEqual(appointment.getMonthAndYear())) {
+					monthlyBalance = new MonthlyBalance();
+					monthlyBalance.setMonthAndYear(appointment.getMonthAndYear());
+					monthlyBalance.setEmployee(emp);
+					monthlyBalanceListHelper = monthlyBalanceDAO.find(monthlyBalance);
+					if ( monthlyBalanceListHelper.isEmpty() ) {
+						monthlyBalance = null;
+					} else {
+						monthlyBalance = monthlyBalanceListHelper.get(0);
+					}
+					if ( null == monthlyBalance ) {
+						monthlyBalance = new MonthlyBalance();
+						monthlyBalance.setMonthAndYear(appointment.getMonthAndYear());
+						monthlyBalance.setEmployee(employee);
+					}
+					monthlyBalanceList.add(monthlyBalance);
+				}
 				
 				if ( appointment.getBalance().isBefore( workload ) ) {
 					balanceToInsert = getDoubleTime(appointment.getHoursLeft()) * (-1);
@@ -99,9 +128,19 @@ public class CalcBankTask extends TimerTask {
 				bank.setBalance(bank.getBalance() + balanceToInsert);
 				appointment.setPreviousBalanceInserted(balanceToInsert);
 				appointment.setCalculated(true);
+				
+				monthlyBalance.setBalanceHours(monthlyBalance.getBalanceHours() + appointment.getBalance().getHour());
+				monthlyBalance.setBalanceMinutes(monthlyBalance.getBalanceMinutes() + appointment.getBalance().getMinute());
+				monthlyBalance.setAbscenseHours(monthlyBalance.getAbscenseHours() + appointment.getHoursLeft().getHour());
+				monthlyBalance.setAbscenseMinutes(monthlyBalance.getAbscenseMinutes() + appointment.getHoursLeft().getMinute());
+				monthlyBalance.setOvertimeHours(monthlyBalance.getOvertimeHours() + appointment.getDayOvertime().getHour());
+				monthlyBalance.setOvertimeMinutes(monthlyBalance.getOvertimeMinutes() + appointment.getDayOvertime().getMinute());
 			}
 			
+			monthlyBalance = null;
+			
 			try {
+				monthlyBalanceRepository.saveAll(monthlyBalanceList);
 				bankedHoursDAO.save(bank);
 				appointmentRepository.saveAll(appointmentList);
 			} catch (Exception e) {
