@@ -269,7 +269,9 @@ export default {
         if (result.resultList.length !== 0) {
           // retorno ok /
           employee = result.resultList[0]
-          this.workload = '0' + employee.baseHourCalculation.workload + ':00'
+          if (employee.baseHourCalculation) {
+            this.workload = '0' + employee.baseHourCalculation.workload + ':00'
+          }
         }
         if (result.mensagem) {
           this.messages = [...result.message]
