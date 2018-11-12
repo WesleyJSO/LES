@@ -153,23 +153,16 @@ export default {
       return 'pt-BR'
     },
     getTitle () {
-<<<<<<< d99dd8b43efda0dd0a72b570caff354c0e0fd123
       return this.edit ? '' : 'Realizar Solicitação'
-=======
-      return this.isEditing ? '' : 'Realizar Solicitação'
->>>>>>> Change datePicker type of Request view
     },
     getLabels () {
       return RequestService.LABELS
     },
     getColors () {
       return RequestService.COLORS
-<<<<<<< d99dd8b43efda0dd0a72b570caff354c0e0fd123
     },
     getRequestValue () {
       return RequestService.REQUEST_VALUE
-=======
->>>>>>> Change datePicker type of Request view
     }
   },
   watch: {
