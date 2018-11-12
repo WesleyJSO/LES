@@ -25,30 +25,26 @@ public class EditRequestRealocateWorkDay implements IStrategy<Request> {
 	public void process(Request aEntity, INavigationCase<Request> aCase) {
 		if (aEntity != null && aEntity.getId() != 0 && !Strings.isNullOrEmpty(String.valueOf(aEntity.getId()))) {
 			Request r = requestRepository.findActiveById(aEntity.getId()).get();
-				if ( r.getType() == RequestType.REALOCATE_DAY && aEntity.getStatus() == r.getStatus() ) {
-					if (null == aEntity.getStartDate())
+				if ( aEntity.getType() == RequestType.REALOCATE_DAY && aEntity.getStatus() == r.getStatus() ) {
+					if (null == aEntity.getStartDate()) {
 						aCase.getResult().setError(Util.ERROR_ENTRY_DATE);
-	
-					else if (r.getStartDate() != aEntity.getStartDate()
-							&& aEntity.getStartDate().compareTo(LocalDate.now()) <= 0)
+					} else if (r.getStartDate() != aEntity.getStartDate()
+							&& aEntity.getStartDate().compareTo(LocalDate.now()) <= 0) {
 						aCase.getResult().setError(Util.INVALID_ENTRY_DATE);
-	
-					if (null != aEntity.getEndDate() && aEntity.getStartDate().compareTo(aEntity.getEndDate()) <= 0)
-						aCase.getResult().setError(Util.INVALID_END_DATE);
-	
-					if (null == aEntity.getEndDate())
+					}
+					
+					if (null == aEntity.getEndDate()) {
 						aCase.getResult().setError(Util.ERROR_END_DATE);
-	
-					else if (r.getEndDate().compareTo(aEntity.getEndDate()) != 0
-							&& aEntity.getStartDate().compareTo(aEntity.getEndDate()) <= 0)
+					} else if (aEntity.getEndDate().compareTo(aEntity.getStartDate()) <= 0) { 
 						aCase.getResult().setError(Util.INVALID_END_DATE);
+					}
 	
-					if (null == aEntity.getDescription())
+					if (null == aEntity.getDescription()) {
 						aCase.getResult().setError(Util.ERROR_DESCRIPTION);
-	
-					else if (r.getDescription() != aEntity.getDescription()
-							&& (aEntity.getDescription().trim().equals("") || aEntity.getDescription().length() < 10))
+					} else if (r.getDescription() != aEntity.getDescription()
+							&& (aEntity.getDescription().trim().equals("") || aEntity.getDescription().length() < 10)) {
 						aCase.getResult().setError(Util.INVALID_DESCRIPTION);
+					}
 					
 					if (aCase.getResult().isSuccess()) {
 						aCase.getResult().setSuccess(Util.UPDATE_SUCCESSFUL_REQUEST);

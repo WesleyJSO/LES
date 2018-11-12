@@ -25,24 +25,26 @@ public class EditRequestCompTime implements IStrategy<Request> {
 	public void process(Request aEntity, INavigationCase<Request> aCase) {
 		if (aEntity != null && aEntity.getId() != 0 && !Strings.isNullOrEmpty(String.valueOf(aEntity.getId()))) {
 			Request r = requestRepository.findActiveById(aEntity.getId()).get();
-				if ( r.getType() == RequestType.COMP_TIME && aEntity.getStatus() == r.getStatus() ) {
-					if (null == aEntity.getStartDate())
+				if ( aEntity.getType() == RequestType.COMP_TIME && aEntity.getStatus() == r.getStatus() ) {
+					if (null == aEntity.getStartDate()) {
 						aCase.getResult().setError(Util.ERROR_ENTRY_DATE);
-
-					else if (r.getStartDate().compareTo(aEntity.getStartDate()) != 0
-							&& (aEntity.getStartDate().compareTo(LocalDate.now()) <= 0))
+					} else if (r.getStartDate().compareTo(aEntity.getStartDate()) != 0
+							&& (aEntity.getStartDate().compareTo(LocalDate.now()) <= 0)) {
 						aCase.getResult().setError(Util.INVALID_ENTRY_DATE);
-
-					if (null != aEntity.getEndDate())
-						if (aEntity.getStartDate().compareTo(aEntity.getEndDate()) <= 0)
+					}
+					
+					if (null != aEntity.getEndDate()) {
+						if (aEntity.getEndDate().compareTo(aEntity.getStartDate()) <= 0) {
 							aCase.getResult().setError(Util.INVALID_END_DATE);
+						}
+					}
 
-					if (null == aEntity.getDescription())
+					if (null == aEntity.getDescription()) {
 						aCase.getResult().setError(Util.ERROR_DESCRIPTION);
-
-					else if (r.getDescription() != aEntity.getDescription()
-							&& (aEntity.getDescription().trim().equals("") || aEntity.getDescription().length() < 10))
+					} else if (r.getDescription() != aEntity.getDescription()
+							&& (aEntity.getDescription().trim().equals("") || aEntity.getDescription().length() < 10)) {
 						aCase.getResult().setError(Util.INVALID_DESCRIPTION);
+					}
 					
 					if (aCase.getResult().isSuccess()) {
 						aCase.getResult().setSuccess(Util.UPDATE_SUCCESSFUL_REQUEST);
