@@ -73,7 +73,6 @@ export const REQUEST = [
   {id: 2, description: 'Banco de Horas'},
   {id: 4, description: 'Remanejamento de Horas/Dias'}
 ]
-
 export const REQUEST_VALUE = {
   1: {id: 1, description: 'Hora Extra'},
   2: {id: 2, description: 'Banco de Horas'},
