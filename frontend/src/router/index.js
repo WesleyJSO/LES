@@ -10,12 +10,13 @@ import RegisterCompany from '@/components/admin/RegisterCompany'
 import RequestView from '@/components/admin/RequestView'
 import Reports from '@/components/reports/Reports'
 import CostCentre from '@/components/admin/CostCentre'
-import SystemParameters from '@/components/admin/SystemParameters'
+import SystemParameters from '@/components/Admin/SystemParameters'
 import ManageHours from '@/components/admin/ManageHours'
 import Timeline from '@/components/user/Timeline'
 import Appoint from '@/components/user/Appoint'
-import RegisterSystemParameters from '@/components/admin/RegisterSystemParameters'
+import RegisterSystemParameters from '@/components/Admin/RegisterSystemParameters'
 import AppointmentsView from '@/components/manager/AppointmentsView'
+import RequestManagerView from '@/components/admin/RequestManagerView'
 
 Vue.use(Router)
 
@@ -121,6 +122,12 @@ export default new Router({
       name: 'AppointmentsView',
       component: AppointmentsView,
       meta: { requiresAuth: true, employeeAuth: true, adminAuth: true, managerAuth: true }
+    },
+    {
+      path: '/MinhasSolicitacoes',
+      name: 'RequestManagerView',
+      component: RequestManagerView,
+      meta: { requiresAuth: true, managerAuth: true }
     }
   ]
 })

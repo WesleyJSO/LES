@@ -73,7 +73,6 @@ insert into APPOINTMENT values(HIBERNATE_SEQUENCE.nextval,1,getDate(), '13:00:00
 insert into APPOINTMENT values(HIBERNATE_SEQUENCE.nextval,1,getDate(), '13:00:00', '18:00:00', '08:00:00', 0, '2018-07-05', '01:00:00', '00:00:00', '2018-07-05', '09:00:00', '12:00:00', null, null, null, null, 0, (select e.id from employee e inner join user u on e.user_id = u.id where u.email='zeller@zeller.com'))
 
 -- Requests
--- Zeller
 INSERT INTO REQUEST VALUES (HIBERNATE_SEQUENCE.nextval, 1, getDate(), NULL, 'Solicitacao realizada pelo Zeller', NULL,  NULL, NULL, getDate() + 1, 1, 1, NULL, (select id from employee where last_name='Zeller'))
 -- Bruno
 INSERT INTO REQUEST VALUES (HIBERNATE_SEQUENCE.nextval, 1, getDate(), NULL, 'Solicitacao realizada pelo Holanda', NULL,  NULL, NULL, getDate() + 1, 1, 1, NULL, (select id from employee where last_name='Holanda'))

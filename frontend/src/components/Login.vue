@@ -52,6 +52,7 @@
 </template>
 
 <script>
+import Authenticator from '@/service/Authenticator'
 export default {
   data: () => ({
     user: {},
@@ -65,6 +66,9 @@ export default {
     this.user.password = '1234'
   },
   methods: {
+    hasRole (role) {
+      return Authenticator.HAS_ROLE(role)
+    },
     sendForgotPasswordEmail () {
       this.messages = []
       this.haveMessage = false
@@ -113,13 +117,19 @@ export default {
             this.messageColor = 'warning'
           }
         }
-        this.$router.push('/LinhaDoTempo')
+        if (this.hasRole('ROLE_EMPLOYEE')) {
+          this.$router.push('/LinhaDoTempo')
+        } else {
+          this.$router.push('/Graficos')
+        }
       } catch (err) {
-        console.log(err)
+        console.log(JSON.stringify(err, null, ''))
+        // this.messages = [this.getMessages.approveError]
         localStorage.removeItem('user-token')
+        this.$router.push('/Login')
+        this.messageColor = 'error'
         this.messages = ['Erro durante execução do serviço!']
         this.haveMessage = true
-        this.messageColor = 'error'
       }
     },
     /* submit () {

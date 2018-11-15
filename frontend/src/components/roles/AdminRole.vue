@@ -56,6 +56,27 @@
           </v-list-tile-content>
         </v-list-tile>
 
+        <v-list-tile>
+          <v-list-tile-action>
+            <v-icon>assignment_turned_in</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <router-link to="Solicitacoes">
+              <v-list-tile-title>Solicitações</v-list-tile-title>
+            </router-link>
+          </v-list-tile-content>
+        </v-list-tile>
+
+        <v-list-tile v-if="this.hasRole('ROLE_EMPLOYEE')">
+          <v-list-tile-action>
+            <v-icon>assignment</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <router-link to="MinhasSolicitacoes">
+              <v-list-tile-title>Minhas Solicitações</v-list-tile-title>
+            </router-link>
+          </v-list-tile-content>
+        </v-list-tile>
 
         <v-list-tile>
           <v-list-tile-action>
@@ -64,18 +85,6 @@
           <v-list-tile-content>
             <router-link to="CentroDeCustos">
               <v-list-tile-title>Centro de Custos</v-list-tile-title>
-            </router-link>
-          </v-list-tile-content>
-        </v-list-tile>
-
-
-        <v-list-tile>
-          <v-list-tile-action>
-            <v-icon>assignment_turned_in</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <router-link to="Solicitacoes">
-              <v-list-tile-title>Solicitações</v-list-tile-title>
             </router-link>
           </v-list-tile-content>
         </v-list-tile>
@@ -160,9 +169,15 @@
 </template>
 
 <script>
+  import Authenticator from '@/service/Authenticator'
   export default {
     data: function () {
       return {
+      }
+    },
+    methods: {
+      hasRole (role) {
+        return Authenticator.HAS_ROLE(role)
       }
     }
   }
