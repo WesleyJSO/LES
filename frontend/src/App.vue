@@ -71,6 +71,7 @@ export default {
     logOut () {
       sessionStorage.removeItem('token')
       sessionStorage.removeItem('principal')
+      this.drawer = false
       router.push('/')
     },
     hasRole (role) {
