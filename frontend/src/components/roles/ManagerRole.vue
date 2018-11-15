@@ -110,6 +110,17 @@
             </router-link>
           </v-list-tile-content>
         </v-list-tile>
+
+        <v-list-tile>
+          <v-list-tile-action>
+            <v-icon>date_range</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <router-link to="dashboard">
+              <v-list-tile-title>Dashboard</v-list-tile-title>
+            </router-link>
+          </v-list-tile-content>
+        </v-list-tile>
       </v-list>
 
 </template>

@@ -17,6 +17,7 @@ import Appoint from '@/components/user/Appoint'
 import RegisterSystemParameters from '@/components/Admin/RegisterSystemParameters'
 import AppointmentsView from '@/components/manager/AppointmentsView'
 import RequestManagerView from '@/components/admin/RequestManagerView'
+import Dashboard from '@/components/manager/Dashboard'
 
 Vue.use(Router)
 
@@ -127,6 +128,12 @@ export default new Router({
       path: '/MinhasSolicitacoes',
       name: 'RequestManagerView',
       component: RequestManagerView,
+      meta: { requiresAuth: true, managerAuth: true }
+    },
+    {
+      path: '/dashboard',
+      name: 'Dashboard',
+      component: Dashboard,
       meta: { requiresAuth: true, managerAuth: true }
     }
   ]

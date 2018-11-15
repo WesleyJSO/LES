@@ -62,7 +62,7 @@ export default {
     msgColor: ''
   }),
   created () {
-    this.user.email = 'bruno@bruno.com'
+    this.user.email = 'wesley@wesley.com'
     this.user.password = '1234'
   },
   methods: {
