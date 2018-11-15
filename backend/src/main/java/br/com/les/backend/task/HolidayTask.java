@@ -38,8 +38,7 @@ public class HolidayTask extends TimerTask {
  	// name of the city
  	private final static String CITY = "MOGI_DAS_CRUZES";
  	// API token
- 	private final static String TOKEN = "am9zZXdzbzU1QGdtYWlsLmNvbSZoYXNoPTY4MDQxMzAx";
-	
+ 	private final static String TOKEN = "am9zZXdzbzU1QGdtYWlsLmNvbSZoYXNoPTY4MDQxMzAx";	
 	// Period in milliseconds
  	private final static int PERIOD_IN_YEAR = 1;
  	// used to indicate init date

@@ -26,6 +26,7 @@ import br.com.les.backend.repository.MonthlyBalanceRepository;
 @Component
 public class CalcBankTask extends TimerTask {
 	
+	@Autowired HolidayTask holidayTask;
 	@Autowired AutoAppointmentTask autoAppointmentTask;
 
 	@Autowired GenericDAO<MonthlyBalance> monthlyBalanceDAO;
@@ -64,6 +65,8 @@ public class CalcBankTask extends TimerTask {
 	
 	@Override
     public void run() {
+		
+		holidayTask.run();
     	
 		autoAppointmentTask.run();
 		

@@ -13,4 +13,7 @@ public interface HolidayRepository extends GenericRepository<Holiday>{
 
 	@Query("select t from Holiday t where t.date >= ?1 and t.date <= ?2")
 	List< Holiday > findByYear(LocalDate fistOfTheYear, LocalDate lastOfTheYear);
+	
+	@Query("select t from Holiday t where t.date = ?1")
+	List< Holiday > findBydate(LocalDate date);
 }

@@ -13,12 +13,15 @@ import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.Appointment;
 import br.com.les.backend.entity.Employee;
+import br.com.les.backend.entity.Holiday;
 import br.com.les.backend.repository.AppointmentRepository;
 import br.com.les.backend.repository.EmployeeRepository;
+import br.com.les.backend.repository.HolidayRepository;
 
 @Component
 public class AutoAppointmentTask {
 	
+	@Autowired HolidayRepository holidayRepository;
 	@Autowired EmployeeRepository employeeRepository;
 	@Autowired AppointmentRepository appointmentRepository;
 
@@ -29,6 +32,13 @@ public class AutoAppointmentTask {
     public void run() {
     	
     	Appointment appointment = null;
+    	
+    	LocalDate localDate = LocalDate.now();
+    	List< Holiday > holidays = holidayRepository.findByYear(localDate.withDayOfYear(1), localDate.withDayOfYear(365));
+		if ( holidays.isEmpty() ) {
+			System.out.println("Serviço encerrado - Não há feriados cadastrados para o ano de " + localDate.getYear());
+			return;
+		}
     	
     	Random random = new Random();
     	
@@ -54,6 +64,10 @@ public class AutoAppointmentTask {
 				
 				if (date.getDayOfWeek() == DayOfWeek.SUNDAY || date.getDayOfWeek() == DayOfWeek.SATURDAY )
 					continue;
+				
+				if ( !holidayRepository.findBydate(date).isEmpty() ) {
+					continue;
+				}
 				
 				appointment = new Appointment();
 				
