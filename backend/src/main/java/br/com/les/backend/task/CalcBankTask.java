@@ -133,11 +133,11 @@ public class CalcBankTask extends TimerTask {
 				appointment.setPreviousBalanceInserted(balanceToInsert);
 				appointment.setCalculated(true);
 				
-				monthlyBalance.setBalanceHours(appointment.getBalance().getHour());
+				monthlyBalance.addToBalanceHours(appointment.getBalance().getHour());
 				monthlyBalance.calculateBalanceHoursAndMinutes(appointment.getBalance().getMinute());
-				monthlyBalance.setAbscenseHours(appointment.getHoursLeft().getHour());
+				monthlyBalance.addToAbscenseHours(appointment.getHoursLeft().getHour());
 				monthlyBalance.calculateAbscenseHoursAndMinutes(appointment.getHoursLeft().getMinute());
-				monthlyBalance.setOvertimeHours(appointment.getDayOvertime().getHour());
+				monthlyBalance.addToOvertimeHours(appointment.getDayOvertime().getHour());
 				monthlyBalance.calculateOvertimeHoursAndMinutes(appointment.getDayOvertime().getMinute());
 				monthlyBalance.setPlusEightMonthWorkload();
 			}
