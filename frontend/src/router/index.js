@@ -18,6 +18,7 @@ import RegisterSystemParameters from '@/components/Admin/RegisterSystemParameter
 import AppointmentsView from '@/components/manager/AppointmentsView'
 import RequestManagerView from '@/components/admin/RequestManagerView'
 import RegisterHoliday from '@/components/admin/RegisterHoliday'
+import Dashboard from '@/components/manager/Dashboard'
 
 Vue.use(Router)
 
@@ -135,6 +136,12 @@ export default new Router({
       name: 'RegisterHoliday',
       component: RegisterHoliday,
       meta: { requiresAuth: true, employeeAuth: true, adminAuth: true, managerAuth: true }
+    },
+    {
+      path: '/dashboard',
+      name: 'Dashboard',
+      component: Dashboard,
+      meta: { requiresAuth: true, managerAuth: true }
     }
   ]
 })

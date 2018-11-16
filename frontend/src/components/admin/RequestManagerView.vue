@@ -417,8 +417,10 @@ export default {
         let approved = this.$_axios.patch(`${this.$_url}request`, {'status': this.getStatusValue.approved, 'employee': emp})
         let denied = this.$_axios.patch(`${this.$_url}request`, {'status': this.getStatusValue.denied, 'employee': emp})
         let [sent, approve, deny] = await Promise.all([pending, approved, denied])
-        this.processedRequests = [...approve.data.resultList, ...deny.data.resultList]
-        this.requests = [...sent.data.resultList]
+        let processeds = [...approve.data.resultList, ...deny.data.resultList]
+        let approveds = [...sent.data.resultList]
+        this.processedRequests = processeds.length > 0 ? this.parseRequest(processeds) : []
+        this.requests = approveds.length > 0 ? this.parseRequest(approveds) : []
         let message1 = !sent.data.message ? [] : sent.data.message
         let message2 = !approve.data.message ? [] : approve.data.message
         let message3 = !deny.data.message ? [] : deny.data.message
@@ -438,6 +440,14 @@ export default {
         this.haveMessage = true
         this.messageColor = 'error'
       }
+    },
+    parseRequest (list) {
+      let employeeRequest = list.filter(r => r.employee)
+      let employee = employeeRequest[0].employee
+      return list.map(n => {
+        n.employee = Object.assign(employee, {})
+        return n
+      })
     }
   },
   components: {

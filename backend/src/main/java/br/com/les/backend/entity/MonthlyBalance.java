@@ -123,7 +123,11 @@ public class MonthlyBalance extends DomainEntity {
 		return monthWorkload;
 	}
 
-	public void setMonthWorkload(Appointment a) {
+	public void setMonthWorkload(Integer monthWorkload) {
+	 this.monthWorkload += monthWorkload;
+	}
+	
+	public void setPlusEightMonthWorkload() {
 		this.monthWorkload += 8;
 	}
 	

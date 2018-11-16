@@ -142,7 +142,7 @@ public class CalcBankTask extends TimerTask {
 				monthlyBalance.setAbscenseMinutes(appointment.getHoursLeft().getMinute());
 				monthlyBalance.setOvertimeHours(appointment.getDayOvertime().getHour());
 				monthlyBalance.setOvertimeMinutes(appointment.getDayOvertime().getMinute());
-				monthlyBalance.setMonthWorkload(appointment);
+				monthlyBalance.setPlusEightMonthWorkload();
 			}
 			
 			monthlyBalance = null;

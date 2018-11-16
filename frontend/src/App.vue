@@ -19,14 +19,14 @@
       <v-icon large color="blue lighten-2" >{{ account_circle }}</v-icon>
       <v-spacer></v-spacer> <!-- separete left and right -->
       <div class="hidden-sm-and-down">
-        <v-btn @click.stop="logOut()"flat>LOGOUT</v-btn>
+        <v-btn @click.stop="logOut()" flat>LOGOUT</v-btn>
       </div>
     </v-toolbar>
 
     <v-content>
       <v-container fluid fixed="fixed">
         <v-slide-y-transition mode="out-in">
-            <v-flex xs12 sm10 offset-sm1 pa-5>
+            <v-flex md12 pa-2>
               <router-view @emittedUser="setUsuarioLogado" />
             </v-flex>
         </v-slide-y-transition>
