@@ -227,7 +227,6 @@ export default {
     async callApi (appointment) {
       var response = null
       var result = null
-      alert(JSON.stringify(appointment))
       try {
         response = await this.$_axios.patch(`${this.$_url}appointment`, appointment)
         result = response.data
