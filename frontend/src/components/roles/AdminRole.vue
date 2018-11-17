@@ -135,32 +135,22 @@
 
         <v-list-tile>
           <v-list-tile-action>
-            <v-icon>timeline</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <router-link to="LinhaDoTempo">
-              <v-list-tile-title>Linha do Tempo</v-list-tile-title>
-            </router-link>
-          </v-list-tile-content>
-        </v-list-tile>
-        <v-list-tile>
-          <v-list-tile-action>
-            <v-icon>touch_app</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <router-link to="Apontar">
-              <v-list-tile-title>Apontamento Rápido</v-list-tile-title>
-            </router-link>
-          </v-list-tile-content>
-        </v-list-tile>
-
-        <v-list-tile>
-          <v-list-tile-action>
             <v-icon>dns</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <router-link to="VisualizarApontamentos">
               <v-list-tile-title>Visualizar Apontamentos</v-list-tile-title>
+            </router-link>
+          </v-list-tile-content>
+        </v-list-tile>
+        
+        <v-list-tile>
+          <v-list-tile-action>
+            <v-icon>event</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <router-link to="Feriados">
+              <v-list-tile-title>Feriados</v-list-tile-title>
             </router-link>
           </v-list-tile-content>
         </v-list-tile>

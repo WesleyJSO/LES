@@ -72,10 +72,10 @@ export default {
   },
   watch: {
   },
-  created () {
+  beforeMount () {
     this.employee.user.id = Authenticator.GET_AUTHENTICATED().id
     this.findWorkload(this.employee)
-    this.callApi({monthAndYear: new Date(), date: new Date(), employee: this.employee})
+    this.callApi({monthAndYear: this.$_moment().format('YYYY-MM-DDThh:mm:ss'), date: this.$_moment().format('YYYY-MM-DDThh:mm:ss'), employee: this.employee})
   },
   methods: {
     takeAppointment (appointment) {
@@ -241,6 +241,7 @@ export default {
           this.registerAppointments()
         }
         this.verifyButtons()
+        this.haveMessage = false
         if (result.mensagem) {
           this.messages = [...result.message]
           this.haveMessage = true
@@ -273,6 +274,7 @@ export default {
             this.workload = '0' + employee.baseHourCalculation.workload + ':00'
           }
         }
+        this.haveMessage = false
         if (result.mensagem) {
           this.messages = [...result.message]
           this.haveMessage = true

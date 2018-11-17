@@ -188,6 +188,7 @@ export default {
             // retorno mensagem de sucesso
               this.messageColor = 'info'
               this.clearForm()
+              this.type = ''
             } else {
               // retorno mensagem de erro
               this.messageColor = 'warning'
@@ -218,6 +219,7 @@ export default {
               // alert('Messages everything OK')
               this.messageColor = 'info'
               this.clearForm()
+              this.type = ''
             } else {
               // retorno mensagem de erro
               this.messageColor = 'warning'
