@@ -104,7 +104,7 @@ export default new Router({
       path: '/LinhaDoTempo',
       name: 'Timeline',
       component: Timeline,
-      meta: { requiresAuth: true, employeeAuth: true, adminAuth: true, managerAuth: true }
+      meta: { requiresAuth: true, employeeAuth: true }
     },
     {
       path: '/Apontar',

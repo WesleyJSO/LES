@@ -7,7 +7,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -15,6 +14,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 
@@ -96,7 +96,6 @@ public class HolidayTask extends TimerTask {
 			ObjectMapper mapper = new ObjectMapper();
 	 
 			JSONArray jArray = new JSONArray(jsonString);
-		    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		    
 			Holiday holiday = null;
 			for (int j = 0; j < jArray.length(); j++) {
@@ -106,8 +105,13 @@ public class HolidayTask extends TimerTask {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+			    Stream<Holiday> stream = holidays.stream();
+			    LocalDate date = holiday.getDate();
+			    if ( null != stream.filter(h -> h.getDate().equals(date))
+			    	.findAny().orElse(null)) {
+			    	continue;
+			    }
 			    if ( !holiday.getType().equals("Facultativo") && !holiday.getType().equals("Dia Convencional") ) {
-				    holiday.setDate( LocalDate.parse(holiday.getJsonDate(),formatter) );
 				    holidays.add(holiday);
 			    }
 			}

@@ -72,10 +72,10 @@ export default {
   },
   watch: {
   },
-  beforeMount () {
+  async beforeMount () {
     this.employee.user.id = Authenticator.GET_AUTHENTICATED().id
-    this.findWorkload(this.employee)
-    this.callApi({monthAndYear: this.$_moment().format('YYYY-MM-DDThh:mm:ss'), date: this.$_moment().format('YYYY-MM-DDThh:mm:ss'), employee: this.employee})
+    await this.findWorkload(this.employee)
+    await this.callApi({monthAndYear: this.$_moment().format('YYYY-MM-DDThh:mm:ss'), date: this.$_moment().format('YYYY-MM-DDThh:mm:ss'), employee: this.employee})
   },
   methods: {
     takeAppointment (appointment) {

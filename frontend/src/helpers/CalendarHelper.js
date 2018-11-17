@@ -90,11 +90,11 @@ export default {
     ).getDay()
 
     // concat prev month and next month
-    const prevMonthFewDays = prevMonthDays.splice(
+    const prevMonthFewDays = firstDay === 7 ? [] : prevMonthDays.splice(
       prevMonthDays.length - firstDay,
       prevMonthDays.length - 1
     )
-    const nextMonthFewDays = nextMonthDays.splice(0, 7 - (lastDay + 1))
+    const nextMonthFewDays = nextMonthDays.splice(0, 7 - (lastDay + 2))
 
     prevMonthFewDays.map(item => { item['isOtherMonthDay'] = true })
     nextMonthFewDays.map(item => { item['isOtherMonthDay'] = true })

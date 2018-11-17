@@ -11,10 +11,13 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 
 @Component
 @Entity
@@ -26,10 +29,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 })
 public class Holiday extends DomainEntity{
 
-	@Transient
+	@JsonFormat(pattern = "dd/MM/yyyy")
+	@JsonDeserialize(using= LocalDateDeserializer.class)
 	@JsonProperty("date")
-	private String jsonDate;
-	
 	private LocalDate date;
 	
 	@JsonProperty("name")
@@ -43,13 +45,13 @@ public class Holiday extends DomainEntity{
 	private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 	
 	@JsonProperty("date")
-	public String getJsonDate() {
-	return jsonDate;
+	public LocalDate getDate() {
+	return date;
 	}
 	
 	@JsonProperty("date")
-	public void setDate(String jsonDate) {
-	this.jsonDate = jsonDate;
+	public void setDate(LocalDate date) {
+	this.date = date;
 	}
 	
 	@JsonProperty("name")
@@ -80,14 +82,6 @@ public class Holiday extends DomainEntity{
 	@JsonAnySetter
 	public void setAdditionalProperty(String name, Object value) {
 	this.additionalProperties.put(name, value);
-	}
-
-	public LocalDate getDate() {
-		return date;
-	}
-
-	public void setDate(LocalDate date) {
-		this.date = date;
 	}
 
 }

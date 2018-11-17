@@ -19,4 +19,8 @@ export default class DateHelper {
     var dateVar2 = date.split('/')
     return new Date(dateVar2[2] + '-' + dateVar2[1] + '-' + dateVar2[0])
   }
+  static formatISOOnlyDate (date) {
+    var dateVar2 = date.split('/')
+    return dateVar2[2] + '-' + dateVar2[1] + '-' + dateVar2[0]
+  }
 }

@@ -208,7 +208,7 @@ li {
 }
 .calendar-content {
   color: #232323;
-  background-color: #fff;
+  background-color: rgb(238, 237, 237);
 }
 .week {
   display: flex;
