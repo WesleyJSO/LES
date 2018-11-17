@@ -25,7 +25,7 @@ public class DashboardFilterDAO extends GenericDAO<DashboardFilter> {
 		StringBuilder sb = new StringBuilder();
 		
 		
-		sb.append(" from m MonthlyBalance where m.monthAndYear > :limitMonth");
+		sb.append(" from MonthlyBalance m where m.monthAndYear > :limitMonth");
 		@SuppressWarnings("unchecked")
 		List<MonthlyBalance> monthlyBalanceList = em.
 				createQuery(sb.toString())

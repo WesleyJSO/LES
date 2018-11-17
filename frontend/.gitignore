@@ -22,5 +22,4 @@ selenium-debug.log
 *.sln
 /target/
 *.properties
-/package.json
-/package-lock.json
+package-lock.json

@@ -1,7 +1,5 @@
 package br.com.les.backend.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -36,7 +34,8 @@ public class DashboardFilterController extends AbstractController<DashboardFilte
 		BusinessCase<DashboardFilter> bCase = new BusinessCaseBuilder<DashboardFilter>()
 				.withName(existingNavigation("FIND_".concat(clazz.getSimpleName().toUpperCase())))
 				.build();
-		
-		return null;
+		navigator.run(entity, bCase);
+		return bCase.getResult();
 	}
 }
+
