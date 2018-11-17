@@ -84,7 +84,7 @@ export default {
     let nextMonthDays = this.handleDays(year, nextMonth, markers)
 
     // get the first day and the last day of the month is the day of the week
-    const firstDay = new Date(currentMonthAllDays[0].date).getDay()
+    const firstDay = new Date(currentMonthAllDays[0].date).getDay() + 1
     const lastDay = new Date(
       currentMonthAllDays[currentMonthAllDays.length - 1].date
     ).getDay()

@@ -30,7 +30,7 @@ export default {
     markers: Array,
     weekText: {
       type: Array,
-      default: () => ['S', 'M', 'T', 'W', 'T', 'F', 'S']
+      default: () => ['D', 'S', 'T', 'Q', 'Q', 'S', 'S']
     },
     disabledFutureDay: {
       type: Boolean,
@@ -55,12 +55,14 @@ export default {
   watch: {
     'current.month' () {
       this.initCalendar()
+    },
+    markers () {
+      this.initCalendar()
+      this.current.date = CalendarHelper.splicingDate(this.current)
+      this.$emit('day', CalendarHelper.splicingDate(this.current))
     }
   },
   created () {
-    this.initCalendar()
-    this.current.date = CalendarHelper.splicingDate(this.current)
-    this.$emit('day', CalendarHelper.splicingDate(this.current))
   },
   methods: {
     initCalendar () {
@@ -140,8 +142,8 @@ export default {
       this.handleMonthSwitch('next')
     },
     chooseSpecifiedDate (date) {
-      var mes = 'Missing required parameters'
-      if (!date) throw mes
+      var message = 'Missing required parameters'
+      if (!date) throw message
 
       const [year, month, day] = date.split('-') || date.split('/')
       const { year: currentYear, month: currentMonth } = this.current
