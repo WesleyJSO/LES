@@ -1,6 +1,5 @@
 package br.com.les.backend.facade;
 
-import br.com.les.backend.entity.Appointment;
 import br.com.les.backend.entity.DomainEntity;
 import br.com.les.backend.navigator.INavigationCase;
 import br.com.les.backend.utils.Result;
@@ -15,5 +14,4 @@ public interface IApplicationFacade<T extends DomainEntity> {
 	
 	Result<T> find(T aEntity, INavigationCase<T> aCase);
 
-	Result<Appointment> get(T entity, INavigationCase<T> bCase);
 }

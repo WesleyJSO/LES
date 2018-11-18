@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.GrantedAuthority;
 
-import com.google.common.base.Strings;
-
 import br.com.les.backend.entity.DomainEntity;
 import br.com.les.backend.entity.Employee;
 import br.com.les.backend.entity.Role;
