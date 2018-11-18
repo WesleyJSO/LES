@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -61,12 +62,16 @@ public abstract class AbstractController<T extends DomainEntity> extends BaseCon
 		return run(Actions.UPDATE.getValue()).execute(entity, bCase);
     }
     
-    @DeleteMapping
-    public @ResponseBody Result<T> delete(@RequestBody T entity) throws InstantiationException, IllegalAccessException {
+    @SuppressWarnings("unchecked")
+    @DeleteMapping(value = "{id}")
+    public @ResponseBody Result<T> delete(@PathVariable Long id) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
 
     	BusinessCase<T> bCase = new BusinessCaseBuilder<T>()
 				.withName(existingNavigation("DELETE_".concat(clazz.getSimpleName().toUpperCase())))
 				.build();
+    	
+		T entity = (T) Class.forName(clazz.getName()).newInstance();
+    	entity.setId(id);
     	
 		return run(Actions.DELETE.getValue()).execute(entity, bCase);
     }
