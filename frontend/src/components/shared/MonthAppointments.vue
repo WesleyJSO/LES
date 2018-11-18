@@ -153,32 +153,35 @@ export default {
           this.messageColor = 'error'
         })
     },
-    callApi (appointment) {
-      console.log(JSON.stringify(appointment))
-      this.$_axios.patch(`${this.$_url}appointment`, appointment)
-        .then(response => {
-          var result = response.data
-          console.log(JSON.stringify(result))
-          this.appointments = result.resultList
-          if (this.appointments.length > 0) {
-            this.appointment = this.appointments[0]
-          }
-          if (result.message) {
-            this.messages = [...result.message]
-            this.haveMessage = true
-            if (result.success) {
-              this.messageColor = 'info'
-            } else {
-              this.messageColor = 'warning'
-            }
-          }
-        })
-        .catch(error => {
-          console.log(error)
-          this.messages = ['Erro durante execução do serviço!']
+    async callApi (appointment) {
+      var response = null
+      var result = null
+      try {
+        console.log(JSON.stringify(appointment))
+        response = await this.$_axios.patch(`${this.$_url}appointment`, appointment)
+        result = response.data
+        console.log(JSON.stringify(result))
+        this.appointments = result.resultList
+        if (this.appointments.length > 0) {
+          this.appointment = this.appointments[0]
+        }
+        this.haveMessage = false
+        if (result.message) {
+          this.messages = [...result.message]
           this.haveMessage = true
-          this.messageColor = 'error'
-        })
+          if (result.success) {
+            this.messageColor = 'info'
+          } else {
+            this.messageColor = 'warning'
+          }
+        }
+      } catch (error) {
+        // erro na requisição do serviço /
+        console.log(error)
+        this.messages = ['Erro durante execução do serviço!']
+        this.haveMessage = true
+        this.messageColor = 'error'
+      }
     },
     async findWorkload (employee) {
       var response = null
@@ -210,31 +213,33 @@ export default {
         this.messageColor = 'error'
       }
     },
-    findMonthlyBalanceData (monthlyBalance) {
-      this.$_axios.patch(`${this.$_url}monthlybalance`, monthlyBalance)
-        .then(response => {
-          var result = response.data
-          var monthData = null
-          if (result.resultList.length > 0) {
-            monthData = result.resultList[0]
-            this.mountData(monthData)
-          }
-          if (result.message) {
-            this.messages = [...result.message]
-            this.haveMessage = true
-            if (result.success) {
-              this.messageColor = 'info'
-            } else {
-              this.messageColor = 'warning'
-            }
-          }
-        })
-        .catch(error => {
-          console.log(error)
-          this.messages = ['Erro durante execução do serviço!']
+    async findMonthlyBalanceData (monthlyBalance) {
+      var response = null
+      var result = null
+      try {
+        response = await this.$_axios.patch(`${this.$_url}monthlybalance`, monthlyBalance)
+        result = response.data
+        var monthData = null
+        if (result.resultList.length > 0) {
+          monthData = result.resultList[0]
+          this.mountData(monthData)
+        }
+        this.haveMessage = false
+        if (result.message) {
+          this.messages = [...result.message]
           this.haveMessage = true
-          this.messageColor = 'error'
-        })
+          if (result.success) {
+            this.messageColor = 'info'
+          } else {
+            this.messageColor = 'warning'
+          }
+        }
+      } catch (error) {
+        console.log(error)
+        this.messages = ['Erro durante execução do serviço!']
+        this.haveMessage = true
+        this.messageColor = 'error'
+      }
     },
     mountData (monthData) {
       this.abscenses = monthData.abscenseHours < 10 ? '0' + monthData.abscenseHours + ':' : monthData.abscenseHours + ':'

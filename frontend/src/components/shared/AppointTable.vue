@@ -5,6 +5,7 @@
         <v-flex center >
           <v-data-table :headers="headers"
                     :items="appointments"
+                    no-data-text="Nenhum registro foi econtrados"
                     item-key="id"
                     hide-actions
                     class="elevation-10 form-container" >
@@ -105,13 +106,6 @@
                   </v-flex>
                 </v-layout>
               </v-card>
-            </template>
-
-            <!-- empty message -->
-            <template slot="no-data">
-              <v-alert :value="true" color="error" icon="warning">
-                Não existem valores para o mês selecionado.
-              </v-alert>
             </template>
 
           </v-data-table>

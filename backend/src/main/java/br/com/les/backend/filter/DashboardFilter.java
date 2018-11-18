@@ -1,5 +1,7 @@
 package br.com.les.backend.filter;
 
+import java.time.LocalTime;
+
 import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.DomainEntity;
@@ -7,42 +9,25 @@ import br.com.les.backend.entity.DomainEntity;
 @Component
 public class DashboardFilter extends DomainEntity {
 
-    private String employee;
-    private Double workedHours;
-    private String balance;
+	
+    private String employeeFullName;
+    private String workedHoursOnTheParameterPeriod;
+    private String Balance;
     private String lastMonth;
-    private Double hoursInLastMonth;
+    private String hoursInLastMonth;
     private Double workedHourComercial;
     private Double workedHourNight;
     
-	public String getEmployee() {
-		return employee;
-	}
-	public void setEmployee(String employee) {
-		this.employee = employee;
-	}
-	public Double getWorkedHours() {
-		return workedHours;
-	}
-	public void setWorkedHours(Double workedHours) {
-		this.workedHours = workedHours;
-	}
-	public String getBalance() {
-		return balance;
-	}
-	public void setBalance(String balance) {
-		this.balance = balance;
-	}
 	public String getLastMonth() {
 		return lastMonth;
 	}
 	public void setLastMonth(String lastMonth) {
 		this.lastMonth = lastMonth;
 	}
-	public Double getHoursInLastMonth() {
+	public String getHoursInLastMonth() {
 		return hoursInLastMonth;
 	}
-	public void setHoursInLastMonth(Double hoursInLastMonth) {
+	public void setHoursInLastMonth(String hoursInLastMonth) {
 		this.hoursInLastMonth = hoursInLastMonth;
 	}
 	public Double getWorkedHourComercial() {
@@ -56,5 +41,23 @@ public class DashboardFilter extends DomainEntity {
 	}
 	public void setWorkedHourNight(Double workedHourNight) {
 		this.workedHourNight = workedHourNight;
+	}
+	public String getEmployeeFullName() {
+		return employeeFullName;
+	}
+	public void setEmployeeFullName(String employeeFullName) {
+		this.employeeFullName = employeeFullName;
+	}
+	public String getWorkedHoursOnTheParameterPeriod() {
+		return workedHoursOnTheParameterPeriod;
+	}
+	public void setWorkedHoursOnTheParameterPeriod(String workedHoursOnTheParameterPeriod) {
+		this.workedHoursOnTheParameterPeriod = workedHoursOnTheParameterPeriod;
+	}
+	public String getBalance() {
+		return Balance;
+	}
+	public void setBalance(String balance) {
+		Balance = balance;
 	}
 }

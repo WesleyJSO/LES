@@ -1,0 +1,9 @@
+# Define the root logger with appender X
+log4j.rootLogger = DEBUG, DAORA
+
+# Set the appender named X to be a File appender
+log4j.appender.DAORA=org.apache.log4j.FileAppender
+
+# Define the layout for X appender
+log4j.appender.DAORA.layout=org.apache.log4j.PatternLayout
+log4j.appender.DAORA.layout.conversionPattern=%m%n

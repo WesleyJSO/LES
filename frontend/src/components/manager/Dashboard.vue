@@ -95,12 +95,12 @@
 
     <v-data-table
       :headers="headers"
-      :items="desserts"
+      :items="employees"
       class="elevation-2"
     >
       <template slot="items" slot-scope="props">
         <td>{{ props.item.employee }}</td>
-        <td class="text-xs-center">{{ props.item.workedHours }}</td>
+        <td class="text-xs-center">{{ props.item.workedHoursOnTheParameterPeriod }}</td>
         <td class="text-xs-center">{{ props.item.balance }}</td>
         <td class="text-xs-center">{{ props.item.lastMonth }}</td>
         <td class="text-xs-center">{{ props.item.hoursInLastMonth }}</td>
@@ -116,18 +116,18 @@ export default {
   data: () => ({
     headers: [
       { text: 'Funcionários', align: 'left', sortable: true, value: 'employee' },
-      { text: 'Total horas trabalhadas', align: 'center', sortable: true, value: 'Total horas trabalhadas' },
-      { text: 'Saldo total', align: 'center', sortable: true, value: 'Saldo' },
-      { text: 'Ultimo mês em débito', align: 'center', sortable: true, value: 'Ultimo mês em débito' },
-      { text: 'Horas do ultimo mês em débito', align: 'center', sortable: true, value: 'Horas do ultimo mês em débito' },
-      { text: 'Horas pediodo comercial', align: 'center', sortable: true, value: 'Horas periodo comercial' },
-      { text: 'Horas trabalhadas noite', align: 'center', sortable: true, value: 'Horas trabalhadas noite' }
+      { text: 'Total horas trabalhadas', align: 'center', sortable: true, value: 'workedHoursOnTheParameterPeriod' },
+      { text: 'Saldo total', align: 'center', sortable: true, value: 'balance' },
+      { text: 'Ultimo mês em débito', align: 'center', sortable: true, value: 'lastMonth' },
+      { text: 'Horas do ultimo mês em débito', align: 'center', sortable: true, value: 'hoursInLastMonth' },
+      { text: 'Horas pediodo comercial', align: 'center', sortable: true, value: 'workedHourComercial' },
+      { text: 'Horas trabalhadas noite', align: 'center', sortable: true, value: 'workedHourNight' }
     ],
-    desserts: [
+    employees: [
       {
         value: false,
         employee: 'Frozen Yogurt',
-        workedHours: 159,
+        workedHoursOnTheParameterPeriod: 159,
         balance: 6.0,
         lastMonth: 'janeiro',
         hoursInLastMonth: 4.0,
@@ -137,7 +137,7 @@ export default {
       {
         value: false,
         employee: 'Ice cream sandwich',
-        workedHours: 237,
+        workedHoursOnTheParameterPeriod: 237,
         balance: 9.0,
         lastMonth: 'março',
         hoursInLastMonth: 4.3,
@@ -147,7 +147,7 @@ export default {
       {
         value: false,
         employee: 'Eclair',
-        workedHours: 262,
+        workedHoursOnTheParameterPeriod: 262,
         balance: 16.0,
         lastMonth: 'janeiro',
         hoursInLastMonth: 6.0,
@@ -157,7 +157,7 @@ export default {
       {
         value: false,
         employee: 'Cupcake',
-        workedHours: 305,
+        workedHoursOnTheParameterPeriod: 305,
         balance: 3.7,
         lastMonth: 'abril',
         hoursInLastMonth: 4.3,
@@ -167,7 +167,7 @@ export default {
       {
         value: false,
         employee: 'Gingerbread',
-        workedHours: 356,
+        workedHoursOnTheParameterPeriod: 356,
         balance: 16.0,
         lastMonth: 'dezembro',
         hoursInLastMonth: 3.9,
@@ -177,7 +177,7 @@ export default {
       {
         value: false,
         employee: 'Jelly bean',
-        workedHours: 375,
+        workedHoursOnTheParameterPeriod: 375,
         balance: 0.0,
         lastMonth: 'julho',
         hoursInLastMonth: 0.0,
@@ -187,7 +187,7 @@ export default {
       {
         value: false,
         employee: 'Lollipop',
-        workedHours: 392,
+        workedHoursOnTheParameterPeriod: 392,
         balance: 0.2,
         lastMonth: 'julho',
         hoursInLastMonth: 0,
@@ -197,7 +197,7 @@ export default {
       {
         value: false,
         employee: 'Honeycomb',
-        workedHours: 408,
+        workedHoursOnTheParameterPeriod: 408,
         balance: 3.2,
         lastMonth: 'julho',
         hoursInLastMonth: 6.5,
@@ -207,7 +207,7 @@ export default {
       {
         value: false,
         employee: 'Donut',
-        workedHours: 452,
+        workedHoursOnTheParameterPeriod: 452,
         balance: 25.0,
         lastMonth: 'agosto',
         hoursInLastMonth: 4.9,
@@ -217,7 +217,7 @@ export default {
       {
         value: false,
         employee: 'KitKat',
-        workedHours: 518,
+        workedHoursOnTheParameterPeriod: 518,
         balance: 26.0,
         lastMonth: 'fevereiro',
         hoursInLastMonth: 7,
@@ -225,7 +225,12 @@ export default {
         workedHourNight: '5'
       }
     ]
-  })
+  }),
+  async beforeMount () {
+    console.log('before mount trigger')
+    let response = await this.$_axios.patch(`${this.$_url}dashboard`, {})
+    console.log({response})
+  }
 }
 </script>
 
