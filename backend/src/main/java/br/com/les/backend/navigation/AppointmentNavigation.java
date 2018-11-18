@@ -11,6 +11,7 @@ import br.com.les.backend.strategy.appointment.AutoInput;
 import br.com.les.backend.strategy.appointment.CalculateBalance;
 import br.com.les.backend.strategy.appointment.ChangeSpecificAppointment;
 import br.com.les.backend.strategy.appointment.LoggedUser;
+import br.com.les.backend.strategy.appointment.TimeInputConsistency;
 
 @Configuration
 public class AppointmentNavigation {
@@ -18,6 +19,7 @@ public class AppointmentNavigation {
 	@Autowired private CalculateBalance calculateBalance;
 	@Autowired private LoggedUser loggedUser;
 	@Autowired private AutoInput autoInput;
+	@Autowired private TimeInputConsistency timeInputConsistency;
 	
 	@Bean("FIND_APPOINTMENT")
 	public Navigation<Appointment> findAppointmentValidator() {
@@ -36,8 +38,8 @@ public class AppointmentNavigation {
 	public Navigation<Appointment> updateAppointmentValidator() {
 		return new NavigationBuilder<Appointment>()
 				.next(loggedUser)
-				.next(changeSpecificAppointment)
 				.next(autoInput)
+				.next(timeInputConsistency)
 				.next(calculateBalance)
 				.build();
 	}
