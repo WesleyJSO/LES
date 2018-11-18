@@ -1,12 +1,12 @@
 export const HEADERS = [
-  { text: 'Nome', align: 'center', sortable: false, value: 'nome' },
+  { text: 'Nome', align: 'center', sortable: false, value: 'lastName' },
   { text: 'Carga Horária', align: 'center', value: 'cargaHoraria' },
-  { text: 'Salário', value: 'salario' },
-  { text: 'Tipo de Hora', value: 'tipoHora' },
-  { text: 'Gestor', value: 'gestor' },
-  { text: 'Telefone', value: 'telefone1' },
+  { text: 'Salário', align: 'center', value: 'salario' },
+  { text: 'Tipo de Hora', align: 'center', value: 'tipoHora' },
+  { text: 'Gestor', align: 'center', value: 'gestor' },
+  { text: 'Telefone', align: 'center', value: 'telefone1' },
   { text: 'E-mail', align: 'center', value: 'email' },
-  { text: 'Actions', value: 'name', sortable: false }
+  { text: 'Actions', align: 'center', value: 'name', sortable: false }
 ]
 export const SUB_HEADERS = [
   { text: 'PIS/PASESP', value: 'pis', align: 'center', sortable: false },
@@ -32,6 +32,18 @@ export const MANAGE_HOURS_TABLE_HEADERS = [
   { text: 'Férias', align: 'center', sortable: false, value: 'ferias' },
   { text: 'Valor Total (R$)', align: 'center', sortable: false, value: 'valor_total' }
 ]
+export const TITLES = {
+  employees: 'Lista de Funcionários',
+  manageCompTime: 'Gerenciamento de Horas'
+
+}
+export const MESSAGES = {
+  emptyDataTable: 'Nenhum registro foi encontrado'
+}
+export const LABELS = {
+  search: 'Pesquisar'
+}
+
 export default class AdminService {
   static get HEADERS () { return HEADERS }
   static get SUB_HEADERS () { return SUB_HEADERS }
@@ -39,4 +51,7 @@ export default class AdminService {
   static get ITEMS () { return ITEMS }
   static get COST_CENTRE_HEADERS () { return COST_CENTRE_HEADERS }
   static get MANAGE_HOURS_TABLE_HEADERS () { return MANAGE_HOURS_TABLE_HEADERS }
+  static get MESSAGES () { return MESSAGES }
+  static get TITLES () { return TITLES }
+  static get LABELS () { return LABELS }
 }

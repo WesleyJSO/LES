@@ -2,6 +2,7 @@ package br.com.les.backend.entity;
 
 import java.time.LocalTime;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -15,13 +16,14 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Component
 @Entity
 @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
-public class AppointmentRequest extends DomainEntity {
+public class AppointmentRequest extends Request {
 	
 	private String fieldToChange;
 	private Boolean isAproved;
+	private LocalTime previousValue;
 	private LocalTime replacement;
 	
-	@ManyToOne
+	@ManyToOne( cascade= {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH} )
 	@JoinColumn(name="id_appointment")
 	private Appointment appointment;
 
@@ -57,4 +59,11 @@ public class AppointmentRequest extends DomainEntity {
 		this.appointment = appointment;
 	}
 
+	public LocalTime getPreviousValue() {
+		return previousValue;
+	}
+
+	public void setPreviousValue(LocalTime previousValue) {
+		this.previousValue = previousValue;
+	}
 }

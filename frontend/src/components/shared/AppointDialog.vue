@@ -54,6 +54,7 @@ export default {
       if (action === 'close') {
         this.$emit('editAppoint', false)
       } else {
+        this.$emit('replacementValue', this.value)
         if (this.type === 'Entrada Manhã') {
           this.appointment.morningEntrance = this.value
         } else if (this.type === 'Saída Manhã') {

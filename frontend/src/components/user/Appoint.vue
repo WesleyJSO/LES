@@ -6,6 +6,11 @@
 								v-text="message"
 								transition="scale-transition" />
 			</li>
+      <confirm-dialog :dialog="confirmDialog" :item="appointmentRequest" 
+          @deleteRequest="handleDeleteRequest($event)" 
+          @confirmRequest="handleConfirmRequest($event)"
+          @requestError="handleRequestError($event)">
+          </confirm-dialog>  
     <v-form>
 			<v-toolbar flat color="white" >
 				<v-toolbar-title>{{ tittle }}</v-toolbar-title>
@@ -16,13 +21,14 @@
 			</v-toolbar>
       <v-layout>
         <v-flex center >
-          <AppointTable :editable="true" :appointments="appointments" @register="takeAppointment($event)"></AppointTable>
+          <AppointTable :editable="true" :appointments="appointments" @register="takeAppointment($event)" @replacement="assignReplacement($event)">
+          </AppointTable>
           <v-flex class="text-xs-center">
             <v-card class="elevation-10">       
 							<v-flex>
 								<AppointButton v-for="button in buttons" :key="button.name" 
                   :disable="button.disable" 
-                  :buttonName="button.name" 
+                  :buttonName="button.name"
                   @emitAppoint="appoint($event)">
                 </AppointButton>
 							</v-flex>
@@ -38,8 +44,9 @@
 import AppointButton from '@/components/shared/AppointButton.vue'
 import AppointDialog from '@/components/shared/AppointDialog.vue'
 import AppointTable from '@/components/shared/AppointTable.vue'
-import DateHelper from '../../helpers/DateHelper'
-import Authenticator from '../../service/Authenticator'
+import DateHelper from '@/helpers/DateHelper'
+import Authenticator from '@/service/Authenticator'
+import ConfirmDialog from '@/components/shared/AppointmentRequestDialog'
 
 export default {
   data: () => ({
@@ -61,12 +68,16 @@ export default {
     ],
     appointment: {},
     employee: {user: {id: null}},
-    appointments: []
+    appointments: [],
+    replacement: '',
+    appointmentRequest: {},
+    confirmDialog: false
   }),
   components: {
     AppointButton,
     AppointDialog,
-    AppointTable
+    AppointTable,
+    ConfirmDialog
   },
   computed: {
   },
@@ -92,6 +103,9 @@ export default {
           button = 'Retorno'
         }
       }
+      // Set time to replacement to
+      // find appointMentRequests
+      this.replacement = time
       this.mountAppointment(button, time)
     },
     mountAppointment (field, time) {
@@ -169,6 +183,7 @@ export default {
     async registerAppointments () {
       var response = null
       var result = null
+      this.verifyAppointment()
       if (!this.appointment.id) {
         try {
           response = await this.$_axios.post(`${this.$_url}appointment`, this.appointment)
@@ -222,7 +237,15 @@ export default {
           this.messageColor = 'error'
         }
       }
-      this.callApi({id: this.appointment.id})
+      await this.callApi({id: this.appointment.id})
+      /* Call 'findAppointmentRequest' passing
+       * the time entered because if this
+       * appointment becames an appointmentRequest,
+       * we're gonna use it to load the specifc
+       * request and show the dialog confirm to the
+       * user.
+       */
+      this.findAppointmentRequest()
     },
     async callApi (appointment) {
       var response = null
@@ -235,7 +258,7 @@ export default {
           this.appointments = result.resultList
           this.appointment = this.appointments[0]
           this.verifyButtons()
-          console.log(JSON.stringify(this.appointments))
+          // console.log(JSON.stringify(this.appointments))
         } else {
           this.appointment = appointment
           this.registerAppointments()
@@ -293,6 +316,63 @@ export default {
         this.haveMessage = true
         this.messageColor = 'error'
       }
+    },
+    async findAppointmentRequest () {
+      console.log('valor de replacement pra buscar as possiveis solicitações -> ', this.replacement)
+      console.log('valor appointment.date -> ', this.appointment.date)
+      console.log('startDate -> ', this.appointment.date)
+      if (this.appointment.id) {
+        let appointmentRequest = {
+          employee: { user: { id: Authenticator.GET_AUTHENTICATED().id } },
+          appointment: { id: this.appointment.id },
+          replacement: this.replacement,
+          status: 1, // FIX HERE !!! -> Get status from service
+          startDate: this.appointment.date.length > 10 ? DateHelper.formatShortDate(this.appointment.date) : this.appointment.date,
+          endDate: this.appointment.date.length > 10 ? DateHelper.formatShortDate(this.appointment.date) : this.appointment.date
+        }
+        let request = this.$_axios.patch(`${this.$_url}appointmentRequest`, appointmentRequest)
+        let [result] = await Promise.all([request])
+        console.log('resultList.size() -> ', result.data.resultList.length)
+        if (result.data.success && result.data.resultList.length > 0) {
+          alert('result.data.resultList.length > 0 - ', result.data.success && result.data.resultList.length > 0)
+          this.appointmentRequest = result.data.resultList[0]
+          this.confirmDialog = true
+        } else {
+          this.confirmDialog = false
+        }
+      }
+    },
+    verifyAppointment () {
+      if (this.appointment.appointmentRequestList && this.appointment.appointmentRequestList.length > 0) {
+        this.appointment.appointmentRequestList = this.appointment.appointmentRequestList.map(m => {
+          let newM = m
+          if (m.employee.hasOwnProperty('id')) {
+            newM.employee = Object.assign({id: m.employee.id}, {})
+            return newM
+          }
+        })
+      }
+    },
+    assignReplacement (time) {
+      console.log('replacement =  ', time)
+      this.replacement = time
+    },
+    handleDeleteRequest (result) {
+      this.confirmDialog = false
+    },
+    handleConfirmRequest (result) {
+      this.confirmDialog = false
+      if (result.success) {
+        this.messages = [...result.message]
+        this.haveMessage = true
+        this.messageColor = 'info'
+      }
+    },
+    handleRequestError (error) {
+      console.log(error)
+      this.messages = ['Erro ao processar a solitação de Apontamento!']
+      this.haveMessage = true
+      this.messageColor = 'error'
     }
   }
 }

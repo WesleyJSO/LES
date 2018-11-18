@@ -2,6 +2,7 @@ package br.com.les.backend.strategy.appointment;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
@@ -14,12 +15,16 @@ import org.springframework.context.annotation.Configuration;
 import br.com.les.backend.annotation.TimeIgnore;
 import br.com.les.backend.entity.Appointment;
 import br.com.les.backend.entity.AppointmentRequest;
+import br.com.les.backend.entity.Employee;
 import br.com.les.backend.entity.Parameter;
+import br.com.les.backend.entity.RequestStatus;
 import br.com.les.backend.navigator.INavigationCase;
 import br.com.les.backend.navigator.IStrategy;
 import br.com.les.backend.repository.AppointmentRepository;
 import br.com.les.backend.repository.AppointmentRequestRepository;
 import br.com.les.backend.repository.ParameterRepository;
+import br.com.les.backend.service.SecurityService;
+import br.com.les.backend.utils.RequestType;
 import br.com.les.backend.utils.Result;
 import br.com.les.backend.utils.Util;
 
@@ -42,7 +47,8 @@ public class ChangeSpecificAppointment implements IStrategy<Appointment> {
 			
 				Parameter parameter = parameterList.get(0);
 				
-				// find the appointment that need to be changed the list needs to show only one
+				// find the appointment that need to be changed,
+				// the list needs to show only one
 				Optional<Appointment> dbAppointment = appointmentRepository.findById(aEntity.getId());
 				
 				// find which field need to be updated 
@@ -55,8 +61,9 @@ public class ChangeSpecificAppointment implements IStrategy<Appointment> {
 				try {
 					methodToCompare = dbAppointment.get().getClass().getDeclaredMethod(methodToUpdate.getName());
 					// verify if the value can be updated with the parameter object 
-					dateToCompare = (LocalTime) methodToCompare.invoke(aEntity);
-					timeDiference = (int) ChronoUnit.MINUTES.between( dateToCompare, now.toLocalTime());
+					dateToUpdate = (LocalTime) methodToCompare.invoke(aEntity);
+					dateToCompare = (LocalTime) methodToCompare.invoke(dbAppointment.get());
+					timeDiference = (int) ChronoUnit.MINUTES.between( dateToUpdate, now.toLocalTime());
 				} catch (Exception e) {
 					aCase.suspendExecution();
 					aCase.getResult().setError("Erro durante o processamento de datas!");
@@ -78,16 +85,28 @@ public class ChangeSpecificAppointment implements IStrategy<Appointment> {
 				
 				if(timeDiference > retroactiveLimitInMinutes || timeDiference < retroactiveLimitInMinutes * - 1
 						|| !aEntity.getDate().toLocalDate().equals(now.toLocalDate())) {
+
 					//save a new AppointmentRequest and send a message back to the user
 					if(result.isSuccess()) {
 						AppointmentRequest appointmentRequest = new AppointmentRequest();
-						appointmentRequest.setAppointment(aEntity);
+						appointmentRequest.setAppointment(dbAppointment.get());
 						appointmentRequest.setFieldToChange(methodToUpdate.getName());
 						appointmentRequest.setReplacement(dateToUpdate);
+						appointmentRequest.setPreviousValue(dateToCompare);
+						appointmentRequest.setDescription(MessageFormat.format(Util.CHANGE_SPECIFIC_APPOINTMENT_MESSAGE, retroactiveLimit.toString()));
 						appointmentRequest.setIsAproved(false);
+						appointmentRequest.setType(RequestType.CHANGE_APPOINTMENT);
+						appointmentRequest.setEmployee( (Employee) SecurityService.getAuthenticatedUser() );
+						appointmentRequest.setStatus(RequestStatus.SENT.getValue());
+						// Set the same value to start and end date because this request
+						// refers to the appointment of the same day
+						appointmentRequest.setStartDate(dbAppointment.get().getDate().toLocalDate());
+						appointmentRequest.setEndDate(dbAppointment.get().getDate().toLocalDate());
 						appointmentRequestRepository.save(appointmentRequest);
+						// Do not send a "Successful update appointment" message, 
+						// cause we'are going to  ask user confirmation about this request
 						aCase.suspendExecution();
-						aCase.getResult().setSuccess(Util.UPDATE_APPOINTMENT_REQUESTED);
+						// aCase.getResult().setSuccess(Util.UPDATE_APPOINTMENT_REQUESTED);
 						return;
 					}
 				}

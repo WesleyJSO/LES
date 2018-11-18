@@ -40,10 +40,13 @@ import br.com.les.backend.repository.GenericRepository;
 public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 	
 	
-	private Map<String, LocalDateTime> dateTimeMap; 	// for dates that will query for days and time of a day
-	private Map<String, LocalDate> dateMap; 			// for dates that will query for month
+	private Map<String, LocalDateTime> dateTimeMap;    // for dates that will query for days and time of a day
+	private Map<String, LocalDate> dateMap; 		   // for dates that will query for month
+	private Map<String, LocalTime> timeMap;			   // for times fields (LocalTime)
+	private static DateTimeFormatter timePattern = DateTimeFormatter.ofPattern("HH:mm:ss");
 	private static DateTimeFormatter datePettern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 	private static DateTimeFormatter monthYearPettern = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	private final String REPOSITORY ="Repository";
 	
 	@PersistenceContext
 	protected EntityManager em;
@@ -54,9 +57,8 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 	private GenericRepository<T> getRepository(T clazz) {
 		for (Entry<String, GenericRepository<T>> e : repositoryMap.entrySet())
 			if(e.getKey()
-					.substring(0, clazz.getClass().getSimpleName().length())
 					.toLowerCase()
-					.equals(clazz.getClass().getSimpleName().toLowerCase()))
+					.equals( clazz.getClass().getSimpleName().concat( REPOSITORY ).toLowerCase() ) )
 				return e.getValue();
 		return null;
 	}
@@ -107,6 +109,7 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 	    
 		dateMap = new HashMap<>();
 		dateTimeMap = new HashMap<>();
+		timeMap = new HashMap<>();
 		List<Method> methodList = getMethodsFromClass(clazz);
 		List<Field> fieldList = getFieldsFromClass(clazz);
 		Map<Field, Method> attributesMap = MakeMapToMethods(methodList, fieldList);
@@ -119,12 +122,14 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 					sql += queryForList(item.getKey(), item.getValue(), clazz);
 					storeDateTimeTypes(item.getKey(), item.getValue(), clazz);
 					storeDateTypes(item.getKey(), item.getValue(), clazz);
+					storeTime(item.getKey(), item.getValue(), clazz);
 				}
 						
 			}
 			sql += queryForMonth();
 			sql += queryForDateTime();
 			sql += queryForAnotation(methodList, clazz);
+			sql += queryForTime();
 			sql = validateSqlStatement(sql);
 			
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) { e.printStackTrace(); }
@@ -168,6 +173,24 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 		}
 		return sql;
 	}
+	
+	/**
+	 * Makes a SQL statement with time fields (LocalTime)
+	 * founded on entity
+	 * 
+	 * @return sql
+	 * 			the SQL statement with all time fields
+	 * 			founded on entity
+	 */
+	private String queryForTime () {
+		String sql = "";
+		if ( timeMap.keySet().size() > 0 ) {
+			Entry <String, LocalTime> entry = timeMap.entrySet().iterator().next();
+			sql = " and t." + entry.getKey()
+				+ " = '" + entry.getValue().format(timePattern) + "'";
+		}
+		return sql;
+	}
 
 	private String queryForMonth() {
 		String sql = "";
@@ -189,6 +212,27 @@ public class GenericDAO<T extends DomainEntity> implements IDAO<T> {
 	private void storeDateTimeTypes(Field f, Method m, T clazz) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		if(m.getReturnType() == LocalDateTime.class) {
 			dateTimeMap.put(f.getName(), (LocalDateTime) m.invoke(clazz));
+		}
+	}
+	
+	/**
+	 * 
+	 * @param f
+	 * 			field that could be a LocalTime
+	 * @param m
+	 * 			method used to invoke the value
+	 * 			of field
+	 * @param clazz
+	 * 			used to invoke the value
+	 * 			of field
+	 * 
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 */
+	private void storeTime( Field f, Method m, T clazz) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		if(m.getReturnType() == LocalTime.class) {
+			timeMap.put(f.getName(), (LocalTime) m.invoke(clazz));
 		}
 	}
 
