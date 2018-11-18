@@ -89,6 +89,7 @@ export default {
   },
   watch: {
     holidays () {
+      this.markers = []
       this.holidays.forEach(element => {
         this.markers.push(
           {
@@ -211,13 +212,14 @@ export default {
       }
     },
     async deleteHoliday () {
-      console.log('delete')
-      console.log(this.holiday.id)
+      var id = this.holiday.id
+      console.log(id)
+      console.log(JSON.stringify(this.holiday))
       var response = null
       var result = null
       try {
         if (this.holiday.id !== null) {
-          response = await this.$_axios.delete(`${this.$_url}holiday`, this.holiday)
+          response = await this.$_axios.delete(`${this.$_url}holiday/${id}`)
           result = response.data
           this.haveMessage = false
           if (result.message) {

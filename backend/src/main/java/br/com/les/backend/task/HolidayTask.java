@@ -8,15 +8,9 @@ import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Timer;
 import java.util.TimerTask;
 import java.util.stream.Stream;
-
-import javax.annotation.PostConstruct;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -40,53 +34,57 @@ public class HolidayTask extends TimerTask {
  	// API token
  	private final static String TOKEN = "am9zZXdzbzU1QGdtYWlsLmNvbSZoYXNoPTY4MDQxMzAx";	
 	// Period in milliseconds
- 	private final static int PERIOD_IN_YEAR = 1;
- 	// used to indicate init date
- 	private final static int ONE_DAY = 0;
- 	// schedule hour
- 	private final static int HOUR = 4;
- 	// schedule minutes
- 	private final static int MINUTE = 0;
+// 	private final static int PERIOD_IN_YEAR = 1;
+// 	// used to indicate init date
+// 	private final static int ONE_DAY = 0;
+// 	// schedule hour
+// 	private final static int HOUR = 4;
+// 	// schedule minutes
+// 	private final static int MINUTE = 0;
  	
- 	@PostConstruct
- 	public void calcBankTask() {
- 		
- 		Timer timer = new Timer();
- 		timer.scheduleAtFixedRate(this, getSchedule(), getPeriod());
- 	}
-	
-	private static Date getSchedule() {
-		
-		Calendar tomorrow = new GregorianCalendar();
-		tomorrow.add(Calendar.DATE, ONE_DAY);
-		Calendar result = new GregorianCalendar(tomorrow.get(Calendar.YEAR),
-		    tomorrow.get(Calendar.MONTH), tomorrow.get(Calendar.DATE), HOUR,
-		    MINUTE);
-		return result.getTime();
-		
-	}
-	
-	private static Long getPeriod() {
-		
-		Calendar date = new GregorianCalendar();
-		date.add(Calendar.YEAR, PERIOD_IN_YEAR);
-		long period =
-				date.getTimeInMillis() - System.currentTimeMillis();
-		return period;
-		
-	}
+// 	@PostConstruct
+// 	public void calcBankTask() {
+// 		
+// 		Timer timer = new Timer();
+// 		timer.scheduleAtFixedRate(this, getSchedule(), getPeriod());
+// 	}
+//	
+//	private static Date getSchedule() {
+//		
+//		Calendar tomorrow = new GregorianCalendar();
+//		tomorrow.add(Calendar.DATE, ONE_DAY);
+//		Calendar result = new GregorianCalendar(tomorrow.get(Calendar.YEAR),
+//		    tomorrow.get(Calendar.MONTH), tomorrow.get(Calendar.DATE), HOUR,
+//		    MINUTE);
+//		return result.getTime();
+//		
+//	}
+//	
+//	private static Long getPeriod() {
+//		
+//		Calendar date = new GregorianCalendar();
+//		date.add(Calendar.YEAR, PERIOD_IN_YEAR);
+//		long period =
+//				date.getTimeInMillis() - System.currentTimeMillis();
+//		return period;
+//		
+//	}
 	
 	@Override
     public void run() {
 		
 	    List< Holiday > holidays = new ArrayList<>();
+	    holidays = holidayRepository.findAll();
+	    List< Holiday > holidays2 = new ArrayList<>();
+	    
 	    
 		for ( int i = 0; i < 3; i++ ) {
 			
 			LocalDate localDate = LocalDate.now();
 			localDate = localDate.plusYears(i);
 			
-			if ( !holidayRepository.findByYear(localDate.withDayOfYear(1), localDate.withDayOfYear(365)).isEmpty() ) {
+			if ( !(holidays2 = holidayRepository.findByYear(localDate.withDayOfYear(1), localDate.withDayOfYear(365))).isEmpty() ) {
+				holidays.removeAll(holidays2);
 				continue;
 			}
 			
