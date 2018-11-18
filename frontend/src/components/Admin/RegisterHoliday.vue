@@ -217,7 +217,7 @@ export default {
       var result = null
       try {
         if (this.holiday.id !== null) {
-          response = await this.$_axios.delete(`${this.$_url}holiday`, {params: {id: this.holiday.id, clazzName: 'Holiday'}})
+          response = await this.$_axios.delete(`${this.$_url}holiday`, this.holiday)
           result = response.data
           this.haveMessage = false
           if (result.message) {

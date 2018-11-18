@@ -6,13 +6,10 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import br.com.les.backend.command.ICommand;
 import br.com.les.backend.entity.DomainEntity;
@@ -64,24 +61,14 @@ public abstract class AbstractController<T extends DomainEntity> extends BaseCon
 		return run(Actions.UPDATE.getValue()).execute(entity, bCase);
     }
     
-    @SuppressWarnings("unchecked")
-	@DeleteMapping(params={"id", "clazzName"})
-    public @ResponseBody Result<T> delete(@PathVariable("id") Long id, @PathVariable("clazzName") String clazzName) throws InstantiationException, IllegalAccessException {
+    @DeleteMapping
+    public @ResponseBody Result<T> delete(@RequestBody T entity) throws InstantiationException, IllegalAccessException {
 
-    	try {
-			clazz = (Class<? extends T>) Class.forName(clazzName).newInstance();
-
-			BusinessCase<T> bCase = new BusinessCaseBuilder<T>()
+    	BusinessCase<T> bCase = new BusinessCaseBuilder<T>()
 				.withName(existingNavigation("DELETE_".concat(clazz.getSimpleName().toUpperCase())))
 				.build();
     	
-			T entity = null;
-			entity = (T) Class.forName(clazzName).newInstance();
-			return run(Actions.DELETE.getValue()).execute(entity, bCase);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		return null;
+		return run(Actions.DELETE.getValue()).execute(entity, bCase);
     }
     
     protected ICommand<T> run ( String action) {
