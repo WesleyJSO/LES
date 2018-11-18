@@ -10,4 +10,7 @@ public interface AppointmentRequestRepository extends GenericRepository<Appointm
 
 	@Query("from #{#entityName} t where t.appointment.id = ?1")
 	List<AppointmentRequest> findByAppointmentId(Long id);
+	
+	@Query("from #{#entityName} t where t.appointment.id = ?1 and t.status = ?2")
+	List<AppointmentRequest> findEvaluatedByAppointmentId(Long id, Integer status);
 }

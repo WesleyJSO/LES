@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import br.com.les.backend.entity.Appointment;
 import br.com.les.backend.navigator.Navigation;
 import br.com.les.backend.navigator.NavigationBuilder;
+import br.com.les.backend.strategy.appointment.AutoInput;
 import br.com.les.backend.strategy.appointment.CalculateBalance;
 import br.com.les.backend.strategy.appointment.ChangeSpecificAppointment;
 import br.com.les.backend.strategy.appointment.LoggedUser;
@@ -16,6 +17,7 @@ public class AppointmentNavigation {
 	@Autowired private ChangeSpecificAppointment changeSpecificAppointment;
 	@Autowired private CalculateBalance calculateBalance;
 	@Autowired private LoggedUser loggedUser;
+	@Autowired private AutoInput autoInput;
 	
 	@Bean("FIND_APPOINTMENT")
 	public Navigation<Appointment> findAppointmentValidator() {
@@ -35,6 +37,7 @@ public class AppointmentNavigation {
 		return new NavigationBuilder<Appointment>()
 				.next(loggedUser)
 				.next(changeSpecificAppointment)
+				.next(autoInput)
 				.next(calculateBalance)
 				.build();
 	}

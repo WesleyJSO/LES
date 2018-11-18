@@ -62,22 +62,10 @@ export default {
         } else if (this.type === 'Entrada Tarde') {
           this.appointment.afternoonEntrance = this.value
         } else if (this.type === 'Saída Tarde') {
-          if (!this.appointment.morningOut) {
-            this.appointment.morningOut = '12:00'
-            this.appointment.afternoonEntrance = '12:00'
-          }
           this.appointment.afternoonOut = this.value
         } else if (this.type === 'Entrada Noite') {
           this.appointment.nightEntrance = this.value
         } else if (this.type === 'Saída Noite') {
-          if (!this.appointment.morningOut && this.appointment.morningEntrance) {
-            this.appointment.morningOut = '12:00'
-            this.appointment.afternoonEntrance = '12:00'
-          }
-          if (!this.appointment.afternoonOut && !this.appointment.nightEntrance) {
-            this.appointment.afternoonOut = '18:00'
-            this.appointment.nightEntrance = '18:00'
-          }
           this.appointment.nightOut = this.value
         } else if (this.type === 'Saída Partícular') {
           this.appointment.particularExit = this.value

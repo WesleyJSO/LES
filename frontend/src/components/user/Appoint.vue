@@ -116,22 +116,10 @@ export default {
       } else if (field === 'Entrada Tarde') {
         this.appointment.afternoonEntrance = time
       } else if (field === 'Saída Tarde') {
-        if (!this.appointment.morningOut) {
-          this.appointment.morningOut = '12:00'
-          this.appointment.afternoonEntrance = '12:00'
-        }
         this.appointment.afternoonOut = time
       } else if (field === 'Entrada Noite') {
         this.appointment.nightEntrance = time
       } else if (field === 'Saída Noite') {
-        if (!this.appointment.morningOut && this.appointment.morningEntrance) {
-          this.appointment.morningOut = '12:00'
-          this.appointment.afternoonEntrance = '12:00'
-        }
-        if (!this.appointment.afternoonOut && !this.appointment.nightEntrance) {
-          this.appointment.afternoonOut = '18:00'
-          this.appointment.nightEntrance = '18:00'
-        }
         this.appointment.nightOut = time
       } else if (field === 'Saída Partícular') {
         this.appointment.particularExit = time
