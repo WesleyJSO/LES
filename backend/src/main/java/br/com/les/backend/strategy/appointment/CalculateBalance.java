@@ -1,25 +1,39 @@
 package br.com.les.backend.strategy.appointment;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalTime;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
 import br.com.les.backend.entity.Appointment;
 import br.com.les.backend.entity.Employee;
 import br.com.les.backend.navigator.INavigationCase;
 import br.com.les.backend.navigator.IStrategy;
+import br.com.les.backend.repository.HolidayRepository;
 import br.com.les.backend.service.SecurityService;
 
 @Configuration
 public class CalculateBalance implements IStrategy<Appointment> {
+	
+	@Autowired HolidayRepository holidayRepository;
 
 	@Override
 	public void process(Appointment aEntity, INavigationCase<Appointment> aCase) {
 
 		if (aEntity != null) {
 
+			LocalDate today = LocalDate.now();
 			Employee employee = (Employee) SecurityService.getAuthenticatedUser();
-			int employeeWorkload = employee.getBaseHourCalculation().getWorkload();
+			int employeeWorkload = 0;
+			
+			if ( today.getDayOfWeek() != DayOfWeek.SUNDAY 
+				&& today.getDayOfWeek() != DayOfWeek.SATURDAY
+				&& holidayRepository.findBydate(today).isEmpty()) {
+				employeeWorkload = employee.getBaseHourCalculation().getWorkload();
+			}
+			
 			
 			LocalTime balance = LocalTime.MIN;
 			LocalTime workload = LocalTime.of(employeeWorkload, 0);
