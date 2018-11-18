@@ -26,10 +26,10 @@ public interface GenericRepository<T extends DomainEntity> extends JpaRepository
 	@Transactional
 	@Modifying
 	@Query("update #{#entityName} t set t.active = true where id = ?1")
-	boolean setActiveById(Long id);
+	int setActiveById(Long id);
 
 	@Transactional
 	@Modifying
 	@Query("update #{#entityName} t set t.active = false where id = ?1")
-	boolean setInactiveById(Long id);
+	int setInactiveById(Long id);
 }
