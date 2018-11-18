@@ -21,7 +21,7 @@ public class Role extends DomainEntity implements GrantedAuthority{
 	private String roleName;
 	private String role;
 
-	@ManyToMany(mappedBy="roleList", fetch=FetchType.LAZY)
+	@ManyToMany(mappedBy="authorities", fetch=FetchType.LAZY)
 	private List<User> userList;
 	
 	public String getRoleName() {

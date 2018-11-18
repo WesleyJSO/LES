@@ -36,7 +36,7 @@ public class User extends DomainEntity implements UserDetails {
 	@ManyToMany(fetch=FetchType.EAGER, cascade={ CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE })
 	@JoinTable(name = "user_role", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "role_id") })
-	private List<Role> roleList;
+	private List<Role> authorities;
 
 
 	public String getEmail() {
@@ -47,8 +47,8 @@ public class User extends DomainEntity implements UserDetails {
 		this.email = email;
 	}
 
-	public void setRoleList(List<Role> roleList) {
-		this.roleList = roleList;
+	public void setAuthorities(List<Role> authorities) {
+		this.authorities = authorities;
 	}
 
 	public String getPassword() {
@@ -62,11 +62,7 @@ public class User extends DomainEntity implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return this.roleList;
-	}
-
-	public List<Role> getRoleList() {
-		return roleList;
+		return this.authorities;
 	}
 	
 	@Override

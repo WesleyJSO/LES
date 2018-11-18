@@ -32,7 +32,7 @@ public class Employee extends DomainEntity {
 	private String name;
 	private String lastName;
 	
-	@OneToOne(fetch=FetchType.LAZY, cascade=CascadeType.PERSIST)
+	@OneToOne(optional=true, fetch=FetchType.LAZY, cascade=CascadeType.PERSIST)
 	@JoinColumn(name="user_id")
 	private User user;
 	
