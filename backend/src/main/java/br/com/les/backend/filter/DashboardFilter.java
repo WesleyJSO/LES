@@ -1,7 +1,5 @@
 package br.com.les.backend.filter;
 
-import java.time.LocalTime;
-
 import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.DomainEntity;
@@ -9,16 +7,23 @@ import br.com.les.backend.entity.DomainEntity;
 @Component
 public class DashboardFilter extends DomainEntity {
 
-	
     private String employeeFullName;
     private String workedHoursOnTheParameterPeriod;
-    private String Balance;
+    private Long workedHoursOnTheParameterPeriodMinutes;
+    private String balance;
+    private String shouldBeWorked;
+    private String countingFromMonth;
     private String lastMonth;
     private String hoursInLastMonth;
-    private Double workedHourComercial;
-    private Double workedHourNight;
+    private Double workedHoursComercial;
+    private Double workedHoursNight;
     
-	public String getLastMonth() {
+    private Long balanceInMinutes;
+    private Long hoursInLastMonthMinutes;
+    private Short countingFromMonthNumber;
+    private Short lastMonthNumber;
+    
+    public String getLastMonth() {
 		return lastMonth;
 	}
 	public void setLastMonth(String lastMonth) {
@@ -29,18 +34,6 @@ public class DashboardFilter extends DomainEntity {
 	}
 	public void setHoursInLastMonth(String hoursInLastMonth) {
 		this.hoursInLastMonth = hoursInLastMonth;
-	}
-	public Double getWorkedHourComercial() {
-		return workedHourComercial;
-	}
-	public void setWorkedHourComercial(Double workedHourComercial) {
-		this.workedHourComercial = workedHourComercial;
-	}
-	public Double getWorkedHourNight() {
-		return workedHourNight;
-	}
-	public void setWorkedHourNight(Double workedHourNight) {
-		this.workedHourNight = workedHourNight;
 	}
 	public String getEmployeeFullName() {
 		return employeeFullName;
@@ -55,9 +48,63 @@ public class DashboardFilter extends DomainEntity {
 		this.workedHoursOnTheParameterPeriod = workedHoursOnTheParameterPeriod;
 	}
 	public String getBalance() {
-		return Balance;
+		return balance;
 	}
 	public void setBalance(String balance) {
-		Balance = balance;
+		this.balance = balance;
+	}
+	public String getShouldBeWorked() {
+		return shouldBeWorked;
+	}
+	public void setShouldBeWorked(String shouldBeWorked) {
+		this.shouldBeWorked = shouldBeWorked;
+	}
+	public String getCountingFromMonth() {
+		return countingFromMonth;
+	}
+	public void setCountingFromMonth(String countingFromMonth) {
+		this.countingFromMonth = countingFromMonth;
+	}
+	public Double getWorkedHoursComercial() {
+		return workedHoursComercial;
+	}
+	public void setWorkedHoursComercial(Double workedHoursComercial) {
+		this.workedHoursComercial = workedHoursComercial;
+	}
+	public Double getWorkedHoursNight() {
+		return workedHoursNight;
+	}
+	public void setWorkedHoursNight(Double workedHoursNight) {
+		this.workedHoursNight = workedHoursNight;
+	}
+	public Long getBalanceInMinutes() {
+		return balanceInMinutes;
+	}
+	public void setBalanceInMinutes(Long balanceInMinutes) {
+		this.balanceInMinutes = balanceInMinutes;
+	}
+	public Long getHoursInLastMonthMinutes() {
+		return hoursInLastMonthMinutes;
+	}
+	public void setHoursInLastMonthMinutes(Long hoursInLastMonthMinutes) {
+		this.hoursInLastMonthMinutes = hoursInLastMonthMinutes;
+	}
+	public Short getLastMonthNumber() {
+		return lastMonthNumber;
+	}
+	public void setLastMonthNumber(Short lastMonthNumber) {
+		this.lastMonthNumber = lastMonthNumber;
+	}
+	public Short getCountingFromMonthNumber() {
+		return countingFromMonthNumber;
+	}
+	public void setCountingFromMonthNumber(Short countingFromMonthNumber) {
+		this.countingFromMonthNumber = countingFromMonthNumber;
+	}
+	public Long getWorkedHoursOnTheParameterPeriodMinutes() {
+		return workedHoursOnTheParameterPeriodMinutes;
+	}
+	public void setWorkedHoursOnTheParameterPeriodMinutes(Long workedHoursOnTheParameterPeriodMinutes) {
+		this.workedHoursOnTheParameterPeriodMinutes = workedHoursOnTheParameterPeriodMinutes;
 	}
 }
