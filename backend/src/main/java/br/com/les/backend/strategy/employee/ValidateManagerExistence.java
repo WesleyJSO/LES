@@ -4,9 +4,11 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.core.GrantedAuthority;
 
 import com.google.common.base.Strings;
 
+import br.com.les.backend.entity.DomainEntity;
 import br.com.les.backend.entity.Employee;
 import br.com.les.backend.entity.Role;
 import br.com.les.backend.navigator.INavigationCase;
@@ -24,8 +26,8 @@ public class ValidateManagerExistence implements IStrategy<Employee> {
 		if (aEntity != null && !Strings.isNullOrEmpty(aEntity.getPis())) {
 	
 			Optional<Role> r = Optional.empty();
-			for (Role role : aEntity.getUser().getRoleList()) {
-				r = roleRepository.findActiveById(role.getId());
+			for ( GrantedAuthority role : aEntity.getUser().getAuthorities() ) {
+				r = roleRepository.findActiveById( ( ( DomainEntity ) role ).getId() );
 				if(r.get().equals(Role.ROLE_EMPLOYEE))
 					break;
 				else

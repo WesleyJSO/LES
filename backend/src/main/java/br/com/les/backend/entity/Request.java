@@ -1,7 +1,6 @@
 package br.com.les.backend.entity;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -10,9 +9,10 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 
 import br.com.les.backend.annotation.DeepSearchQuery;
 
@@ -32,8 +32,12 @@ public class Request extends DomainEntity {
 	
 	private Integer status;
 	
+	@JsonFormat(pattern = "dd/MM/yyyy")
+	@JsonDeserialize(using= LocalDateDeserializer.class)
 	private LocalDate startDate;
 	
+	@JsonFormat(pattern = "dd/MM/yyyy")
+	@JsonDeserialize(using= LocalDateDeserializer.class)
 	private LocalDate endDate;
 	
 	private int type;

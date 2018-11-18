@@ -106,6 +106,7 @@
 
 <script>
 import RequestService from '@/service/RequestService'
+import DateHelper from '@/helpers/DateHelper'
 export default {
   props: {
     item: Object,
@@ -174,8 +175,17 @@ export default {
   },
   methods: {
     saveRequest () {
+      let startDate = this.request.startDate
+      let endDate = this.request.endDate
       if (!this.edit) {
-        this.request = Object.assign({'status': null, 'type': this.type.id}, this.request)
+        this.request = Object.assign(
+          {
+            'status': null,
+            'type': this.type.id,
+            'startDate': startDate ? DateHelper.formatShortDate(startDate) : null,
+            'endDate': endDate ? DateHelper.formatShortDate(endDate) : null
+          },
+          this.request)
         console.log(JSON.stringify(this.request, null, ' '))
         this.$_axios.post(`${this.$_url}request`, this.request).then((response) => {
           let result = response.data

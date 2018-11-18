@@ -20,8 +20,8 @@ public class BackendApplication {
     @PostConstruct
     public void init(){
     	Calendar calendar = new GregorianCalendar();
-    	TimeZone systemTimeZone = calendar.getTimeZone();
-    	TimeZone.setDefault(systemTimeZone);
+    	TimeZone currentSystem = calendar.getTimeZone();
+    	TimeZone.setDefault(currentSystem);
     	// Simple Log
         System.out.println("\n###############################################################################################\n");
         System.out.println(" Spring boot application running in America/SAO_PAULO timezone: " + new Date());

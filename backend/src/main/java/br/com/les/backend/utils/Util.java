@@ -67,4 +67,9 @@ public class Util {
 
 	public static final String FIND_SUCCESSFUL_REQUEST = "Consulta Realizada com Sucesso!";
 
+	public static final String CHANGE_SPECIFIC_APPOINTMENT_MESSAGE = "Solicitação Criada devido apontamento ser realizado em um perído que excede o parâmetro cadastrado para apontamentos retroativos/posteriores com limite de {0} Horas";
+
+	public static final String REQUEST_NOT_FOUNDED = "Solicitação não encontrada!";
+
+	public static final String ERROR_FIELD_TO_CHANGE = "Por favor, informe o apontamento a ser alterado!";
 }
