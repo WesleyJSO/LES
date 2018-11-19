@@ -1,17 +1,10 @@
 package br.com.les.backend.strategy.request;
 
-import java.time.LocalDate;
-import java.util.List;
-
 import org.springframework.context.annotation.Configuration;
 
-import br.com.les.backend.entity.Employee;
 import br.com.les.backend.entity.Request;
-import br.com.les.backend.entity.Role;
 import br.com.les.backend.navigator.INavigationCase;
 import br.com.les.backend.navigator.IStrategy;
-import br.com.les.backend.service.SecurityService;
-import br.com.les.backend.utils.Util;
 
 @Configuration
 public class FindRequest implements IStrategy < Request > {

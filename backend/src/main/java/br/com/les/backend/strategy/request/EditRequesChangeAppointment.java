@@ -7,12 +7,10 @@ import org.springframework.context.annotation.Configuration;
 
 import com.google.common.base.Strings;
 
-import br.com.les.backend.entity.Employee;
 import br.com.les.backend.entity.Request;
 import br.com.les.backend.navigator.INavigationCase;
 import br.com.les.backend.navigator.IStrategy;
 import br.com.les.backend.repository.RequestRepository;
-import br.com.les.backend.service.SecurityService;
 import br.com.les.backend.utils.RequestType;
 import br.com.les.backend.utils.Util;
 
