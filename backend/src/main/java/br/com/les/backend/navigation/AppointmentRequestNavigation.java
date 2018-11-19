@@ -8,11 +8,13 @@ import br.com.les.backend.entity.AppointmentRequest;
 import br.com.les.backend.navigator.Navigation;
 import br.com.les.backend.navigator.NavigationBuilder;
 import br.com.les.backend.strategy.appointment.UpdateChangeSpecifcAppointment;
+import br.com.les.backend.strategy.request.ApproveRequestChangeSpecificAppointment;
 
 @Configuration
 public class AppointmentRequestNavigation {
 
 	@Autowired UpdateChangeSpecifcAppointment updateChangeSpecifcAppointment;
+	@Autowired ApproveRequestChangeSpecificAppointment approveRequestChangeSpecificAppointment;
 	
 	@Bean("FIND_APPOINTMENTREQUEST")
 	public Navigation<AppointmentRequest> findValidator() {
@@ -28,6 +30,7 @@ public class AppointmentRequestNavigation {
 	public Navigation<AppointmentRequest> updateAppointmentRequestValidator() {
 		return new NavigationBuilder<AppointmentRequest>()
 				.next(updateChangeSpecifcAppointment)
+				.next(approveRequestChangeSpecificAppointment)
 				.build();
 	}
 
