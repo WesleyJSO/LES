@@ -18,6 +18,7 @@
                     <a slot="activator">{{ props.item.morningEntrance || empty }}</a>
                     <AppointDialog :value="props.item.morningEntrance || empty"
                       :appointment="props.item"
+                      @replacementValue="emitTime($event)"
                       type="Entrada Manhã" @editAppoint="editAppointment($event, props.index * 8 + 0)"></AppointDialog>
                   </v-dialog>
                 </td>
@@ -27,6 +28,7 @@
                     <a slot="activator">{{ props.item.morningOut || empty }}</a>
                     <AppointDialog :value="props.item.morningOut || empty"
                       :appointment="props.item"
+                      @replacementValue="emitTime($event)"
                       type="Saída Manhã" @editAppoint="editAppointment($event, props.index * 8 + 1)"></AppointDialog>
                   </v-dialog>
                 </td>
@@ -36,6 +38,7 @@
                     <a slot="activator">{{ props.item.afternoonEntrance || empty }}</a>
                     <AppointDialog :value="props.item.afternoonEntrance || empty"
                       :appointment="props.item"
+                      @replacementValue="emitTime($event)"
                       type="Entrada Tarde" @editAppoint="editAppointment($event, props.index * 8 + 2)"></AppointDialog>
                   </v-dialog>
                 </td>
@@ -45,6 +48,7 @@
                     <a slot="activator">{{ props.item.afternoonOut || empty }}</a>
                     <AppointDialog :value="props.item.afternoonOut || empty"
                       :appointment="props.item"
+                      @replacementValue="emitTime($event)"
                       type="Saída Tarde" @editAppoint="editAppointment($event, props.index * 8 + 3)"></AppointDialog>
                   </v-dialog>
                 </td>
@@ -54,6 +58,7 @@
                     <a slot="activator">{{ props.item.nightEntrance || empty }}</a>
                     <AppointDialog :value="props.item.nightEntrance || empty"
                       :appointment="props.item"
+                      @replacementValue="emitTime($event)"
                       type="Entrada Noite" @editAppoint="editAppointment($event, props.index * 8 + 4)"></AppointDialog>
                   </v-dialog>
                 </td>
@@ -63,6 +68,7 @@
                     <a slot="activator">{{ props.item.nightOut || empty }}</a>
                     <AppointDialog :value="props.item.nightOut || empty"
                       :appointment="props.item"
+                      @replacementValue="emitTime($event)"
                       type="Saída Noite" @editAppoint="editAppointment($event, props.index * 8 + 5)"></AppointDialog>
                   </v-dialog>
                 </td>
@@ -82,6 +88,7 @@
                       <a slot="activator">{{props.item.particularExit || empty}}</a>
                       <AppointDialog :value="props.item.particularExit || empty"
                         :appointment="props.item"
+                        @replacementValue="emitTime($event)"
                         type="Saída Partícular" @editAppoint="editAppointment($event, props.index * 8 + 6)"></AppointDialog>
                     </v-dialog>
                     <span class="text-xs-center" v-else>{{props.item.particularExit || empty}}</span>
@@ -93,6 +100,7 @@
                         <a slot="activator">{{props.item.particularExitReturn || empty}}</a>
                         <AppointDialog :value="props.item.particularExitReturn || empty"
                           :appointment="props.item"
+                          @replacementValue="emitTime($event)"
                           type="Retorno" @editAppoint="editAppointment($event, props.index * 8 + 7)"></AppointDialog>
                       </v-dialog>
                       <span class="text-xs-center" v-else>{{props.item.particularExit || empty}}</span>
@@ -192,6 +200,9 @@ export default {
         this.$emit('register', this.appointment)
       }
       this.dialogs[index].value = false
+    },
+    emitTime (value) {
+      this.$emit('replacement', value)
     }
   }
 }
