@@ -26,7 +26,12 @@ public class ParticularExitConsistency implements IStrategy<Appointment> {
 			inputList.add(aEntity.getAfternoonEntrance());
 			inputList.add(aEntity.getAfternoonOut());
 			inputList.add(aEntity.getNightEntrance());
-			inputList.add(aEntity.getNightOut());
+			// verify if the night out is after midnight
+			if ( null != aEntity.getNightOut() && aEntity.getNightOut().isBefore(LocalTime.of(6, 0))) {
+				inputList.add(LocalTime.MIDNIGHT.minusMinutes(1));
+			} else {
+				inputList.add(aEntity.getNightOut());
+			}
 			
 			for (int i = 0; i < inputList.size() - 1; i = i + 2) {
 				

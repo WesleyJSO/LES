@@ -26,13 +26,18 @@ public class TimeInputConsistency implements IStrategy<Appointment> {
 			inputList.add(aEntity.getAfternoonEntrance());
 			inputList.add(aEntity.getAfternoonOut());
 			inputList.add(aEntity.getNightEntrance());
-			inputList.add(aEntity.getNightOut());
+			// verify if the night out is after midnight
+			if ( null != aEntity.getNightOut() && aEntity.getNightOut().isBefore(LocalTime.of(6, 0))) {
+				inputList.add(LocalTime.MIDNIGHT.minusMinutes(1));
+			} else {
+				inputList.add(aEntity.getNightOut());
+			}
 			
 			for (int i = 0; i < inputList.size() - 1; i++) {
 				
 				int next = i + 1;
 				
-				// get the index of the next input with value
+				// get the index of the next input with value or the last
 				while ( inputList.size() > next + 1 && null == inputList.get(next) ) {
 					next++;
 				}
@@ -43,9 +48,18 @@ public class TimeInputConsistency implements IStrategy<Appointment> {
 					return;
 				}
 			}
-			if ( !verifyFields( aEntity.getParticularExit(), aEntity.getParticularExitReturn() ) ) {
-				aCase.suspendExecution();
-				aCase.getResult().setError("Os horários inseridos devem estar ordenados!");
+			// verify if the night out is after midnight
+			if ( null != aEntity.getParticularExitReturn() && aEntity.getParticularExitReturn().isBefore(LocalTime.of(6, 0))
+				&& aEntity.getParticularExitReturn().isAfter(LocalTime.MIDNIGHT)) {
+				if ( !verifyFields( aEntity.getParticularExit(), LocalTime.MIDNIGHT.minusMinutes(1) ) ) {
+					aCase.suspendExecution();
+					aCase.getResult().setError("Os horários inseridos devem estar ordenados!");
+				}
+			} else {
+				if ( !verifyFields( aEntity.getParticularExit(), aEntity.getParticularExitReturn() ) ) {
+					aCase.suspendExecution();
+					aCase.getResult().setError("Os horários inseridos devem estar ordenados!");
+				}
 			}
 			return;
 		}
