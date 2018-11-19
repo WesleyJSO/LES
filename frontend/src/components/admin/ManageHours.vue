@@ -7,9 +7,6 @@
                     <v-card-text>
                     <h2 class="grey--text">Calendário</h2>
                     <v-container fluid>
-                        <v-calendar :attributes="calendarAttributes"
-                                    is-expanded>
-                        </v-calendar>
                     </v-container>
                     </v-card-text>
                     </v-flex>

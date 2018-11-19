@@ -15,8 +15,6 @@ import UserValidator from './validators/UserValidators'
 import BaseHourCalculationValidators from './validators/BaseHourCalculationValidators'
 import ParametersValidators from './validators/ParametersValidators'
 import CostCentreValidator from './validators/CostCentreValidator'
-import VCalendar from 'v-calendar'
-import 'v-calendar/lib/v-calendar.min.css'
 import VueChartkick from 'vue-chartkick'
 import Chart from 'chart.js'
 import CompanyValidators from '@/validators/CompanyValidators'
@@ -29,17 +27,6 @@ Vue.use(VueChartkick, {adapter: Chart})
 
 Vue.use(Vuetify, {
   iconfont: 'mdi' // 'md' || 'mdi' || 'fa' || 'fa4'
-})
-
-Vue.use(VCalendar, {
-  formats: {
-    title: 'MMMM YYYY',
-    weekdays: 'W',
-    navMonths: 'MMM',
-    input: ['L', 'DD-MM-YYYY', 'DD/MM/YYYY'],
-    dayPopover: 'L',
-    data: ['L', 'DD-MM-YYYY', 'DD/MM/YYYY']
-  }
 })
 
 Vue.use(VeeValidate)
