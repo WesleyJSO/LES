@@ -207,6 +207,7 @@ export default {
             this.appointments = result.resultList
             this.appointment = this.appointments[0]
           }
+          this.haveMessage = false
           if (result.message) {
             this.messages = [...result.message]
             this.haveMessage = true
@@ -252,7 +253,6 @@ export default {
           this.registerAppointments()
         }
         this.verifyButtons()
-        this.haveMessage = false
         if (result.mensagem) {
           this.messages = [...result.message]
           this.haveMessage = true

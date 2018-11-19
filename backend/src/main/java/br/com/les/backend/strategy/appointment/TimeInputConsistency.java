@@ -20,6 +20,7 @@ public class TimeInputConsistency implements IStrategy<Appointment> {
 			
 			List< LocalTime > inputList = new ArrayList<>();
 			
+			// order the inputs in a list
 			inputList.add(aEntity.getMorningEntrance());
 			inputList.add(aEntity.getMorningOut());
 			inputList.add(aEntity.getAfternoonEntrance());
@@ -31,6 +32,7 @@ public class TimeInputConsistency implements IStrategy<Appointment> {
 				
 				int next = i + 1;
 				
+				// get the index of the next input with value
 				while ( inputList.size() > next + 1 && null == inputList.get(next) ) {
 					next++;
 				}
@@ -41,6 +43,10 @@ public class TimeInputConsistency implements IStrategy<Appointment> {
 					return;
 				}
 			}
+			if ( !verifyFields( aEntity.getParticularExit(), aEntity.getParticularExitReturn() ) ) {
+				aCase.suspendExecution();
+				aCase.getResult().setError("Os horários inseridos devem estar ordenados!");
+			}
 			return;
 		}
 		aCase.suspendExecution();
@@ -49,6 +55,7 @@ public class TimeInputConsistency implements IStrategy<Appointment> {
 	}
 	
 	public Boolean verifyFields(LocalTime first, LocalTime second) {
+		// if one of them are null, there's nothing to validate
 		if ( null != first && null != second ) {
 			
 			if (first.isAfter(second) ) {
