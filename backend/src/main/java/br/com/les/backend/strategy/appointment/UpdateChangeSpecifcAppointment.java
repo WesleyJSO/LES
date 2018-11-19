@@ -34,6 +34,12 @@ public class UpdateChangeSpecifcAppointment implements IStrategy<AppointmentRequ
 				aCase.getResult().setError(Util.ERROR_FIELD_TO_CHANGE);
 			}
 			
+			if (RequestStatus.APPROVED.getValue() == aEntity.getStatus() ) {
+				aEntity.setStatus(RequestStatus.APPROVED.getValue());
+			} else if ( aEntity.getStatus() == RequestStatus.DENIED.getValue() ) {
+				aEntity.setStatus(RequestStatus.DENIED.getValue());
+			}
+			
 			if ( aCase.getResult().isSuccess() && aEntity.getStatus() == RequestStatus.SENT.getValue() ) {
 				aCase.getResult().setSuccess( Util.SAVE_SUCCESSFUL_REQUEST );
 			} else if ( aCase.getResult().isSuccess() && aEntity.getStatus() == RequestStatus.APPROVED.getValue() ) {

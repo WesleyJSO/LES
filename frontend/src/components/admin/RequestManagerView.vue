@@ -116,6 +116,16 @@
                         <a href="">{{ getTitles.fileName }}</a>
                     </v-card-text>
 
+                    <!-- Request type equals 3' -->
+                    <v-card-text v-if="(props.item.type === 3)">
+                        <b>{{ getTitles.appointmentDate }}</b>
+                        {{ props.item.startDate}}
+                        <br><br>
+                        <b>{{getTitles.appointmentField}}</b>
+                        <br>
+                        {{getFieldToChangeName[props.item.fieldToChange]}} - <b> {{props.item.previousValue ? `de ${props.item.previousValue.substring(0, 5)} para ${props.item.replacement.substring(0, 5)}` : props.item.replacement.substring(0, 5) }}</b>
+                    </v-card-text>
+
                     <!-- There is no File -->
                     <!-- <v-card-text v-if="(props.item.type === 1 || props.item.type === 2) && !props.item.endDate && !props.item.attachment">
                         <b>{{ getTitles.entryDate }}</b>
@@ -172,7 +182,7 @@
         </v-data-table>
       </v-tab-item>
       <v-tab-item :key="2">
-        <v-data-table :headers="getHeaders"
+        <v-data-table :headers="getHeadersProccesseds"
                   :items="getProcessed"
                   item-key="id"
                   hide-actions
@@ -212,7 +222,6 @@
                         <br>
                         {{ props.item.description }}
                     </v-card-text>
-
                     <!-- Work Over Time or Compensatory Time Request-->
                     <!-- All attributes has values -->
                     <v-card-text v-if="(props.item.type === 1 || props.item.type === 2) && props.item.endDate">
@@ -220,22 +229,23 @@
                         {{ props.item.startDate}}
                         <br>
                         <br>
-                        <b>{{ getPrefixes.end }}</b>
-                        {{ props.item.endDate}}
-                        <br>
-                        <br>
-                        <b>{{ getTitles.file }}</b>
-                        <a href="">{{ getTitles.fileName }}</a>
+                        <b>{{ getPrefixes.end }}</b>{{ props.item.endDate}}
                     </v-card-text>
 
                     <!-- There is no 'endDate' -->
                     <v-card-text v-if="(props.item.type === 1 || props.item.type === 2) && !props.item.endDate">
                         <b>{{ getTitles.entryDate }}</b>
                         {{ props.item.startDate}}
+                    </v-card-text>
+
+                    <!-- Request type equals 3' -->
+                    <v-card-text v-if="(props.item.type === 3)">
+                        <b>{{ getTitles.appointmentDate }}</b>
+                        {{ props.item.startDate}}
+                        <br><br>
+                        <b>{{getTitles.appointmentField}}</b>
                         <br>
-                        <br>
-                        <b>{{ getTitles.file }}</b>
-                        <a href="">{{ getTitles.fileName }}</a>
+                        {{getFieldToChangeName[props.item.fieldToChange]}} - <b> {{props.item.previousValue ? `de ${props.item.previousValue.substring(0, 5)} para ${props.item.replacement.substring(0, 5)}` : props.item.replacement.substring(0, 5) }}</b>
                     </v-card-text>
 
                     <!-- There is no File -->
@@ -258,10 +268,6 @@
                         <br>
                         <b>{{ getTitles.workDay }}</b>
                         {{ props.item.endDate}}
-                        <br>
-                        <br>
-                        <b>{{ getTitles.file }}</b>
-                        <a href="">{{ getTitles.fileName }}</a>
                     </v-card-text>
 
                     <!-- There is no  File -->
@@ -278,7 +284,6 @@
                     <!-- Last Update -->
                      <v-card-text v-if="props.item.updatedDate">
                         <b>{{ getTitles.lastUpdate }}</b>
-                        
                         {{ props.item.updatedDate}}
                     </v-card-text>
 
@@ -323,6 +328,8 @@
 import RequestService from '@/service/RequestService'
 import Authenticator from '@/service/Authenticator'
 import Request from '@/components/user/Request'
+import UserService from '@/service/UserService'
+
 export default {
   data () {
     return {
@@ -348,6 +355,9 @@ export default {
   computed: {
     getHeaders () {
       return RequestService.HEADERS
+    },
+    getHeadersProccesseds () {
+      return RequestService.HEADERS_APPROVED
     },
     getSubHeaders () {
       return RequestService.SUB_HEADERS
@@ -384,6 +394,9 @@ export default {
     },
     getUser () {
       return Authenticator.GET_AUTHENTICATED
+    },
+    getFieldToChangeName () {
+      return UserService.FIELD_TO_CHANGE
     }
   },
   methods: {
@@ -445,7 +458,7 @@ export default {
       let employeeRequest = list.filter(r => r.employee)
       let employee = employeeRequest[0].employee
       return list.map(n => {
-        n.employee = Object.assign(employee, {})
+        n.employee.id = Object.assign(employee.id, {})
         return n
       })
     }

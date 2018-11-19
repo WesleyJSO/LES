@@ -2,7 +2,20 @@ export const HEADERS = [
   { text: 'Solicitante', align: 'left', sortable: false, value: 'employee.name' },
   { text: 'Tipo', align: 'left', value: 'type' },
   { text: 'Status', align: 'left', value: 'status' },
-  { text: 'Ação', align: 'righ', value: 'acao' }
+  { text: 'Editar', align: 'righ', value: 'acao' },
+  { text: 'Vizualizar', align: 'righ', value: 'acao' }
+]
+export const HEADERS_ADMIN = [
+  { text: 'Solicitante', align: 'left', sortable: false, value: 'employee.name' },
+  { text: 'Tipo', align: 'left', value: 'type' },
+  { text: 'Status', align: 'left', value: 'status' },
+  { text: 'Editar', align: 'righ', value: 'acao' }
+]
+export const HEADERS_APPROVED = [
+  { text: 'Solicitante', align: 'left', sortable: false, value: 'employee.name' },
+  { text: 'Tipo', align: 'left', value: 'type' },
+  { text: 'Status', align: 'left', value: 'status' },
+  { text: 'Vizualizar', align: 'righ', value: 'acao' }
 ]
 export const TITLES = {
   requests: 'Solicitações',
@@ -23,7 +36,11 @@ export const TITLES = {
   managerMessage: 'Detalhe: ',
   viewManagerMessage: 'Observações sobre a Solicitação: ',
   approvedManager: 'Atualizado por -  ',
-  lastUpdate: 'Útilma atualização -  '
+  lastUpdate: 'Útilma atualização -  ',
+  appointmentDate: 'Apontamento Realizado em: ',
+  appointmentField: 'Alterações: ',
+  from: 'De ',
+  to: 'Para '
 
 }
 export const SUB_HEADERS = [
@@ -39,6 +56,7 @@ export const DATE_FORMATS = [ {year: 'numeric', month: 'numeric', day: 'numeric'
 export const TYPE_NAME = {
   1: 'Hora Extra',
   2: 'Banco de Hora',
+  3: 'Alteração de Apontamento',
   4: 'Remanejamento de Dia'
 }
 export const PREFIXES = {
@@ -71,11 +89,13 @@ export const MESSAGE = {
 export const REQUEST = [
   {id: 1, description: 'Hora Extra'},
   {id: 2, description: 'Banco de Horas'},
+  {id: 3, description: 'Alteração de Apontamento'},
   {id: 4, description: 'Remanejamento de Horas/Dias'}
 ]
 export const REQUEST_VALUE = {
   1: {id: 1, description: 'Hora Extra'},
   2: {id: 2, description: 'Banco de Horas'},
+  3: {id: 3, description: 'Alteração de Apontamento'},
   4: {id: 4, description: 'Remanejamento de Horas/Dias'}
 }
 export const COLORS = {
@@ -98,4 +118,6 @@ export default class RequestService {
   static get REQUEST () { return REQUEST }
   static get COLORS () { return COLORS }
   static get REQUEST_VALUE () { return REQUEST_VALUE }
+  static get HEADERS_ADMIN () { return HEADERS_ADMIN }
+  static get HEADERS_APPROVED () { return HEADERS_APPROVED }
 }

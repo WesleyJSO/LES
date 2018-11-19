@@ -27,7 +27,7 @@
         <v-tab>{{ this.getTitles.approved }}</v-tab>
     <v-tabs-items v-model="tabs">
       <v-tab-item key="1">
-        <v-data-table :headers="getHeaders"
+        <v-data-table :headers="getHeadersAdmin"
                   :items="getRequests"
                   item-key="id"
                   hide-actions
@@ -116,6 +116,16 @@
                         <a href="">{{ getTitles.fileName }}</a>
                     </v-card-text>
 
+                    <!-- Request type equals 3' -->
+                    <v-card-text v-if="(props.item.type === 3)">
+                        <b>{{ getTitles.appointmentDate }}</b>
+                        {{ props.item.startDate}}
+                        <br><br>
+                        <b>{{getTitles.appointmentField}}</b>
+                        <br>
+                        {{getFieldToChangeName[props.item.fieldToChange]}} - <b> {{props.item.previousValue ? `de ${props.item.previousValue.substring(0, 5)} para ${props.item.replacement.substring(0, 5)}` : props.item.replacement.substring(0, 5) }}</b>
+                    </v-card-text>
+
                     <!-- There is no File -->
                     <!-- <v-card-text v-if="(props.item.type === 1 || props.item.type === 2) && !props.item.endDate && !props.item.attachment">
                         <b>{{ getTitles.entryDate }}</b>
@@ -190,7 +200,7 @@
         </v-data-table>
       </v-tab-item>
       <v-tab-item :key="2">
-        <v-data-table :headers="getHeaders"
+        <v-data-table :headers="getHeadersProccesseds"
                   :items="getProcessed"
                   item-key="id"
                   hide-actions
@@ -246,7 +256,16 @@
                     <v-card-text v-if="(props.item.type === 1 || props.item.type === 2) && !props.item.endDate">
                         <b>{{ getTitles.entryDate }}</b>
                         {{ props.item.startDate}}
+                    </v-card-text>
 
+                    <!-- Request type equals 3' -->
+                    <v-card-text v-if="(props.item.type === 3)">
+                        <b>{{ getTitles.appointmentDate }}</b>
+                        {{ props.item.startDate}}
+                        <br><br>
+                        <b>{{getTitles.appointmentField}}</b>
+                        <br>
+                        {{getFieldToChangeName[props.item.fieldToChange]}} - <b> {{props.item.previousValue ? `de ${props.item.previousValue.substring(0, 5)} para ${props.item.replacement.substring(0, 5)}` : props.item.replacement.substring(0, 5) }}</b>
                     </v-card-text>
 
                     <!-- There is no File -->
@@ -331,6 +350,8 @@
 import RequestService from '@/service/RequestService'
 import Request from '@/components/user/Request'
 import Authenticator from '@/service/Authenticator'
+import UserService from '@/service/UserService'
+
 export default {
   data () {
     return {
@@ -356,6 +377,12 @@ export default {
   computed: {
     getHeaders () {
       return RequestService.HEADERS
+    },
+    getHeadersProccesseds () {
+      return RequestService.HEADERS_APPROVED
+    },
+    getHeadersAdmin () {
+      return RequestService.HEADERS_ADMIN
     },
     getSubHeaders () {
       return RequestService.SUB_HEADERS
@@ -389,6 +416,9 @@ export default {
     },
     getMessages () {
       return RequestService.MESSAGE
+    },
+    getFieldToChangeName () {
+      return UserService.FIELD_TO_CHANGE
     }
   },
   methods: {
@@ -399,7 +429,8 @@ export default {
         delete i.employee.user
         delete i.employee.manager
         let updatedRequest = Object.assign({'status': status, 'observation': item.observation}, i)
-        let result = this.$_axios.put(`${this.$_url}request`, updatedRequest)
+        let controller = updatedRequest.type === 3 ? 'appointmentRequest' : 'request'
+        let result = this.$_axios.put(`${this.$_url}${controller}`, updatedRequest)
         let [response] = await Promise.all([result])
         if (response.data.message) {
           let resultMessage = !result.response.data.message ? [] : result.response.data.message
