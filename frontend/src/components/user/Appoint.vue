@@ -59,12 +59,12 @@ export default {
     dialog: false,
     buttons: [
       { name: 'Entrada Manhã', disable: false },
-      { name: 'Saída Manhã', disable: true },
+      { name: 'Saída Manhã', disable: false },
       { name: 'Entrada Tarde', disable: false },
-      { name: 'Saída Tarde', disable: true },
+      { name: 'Saída Tarde', disable: false },
       { name: 'Entrada Noite', disable: false },
-      { name: 'Saída Noite', disable: true },
-      { name: 'Saída Partícular', disable: true }
+      { name: 'Saída Noite', disable: false },
+      { name: 'Saída Partícular', disable: false }
     ],
     appointment: {},
     employee: {user: {id: null}},
@@ -92,7 +92,7 @@ export default {
     takeAppointment (appointment) {
       this.appointment = appointment
       this.registerAppointments()
-      this.verifyButtons()
+      // this.verifyButtons()
     },
     appoint (button) {
       let date = new Date()
@@ -128,7 +128,7 @@ export default {
       }
       this.appointment.date = DateHelper.formatISODate(this.appointment.date)
       this.appointment.employee = null
-      this.verifyButtons()
+      // this.verifyButtons()
       this.registerAppointments()
     },
     verifyButtons () {
@@ -246,13 +246,13 @@ export default {
           // retorno ok /
           this.appointments = result.resultList
           this.appointment = this.appointments[0]
-          this.verifyButtons()
+          // this.verifyButtons()
           // console.log(JSON.stringify(this.appointments))
         } else {
           this.appointment = appointment
           this.registerAppointments()
         }
-        this.verifyButtons()
+        // this.verifyButtons()
         if (result.mensagem) {
           this.messages = [...result.message]
           this.haveMessage = true
