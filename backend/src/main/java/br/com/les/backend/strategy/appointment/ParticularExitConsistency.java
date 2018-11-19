@@ -20,6 +20,7 @@ public class ParticularExitConsistency implements IStrategy<Appointment> {
 			
 			List< LocalTime > inputList = new ArrayList<>();
 			
+			// order the inputs in a list
 			inputList.add(aEntity.getMorningEntrance());
 			inputList.add(aEntity.getMorningOut());
 			inputList.add(aEntity.getAfternoonEntrance());
@@ -31,15 +32,19 @@ public class ParticularExitConsistency implements IStrategy<Appointment> {
 				
 				int next = i + 1;
 				
+				// get the index of the next input with value
 				while ( inputList.size() > next + 1 && null == inputList.get(next) ) {
 					next++;
 				}
 				
+				// in case of the two inputs are present
 				if ( null != aEntity.getParticularExit()
 					&& null != aEntity.getParticularExitReturn() ) {
 					
+					// verify if the inputs are into the permitted range
 					if ( validate(inputList.get(i), aEntity.getParticularExit(), inputList.get(next) ) 
 						&& validate(inputList.get(i), aEntity.getParticularExitReturn(), inputList.get(next) ) ) {
+						// verify if the inputs aren't out of the permitted range
 						if ( validateRange(aEntity.getMorningOut(), aEntity.getAfternoonEntrance(), 
 								aEntity.getParticularExit(), aEntity.getParticularExitReturn() )
 							&& validateRange(aEntity.getAfternoonOut(), aEntity.getNightEntrance(), 
@@ -50,17 +55,20 @@ public class ParticularExitConsistency implements IStrategy<Appointment> {
 					
 				} else if ( null != aEntity.getParticularExit() ) {
 					
+					// verify if the input are into the permitted range
 					if ( validate(inputList.get(i), aEntity.getParticularExit(), inputList.get(next) ) ) {
 						return;
 					}
 					
 				} else if ( null != aEntity.getParticularExitReturn() ) {
 
+					// verify if the input are into the permitted range
 					if ( validate(inputList.get(i), aEntity.getParticularExitReturn(), inputList.get(next) ) ) {
 						return;
 					}
 					
 				} else {
+					// in case of the none input, there's nothing to validate
 					return;
 				}
 			}
@@ -80,7 +88,8 @@ public class ParticularExitConsistency implements IStrategy<Appointment> {
 				return true;
 			}
 		} else if ( null != entrance && time.isAfter(entrance) ) {
-			 return true;
+			// if there's an entrance and the input is after that, than true
+			return true;
 		}
 		return false;
 	}
