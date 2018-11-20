@@ -1,7 +1,6 @@
 package br.com.les.backend.dao;
 
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -16,9 +15,12 @@ public class FilterDAO extends GenericDAO<ChartFilter>{
 
 	private static DateTimeFormatter monthYearPettern = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	private String s = "";
+	private ChartFilter chartFilter;
 	
 	@SuppressWarnings("unchecked")
-	public List<Appointment> get(ChartFilter filter) {
+	public ChartFilter get(ChartFilter filter) {
+		
+		chartFilter = new ChartFilter();
 		
 		s = "select * from appointment a join employee e on a.employee_id=e.id where ";
 		if(filter.getEmployeeNameList() != null && !filter.getEmployeeNameList().isEmpty()) {
@@ -42,6 +44,7 @@ public class FilterDAO extends GenericDAO<ChartFilter>{
 		if(s.endsWith("where "))
 			return null;
 		else
-			return em.createNativeQuery(s, Appointment.class).getResultList();
+			chartFilter.setAppointmentList(em.createNativeQuery(s, Appointment.class).getResultList());
+			return chartFilter;
 	}
 }

@@ -14,7 +14,6 @@ public class Result<T extends DomainEntity> {
 
     private boolean success;
     private List< String > message = new ArrayList<>();
-    
     private List<T> resultList = new ArrayList<>();
     
     public Result() {

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import br.com.les.backend.annotation.DateQuery;
 import br.com.les.backend.annotation.ListQuery;
 import br.com.les.backend.annotation.Query;
+import br.com.les.backend.entity.Appointment;
 import br.com.les.backend.entity.DomainEntity;
 
 @Component
@@ -18,6 +19,7 @@ public class ChartFilter extends DomainEntity {
 	private List<String> employeeNameList;
 	private LocalDate initialQueryDate;
 	private LocalDate finalQueryDate;
+	private List<Appointment> appointmentList;
 	
 	@ListQuery(name="t.employee.id") 
 	public List<String> getEmployeeNameList() {
@@ -44,6 +46,14 @@ public class ChartFilter extends DomainEntity {
 
 	public void setFinalQueryDate(LocalDate finalQueryDate) {
 		this.finalQueryDate = finalQueryDate;
+	}
+
+	public List<Appointment> getAppointmentList() {
+		return appointmentList;
+	}
+
+	public void setAppointmentList(List<Appointment> appointmentList) {
+		this.appointmentList = appointmentList;
 	}
 
 }

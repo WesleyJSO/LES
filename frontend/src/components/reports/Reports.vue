@@ -92,66 +92,6 @@
             >Consultar</v-btn>
           </v-layout>
         </v-form>
-        <!-- <v-layout pb-5>
-          <v-flex xs12 sm9 md6 lg6 xl4>
-            <v-menu
-              ref="joiningDateHelper"
-              :close-on-content-click="false"
-              v-model="joiningDateHelper"
-              :nudge-right="40"
-              :return-value.sync="joiningDate"
-              lazy
-              min-width="290px"
-              transition="scale-transition"
-              full-width
-            >
-            <v-text-field
-              slot="activator"
-              v-model="joiningDate"
-              label="Data inícial"
-              prepend-icon="event"
-              readonly
-            >
-            </v-text-field>
-            <v-date-picker
-              v-model="joiningDate"
-              header-color="black"
-              :reactive="reactive"
-              @input="$refs.joiningDateHelper.save(joiningDate)"
-            >
-            </v-date-picker>
-          </v-menu>
-        </v-flex>
-        <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-menu
-            ref="joiningDateHelper"
-            :close-on-content-click="false"
-            v-model="joiningDateHelper"
-            :nudge-right="40"
-            :return-value.sync="joiningDate"
-            lazy
-            min-width="290px"
-            transition="scale-transition"
-            full-width
-          >
-            <v-text-field
-              slot="activator"
-              v-model="joiningDate"
-              label="Data final"
-              prepend-icon="event"
-              readonly
-            >
-            </v-text-field>
-            <v-date-picker
-              v-model="joiningDate"
-              header-color="black"
-              :reactive="reactive"
-              @input="$refs.joiningDateHelper.save(joiningDate)"
-            >
-            </v-date-picker>
-          </v-menu>
-        </v-flex>
-      </v-layout> -->
 
         <v-flex xs12>
           <v-tabs dark slider-color="yellow" >
@@ -232,42 +172,19 @@ export default {
       lunchHours: {}
     }
   }),
-  // async beforeMount () {
-  //   this.chartData = await this.$_axios.patch(`${this.$_url}appointment`)
-  //   this.chart = await this.chartData.data
-  // },
   mounted () {
     this.getEmployees()
   },
   methods: {
     async submit () {
       let result = await this.$_axios.patch(`${this.$_url}chartfilter`, this.chartFilter)
+      result = result.data.resultList[0].appointmentList
+      console.log(result)
       let chartData = {}
-      chartData.workedHours = this.workedHours(result.data.resultList)
-      chartData.workOvertime = this.workOvertime(result.data.resultList)
-      chartData.lunchHours = this.lunchHours(result.data.resultList)
+      chartData.workedHours = this.workedHours(result)
+      chartData.workOvertime = this.workOvertime(result)
+      chartData.lunchHours = this.lunchHours(result)
       this.chart = await chartData
-    },
-    changeFrequency (frequency) {
-      // this.$children[2].destroyElement()
-      // console.log(this.$children[2])
-      // let today = new Date()
-      // switch (frequency) {
-      //   case 'Semana':
-      //     for (let index in this.chart) {
-      //       for (let date in this.chart[index].data) {
-      //         // let name = chart[index].name
-      //         // let hours = chart[index].data[date]
-      //         if (DateHelper.diffDates(new Date(date), today) > 3) {
-      //           console.log(`Item removed: ${this.chart[index].data[date]}`)
-      //           delete this.chart[index].data[date]
-      //         }
-      //       }
-      //     }
-      //     this.$refs.chartObject1.updateChart()
-      //     this.$refs.chartObject2.updateChart()
-      //     this.$refs.chartObject3.updateChart()
-      // }
     },
     getEmployees () {
       let employee = {}

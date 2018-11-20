@@ -26,7 +26,7 @@ public class ChartFilterController extends AbstractController<ChartFilter>{
 	public @ResponseBody Result<ChartFilter> find(@RequestBody ChartFilter entity) throws InstantiationException, IllegalAccessException {
 		
 		Result<ChartFilter> result = new Result<>();
-		result.setResultList(filterDAO.find(entity));
+		result.addResult(filterDAO.get(entity));
 		return result;
 	} 
 }
