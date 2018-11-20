@@ -171,7 +171,6 @@ export default {
     async registerAppointments () {
       var response = null
       var result = null
-      this.verifyAppointment()
       if (!this.appointment.id) {
         try {
           response = await this.$_axios.post(`${this.$_url}appointment`, this.appointment)
@@ -332,6 +331,7 @@ export default {
     },
     verifyAppointment () {
       if (this.appointment.appointmentRequestList && this.appointment.appointmentRequestList.length > 0) {
+        console.log(JSON.stringify(this.appointment.appointmentRequestList))
         this.appointment.appointmentRequestList = this.appointment.appointmentRequestList.map(m => {
           let newM = m
           if (m.employee.hasOwnProperty('id')) {
@@ -339,6 +339,7 @@ export default {
             return newM
           }
         })
+        console.log(JSON.stringify(this.appointment.appointmentRequestList))
       }
     },
     assignReplacement (time) {

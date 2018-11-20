@@ -1,12 +1,16 @@
 <template>
 
       <v-list dense>
+
         <v-list-tile>
           <v-list-tile-action>
             <v-icon>home</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <router-link to="LinhaDoTempo">
+            <router-link to="LinhaDoTempo" v-if="this.hasRole(getRole.employee) && !this.hasRole(getRole.manager)">
+              <v-list-tile-title>Home</v-list-tile-title>
+            </router-link>
+            <router-link to="dashboard" v-else>
               <v-list-tile-title>Home</v-list-tile-title>
             </router-link>
           </v-list-tile-content>
@@ -34,7 +38,7 @@
           </v-list-tile-content>
         </v-list-tile>
 
-        <v-list-tile>
+        <v-list-tile v-if="this.hasRole(getRole.employee)">
           <v-list-tile-action>
             <v-icon>touch_app</v-icon>
           </v-list-tile-action>
@@ -45,7 +49,7 @@
           </v-list-tile-content>
         </v-list-tile>
 
-        <v-list-tile>
+        <v-list-tile v-if="this.hasRole(getRole.employee)">
           <v-list-tile-action>
             <v-icon>assignment</v-icon>
           </v-list-tile-action>
@@ -56,18 +60,18 @@
           </v-list-tile-content>
         </v-list-tile>
 
-        <v-list-tile>
+        <v-list-tile  v-if="this.hasRole(getRole.manager)">
           <v-list-tile-action>
             <v-icon>assignment_turned_in</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <router-link to="Solicitacoes">
-              <v-list-tile-title>Solicitações</v-list-tile-title>
+              <v-list-tile-title>Aprovar Solicitações</v-list-tile-title>
             </router-link>
           </v-list-tile-content>
         </v-list-tile>
 
-        <v-list-tile v-if="this.hasRole('ROLE_EMPLOYEE')">
+        <v-list-tile v-if="this.hasRole(getRole.employee)">
           <v-list-tile-action>
             <v-icon>assignment</v-icon>
           </v-list-tile-action>
@@ -100,7 +104,7 @@
           </v-list-tile-content>
         </v-list-tile>
 
-        <v-list-tile>
+        <v-list-tile v-if="this.hasRole(getRole.manager)">
           <v-list-tile-action>
             <v-icon>insert_chart</v-icon>
           </v-list-tile-action>
@@ -118,17 +122,6 @@
           <v-list-tile-content>
             <router-link to="Parametros">
               <v-list-tile-title>Parametros do Sistema</v-list-tile-title>
-            </router-link>
-          </v-list-tile-content>
-        </v-list-tile>
-
-        <v-list-tile>
-          <v-list-tile-action>
-            <v-icon>dns</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <router-link to="GerenciarBancoHoras">
-              <v-list-tile-title>Banco de Horas</v-list-tile-title>
             </router-link>
           </v-list-tile-content>
         </v-list-tile>
@@ -163,6 +156,11 @@
   export default {
     data: function () {
       return {
+      }
+    },
+    computed: {
+      getRole () {
+        return Authenticator.ROLE
       }
     },
     methods: {

@@ -120,7 +120,7 @@ export default {
         if (this.hasRole('ROLE_EMPLOYEE')) {
           this.$router.push('/LinhaDoTempo')
         } else {
-          this.$router.push('/Graficos')
+          this.$router.push('/dashboard')
         }
       } catch (err) {
         console.log(JSON.stringify(err, null, ''))

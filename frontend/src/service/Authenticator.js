@@ -1,3 +1,8 @@
+export const ROLE = {
+  manager: 'ROLE_MANAGER',
+  employee: 'ROLE_EMPLOYEE',
+  admin: 'ROLE_ADMIN'
+}
 export default class Authenticator {
   static HAS_ROLE (role) {
     let principal = JSON.parse(sessionStorage.getItem('principal'))
@@ -16,5 +21,9 @@ export default class Authenticator {
       let user = JSON.parse(sessionStorage.getItem('principal'))
       return user
     }
+  }
+
+  static get ROLE () {
+    return ROLE
   }
 }

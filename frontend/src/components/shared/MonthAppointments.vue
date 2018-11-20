@@ -6,6 +6,11 @@
                v-text="message"
                transition="scale-transition" />
     </li>
+    <confirm-dialog :dialog="confirmDialog" :item="appointmentRequest" 
+        @deleteRequest="handleDeleteRequest($event)" 
+        @confirmRequest="handleConfirmRequest($event)"
+        @requestError="handleRequestError($event)">
+        </confirm-dialog>  
 
     <v-form>
       <v-toolbar>
@@ -44,7 +49,7 @@
       </v-toolbar>
       <v-layout>
         <v-flex center >
-          <AppointTable :editable="editable" :appointments="appointments" @register="takeAppointment($event)"></AppointTable>
+          <AppointTable :editable="editable" :appointments="appointments" @register="takeAppointment($event)" @replacement="assignReplacement($event)"></AppointTable>
           <v-card class="elevation-10" >
             <v-layout class="text-xs-center">
               <v-flex xs12 sm9 md6 lg6 xl4>
@@ -74,6 +79,9 @@
 import AppointDialog from '@/components/shared/AppointDialog.vue'
 import AppointTable from '@/components/shared/AppointTable.vue'
 import moment from 'moment'
+import DateHelper from '@/helpers/DateHelper'
+import Authenticator from '@/service/Authenticator'
+import ConfirmDialog from '@/components/shared/AppointmentRequestDialog'
 
 export default {
   props: [
@@ -102,11 +110,15 @@ export default {
     months: [],
     month: '',
     years: [],
-    year: ''
+    year: '',
+    replacement: '',
+    appointmentRequest: {},
+    confirmDialog: false
   }),
   components: {
     AppointDialog,
-    AppointTable
+    AppointTable,
+    ConfirmDialog
   },
   beforeMount () {
     this.beforeCallApi(moment().format('YYYY-MM'))
@@ -123,6 +135,7 @@ export default {
         this.appointWithMonth = {employee: this.employee, monthAndYear: new Date(`${monthYear}-01`)}
         this.findWorkload(this.employee)
         this.findMonthlyBalanceData(this.appointWithMonth)
+        this.haveMessage = false
         this.callApi(this.appointWithMonth)
       }
     },
@@ -130,42 +143,80 @@ export default {
       this.appointment = appointment
       this.registerAppointments()
     },
-    registerAppointments () {
-      // let previousList = this.appointments
-      this.$_axios.put(`${this.$_url}appointment`, this.appointment)
-        .then(response => {
-          var result = response.data
-          if (result.message) {
-            this.messages = [...result.message]
-            this.haveMessage = true
-            if (result.success) {
-              this.messageColor = 'info'
-            } else {
-              this.messageColor = 'warning'
-            }
-          }
-          this.callApi(this.appointWithMonth)
-        })
-        .catch(error => {
-          console.log(error)
-          this.messages = ['Erro durante execução do serviço!']
+    assignReplacement (time) {
+      console.log('replacement =  ', time)
+      this.replacement = time
+    },
+    async registerAppointments () {
+      var response = null
+      var result = null
+      this.verifyAppointment()
+      try {
+        response = await this.$_axios.put(`${this.$_url}appointment`, this.appointment)
+        result = response.data
+        this.haveMessage = false
+        if (result.message) {
+          this.messages = [...result.message]
           this.haveMessage = true
-          this.messageColor = 'error'
-        })
+          if (result.success) {
+          // retorno mensagem de sucesso /
+            this.messageColor = 'info'
+          } else {
+            // retorno mensagem de erro /
+            this.messageColor = 'warning'
+          }
+        }
+      } catch (error) {
+        console.log(error)
+        this.messages = ['Erro durante execução do serviço!']
+        this.haveMessage = true
+        this.messageColor = 'error'
+      }
+      await this.callApi(this.appointWithMonth)
+      /* Call 'findAppointmentRequest' passing
+       * the time entered because if this
+       * appointment becames an appointmentRequest,
+       * we're gonna use it to load the specifc
+       * request and show the dialog confirm to the
+       * user.
+       */
+      this.findAppointmentRequest()
+    },
+    async findAppointmentRequest () {
+      console.log('apontamento -> ', this.appointment)
+      console.log('valor de replacement pra buscar as possiveis solicitações -> ', this.replacement)
+      console.log('valor appointment.date -> ', this.appointment.date)
+      console.log('startDate -> ', this.appointment.date)
+      if (this.appointment.id) {
+        let appointmentRequest = {
+          employee: { user: { id: Authenticator.GET_AUTHENTICATED().id } },
+          appointment: { id: this.appointment.id },
+          replacement: this.replacement,
+          status: 1, // FIX HERE !!! -> Get status from service
+          startDate: this.appointment.date.length > 10 ? DateHelper.formatShortDate(this.appointment.date) : this.appointment.date,
+          endDate: this.appointment.date.length > 10 ? DateHelper.formatShortDate(this.appointment.date) : this.appointment.date
+        }
+        let request = this.$_axios.patch(`${this.$_url}appointmentRequest`, appointmentRequest)
+        let [result] = await Promise.all([request])
+        console.log('resultList.size() -> ', result.data.resultList.length)
+        if (result.data.success && result.data.resultList.length > 0) {
+          this.appointmentRequest = result.data.resultList[0]
+          this.confirmDialog = true
+        } else {
+          this.confirmDialog = false
+        }
+      }
     },
     async callApi (appointment) {
       var response = null
       var result = null
       try {
-        console.log(JSON.stringify(appointment))
         response = await this.$_axios.patch(`${this.$_url}appointment`, appointment)
         result = response.data
-        console.log(JSON.stringify(result))
         this.appointments = result.resultList
         if (this.appointments.length > 0) {
           this.appointment = this.appointments[0]
         }
-        this.haveMessage = false
         if (result.message) {
           this.messages = [...result.message]
           this.haveMessage = true
@@ -252,6 +303,34 @@ export default {
         monthData.monthWorkload = 176
       }
       this.monthWorkload = monthData.monthWorkload
+    },
+    verifyAppointment () {
+      if (this.appointment.appointmentRequestList && this.appointment.appointmentRequestList.length > 0) {
+        this.appointment.appointmentRequestList = this.appointment.appointmentRequestList.map(m => {
+          let newM = m
+          if (m.employee.hasOwnProperty('id')) {
+            newM.employee = Object.assign({id: m.employee.id}, {})
+            return newM
+          }
+        })
+      }
+    },
+    handleDeleteRequest (result) {
+      this.confirmDialog = false
+    },
+    handleConfirmRequest (result) {
+      this.confirmDialog = false
+      if (result.success) {
+        this.messages = [...result.message]
+        this.haveMessage = true
+        this.messageColor = 'info'
+      }
+    },
+    handleRequestError (error) {
+      console.log(error)
+      this.messages = ['Erro ao processar a solitação de Apontamento!']
+      this.haveMessage = true
+      this.messageColor = 'error'
     }
   }
 }
