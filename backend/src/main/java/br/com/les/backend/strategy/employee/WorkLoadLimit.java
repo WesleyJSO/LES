@@ -27,7 +27,7 @@ public class WorkLoadLimit implements IStrategy<Employee> {
 			Optional<Role> r = Optional.empty();
 			for ( GrantedAuthority role : aEntity.getUser().getAuthorities() ) {
 				r = roleRepository.findActiveById( ( ( DomainEntity ) role ).getId() );
-				if(r.get().getRole().equals(Role.ROLE_EMPLOYEE))
+				if(r.get().getAuthority().equals(Role.ROLE_EMPLOYEE))
 					break;
 				else
 					r = Optional.empty();
