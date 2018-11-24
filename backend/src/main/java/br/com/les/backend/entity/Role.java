@@ -31,10 +31,6 @@ public class Role extends DomainEntity implements GrantedAuthority{
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
 	}
-	
-	public String getRole() {
-		return role;
-	}
 
 	public void setRole(String role) {
 		this.role = role;
