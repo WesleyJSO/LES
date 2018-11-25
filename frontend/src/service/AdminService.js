@@ -1,16 +1,14 @@
 export const HEADERS = [
-  { text: 'Nome', align: 'center', sortable: false, value: 'lastName' },
-  { text: 'Carga Horária', align: 'center', value: 'cargaHoraria' },
-  { text: 'Salário', align: 'center', value: 'salario' },
+  { text: 'Nome', align: 'left', sortable: false, value: 'lastName' },
+  { text: 'Carga Horária (Horas)', align: 'center', value: 'cargaHoraria' },
+  { text: 'Salário (R$)', align: 'center', value: 'salario' },
   { text: 'Tipo de Hora', align: 'center', value: 'tipoHora' },
-  { text: 'Gestor', align: 'center', value: 'gestor' },
   { text: 'Telefone', align: 'center', value: 'telefone1' },
   { text: 'E-mail', align: 'center', value: 'email' },
   { text: 'Actions', align: 'center', value: 'name', sortable: false }
 ]
 export const SUB_HEADERS = [
   { text: 'PIS/PASESP', value: 'pis', align: 'center', sortable: false },
-  { text: 'Data de Nascimento', value: 'birthdate', align: 'center', sortable: false },
   { text: 'Data de Ingresso na Empresa', value: 'dataIngressoEmpresa', align: 'center', sortable: false },
   { text: 'Telefone 2', value: 'telefone2', align: 'center', sortable: false },
   { text: 'Telefone 3', value: 'telefone3', align: 'center', sortable: false }

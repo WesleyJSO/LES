@@ -7,65 +7,58 @@
                transition="scale-transition" />
     </li>
     <v-toolbar flat color="white">
-      <v-toolbar-title>Funcionários</v-toolbar-title>
+      <v-toolbar-title>{{ getTitles.employees }}</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-text-field v-model="searchFilter"
                     append-icon="search"
-                    label="Search"
+                    :label="getLabels.search"
                     single-line
                     hide-details>
       </v-text-field>
-      <v-dialog v-model="dialog" max-width="1000px" max-height="300px" >
-        <v-card>
-          <v-card-text>
-            <register-user :user="editedItem"
+    <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+      <v-card>
+        <v-toolbar dark color="black">
+          <v-toolbar-title>{{getTitleEdit}}</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-items>
+              <v-btn icon dark @click="close">
+                <v-icon>close</v-icon>
+              </v-btn>
+            </v-toolbar-items>
+        </v-toolbar>
+        <v-card-text>
+            <register-user :editedEmployee="editedItem"
                            :edit="isEditing"
-                           @save="save">
+                           @messages="handleMessages($event)"
+                           @closeDialog="handleCloseDialog">
             </register-user>
           </v-card-text>
-        </v-card>
-      </v-dialog>
-      <v-dialog v-model="manageHoursDialog"
-                width="700">
-                <v-card>
-        <v-card-title
-          class="headline grey lighten-2"
-          primary-title
-        >
-          Gerenciamento de Banco de Horas
-        </v-card-title>
-          <manageHours :item="itemToShow">
-          </manageHours>
-                </v-card>
-      </v-dialog>
+      </v-card>
+    </v-dialog>
     </v-toolbar>
     <v-data-table :headers="getHeaders"
-                  :items="users"
+                  :items="getEmployees"
                   item-key="id"
                   hide-actions
+                  :no-data-text="getMessages.emptyDataTable"
                   :search="searchFilter"
                   class="elevation-2" >
       <template slot="items" slot-scope="props">
         <tr @click="props.expanded = !props.expanded">
-          <td>{{ props.item.name }}</td>
-          <td class="text-xs-center">{{ props.item.baseCalculationHours.workload }}</td>
-          <td class="text-xs-center">{{ props.item.baseCalculationHours.salary }}</td>
-          <td class="text-xs-center">{{ props.item.baseCalculationHours.hourType === -1 ? 'BANCO' : 'EXTRA' }}</td>
-          <td class="text-xs-center">{{ props.item.manager.name }}</td>
-          <td class="text-xs-center">{{ props.item.thelephoneList[0].number }}</td>
-          <td class="text-xs-center">{{ props.item.email }}</td>
+          <td>{{ props.item.name  + ' ' + props.item.lastName }}</td>
+          <td class="text-xs-center">{{ props.item.baseHourCalculation ? props.item.baseHourCalculation.workload : 'Não se aplica'}}</td>
+          <td class="text-xs-center">{{ props.item.baseHourCalculation ? props.item.baseHourCalculation.salary : 'Não se aplica'}}</td>
+          <td class="text-xs-center">{{ props.item.baseHourCalculation.hasOwnProperty('hourType') ? props.item.baseHourCalculation.hourType.description : 'Não se aplica'}}</td>
+          <td class="text-xs-center">{{ props.item.telephoneList.length !== 0 ? props.item.telephoneList[0].number : '-'}}</td>
+          <td class="text-xs-center">{{ props.item.user.email }}</td>
           <td class="justify-center layout px-0">
             <v-icon small
                     class="mr-2"
-                    @click.stop="editItem(props.item)">edit
+                    @click.stop="editItem(props.item)">remove_red_eye
             </v-icon>
             <v-icon small
                     class="mr-2"
-                    @click.stop="deleteItem(props.item)">delete
-            </v-icon>
-            <v-icon small
-                    class="mr-2"
-                    @click.stop="showItem(props.item)">remove_red_eye
+                    @click.stop="deleteEmployee(props.item)">delete
             </v-icon>
           </td>
         </tr>
@@ -78,10 +71,9 @@
                       class="elevation-1" >
           <template slot="items" slot-scope="props">
             <td class="text-xs-center">{{ props.item.pis }}</td>
-            <td class="text-xs-center">{{ props.item.birthDate }}</td>
-            <td class="text-xs-center">{{ props.item.entryDateInCompany }}</td>
-            <td class="text-xs-center">{{ props.item.thelephoneList[1].number }}</td>
-            <td class="text-xs-center">{{ props.item.thelephoneList[1].number }}</td>
+            <td class="text-xs-center">{{ props.item.joiningDate.substring(0, 10).replace(/-/g, '/') }}</td>
+            <td class="text-xs-center">{{ props.item.telephoneList.length > 1 ? props.item.telephoneList[1].number : '-' }}</td>
+            <td class="text-xs-center">{{ props.item.telephoneList.length === 3 ? props.item.telephoneList[2].number : '-' }}</td>
           </template>
         </v-data-table>
       </template>
@@ -90,220 +82,12 @@
 </template>
 
 <script>
-// import Consultar from '@/components/usuario/Consultar'
-// import Listar from '@/components/usuario/Listar'
 import RegisterUser from '@/components/admin/RegisterUser'
-import Employee from '@/objects/Employee'
-import BaseHourCalculation from '@/objects/BaseHourCalculation'
-import Telephone from '@/objects/Telephone'
-import Login from '@/objects/Login'
 import AdminService from '@/service/AdminService'
-import ManageHours from '@/components/admin/ManageHours'
+import Authenticator from '@/service/Authenticator'
+import DateHelper from '@/helpers/DateHelper'
 
 export default {
-  props: {
-    users: {
-      type: Array,
-      default () {
-        return [{
-          id: '001',
-          creationDate: '1/1/1990',
-          name: 'José',
-          lastName: 'Zeller',
-          birthDate: '06/05/1998',
-          login: {
-            passwordValidation: 'zeller',
-            password: 'zeller',
-            active: true
-          },
-          email: 'josevictorzg@gmail.com',
-          roleList: [
-            { roleName: 'Super User ADM' },
-            { roleName: 'Funcionário' }
-          ],
-          logActionList: [
-            { action: 'Request abscence', actionDate: '22/12/2010' },
-            { action: 'Mark hours', actionDate: '22/12/2010' },
-            { action: 'Mark hours', actionDate: '22/12/2010' }
-          ],
-          thelephoneList: [
-            { type: 'Fixo', number: '46771435' },
-            { type: 'Móvel', number: '998679124' }
-          ],
-          pis: '123456789',
-          entryDateInCompany: '29/05/2018',
-          manager: {
-            id: '001',
-            creationDate: '1/1/1990',
-            name: 'José',
-            lastName: 'Zeller',
-            birthDate: '06/05/1998',
-            login: {
-              passwordValidation: 'zeller',
-              password: 'zeller',
-              active: true
-            },
-            email: 'josevictorzg@gmail.com',
-            roleList: [
-              { roleName: 'Super User ADM' },
-              { roleName: 'Funcionário' }
-            ],
-            logActionList: [
-              { action: 'Request abscence', actionDate: '22/12/2010' },
-              { action: 'Mark hours', actionDate: '22/12/2010' },
-              { action: 'Mark hours', actionDate: '22/12/2010' }
-            ],
-            thelephoneList: [
-              { type: 'Fixo', number: '46771435' },
-              { type: 'Móvel', number: '998679124' },
-              { type: 'Móvel', number: '955448899' }
-            ],
-            pis: '123456789'
-          },
-          requestList: [
-            {
-              description: 'Desc Solicitação',
-              agreed: true,
-              requestType: {
-                description: 'Falta, Troca de Dia...'
-              },
-              notificatedColaboratorsList: [
-                { id: '020', name: 'Chefe', lastName: 'Boss' }
-              ]
-            }
-          ],
-          appointmentList: [
-            {
-              description: 'APontamento normal',
-              userAppointmentDate: '22/08/2010 09:00',
-              userSystemAccessDate: '22/08/2010 09:04'
-            }
-          ],
-          baseCalculationHours: {
-            hourType: '-1',
-            workload: '8',
-            effectiveDate: '22/02/2010',
-            salary: 3000
-          },
-          monthlyCompTimeList: {
-            balance: '',
-            monthlyHoursLimit: '50',
-            dailyHoursLimit: '12',
-            monthlyHoursLimitActive: false,
-            thisMonthBalance: '45',
-            thisMonthBalanceDescription: 'Banco de Horas do Mês',
-            monthPaymentLimit: '15',
-            descriptionOfMontlyPaymentLimit: 'Limite Mensal de Banco'
-          },
-          amountHours: 80,
-          nextVacation: '22/10/2018'
-        },
-        {
-          id: '002',
-          creationDate: '1/1/1990',
-          name: 'Pedro',
-          lastName: 'Silva',
-          birthDate: '06/05/1998',
-          login: {
-            passwordValidation: 'zeller',
-            password: 'zeller',
-            active: true
-          },
-          email: 'pedro@gmail.com',
-          roleList: [
-            { roleName: 'Super User ADM' },
-            { roleName: 'Funcionário' }
-          ],
-          logActionList: [
-            { action: 'Request abscence', actionDate: '22/12/2010' },
-            { action: 'Mark hours', actionDate: '22/12/2010' },
-            { action: 'Mark hours', actionDate: '22/12/2010' }
-          ],
-          thelephoneList: [
-            { type: 'Fixo', number: '46771435' },
-            { type: 'Móvel', number: '987655432' }
-          ],
-          pis: '123456789',
-          entryDateInCompany: '29/05/2018',
-          manager: {
-            id: '001',
-            creationDate: '1/1/1990',
-            name: 'José',
-            lastName: 'Zeller',
-            birthDate: '06/05/1998',
-            login: {
-              passwordValidation: 'zeller',
-              password: 'zeller',
-              active: true
-            },
-            email: 'josevictorzg@gmail.com',
-            roleList: [
-              { roleName: 'Super User ADM' },
-              { roleName: 'Funcionário' }
-            ],
-            logActionList: [
-              { action: 'Request abscence', actionDate: '22/12/2010' },
-              { action: 'Mark hours', actionDate: '22/12/2010' },
-              { action: 'Mark hours', actionDate: '22/12/2010' }
-            ],
-            thelephoneList: [
-              { type: 'Fixo', number: '46771435' },
-              { type: 'Móvel', number: '998679124' },
-              { type: 'Móvel', number: '955448899' }
-            ],
-            pis: '123456789'
-          },
-          requestList: [
-            {
-              description: 'Desc Solicitação',
-              agreed: true,
-              requestType: {
-                description: 'Falta, Troca de Dia...'
-              },
-              notificatedColaboratorsList: [
-                { id: '020', name: 'Chefe', lastName: 'Boss' }
-              ]
-            }
-          ],
-          appointmentList: [
-            {
-              description: 'APontamento normal',
-              userAppointmentDate: '22/08/2010 09:00',
-              userSystemAccessDate: '22/08/2010 09:04'
-            }
-          ],
-          baseCalculationHours: {
-            hourType: '-1',
-            workload: '6',
-            effectiveDate: '22/02/2010',
-            salary: 2500
-          },
-          monthlyCompTimeList: {
-            balance: '',
-            monthlyHoursLimit: '50',
-            dailyHoursLimit: '12',
-            monthlyHoursLimitActive: false,
-            thisMonthBalance: '45',
-            thisMonthBalanceDescription: 'Banco de Horas do Mês',
-            monthPaymentLimit: '15',
-            descriptionOfMontlyPaymentLimit: 'Limite Mensal de Banco'
-          },
-          amountHours: 30,
-          nextVacation: '05/11/2018'
-        }]
-      }
-    },
-    editedItem: {
-      type: Object,
-      default () {
-        return {
-          thelephoneList: [],
-          password: '',
-          passwordValidation: ''
-        }
-      }
-    }
-  },
   data: () => ({
     messages: [],
     haveMessage: false,
@@ -313,14 +97,40 @@ export default {
     dialog: false,
     manageHoursDialog: false,
     isEditing: false,
-    itemToShow: {}
+    editedItem: {},
+    editTitle: 'Colaborador',
+    itemToShow: {},
+    employees: [],
+    isAdmin: false
   }),
+  mounted () {
+    this.listEmployees()
+    this.isAdmin = Authenticator.HAS_ROLE('ROLE_ADMIN')
+  },
   computed: {
     getHeaders () {
       return AdminService.HEADERS
     },
     getSubHeaders () {
       return AdminService.SUB_HEADERS
+    },
+    getMessages () {
+      return AdminService.MESSAGES
+    },
+    getTitles () {
+      return AdminService.TITLES
+    },
+    getLabels () {
+      return AdminService.LABELS
+    },
+    getEmployees () {
+      return this.employees
+    },
+    getDateFormats () {
+      return AdminService.DATE_FORMATS
+    },
+    getTitleEdit () {
+      return this.editTitle
     }
   },
   watch: {
@@ -328,93 +138,66 @@ export default {
       val || this.close()
     }
   },
-  created () {
-    /* this.$_axios.get(`${this.$_url}funcionario`).then((response) => {
-      let resultado = response.data
-      if (resultado.listaResultado.length !== 0) {
-        // retorno ok
-        this.users = resultado.listaResultado
-      }
-      if (resultado.mensagem) {
-        this.messages = [...resultado.mensagem]
-        this.haveMessage = true
-        if (resultado.sucesso) {
-          // retorno mensagem de sucesso
+  methods: {
+    parseDate (date) {
+      return DateHelper.formatShortDate(date)
+    },
+    async listEmployees () {
+      let user = {id: Authenticator.GET_AUTHENTICATED().id}
+      let manager = {'user': user}
+      try {
+        let result = await this.$_axios.patch(`${this.$_url}employee`, {manager})
+        let resultMessage = !result.data.message ? [] : result.data.message
+        if (resultMessage) {
+          this.messages = [...resultMessage]
+          this.haveMessage = resultMessage.length > 0
+        }
+        if (result.data.success) {
+          this.employees = [...result.data.resultList]
+          this.employees = this.parseEmployees(this.employees)
           this.messageColor = 'info'
         } else {
-          // retorno mensagem de erro
           this.messageColor = 'warning'
         }
+      } catch (err) {
+        console.log(JSON.stringify(err, null, ''))
+        this.messages = ['Houve um erro ao Consultar os Colaboradores']
+        this.haveMessage = true
+        this.messageColor = 'error'
       }
     },
-    (response) => {
-      console.log(JSON.stringify(response, null, ' '))
-      // erro na requisição do serviço
-      this.messages = ['Erro durante execução do serviço!']
-      this.haveMessage = true
-      this.messageColor = 'error'
-    }) */
-  },
-  methods: {
-    initialize () {
-    },
-    prepareUserObject (userObject) {
-      let listaTelefone = []
-      listaTelefone.push(new Telephone(userObject.telefone1), new Telephone(userObject.telefone2), new Telephone(userObject.telefone3))
-      let funcionario = new Employee(
-        userObject.id,
-        userObject.nome,
-        userObject.email,
-        userObject.ultimoNome,
-        userObject.dataNascimento,
-        new Login(userObject.senha, userObject.senhaValidacao, userObject.nomeLogin, userObject.ativo),
-        listaTelefone,
-        userObject.pis,
-        userObject.dataIngressoEmpresa,
-        new Employee(0, userObject.gestor),
-        new BaseHourCalculation(0, userObject.tipoHora, userObject.cargaHoraria, null, userObject.salario)
-      )
-      return funcionario
-    },
     editItem (item) {
-      // Emit messagem to RegisterUser.vue component
-      //
-      this.editedIndex = this.users.indexOf(item)
-      this.editedItem = Object.assign({}, item)
+      // Need to format date as 'year-month-date'
+      // to avoid refactor all register user component code
+      const [day, month, year] = item.joiningDate.replace(/\//g, '-').substring(0, 10).split('-')
+      let parseDate = `${year}-${month}-${day}`
+      this.editedItem = JSON.parse(JSON.stringify(item))
+      this.editedItem.joiningDate = parseDate
+      this.editedItem.user.password = ''
+      this.editedItem.baseHourCalculation.hourType = {id: this.editedItem.baseHourCalculation.hourType.id}
+      this.editTitle = 'Colaborador'
       this.dialog = true
       this.isEditing = true
     },
-    deleteItem (item) {
-      const index = this.users.indexOf(item)
-      confirm('Tem certeza que deseja excluir este usuário?') && this.users.splice(index, 1)
-      /* this.$_axios.post(`${this.$_url}funcionario`, funcionario).then((response) => {
-        let resultado = response.data
-        if (resultado.listaResultado.length !== 0) {
-          /* retorno ok
-          this.funcionario = resultado.listaResultado
-        }
-        if (resultado.mensagem) {
-          this.messages = [...resultado.mensagem]
+    async deleteEmployee (item) {
+      try {
+        let result = await this.$_axios.delete(`${this.$_url}employee/${item.id}`)
+        if (result.data.messages) {
+          this.messages = [...result.message]
           this.haveMessage = true
-          if (resultado.sucesso) {
-          /* retorno mensagem de sucesso
+          if (result.data.success) {
             this.messageColor = 'info'
           } else {
-            /* retorno mensagem de erro
             this.messageColor = 'warning'
           }
         }
-      },
-      (response) => {
-        /* erro na requisição do serviço
+        this.listEmployees()
+      } catch (error) {
+        console.log(error)
         this.messages = ['Erro durante execução do serviço!']
         this.haveMessage = true
         this.messageColor = 'error'
-      }) */
-    },
-    showItem (item) {
-      this.manageHoursDialog = true
-      Object.assign(this.itemToShow, item)
+      }
     },
     close () {
       this.dialog = false
@@ -424,45 +207,29 @@ export default {
         this.editedIndex = -1
       }, 300)
     },
-    save (funcionario) {
-      alert('Parent Save', JSON.stringify(funcionario, null, ' '))
-      this.$_axios.post(`${this.$_url}funcionario`, funcionario).then((response) => {
-        let resultado = response.data
-        if (resultado.listaResultado.length !== 0) {
-          // retorno ok
-          this.funcionario = resultado.listaResultado
+    parseEmployees (list) {
+      // Assuming that first employee has a full manager Object
+      let manager = list[0].manager
+      return list.map(e => {
+        let newE = e
+        if (!e.manager.hasOwnProperty('user')) {
+          newE.manager = Object.assign(manager, {})
         }
-        if (resultado.mensagem) {
-          this.messages = [...resultado.mensagem]
-          this.haveMessage = true
-          if (resultado.sucesso) {
-          // retorno mensagem de sucesso
-            this.messageColor = 'info'
-          } else {
-            // retorno mensagem de erro
-            this.messageColor = 'warning'
-          }
-        }
-      },
-      (response) => {
-        // erro na requisição do serviço
-        this.messages = ['Erro durante execução do serviço!']
-        this.haveMessage = true
-        this.messageColor = 'error'
+        return newE
       })
-      if (this.editedIndex > -1) {
-        Object.assign(this.users[this.editedIndex], funcionario)
-      } else {
-        this.users.push(this.funcionario)
-      }
-      this.close()
+    },
+    handleMessages (value) {
+      this.messages = [...value]
+      this.haveMessage = true
+      this.messageColor = 'info'
+    },
+    handleCloseDialog () {
+      this.listEmployees()
+      this.dialog = false
     }
   },
   components: {
-    // Consultar,
-    // Listar,
-    RegisterUser,
-    ManageHours
+    RegisterUser
   }
 }
 </script>

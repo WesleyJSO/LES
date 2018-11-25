@@ -88,19 +88,19 @@ export default class UserValidators {
       return ['Informe um número PIS/PASESP Válido!']
     }
   }
-  passwordRules (password) {
-    if (!password) {
+  passwordRules (password, edit) {
+    if (!password && !edit) {
       return ['campo Senha deve ser preenchido!']
-    } else if (password.length <= 3) {
+    } else if (password.length <= 3 && !edit) {
       return ['campo Senha deve conter no mínimo 3 caracteres!']
     }
   }
-  passwordValidationRules (password, passwordValidation) {
-    if (!password && !passwordValidation) {
+  passwordValidationRules (password, passwordValidation, edit) {
+    if (!password && !passwordValidation && !edit) {
       return ['campo Senha de Confirmação deve ser preenchido!']
-    } else if ((!password && passwordValidation) || (password && !passwordValidation)) {
+    } else if (((!password && passwordValidation) || (password && !passwordValidation)) && !edit) {
       return ['As Senhas informadas são divergentes!']
-    } else if (password !== passwordValidation) {
+    } else if (password !== passwordValidation && !edit) {
       return ['As Senhas informadas são divergentes!']
     }
   }
