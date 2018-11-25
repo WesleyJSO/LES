@@ -23,6 +23,13 @@ import RequestValidator from './validators/RequestValidator'
 import RoleValidators from './validators/RoleValidators'
 import Authenticator from '@/service/Authenticator'
 
+moment.updateLocale('en', {
+  months: [
+    'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho',
+    'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+  ]
+})
+
 Vue.use(VueChartkick, {adapter: Chart})
 
 Vue.use(Vuetify, {

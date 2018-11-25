@@ -45,7 +45,7 @@ public class CreateDashboardData implements IStrategy<DashboardFilter> {
 		
 		if(aCase.getResult().isSuccess()) {
 			
-			calculateTheLastMonthBalance();
+			calculateBalance();
 			sortMonthlyBalanceList();
 			logInConsole();
 			m.forEach(monthlyBalance -> {
@@ -54,8 +54,10 @@ public class CreateDashboardData implements IStrategy<DashboardFilter> {
 					theLastBalanceForThisUserHasEvaluated = false;
 					employeeId = monthlyBalance.getEmployee().getId();
 					employeeDashboardData = new DashboardFilter();
+					employeeDashboardData.setEmployeeEvaluatedBalanceList(new ArrayList<>());
 					dashboardFilterList.add(employeeDashboardData);
 				}
+				employeeDashboardData.getEmployeeEvaluatedBalanceList().add(monthlyBalance);
 				
 				if(monthlyBalance.getAbscenseHours() != 0 || monthlyBalance.getAbscenseMinutes() != 0 
 				|| monthlyBalance.getOvertimeHours() != 0 || monthlyBalance.getOvertimeMinutes() != 0) {
@@ -112,7 +114,7 @@ public class CreateDashboardData implements IStrategy<DashboardFilter> {
 		String minute = String.valueOf(minutes - minutes / 60 * 60).replace("-", "");
 		if(minute.length() < 2)
 			minute = "0".concat(minute);
-		return  String.valueOf(minutes / 60).concat(":").concat(minute);
+		return  String.valueOf(minutes < 0 && minutes > -60 ? "-0" : minutes / 60).concat(":").concat(minute);
 	}
 	
 	private String fetchBalance(MonthlyBalance monthlyBalance) {
@@ -180,34 +182,44 @@ public class CreateDashboardData implements IStrategy<DashboardFilter> {
 				.concat(" ").concat(monthlyBalance.getEmployee().getLastName());
 	}
 
-	private void calculateTheLastMonthBalance() {
+	private void calculateBalance() {
 		long empId = 0;
-		for(int current = 0; current < m.size() -1; current++) {
-			for(int next = current + 1; next < m.size(); next++) {
+		for(short current = 0; current < m.size(); current++) {
 			
-				long currentEmployeeId = m.get(current).getEmployee().getId();
+			long currentEmployeeId = m.get(current).getEmployee().getId();
+			for(short next = current; next < m.size(); next++) {				
 				
 				if(currentEmployeeId != m.get(next).getEmployee().getId())
 					break;
 				
 				if(empId != currentEmployeeId)
-					empId = currentEmployeeId;			
+					empId = currentEmployeeId;	
 				
-				long currentMonthBalance = 
-						(m.get(current).getOvertimeHours() * 60 + m.get(current).getOvertimeMinutes())
-						- (m.get(current).getAbscenseHours() * 60 + m.get(current).getAbscenseMinutes());
+				int absenceHours = m.get(current).getAbscenseHours() * 60 + m.get(current).getAbscenseMinutes();
+				if(absenceHours == 0)
+					break;
+				int overtimeHours = m.get(next).getOvertimeHours() * 60 + m.get(next).getOvertimeMinutes();
 				
-				long nextMonthBalance = 
-						(m.get(next).getOvertimeHours() * 60 + m.get(next).getOvertimeMinutes()) 
-						- (m.get(next).getAbscenseHours() * 60 + m.get(next).getAbscenseMinutes());
+				applicateNewValues(m, current, next, absenceHours, overtimeHours);
+			}
+			
+			for(short next = current; next < m.size(); next++) {
 				
-				if(currentMonthBalance > 0 && nextMonthBalance < 0 || currentMonthBalance < 0 && nextMonthBalance > 0) {
-					boolean breakLoop = applicateNewValues(m, current, next, currentMonthBalance, nextMonthBalance);
-					if(breakLoop) break;
-				}
+				if(currentEmployeeId != m.get(next).getEmployee().getId())
+					break;
+				
+				if(empId != currentEmployeeId)
+					empId = currentEmployeeId;	
+				
+				
+				int overtimeHours = m.get(current).getOvertimeHours() * 60 + m.get(current).getOvertimeMinutes();
+				if(overtimeHours == 0)
+					break;
+				int absenceHours = m.get(next).getAbscenseHours() * 60 + m.get(next).getAbscenseMinutes();
+				
+				applicateNewValues(m, next, current, absenceHours, overtimeHours);
 			}
 		}
-		logInConsole();
 	}
 
 	private void logInConsole() {
@@ -255,46 +267,27 @@ public class CreateDashboardData implements IStrategy<DashboardFilter> {
 		});
 	}
 
-	/**
-	 * 
-	 * @param m 	List that contains every month with each user and his balance
-	 * @param current 	index for the current employee
-	 * @param next 	index for the next employee
-	 * @param currentMonthBalance 	current value used to calculate with the next value,
-	 * this will validate if the current balance should be cleared and then, 
-	 * recalculate and set the next value to his new calculated value, 
-	 * the same goes for the case when the next balance value is less than the current
-	 * @param nextMonthBalance 	as said above
-	 * @return clearCurrent 	this variable is used to verify which one of the indexes
-	 * should be cleared, also, is returned to activate the loop break, it's valid cause 
-	 * booth behaviors are the same
-	 */
-	private boolean applicateNewValues(List<MonthlyBalance> m, int current,
-			int next, long currentMonthBalance, long nextMonthBalance) {
+	private void applicateNewValues(List<MonthlyBalance> m, short firstMonth,
+			short nextMonth, int absence, int overtime) {
 		
-		boolean clearCurrent = false;
-		if((currentMonthBalance > 0 && currentMonthBalance + nextMonthBalance <= 0) 
-		|| (currentMonthBalance <= 0 && currentMonthBalance + nextMonthBalance >= 0)) 
-			clearCurrent = true;
-		
-		m.get(clearCurrent ? current : next).setAbscenseHours(0);
-		m.get(clearCurrent ? current : next).setAbscenseMinutes(0);
-		m.get(clearCurrent ? current : next).setOvertimeHours(0);
-		m.get(clearCurrent ? current : next).setOvertimeMinutes(0);
-
-		// adiciona os valores que sobraram em extra ou em falta
-		long minutesLeft = currentMonthBalance + nextMonthBalance;
-		if(minutesLeft > 0) {
-			m.get(!clearCurrent ? current : next).setAbscenseHours(0);
-			m.get(!clearCurrent ? current : next).setAbscenseMinutes(0);
-			m.get(!clearCurrent ? current : next).setOvertimeHours((int)minutesLeft  / 60);
-			m.get(!clearCurrent ? current : next).setOvertimeMinutes((int)(minutesLeft - minutesLeft / 60 * 60));
+		int minutesLeft = 0;
+		if(absence > overtime) {
+			minutesLeft =  absence - overtime;
+			m.get(nextMonth).setOvertimeHours(0);
+			m.get(nextMonth).setOvertimeMinutes(0);
+			m.get(firstMonth).setAbscenseHours(minutesLeft / 60); 
+			m.get(firstMonth).setAbscenseMinutes(minutesLeft - minutesLeft / 60 * 60);
+		} else if(absence < overtime) {			
+			minutesLeft =  overtime - absence;
+			m.get(firstMonth).setAbscenseHours(0);
+			m.get(firstMonth).setAbscenseMinutes(0);
+			m.get(nextMonth).setOvertimeHours(minutesLeft / 60);
+			m.get(nextMonth).setOvertimeMinutes(minutesLeft - minutesLeft / 60 * 60);			
 		} else {
-			m.get(!clearCurrent ? current : next).setAbscenseHours((int)minutesLeft * -1 / 60);
-			m.get(!clearCurrent ? current : next).setAbscenseMinutes((int)(minutesLeft - minutesLeft / 60 * 60) * -1);
-			m.get(!clearCurrent ? current : next).setOvertimeHours(0);
-			m.get(!clearCurrent ? current : next).setOvertimeMinutes(0);
+			m.get(firstMonth).setAbscenseHours(0);
+			m.get(firstMonth).setAbscenseMinutes(0);
+			m.get(nextMonth).setOvertimeHours(0);
+			m.get(nextMonth).setOvertimeMinutes(0);			
 		}
-		return clearCurrent;
 	}
 }

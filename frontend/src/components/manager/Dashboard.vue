@@ -2,33 +2,32 @@
   <div>
 
     <v-item-group>
-      <v-container grid-list-md>
-        <v-layout wrap>
+      <v-container fluid grid-list-md>
+        <v-layout row wrap>
 
-          <v-flex md12>
+          <v-flex d-flex md12>
             <v-hover>
               <v-card
                 @click.native="showAllEmployees"
-                color="#86BBD8"
                 slot-scope="{ hover }"
                 :class="`elevation-${hover ? 12 : 2}`"
               >
                 <v-card-title primary-title>
-                  <div>
-                    <h1 class="text-xs-left headline mb-0">Funcionários: {{employeesAll}}</h1>
-                    <h3 class="text-xs-left headline ma-0">Total de horas trabalhadas: {{hoursAll}}</h3>
-                    <h3 class="text-xs-left headline ma-0">A partir de: {{initialDate}}</h3>
-                  </div>
+                  <h1 class="headline mb-0">Cálculos realizados a partir de: {{initialDate}}</h1>
                 </v-card-title>
-
-                <v-card-actions>
-                  <div class="white--text">Visualizar</div>
-                </v-card-actions>
+                <v-card-text class="pt-0 ma-0">
+                  <h3>Colaboradores: {{employeesAll}}</h3>
+                  <!-- <v-layout row justify-space-between>
+                    <v-flex>
+                      <h3>Total de horas trabalhadas no período: {{hoursAll}}</h3>
+                    </v-flex>
+                  </v-layout> -->
+                </v-card-text>
               </v-card>
             </v-hover>
           </v-flex>
 
-          <v-flex md3>
+          <v-flex d-flex md3>
             <v-hover>
               <v-card
                 @click.native="showOvertimeEmployees"
@@ -37,20 +36,16 @@
                 :class="`elevation-${hover ? 12 : 2}`"
               >
                 <v-card-title primary-title>
-                  <div>
-                    <h1 class="text-xs-left headline mb-0">Funcionários: {{employeesInOvertime}}</h1>
-                    <h3 class="text-xs-left headline ma-0">Horas extras: {{hoursInOvertime}}</h3>
-                  </div>
+                  <h1 class="text-xs-left headline mb-0">Funcionários: {{employeesInOvertime}}</h1>
                 </v-card-title>
-
-                <v-card-actions>
-                  <div class="white--text">Visualizar</div>
-                </v-card-actions>
+                <v-card-text class="pt-0">
+                  <h3 class="text-xs-left">Saldo positivo total: {{hoursInOvertime}}</h3>
+                </v-card-text>
               </v-card>
             </v-hover>
           </v-flex>
 
-          <v-flex md3>
+          <v-flex d-flex md3>
               <v-hover>
               <v-card
               @click.native="showAbsenceEmployees"
@@ -59,59 +54,36 @@
                 :class="`elevation-${hover ? 12 : 2}`"
               >
                 <v-card-title primary-title>
-                  <div>
-                    <h1 class="text-xs-left headline mb-0">Funcionários: {{employeesInAbsence}}</h1>
-                    <h3 class="text-xs-left headline ma-0">Negativo: {{hoursInAbsence}}</h3>
-                  </div>
+                  <h1 class="text-xs-left headline mb-0">Funcionários: {{employeesInAbsence}}</h1>
                 </v-card-title>
-
-                <v-card-actions>
-                  <div class="white--text">Visualizar</div>
-                </v-card-actions>
+                <v-card-text class="pt-0">
+                  <h3 class="text-xs-left">Saldo negativo total: {{hoursInAbsence}}</h3>
+                </v-card-text>
               </v-card>
             </v-hover>
           </v-flex>
 
-          <v-flex md3>
+          <v-flex d-flex md6>
               <v-hover>
               <v-card
-                @click.native="showPositiveLimitEmployees"
-                color="#CC5A71"
+                @click.native="showPositiveAndNegativeLimitEmployees"
+                color="#BA1B1D"
                 slot-scope="{ hover }"
                 :class="`elevation-${hover ? 12 : 2}`"
               >
                 <v-card-title primary-title>
-                  <div>
-                    <h1 class="text-xs-left headline mb-0">Funcionários: {{employeesInLimitOfTowMonthsPositive}}</h1>
-                    <h3 class="text-xs-left headline ma-0">Limite: {{hoursInLimitOfTowMonthsPositive}}</h3>
-                  </div>
+                    <h1 class="headline mb-0">Funcionários: {{employeesInLimitOfTowMonthsPositive}}</h1>
                 </v-card-title>
-
-                <v-card-actions>
-                  <div class="white--text">Visualizar</div>
-                </v-card-actions>
-              </v-card>
-            </v-hover>
-          </v-flex>
-
-          <v-flex md3>
-              <v-hover>
-              <v-card
-                @click.native="showNegativeLimitEmployees"
-                color="#80475E"
-                slot-scope="{ hover }"
-                :class="`elevation-${hover ? 12 : 2}`"
-              >
-                <v-card-title primary-title>
-                  <div>
-                    <h1 class="text-xs-left headline mb-0">Funcionários: {{employeesInLimitOfTowMonthsNegative}}</h1>
-                    <h3 class="text-xs-left headline ma-0">Limite: {{hoursInLimitOfTowMonthsNegative}}</h3>
-                  </div>
-                </v-card-title>
-
-                <v-card-actions>
-                  <div class="white--text">Visualizar</div>
-                </v-card-actions>
+                <v-card-text class="pt-0">
+                  <v-layout row justify-space-between>
+                    <v-flex>
+                      <h3>Saldo positivo em vencimento: {{hoursInLimitOfTowMonthsPositive}}</h3>
+                    </v-flex>
+                    <v-flex>
+                      <h3>Saldo negativo em vencimento: {{hoursInLimitOfTowMonthsNegative}}</h3>
+                    </v-flex>
+                  </v-layout>
+                </v-card-text>
               </v-card>
             </v-hover>
           </v-flex>
@@ -121,22 +93,70 @@
     </v-item-group>
 
     <v-data-table
+      rows-per-page-text="Linhas por página"
       :headers="headers"
       :items="employeesList"
       class="elevation-2"
+      item-key="employeeFullName"
     >
       <template slot="items" slot-scope="props">
-        <td>{{ props.item.employeeFullName }}</td>
-        <td class="text-xs-center">{{ props.item.shouldBeWorked }}</td>
-        <td class="text-xs-center">{{ props.item.workedHoursOnTheParameterPeriod }}</td>
-        <td class="text-xs-center">{{ props.item.balance }}</td>
-        <td class="text-xs-center">{{ props.item.countingFromMonth }}</td>
-        <td class="text-xs-center">{{ props.item.lastMonth }}</td>
-        <td class="text-xs-center">{{ props.item.hoursInLastMonth }}</td>
-        <td class="text-xs-center">{{ props.item.workedHoursComercial }}</td>
-        <td class="text-xs-center">{{ props.item.workedHoursNight }}</td>
+        <tr @click="props.expanded = !props.expanded">
+          <td>{{ props.item.employeeFullName }}</td>
+          <td class="text-xs-center">{{ props.item.shouldBeWorked }}</td>
+          <td class="text-xs-center">{{ props.item.workedHoursOnTheParameterPeriod }}</td>
+          <td class="text-xs-center">{{ props.item.balance }}</td>
+          <td class="text-xs-center">{{ props.item.countingFromMonth }}</td>
+          <td class="text-xs-center">{{ props.item.lastMonth }}</td>
+          <td class="text-xs-center">{{ props.item.hoursInLastMonth }}</td>
+          <!-- <td class="text-xs-center">{{ props.item.workedHoursComercial }}</td>
+          <td class="text-xs-center">{{ props.item.workedHoursNight }}</td> -->
+        </tr>
       </template>
+
+      <template slot="expand" slot-scope="props">
+        <v-layout justify-space-between>
+          <v-flex xs2 sm2 md2 lg2 xl2 v-for="monthAppointment in props.item.employeeEvaluatedBalanceList" :key="monthAppointment.id">
+            <v-card flat class="subRow" color="#F7F4F3">
+              <v-card-title primary-title>
+                <h3 class="headline ma-0">{{ moment(monthAppointment.monthAndYear.toString().substring(5, 7), 'MM').format('MMMM') }}</h3>
+              </v-card-title>
+              <v-card-title>
+                <v-layout row justify-space-between>
+                  <v-flex>
+                    Positivo<br/>{{ (monthAppointment.overtimeHours.toString().length === 1
+                      ? `0${monthAppointment.overtimeHours}`
+                      : monthAppointment.overtimeHours)
+                      + ':'
+                      + (monthAppointment.overtimeMinutes.toString().length === 1
+                      ? `0${monthAppointment.overtimeMinutes}`
+                      : monthAppointment.overtimeMinutes) }}
+                  </v-flex>
+                  <v-flex>
+                    Negativo<br/>{{ (monthAppointment.abscenseHours.toString().length === 1
+                      ? `0${monthAppointment.abscenseHours}`
+                      : monthAppointment.abscenseHours)
+                      + ':'
+                      + (monthAppointment.abscenseMinutes.toString().length === 1
+                      ? `0${monthAppointment.abscenseMinutes}`
+                      : monthAppointment.abscenseMinutes) }}
+                  </v-flex>
+                </v-layout>
+            </v-card-title>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </template>
+
+      <template slot="no-data">
+        Não existem dados para o item selecionado.
+      </template>
+
+      <template slot="pageText" slot-scope="props">
+        Exibindo {{ props.pageStart }} - {{ props.pageStop }} de {{ props.itemsLength }}
+      </template>
+
     </v-data-table>
+
   </div>
 </template>
 
@@ -150,9 +170,9 @@ export default {
       { sortable: true, align: 'center', text: 'Saldo', value: 'Balance' },
       { sortable: true, align: 'center', text: 'A partir de', value: 'countingFromMonth' },
       { sortable: true, align: 'center', text: 'Ultimo mês débito', value: 'lastMonth' },
-      { sortable: true, align: 'center', text: 'Horas ultimo mês', value: 'hoursInLastMonth' },
-      { sortable: true, align: 'center', text: 'Horas comerciais', value: 'workedHoursComercial' },
-      { sortable: true, align: 'center', text: 'Horas noturnas', value: 'workedHoursNight' }
+      { sortable: true, align: 'center', text: 'Horas ultimo mês', value: 'hoursInLastMonth' }
+      // { sortable: true, align: 'center', text: 'Horas comerciais', value: 'workedHoursComercial' },
+      // { sortable: true, align: 'center', text: 'Horas noturnas', value: 'workedHoursNight' }
     ],
     initialDate: 0,
     employeesAll: 0,
@@ -170,12 +190,14 @@ export default {
     overtimeTotal: [],
     absenceTotal: [],
     limitOfTwoMonthsPositive: [],
-    limitOfTwoMonthsNegative: []
+    limitOfTwoMonthsNegative: [],
+    moment: {}
   }),
   async beforeMount () {
+    this.moment = this.$_moment
     try {
       let response = await this.$_axios.patch(`${this.$_url}dashboard`, {})
-      // console.table(response.data.resultList)
+      console.table(response.data.resultList)
 
       this.employeesList = response.data.resultList
       this.employees = this.employeesList
@@ -201,7 +223,7 @@ export default {
       this.hoursInAbsence = this.convertMinutesInHours(this.hoursInAbsence)
 
       this.limitOfTwoMonthsPositive = this.employees.filter(dashboard => {
-        return dashboard.countingFromMonthNumber >= dashboard.lastMonthNumber - 2 && dashboard.hoursInLastMonthMinutes > 0
+        return dashboard.countingFromMonthNumber >= dashboard.lastMonthNumber && dashboard.hoursInLastMonthMinutes > 0
       })
       this.employeesInLimitOfTowMonthsPositive = this.limitOfTwoMonthsPositive.length
       this.limitOfTwoMonthsPositive.forEach(element => {
@@ -210,7 +232,7 @@ export default {
       this.hoursInLimitOfTowMonthsPositive = this.convertMinutesInHours(this.hoursInLimitOfTowMonthsPositive)
 
       this.limitOfTwoMonthsNegative = this.employees.filter(dashboard => {
-        return dashboard.countingFromMonthNumber >= dashboard.lastMonthNumber - 2 && dashboard.hoursInLastMonthMinutes < 0
+        return dashboard.countingFromMonthNumber >= dashboard.lastMonthNumber && dashboard.hoursInLastMonthMinutes < 0
       })
       this.employeesInLimitOfTowMonthsNegative = this.limitOfTwoMonthsNegative.length
       this.limitOfTwoMonthsNegative.forEach(element => {
@@ -231,8 +253,9 @@ export default {
     showAbsenceEmployees () {
       this.employeesList = this.absenceTotal
     },
-    showPositiveLimitEmployees () {
+    showPositiveAndNegativeLimitEmployees () {
       this.employeesList = this.limitOfTwoMonthsPositive
+      this.employees.push(...this.limitOfTwoMonthsNegative)
     },
     showNegativeLimitEmployees () {
       this.employeesList = this.limitOfTwoMonthsNegative

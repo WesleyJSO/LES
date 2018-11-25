@@ -1,12 +1,16 @@
 package br.com.les.backend.filter;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import br.com.les.backend.entity.DomainEntity;
+import br.com.les.backend.entity.MonthlyBalance;
 
 @Component
 public class DashboardFilter extends DomainEntity {
 
+	private List<MonthlyBalance> employeeEvaluatedBalanceList;
     private String employeeFullName;
     private String workedHoursOnTheParameterPeriod;
     private Long workedHoursOnTheParameterPeriodMinutes;
@@ -106,5 +110,11 @@ public class DashboardFilter extends DomainEntity {
 	}
 	public void setWorkedHoursOnTheParameterPeriodMinutes(Long workedHoursOnTheParameterPeriodMinutes) {
 		this.workedHoursOnTheParameterPeriodMinutes = workedHoursOnTheParameterPeriodMinutes;
+	}
+	public List<MonthlyBalance> getEmployeeEvaluatedBalanceList() {
+		return employeeEvaluatedBalanceList;
+	}
+	public void setEmployeeEvaluatedBalanceList(List<MonthlyBalance> employeeEvaluatedBalanceList) {
+		this.employeeEvaluatedBalanceList = employeeEvaluatedBalanceList;
 	}
 }
