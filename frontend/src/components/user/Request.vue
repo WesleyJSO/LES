@@ -19,7 +19,7 @@
           item-value="id"
           prepend-icon="check_circle"
           label="Tipo de Solicitação"
-          chips> 
+          chips>
         </v-combobox>
         </v-flex>
         <v-flex xs6>
@@ -44,7 +44,7 @@
                   :reactive="reactive"
                   scrollable
                   v-model="request.startDate"
-                  @input="requestEntryDate = false">                  
+                  @input="requestEntryDate = false">
                 </v-date-picker>
               </v-menu>
         </v-flex>
@@ -71,7 +71,7 @@
                   :reactive="reactive"
                   v-model="request.endDate"
                   scrollable
-                  @input="requestChangeDate = false">                  
+                  @input="requestChangeDate = false">
                 </v-date-picker>
               </v-menu>
         </v-flex>
@@ -95,7 +95,7 @@
             </v-textarea>
         </v-flex>
     </v-layout>
-    <v-btn type="button" 
+    <v-btn type="button"
            color="success"
            :disabled="!valid"
            @click="saveRequest">Salvar</v-btn>
@@ -252,12 +252,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-  h1 {
-    font-size: 40px;
-    text-align: center;
-    margin-top: -20px;
-    margin-bottom: 20px;
-  }
-</style>

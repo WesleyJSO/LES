@@ -24,9 +24,9 @@
     </v-toolbar>
 
     <v-content>
-      <v-container fluid fixed="fixed">
+      <v-container fluid fixed>
         <v-slide-y-transition mode="out-in">
-            <v-flex md12 pa-2>
+            <v-flex md12>
               <router-view @emittedUser="setUsuarioLogado" />
             </v-flex>
         </v-slide-y-transition>
@@ -114,10 +114,8 @@ export default {
 
 <style>
   h1 {
-    font-size: 40px;
+    font-size: 30px;
     text-align: center;
-    margin-top: -20px;
-    margin-bottom: 20px;
   }
   li { list-style: none; }
 </style>

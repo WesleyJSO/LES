@@ -1,150 +1,151 @@
 <template>
   <div>
-     <li v-for="(message, index) in messages" :key="index">
-      <v-alert :color="messageColor"
-               :value="haveMessage"
-               v-text="message"
-               transition="scale-transition" />
-    </li>
-    <br/>
-    <h1>{{getTitles.report}}</h1>
-    <v-container fluid>
-      <v-layout wrap column >
-
-        <v-form ref="form" v-model="valid">
-          <v-layout >
-            <v-flex xs12 d-flex>
-              <v-select
-                :label="getLabels.employees"
-                prepend-icon="supervisor_account"
-                :items="employees"
-                multiple small-chips
-                type="Object"
-                item-text="lastName"
-                item-value="id"
-                v-model="chartFilter.employeeNameList">
-              </v-select>
-            </v-flex>
-          </v-layout>
-
-          <v-layout>
-            <!-- initial query date -->
-            <v-flex xs6 sm6 md6>
-              <v-menu
-                :close-on-content-click="false"
-                v-model="pickerInitialDate"
-                :nudge-right="40"
-                lazy offset-y full-width
-                transition="scale-transition"
-                min-width="290px">
-                <v-text-field
-                  :label="getLabels.startDate"
-                  v-model="chartFilter.initialQueryDate"
-                  slot="activator"
-                  prepend-icon="event"
-                  readonly>
-                </v-text-field>
-
-                <v-date-picker
-                  :locale="getDateConfig.locale"
-                  :header-color="getColors.black"
-                  v-model="chartFilter.initialQueryDate"
-                  @input="pickerInitialDate = false">
-                </v-date-picker>
-              </v-menu>
-            </v-flex>
-
-            <!-- final query date -->
-            <v-flex xs6 sm6 md6>
-              <v-menu
-                :close-on-content-click="false"
-                v-model="pickerFinalDate"
-                :nudge-right="40"
-                lazy offset-y full-width
-                transition="scale-transition"
-                min-width="290px">
-                <v-text-field
-                  :label="getLabels.endDate"
-                  v-model="chartFilter.finalQueryDate"
-                  slot="activator"
-                  prepend-icon="event"
-                  readonly>
-                  </v-text-field>
-
-                <v-date-picker
-                  :locale="getDateConfig.locale"
-                  :min="minEndDate"
-                  :header-color="getColors.black"
-                  v-model="chartFilter.finalQueryDate"
-                  @input="pickerFinalDate = false">
-                  </v-date-picker>
-              </v-menu>
-            </v-flex>
-          </v-layout>
-
-          <v-layout pb-5>
+    <li v-for="(message, index) in messages" :key="index">
+    <v-alert :color="messageColor"
+              :value="haveMessage"
+              v-text="message"
+              transition="scale-transition" />
+  </li>
+  <br/>
+    <v-toolbar dark tabs>
+      <v-layout row>
+          <v-flex md2 class="pt-2">
             <v-btn
               id="submit"
               type="button"
               :color="getColors.info"
-              :disabled="!valid"
               @click="submit"
             >Consultar</v-btn>
-          </v-layout>
-        </v-form>
+          </v-flex>
 
-        <v-flex xs12>
-          <v-tabs dark slider-color="yellow" >
-            <v-tab v-for="tabName in getTabsName" :key="tabName" ripple>
-              {{ tabName }}
-            </v-tab>
+          <v-flex md2>
+            <v-menu
+              :close-on-content-click="false"
+              v-model="pickerInitialDate"
+              :nudge-right="40"
+              lazy offset-y full-width
+              transition="scale-transition"
+              min-width="290px">
+              <v-text-field
+                :label="getLabels.startDate"
+                v-model="computedInitialQueryDate"
+                slot="activator"
+                prepend-icon="event"
+                readonly>
+              </v-text-field>
 
-            <v-tab-item>
-              <v-form flat>
-                <line-chart ref="chartObject1" :download="true"
-                  :title="getReportTitle.workedHours"
-                  :stacked="false"
-                  :xtitle="getReportAxis.x.days"
-                  :ytitle="getReportAxis.y.hours"
-                  discrete="true"
-                  height="400px"
-                  :data="getWokedHours"
-                />
-              </v-form>
-            </v-tab-item>
+              <v-date-picker
+                :locale="getDateConfig.locale"
+                :header-color="getColors.black"
+                v-model="chartFilter.initialQueryDate"
+                @input="pickerInitialDate = false">
+              </v-date-picker>
+            </v-menu>
+          </v-flex>
 
-            <v-tab-item>
-              <v-form flat>
-                <column-chart ref="chartObject2" :download="true"
-                  :stacked="false"
-                  :title="getReportTitle.lunchHours"
-                  :xtitle="getReportAxis.x.days"
-                  :ytitle="getReportAxis.y.hours"
-                  discrete="true"
-                  height="400px"
-                  :data="getLunchHours"
-                />
-              </v-form>
-            </v-tab-item>
+          <v-flex md2>
+            <v-menu
+              :close-on-content-click="false"
+              v-model="pickerFinalDate"
+              :nudge-right="40"
+              lazy offset-y full-width
+              transition="scale-transition"
+              min-width="290px">
+              <v-text-field
+                :label="getLabels.endDate"
+                v-model="computedFinalQueryDate"
+                slot="activator"
+                prepend-icon="event"
+                readonly>
+              </v-text-field>
 
-            <v-tab-item>
-              <v-form flat>
-                <bar-chart ref="chartObject3" :download="true"
-                  :stacked="false"
-                  :title="getReportTitle.workOvertime"
-                  :ytitle="getReportAxis.x.days"
-                  :xtitle="getReportAxis.y.hours"
-                  discrete="true"
-                  height="400px"
-                  :data="getWorkOvertime"
-                />
-              </v-form>
-            </v-tab-item>
+              <v-date-picker
+                :locale="getDateConfig.locale"
+                :min="minEndDate"
+                :header-color="getColors.black"
+                v-model="chartFilter.finalQueryDate"
+                @input="pickerFinalDate = false">
+              </v-date-picker>
+            </v-menu>
+          </v-flex>
 
-          </v-tabs>
-        </v-flex>
-      </v-layout>
-    </v-container>
+          <v-flex md6>
+            <v-select
+              :label="getLabels.employees"
+              prepend-icon="supervisor_account"
+              :items="employees"
+              multiple small-chips
+              type="Object"
+              item-text="lastName"
+              item-value="id"
+              v-model="chartFilter.employeeNameList">
+            </v-select>
+          </v-flex>
+        </v-layout>
+
+
+
+
+
+
+      <v-tabs
+        slot="extension"
+        v-model="tabs"  centered
+        slider-color="yellow"
+      >
+        <v-tab v-for="tabName in getTabsName" :key="tabName">
+          {{ tabName }}
+        </v-tab>
+      </v-tabs>
+    </v-toolbar>
+
+    <v-tabs-items v-model="tabs">
+      <v-tab-item>
+        <v-card>
+          <v-card-text>
+            <line-chart ref="chartObject1" :download="true"
+              :title="getReportTitle.workedHours"
+              :stacked="false"
+              :xtitle="getReportAxis.x.days"
+              :ytitle="getReportAxis.y.hours"
+              discrete="true"
+              height="430px"
+              :data="getWokedHours"
+            />
+          </v-card-text>
+        </v-card>
+      </v-tab-item>
+      <v-tab-item>
+        <v-card>
+          <v-card-text>
+            <column-chart ref="chartObject2" :download="true"
+              :stacked="false"
+              :title="getReportTitle.lunchHours"
+              :xtitle="getReportAxis.x.days"
+              :ytitle="getReportAxis.y.hours"
+              discrete="true"
+              height="430px"
+              :data="getLunchHours"
+            />
+          </v-card-text>
+        </v-card>
+      </v-tab-item>
+      <v-tab-item>
+        <v-card>
+          <v-card-text>
+            <bar-chart ref="chartObject3" :download="true"
+              :stacked="false"
+              :title="getReportTitle.workOvertime"
+              :ytitle="getReportAxis.x.days"
+              :xtitle="getReportAxis.y.hours"
+              discrete="true"
+              height="430px"
+              :data="getWorkOvertime"
+            />
+          </v-card-text>
+        </v-card>
+      </v-tab-item>
+    </v-tabs-items>
   </div>
 </template>
 
@@ -154,6 +155,12 @@
 import ReportService from '@/service/ReportService'
 export default {
   data: () => ({
+    tabName1: 'HORAS TRABALHADAS',
+    tabName2: 'HORAS DE ALMOÇO',
+    tabName3: 'HORAS EXTRAS',
+    tabs: null,
+    dasa: 'fds',
+    text: 'nfasohfodsanhfbadsfnhuicjnhuadsbfui',
     messages: [],
     valid: false,
     pickerInitialDate: false,
@@ -179,7 +186,6 @@ export default {
     async submit () {
       let result = await this.$_axios.patch(`${this.$_url}chartfilter`, this.chartFilter)
       result = result.data.resultList[0].appointmentList
-      console.log(result)
       let chartData = {}
       chartData.workedHours = this.workedHours(result)
       chartData.workOvertime = this.workOvertime(result)
@@ -221,7 +227,7 @@ export default {
         }
         parsedDate.employee = this.a.id
         parsedDate.name = this.a.name + ' ' + this.a.lastName
-        parsedDate.date = i.date.substring(0, this.getDateConfig.date)
+        parsedDate.date = this.formatDate(i.date.substring(0, this.getDateConfig.date))
         parsedDate.dayOvertime = i.dayOvertime.substring(0, this.getDateConfig.hour).replace(':', '.')
         return parsedDate
       })
@@ -255,7 +261,8 @@ export default {
         }
         parsedDate.employee = this.a.id
         parsedDate.name = this.a.name + ' ' + this.a.lastName
-        parsedDate.date = i.date.substring(0, this.getDateConfig.date)
+        console.log(i.date)
+        parsedDate.date = this.formatDate(i.date.substring(0, this.getDateConfig.date))
         parsedDate.balance = i.balance.substring(0, this.getDateConfig.hour).replace(':', '.')
         return parsedDate
       })
@@ -289,7 +296,7 @@ export default {
         }
         parsedDate.employee = this.a.id
         parsedDate.name = this.a.name + ' ' + this.a.lastName
-        parsedDate.date = i.date.substring(0, this.getDateConfig.date)
+        parsedDate.date = this.formatDate(i.date.substring(0, this.getDateConfig.date))
         let morning = Number(i.morningOut.substring(0, this.getDateConfig.hour).replace(':', '.'))
         let afterNoon = Number(i.afternoonEntrance.substring(0, this.getDateConfig.hour).replace(':', '.'))
         parsedDate.lunch = afterNoon - morning
@@ -316,9 +323,26 @@ export default {
         }
       }
       return parsedItem
+    },
+    formatDate (date) {
+      return this.$_moment(new Date(date)).format('DD/MM/YY')
     }
   },
   computed: {
+    computedInitialQueryDate () {
+      if (this.chartFilter.initialQueryDate) {
+        return this.formatDate(this.chartFilter.initialQueryDate)
+      } else {
+        return ''
+      }
+    },
+    computedFinalQueryDate () {
+      if (this.chartFilter.finalQueryDate) {
+        return this.formatDate(this.chartFilter.finalQueryDate)
+      } else {
+        return ''
+      }
+    },
     getWorkOvertime () {
       return this.chart.workOvertime
     },
