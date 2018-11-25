@@ -21,7 +21,6 @@ public class Telephone extends DomainEntity {
 	
 	@ManyToOne( fetch=FetchType.LAZY )
 	@JoinColumn( name="employee_id" )
-	@JsonBackReference
 	private Employee employee;
 
 	
