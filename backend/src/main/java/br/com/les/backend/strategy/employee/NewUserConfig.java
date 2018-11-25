@@ -13,7 +13,6 @@ import br.com.les.backend.utils.Util;
 @Component
 public class NewUserConfig implements IStrategy<Employee> {
 
-	@Autowired SecurityService securityService;
 	@Override
 	public void process(Employee aEntity, INavigationCase<Employee> aCase) {
 
@@ -22,7 +21,7 @@ public class NewUserConfig implements IStrategy<Employee> {
 			if(aEntity.getUser() != null) {
 				aCase.getResult().setSuccess(Util.SAVE_SUCCESSFUL_EMPLOYEE);
 				User u = aEntity.getUser();
-				u.setPassword(securityService.encodeUserPassword(aEntity.getUser().getPassword()));
+				u.setPassword( SecurityService.encodeUserPassword( aEntity.getUser().getPassword() ) );
 				u.setEnabled(true);
 				u.setAccountNonLocked(true);
 				u.setAccountNonExpired(true);

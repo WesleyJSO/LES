@@ -14,6 +14,7 @@ import br.com.les.backend.strategy.employee.IdExistence;
 import br.com.les.backend.strategy.employee.IdInactivate;
 import br.com.les.backend.strategy.employee.NameValidator;
 import br.com.les.backend.strategy.employee.NewUserConfig;
+import br.com.les.backend.strategy.employee.PasswordChange;
 import br.com.les.backend.strategy.employee.PasswordLength;
 import br.com.les.backend.strategy.employee.PisLength;
 import br.com.les.backend.strategy.employee.SalaryValidator;
@@ -27,6 +28,7 @@ public class EmployeeNavigation {
 	@Autowired private EmailFormat emailFormat;
 	@Autowired private EmailExistence emailExistence;
 	@Autowired private PasswordLength passwordLength;
+	@Autowired private PasswordChange passwordChange;
 	@Autowired private TelephoneExistence telephoneExistence;
 	@Autowired private WorkLoadLimit workLoadLimit;
 	@Autowired private NameValidator nameValidator;
@@ -86,6 +88,7 @@ public class EmployeeNavigation {
 		return new NavigationBuilder<Employee>()
 				.next(emailFormat)
 				.next(emailExistence)
+				.next(passwordChange)
 				.next(passwordLength)
 				.next(telephoneExistence)
 				.next(workLoadLimit)

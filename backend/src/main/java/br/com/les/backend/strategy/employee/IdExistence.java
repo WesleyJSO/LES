@@ -9,6 +9,7 @@ import br.com.les.backend.entity.Employee;
 import br.com.les.backend.navigator.INavigationCase;
 import br.com.les.backend.navigator.IStrategy;
 import br.com.les.backend.repository.EmployeeRepository;
+import br.com.les.backend.utils.Util;
 
 @Configuration
 public class IdExistence implements IStrategy<Employee> {
@@ -24,6 +25,7 @@ public class IdExistence implements IStrategy<Employee> {
 			if(!employee.isPresent()) {
 				aCase.getResult().setError("Colaborador não foi encontrado!");
 			}
+			aCase.getResult().setSuccess(Util.DELETE_SUCESSFUL_EMPLOYEE);
 			return;
 		}
 		aCase.suspendExecution();
