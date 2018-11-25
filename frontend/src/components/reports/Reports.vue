@@ -37,6 +37,7 @@
               <v-date-picker
                 :locale="getDateConfig.locale"
                 :header-color="getColors.black"
+                :max="maxEndDate"
                 v-model="chartFilter.initialQueryDate"
                 @input="pickerInitialDate = false">
               </v-date-picker>
@@ -62,6 +63,7 @@
               <v-date-picker
                 :locale="getDateConfig.locale"
                 :min="minEndDate"
+                :max="maxEndDate"
                 :header-color="getColors.black"
                 v-model="chartFilter.finalQueryDate"
                 @input="pickerFinalDate = false">
@@ -228,7 +230,7 @@ export default {
         parsedDate.employee = this.a.id
         parsedDate.name = this.a.name + ' ' + this.a.lastName
         parsedDate.date = this.formatDate(i.date.substring(0, this.getDateConfig.date))
-        parsedDate.dayOvertime = i.dayOvertime.substring(0, this.getDateConfig.hour).replace(':', '.')
+        parsedDate.dayOvertime = i.dayOvertime.substring(0, 5).replace(':', '.')
         return parsedDate
       })
       let parsedItem = []
@@ -261,9 +263,8 @@ export default {
         }
         parsedDate.employee = this.a.id
         parsedDate.name = this.a.name + ' ' + this.a.lastName
-        console.log(i.date)
         parsedDate.date = this.formatDate(i.date.substring(0, this.getDateConfig.date))
-        parsedDate.balance = i.balance.substring(0, this.getDateConfig.hour).replace(':', '.')
+        parsedDate.balance = i.balance.substring(0, 5).replace(':', '.')
         return parsedDate
       })
       let parsedItem = []
@@ -299,7 +300,7 @@ export default {
         parsedDate.date = this.formatDate(i.date.substring(0, this.getDateConfig.date))
         let morning = Number(i.morningOut.substring(0, this.getDateConfig.hour).replace(':', '.'))
         let afterNoon = Number(i.afternoonEntrance.substring(0, this.getDateConfig.hour).replace(':', '.'))
-        parsedDate.lunch = afterNoon - morning
+        parsedDate.lunch = (afterNoon - morning).toString().substring(0, 5)
         return parsedDate
       })
       let parsedItem = []
@@ -325,7 +326,7 @@ export default {
       return parsedItem
     },
     formatDate (date) {
-      return this.$_moment(new Date(date)).format('DD/MM/YY')
+      return this.$_moment(new Date(date)).add(1, 'days').format('DD/MM/YY')
     }
   },
   computed: {
@@ -379,6 +380,9 @@ export default {
     minEndDate () {
       let endDate = !this.chartFilter.initialQueryDate ? new Date() : new Date(this.chartFilter.initialQueryDate)
       return endDate.toISOString()
+    },
+    maxEndDate () {
+      return this.$_moment(new Date()).toISOString()
     }
   }
 }
