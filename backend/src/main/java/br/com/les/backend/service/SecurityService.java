@@ -20,7 +20,7 @@ import br.com.les.backend.utils.Util;
 public class SecurityService implements UserDetailsService {
 	
 	@Autowired private UserRepository userRepository;
-	@Autowired private BCryptPasswordEncoder passwordEncoder;
+	private static BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();;
 	
 	// Retrieve logged user
 	public static DomainEntity getAuthenticatedUser () {
@@ -44,7 +44,11 @@ public class SecurityService implements UserDetailsService {
 		return user;
 	}
 	
-	public String encodeUserPassword ( String password ) {
+	public static String encodeUserPassword ( String password ) {
 		return passwordEncoder.encode( password );
+	}
+	
+	public static boolean checkMatchPassword (String oldPassword, String storedPassword) {
+		return passwordEncoder.matches(oldPassword, storedPassword);
 	}
 }
