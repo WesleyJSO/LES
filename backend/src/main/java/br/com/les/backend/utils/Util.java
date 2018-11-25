@@ -72,4 +72,6 @@ public class Util {
 	public static final String REQUEST_NOT_FOUNDED = "Solicitação não encontrada!";
 
 	public static final String ERROR_FIELD_TO_CHANGE = "Por favor, informe o apontamento a ser alterado!";
+
+	public static final String DELETE_SUCESSFUL_EMPLOYEE = "Colaborador Excluído com Sucesso!";
 }
