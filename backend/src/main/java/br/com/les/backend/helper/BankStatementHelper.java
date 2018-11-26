@@ -36,8 +36,22 @@ public class BankStatementHelper {
 		this.employeeName = employee.getName() + " " + employee.getLastName();
 		LocalDate date = employee.getJoiningDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		this.admissionDate = date.format(dateFormatter);
-		this.lastMonthBalance = "00:00";
-		this.finalBalance = "00:00";
+		Integer hour = lastmb.getBankBalanceHour();
+		Integer minutes = lastmb.getBankBalanceMinute();
+		this.lastMonthBalance = Math.abs(hour) < 10 ? "0" + Math.abs(hour) : String.valueOf(Math.abs(hour));
+		this.lastMonthBalance += ":";
+		this.lastMonthBalance += Math.abs(minutes) < 10 ? "0" + Math.abs(minutes) : String.valueOf(Math.abs(minutes));
+		if ( hour < 0 ) {
+			this.lastMonthBalance = "-" + this.lastMonthBalance;
+		}
+		hour = currentmb.getBankBalanceHour();
+		minutes = currentmb.getBankBalanceMinute();
+		this.finalBalance = Math.abs(hour) < 10 ? "0" + Math.abs(hour) : String.valueOf(Math.abs(hour));
+		this.finalBalance += ":";
+		this.finalBalance += Math.abs(minutes) < 10 ? "0" + Math.abs(minutes) : String.valueOf(Math.abs(minutes));
+		if ( hour < 0 ) {
+			this.finalBalance = "-" + this.finalBalance;
+		}
 		this.month = month.getMonth().getDisplayName(TextStyle.FULL, new Locale("pt"));
 		
 		balanceList = new ArrayList<>();

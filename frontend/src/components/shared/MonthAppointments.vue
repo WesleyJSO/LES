@@ -49,7 +49,7 @@
       </v-toolbar>
       <v-layout>
         <v-flex center >
-          <AppointTable :editable="editable" :appointments="appointments" @register="takeAppointment($event)" @replacement="assignReplacement($event)"></AppointTable>
+          <AppointTable :editable="editable" :appointments="appointments" @haveValues="getValuesBool($event)" @register="takeAppointment($event)" @replacement="assignReplacement($event)"></AppointTable>
           <v-card class="elevation-10" >
             <v-layout class="text-xs-center">
               <v-flex xs12 sm9 md6 lg6 xl4>
@@ -129,6 +129,9 @@ export default {
     }
   },
   methods: {
+    getValuesBool (haveValues) {
+      this.$emit('haveValues', haveValues)
+    },
     beforeCallApi (monthYear) {
       this.$emit('setMonthYear', monthYear + '-01')
       this.monthYear = monthYear

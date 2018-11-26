@@ -27,6 +27,8 @@ public class MonthlyBalance extends DomainEntity {
 	private Integer abscenseMinutes;
 	private Integer overtimeMinutes;
 	private Integer monthWorkload;
+	private Integer bankBalanceHour;
+	private Integer bankBalanceMinute;
 
 	@ManyToOne( fetch=FetchType.EAGER )
 	@JoinColumn( name="employee_id" )
@@ -40,6 +42,8 @@ public class MonthlyBalance extends DomainEntity {
 		this.abscenseMinutes = 0;
 		this.overtimeMinutes = 0;
 		this.monthWorkload = 0;
+		this.bankBalanceHour = 0;
+		this.bankBalanceMinute = 0;
 	}
 	
 	public void calculateBalanceHoursAndMinutes(Integer balanceMinutes) {
@@ -61,6 +65,40 @@ public class MonthlyBalance extends DomainEntity {
 		if ( this.overtimeMinutes >= 60 ) {
 			this.overtimeHours += this.overtimeMinutes / 60;
 			this.overtimeMinutes = this.overtimeMinutes % 60;
+		}
+	}
+	public void addToBankBalanceHours(Integer bankBalanceHour) {
+		this.bankBalanceHour += bankBalanceHour;
+	}
+	public void subToBankBalanceHours(Integer bankBalanceHour) {
+		this.bankBalanceHour -= bankBalanceHour;
+	}
+	public void calculateBankBalanceHoursAndMinutes(Integer bankBalanceMinute) {
+		this.bankBalanceMinute += bankBalanceMinute;
+		if ( this.bankBalanceHour < 0 ) {
+			if ( this.bankBalanceMinute > 0 ) {
+				this.bankBalanceHour += 1;
+				this.bankBalanceMinute = (60 - this.bankBalanceMinute % 60) * -1;
+			}
+		} else {
+			if ( this.bankBalanceMinute >= 60 ) {
+				this.bankBalanceHour += this.bankBalanceMinute / 60;
+				this.bankBalanceMinute = this.bankBalanceMinute % 60;
+			}
+		}
+	}
+	public void subBankBalanceHoursAndMinutes(Integer bankBalanceMinute) {
+		this.bankBalanceMinute -= bankBalanceMinute;
+		if ( this.bankBalanceHour > 0 ) {
+			if ( this.bankBalanceMinute < 0 ) {
+				this.bankBalanceHour -= 1;
+				this.bankBalanceMinute = 60 + this.bankBalanceMinute % 60;
+			}
+		} else {
+			if ( this.bankBalanceMinute < -60 ) {
+				this.bankBalanceHour += this.bankBalanceMinute / 60;
+				this.bankBalanceMinute = this.bankBalanceMinute % 60;
+			}
 		}
 	}
 	public void setPlusEightMonthWorkload() {
@@ -151,4 +189,22 @@ public class MonthlyBalance extends DomainEntity {
 	public void setMonthWorkload(Integer monthWorkload) {
 		this.monthWorkload = monthWorkload;
 	}
+
+	public Integer getBankBalanceHour() {
+		return bankBalanceHour;
+	}
+
+	public void setBankBalanceHour(Integer bankBalanceHour) {
+		this.bankBalanceHour = bankBalanceHour;
+	}
+
+	public Integer getBankBalanceMinute() {
+		return bankBalanceMinute;
+	}
+
+	public void setBankBalanceMinute(Integer bankBalanceMinute) {
+		this.bankBalanceMinute = bankBalanceMinute;
+	}
+	
+	
 }

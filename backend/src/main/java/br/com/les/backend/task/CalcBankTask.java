@@ -101,9 +101,16 @@ public class CalcBankTask extends TimerTask {
 
 			List< MonthlyBalance > monthlyBalanceList = new ArrayList<>();
 			
+			Integer lastMonthHour = 0;
+			Integer lastMonthMinute = 0;
+			
 			for (Appointment appointment: appointmentList) {
 				
 				if ( null == monthlyBalance || !monthlyBalance.getMonthAndYear().isEqual(appointment.getMonthAndYear())) {
+					if ( null != monthlyBalance ) {
+						lastMonthHour = monthlyBalance.getBankBalanceHour();
+						lastMonthMinute = monthlyBalance.getBankBalanceMinute();
+					}
 					monthlyBalance = new MonthlyBalance();
 					monthlyBalance.setMonthAndYear(appointment.getMonthAndYear());
 					monthlyBalance.setEmployee(emp);
@@ -118,6 +125,8 @@ public class CalcBankTask extends TimerTask {
 						monthlyBalance.setMonthAndYear(appointment.getMonthAndYear());
 						monthlyBalance.setEmployee(employee);
 					}
+					monthlyBalance.setBankBalanceHour(lastMonthHour);
+					monthlyBalance.setBankBalanceMinute(lastMonthMinute);
 					monthlyBalanceList.add(monthlyBalance);
 				}
 				
@@ -135,6 +144,11 @@ public class CalcBankTask extends TimerTask {
 				bank.setBalance(bank.getBalance() + balanceToInsert);
 				appointment.setPreviousBalanceInserted(balanceToInsert);
 				appointment.setCalculated(true);
+				
+				monthlyBalance.addToBankBalanceHours(appointment.getDayOvertime().getHour());
+				monthlyBalance.calculateBankBalanceHoursAndMinutes(appointment.getDayOvertime().getMinute());
+				monthlyBalance.subToBankBalanceHours(appointment.getHoursLeft().getHour());
+				monthlyBalance.subBankBalanceHoursAndMinutes(appointment.getHoursLeft().getMinute());
 				
 				monthlyBalance.addToBalanceHours(appointment.getBalance().getHour());
 				monthlyBalance.calculateBalanceHoursAndMinutes(appointment.getBalance().getMinute());

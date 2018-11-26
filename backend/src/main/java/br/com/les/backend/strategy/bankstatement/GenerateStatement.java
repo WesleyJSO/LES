@@ -1,6 +1,7 @@
 package br.com.les.backend.strategy.bankstatement;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,20 +38,30 @@ public class GenerateStatement implements IStrategy<BankStatement> {
 		if (aEntity != null) {
 			try {
 				
+				List<MonthlyBalance> list = new ArrayList<MonthlyBalance>();
+				
 				Employee employee = employeeRepository.findActiveById(aEntity.getEmployeeId()).get();
 				
 				Employee emp = new Employee();
 				emp.setId(employee.getId());
 				
 				MonthlyBalance lastMonthBalance = new MonthlyBalance();
-				lastMonthBalance.setMonthAndYear(aEntity.getMonth());
+				lastMonthBalance.setMonthAndYear(aEntity.getMonth().minusMonths(1));
 				lastMonthBalance.setEmployee(emp);
-				lastMonthBalance = monthlyBalanceDAO.find(lastMonthBalance).get(0);
+				list = monthlyBalanceDAO.find(lastMonthBalance);
+				if ( !list.isEmpty() ) {
+					lastMonthBalance = monthlyBalanceDAO.find(lastMonthBalance).get(0);
+					list.clear();
+				}
 				
 				MonthlyBalance currentMonthBalance = new MonthlyBalance();
 				currentMonthBalance.setMonthAndYear(aEntity.getMonth());
 				currentMonthBalance.setEmployee(emp);
-				currentMonthBalance = monthlyBalanceDAO.find(currentMonthBalance).get(0);
+				list = monthlyBalanceDAO.find(currentMonthBalance);
+				if ( !list.isEmpty() ) {
+					currentMonthBalance = list.get(0);
+					list.clear();
+				}
 				
 				Appointment appointment = new Appointment();
 				appointment.setMonthAndYear(aEntity.getMonth());

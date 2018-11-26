@@ -1,6 +1,7 @@
 package br.com.les.backend.strategy.timetracking;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +37,8 @@ public class GenerateReport implements IStrategy<TimeTracking> {
 	public void process(TimeTracking aEntity, INavigationCase<TimeTracking> aCase) {
 		if (aEntity != null) {
 			try {
+
+				List<MonthlyBalance> list = new ArrayList<MonthlyBalance>();
 				
 				Employee employee = employeeRepository.findActiveById(aEntity.getEmployeeId()).get();
 				
@@ -45,12 +48,22 @@ public class GenerateReport implements IStrategy<TimeTracking> {
 				MonthlyBalance monthlyBalance = new MonthlyBalance();
 				monthlyBalance.setMonthAndYear(aEntity.getMonth());
 				monthlyBalance.setEmployee(emp);
-				monthlyBalance = monthlyBalanceDAO.find(monthlyBalance).get(0);
+				list = monthlyBalanceDAO.find(monthlyBalance);
+				if ( !list.isEmpty() ) {
+					monthlyBalance = list.get(0);
+					list.clear();
+				}
 				
 				Appointment appointment = new Appointment();
 				appointment.setMonthAndYear(aEntity.getMonth());
 				appointment.setEmployee(emp);
 				List<Appointment> appointmentList = appointmentDAO.find(appointment);
+				
+				if ( appointmentList.isEmpty() ) {
+					aCase.suspendExecution();
+					aCase.getResult().setError("Nenhum apontamento encontrado!");
+					return;
+				}
 				
 				TimeTrackingHelper helper = new TimeTrackingHelper();
 				helper = helper.generateHelper(aEntity.getMonth(), appointmentList,

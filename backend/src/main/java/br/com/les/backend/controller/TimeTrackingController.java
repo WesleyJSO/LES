@@ -41,13 +41,15 @@ public class TimeTrackingController extends AbstractController<TimeTracking> {
 			
 			navigator.run( new TimeTracking(employeeId , LocalDate.parse(monthAndYear)), bCase);
 			
-			// get PDF generated in reports folder
-			File file = new File("reports/timeTracking.pdf");
-			// set PDF bytes array in response
-			return ResponseEntity.ok()
-            .contentType(MediaType.parseMediaType("application/pdf"))
-            .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + "timeTracking.pdf" + "\"")
-            .body(Files.readAllBytes(file.toPath()));
+			if ( !bCase.isSuspendExecution() ) {
+				// get PDF generated in reports folder
+				File file = new File("reports/timeTracking.pdf");
+				// set PDF bytes array in response
+				return ResponseEntity.ok()
+	            .contentType(MediaType.parseMediaType("application/pdf"))
+	            .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + "timeTracking.pdf" + "\"")
+	            .body(Files.readAllBytes(file.toPath()));
+			}
 		} catch ( Exception e ) {
 			e.printStackTrace();
 		}

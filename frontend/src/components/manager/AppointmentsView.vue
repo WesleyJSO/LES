@@ -26,7 +26,8 @@
           
           <v-spacer></v-spacer>
           
-          <v-flex class="text-xs-right">
+          <v-flex class="text-xs-right"
+            v-if="isAdmin">
             <v-btn
               @click="downloadDemonstrativo()"
               color="primary">
@@ -34,7 +35,8 @@
             </v-btn>
           </v-flex>
           
-          <v-flex class="text-xs-left">
+          <v-flex class="text-xs-left"
+            v-if="isAdmin">
             <v-btn
               @click="downloadPDF()"
               color="primary">
@@ -45,7 +47,7 @@
 
       </v-card>
       <br>
-      <MonthAppointments :editable="false" :employee="employee" @setMonthYear="getMonthYear($event)"></MonthAppointments>
+      <MonthAppointments :editable="false" :employee="employee" @haveValues="getValuesBool($event)" @setMonthYear="getMonthYear($event)"></MonthAppointments>
     </v-form>
   </div>
 </template>
@@ -56,6 +58,8 @@ import Authenticator from '../../service/Authenticator'
 
 export default {
   data: () => ({
+    haveValues: false,
+    isAdmin: false,
     messages: '',
     haveMessage: false,
     employeeName: '',
@@ -69,6 +73,7 @@ export default {
   },
   beforeMount () {
     if (Authenticator.HAS_ROLE('ROLE_ADMIN')) {
+      this.isAdmin = true
       this.callApi({active: true})
     } else {
       var user = {
@@ -86,6 +91,9 @@ export default {
     }
   },
   methods: {
+    getValuesBool (haveValues) {
+      this.haveValues = haveValues
+    },
     getMonthYear (date) {
       this.date = date
     },
@@ -140,36 +148,41 @@ export default {
     async downloadPDF () {
       this.haveMessage = false
       if (this.employee && this.date !== '') {
-        var response = null
-        var result = null
-        try {
-          response = await this.$_axios.get(`${this.$_url}timetracking/` + this.employee.id + `/` + this.date, {responseType: 'blob'})
-          result = response.data
-          console.log(JSON.stringify(result))
-          const url = window.URL.createObjectURL(new Blob([response.data]))
-          const link = document.createElement('a')
-          link.href = url
-          link.setAttribute('download', 'Espelho de Horas - ' + this.employeeName + '.pdf')
-          document.body.appendChild(link)
-          // link.click()
-          link.dispatchEvent(new MouseEvent(`click`, {bubbles: true, cancelable: true, view: window}))
-          if (result.mensagem) {
-            // this.messages = [...result.message]
-            // this.haveMessage = true
-            if (result.success) {
-            // retorno mensagem de sucesso /
-              this.messageColor = 'info'
-            } else {
-              // retorno mensagem de erro /
-              this.messageColor = 'warning'
+        if (this.haveValues) {
+          var response = null
+          var result = null
+          try {
+            response = await this.$_axios.get(`${this.$_url}timetracking/` + this.employee.id + `/` + this.date, {responseType: 'blob'})
+            result = response.data
+            const url = window.URL.createObjectURL(new Blob([response.data]))
+            const link = document.createElement('a')
+            link.href = url
+            link.setAttribute('download', 'Espelho de Horas - ' + this.employeeName + '.pdf')
+            document.body.appendChild(link)
+            // link.click()
+            link.dispatchEvent(new MouseEvent(`click`, {bubbles: true, cancelable: true, view: window}))
+            if (result.mensagem) {
+              // this.messages = [...result.message]
+              // this.haveMessage = true
+              if (result.success) {
+              // retorno mensagem de sucesso /
+                this.messageColor = 'info'
+              } else {
+                // retorno mensagem de erro /
+                this.messageColor = 'warning'
+              }
             }
+          } catch (error) {
+            // erro na requisição do serviço /
+            console.log(error)
+            // this.messages = ['Erro durante execução do serviço!']
+            // this.haveMessage = true
+            // this.messageColor = 'error'
           }
-        } catch (error) {
-          // erro na requisição do serviço /
-          console.log(error)
-          // this.messages = ['Erro durante execução do serviço!']
-          // this.haveMessage = true
-          // this.messageColor = 'error'
+        } else {
+          this.messages = ['Mês sem registro!']
+          this.haveMessage = true
+          this.messageColor = 'warning'
         }
       } else {
         this.messages = ['Selecione um funcionário e uma data!']
