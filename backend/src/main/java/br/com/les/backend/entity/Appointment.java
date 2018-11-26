@@ -42,7 +42,7 @@ public class Appointment extends DomainEntity {
 	private Double previousBalanceInserted;
 	private Boolean calculated;
 	
-	@OneToMany(mappedBy="appointment", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="appointment", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	private List<AppointmentRequest> appointmentRequestList;
 	
 	@ManyToOne( fetch=FetchType.EAGER )

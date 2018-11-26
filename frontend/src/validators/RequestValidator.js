@@ -13,7 +13,7 @@ export default class RequestValidator {
     if (!startDate) {
       return ['Informe a data Alvo!']
     }
-    if (start >= end) {
+    if (start > end) {
       return ['A Data Final deve ser maior que a Data Alvo!']
     }
   }

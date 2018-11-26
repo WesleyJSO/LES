@@ -35,7 +35,6 @@ public class BusinessCase<E extends DomainEntity> implements INavigationCase<E> 
 	@Override
 	public void suspendExecution() {
 		this.suspend = true;
-		this.getResult().setError("Execução suspensa!");
 	}
 
 	@Override

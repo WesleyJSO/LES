@@ -17,7 +17,7 @@
       </v-text-field>
     </v-toolbar>
     <template>
-    
+
     <v-tabs fixed-tabs
             color="black"
             dark
@@ -45,7 +45,7 @@
                   @click.stop="editItem(props.item)">
                   edit
             </v-icon>
-            <v-dialog v-model="dialogEdit" 
+            <v-dialog v-model="dialogEdit"
                       @keydown.esc="dialogEdit = !dialogEdit">
               <v-card>
                 <v-card-title class="headline grey lighten-2"
@@ -62,8 +62,8 @@
             </v-dialog>
             </td>
             <td class="text-xs-center">
-                <v-dialog v-model="dialogRequests[props.item.id]" 
-                          max-width="600px" 
+                <v-dialog v-model="dialogRequests[props.item.id]"
+                          max-width="600px"
                           max-height="300px"
                           @keydown.esc="$set(dialogRequests, props.item.id, false)">
                 <v-icon
@@ -182,7 +182,6 @@
                   @click.stop="deleteRequest(props.item)">delete
               </v-icon>
             </td>
-          </tr>
         </template>
         </v-data-table>
       </v-tab-item>
@@ -417,7 +416,6 @@ export default {
     editItem (item) {
       this.request = Object.assign({}, item)
       this.edit = true
-      console.log(JSON.stringify(this.request, null, ''))
       this.dialogEdit = true
     },
     finishEdit (event) {
@@ -437,8 +435,8 @@ export default {
         let [sent, approve, deny] = await Promise.all([pending, approved, denied])
         let processeds = [...approve.data.resultList, ...deny.data.resultList]
         let approveds = [...sent.data.resultList]
-        this.processedRequests = processeds.length > 0 ? this.parseRequest(processeds) : []
-        this.requests = approveds.length > 0 ? this.parseRequest(approveds) : []
+        this.processedRequests = processeds.length > 0 ? await this.parseRequest(processeds) : []
+        this.requests = approveds.length > 0 ? await this.parseRequest(approveds) : []
         let message1 = !sent.data.message ? [] : sent.data.message
         let message2 = !approve.data.message ? [] : approve.data.message
         let message3 = !deny.data.message ? [] : deny.data.message
@@ -501,13 +499,18 @@ export default {
         this.messageColor = 'error'
       }
     },
-    parseRequest (list) {
+    async parseRequest (list) {
       let employeeRequest = list.filter(r => r.employee)
       let employee = employeeRequest[0].employee
-      return list.map(n => {
-        n.employee.id = Object.assign(employee.id, {})
+      return Promise.all(list.map(async n => {
+        if (!n.hasOwnProperty('id')) {
+          n = await this.$_axios.patch(`${this.$_url}appointmentRequest`, {id: n})
+          n = n.data.resultList[0]
+        } else {
+          n.employee = Object.assign(employee, {})
+        }
         return n
-      })
+      }))
     }
   },
   components: {

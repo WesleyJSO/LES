@@ -105,7 +105,8 @@ public class ChangeSpecificAppointment implements IStrategy<Appointment> {
 						appointmentRequestRepository.save(appointmentRequest);
 						// Do not send a "Successful update appointment" message, 
 						// cause we'are going to  ask user confirmation about this request
-						aCase.suspendExecution(null);
+						aCase.suspendExecution();
+						aCase.getResult().setError("Alteração gerou uma solicitação!");
 						// aCase.getResult().setSuccess(Util.UPDATE_APPOINTMENT_REQUESTED);
 						return;
 					}

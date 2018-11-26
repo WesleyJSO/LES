@@ -1,6 +1,5 @@
 package br.com.les.backend.entity;
  
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +12,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import org.springframework.data.web.JsonPath;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -27,7 +25,7 @@ import br.com.les.backend.annotation.DeepSearchQuery;
  */
 @Component
 @Entity
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id", scope = Employee.class)
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Employee extends DomainEntity {
 	
 	private String pis;

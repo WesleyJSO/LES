@@ -19,7 +19,7 @@
           item-value="id"
           prepend-icon="check_circle"
           label="Tipo de Solicitação"
-          chips>
+          small-chips>
         </v-combobox>
         </v-flex>
         <v-flex xs6>
@@ -33,7 +33,7 @@
                 min-width="290px">
                 <v-text-field
                   :label="getLabels.startDate"
-                  v-model="request.startDate"
+                  v-model="computedStartDate"
                   :rules="$v_request.startDate(request.startDate, edit)"
                   slot="activator"
                   prepend-icon="event">
@@ -43,6 +43,7 @@
                   :locale="locale"
                   :header-color="getColors.black"
                   :reactive="reactive"
+                  :min="maxEndDate"
                   scrollable
                   v-model="request.startDate"
                   @input="requestEntryDate = false">
@@ -60,7 +61,7 @@
                 min-width="290px">
                 <v-text-field
                   :label="getLabels.endDate"
-                  v-model="request.endDate"
+                  v-model="computedEndDate"
                   :rules="$v_request.endDate(request.startDate, request.endDate)"
                   slot="activator"
                   prepend-icon="event">
@@ -70,6 +71,7 @@
                   :locale="locale"
                   :header-color="getColors.black"
                   :reactive="reactive"
+                  :min="minEndDate"
                   v-model="request.endDate"
                   scrollable
                   @input="requestChangeDate = false">
@@ -169,36 +171,52 @@ export default {
     },
     isAppointment () {
       return this.type.id === 3
+    },
+    computedStartDate () {
+      if (this.request.startDate) {
+        return this.formatDate(this.request.startDate)
+      } else {
+        return null
+      }
+    },
+    computedEndDate () {
+      if (this.request.endDate) {
+        return this.formatDate(this.request.endDate)
+      } else {
+        return null
+      }
+    },
+    minEndDate () {
+      let endDate = !this.request.startDate ? this.$_moment() : this.$_moment(this.request.startDate)
+      return endDate.toISOString()
+    },
+    maxEndDate () {
+      return this.$_moment().toISOString()
     }
   },
   watch: {
     item (value) {
+      if (value.startDate) {
+        value.startDate = this.$_moment(value.startDate.toString().replace(/\//g, '-').split('-').reverse())
+      }
+      if (value.endDate) {
+        value.endDate = this.$_moment(value.endDate.toString().replace(/\//g, '-').split('-').reverse())
+      }
       this.request = Object.assign({}, value)
       this.type = this.getRequestValue[value.type]
       this.edit = true
-    },
-    'request.startDate' (val) {
-      if (!val) {
-        this.request.startDate = null
-      }
-      if (val.indexOf('-') !== -1) {
-        const [year, month, day] = this.request.startDate.split('-')
-        this.request.startDate = `${day}/${month}/${year}`
-      }
-    },
-    'request.endDate' (val) {
-      if (!val) {
-        this.request.ebdDate = null
-      }
-      if (val.indexOf('-') !== -1) {
-        const [year, month, day] = this.request.endDate.split('-')
-        this.request.endDate = `${day}/${month}/${year}`
-      }
     }
   },
   methods: {
+    formatDate (date) {
+      if (date) {
+        return this.$_moment(date).format('DD/MM/YYYY')
+      }
+    },
     saveRequest () {
       if (!this.edit) {
+        this.request.startDate = this.formatDate(this.request.startDate)
+        this.request.endDate = this.formatDate(this.request.endDate)
         this.request = Object.assign(
           {
             'status': null,
@@ -208,16 +226,13 @@ export default {
         this.$_axios.post(`${this.$_url}request`, this.request).then((response) => {
           let result = response.data
           if (result.message) {
-            // alert('Messages everything OK')
             this.messages = [...result.message]
             this.haveMessage = true
             if (result.success) {
-            // retorno mensagem de sucesso
               this.messageColor = 'info'
               this.clearForm()
               this.type = ''
             } else {
-              // retorno mensagem de erro
               this.messageColor = 'warning'
             }
           }
@@ -230,6 +245,8 @@ export default {
           this.messageColor = 'error'
         })
       } else {
+        this.request.startDate = this.formatDate(this.request.startDate)
+        this.request.endDate = this.formatDate(this.request.endDate)
         let i = Object.assign({}, this.request)
         delete i.employee
         i.type = this.type.id
@@ -243,7 +260,7 @@ export default {
             if (result.success) {
               // retorno mensagem de sucesso
               // alert('Messages everything OK')
-              this.messageColor = 'info'
+              this.messageColor = 'success'
               this.clearForm()
               this.type = ''
             } else {
