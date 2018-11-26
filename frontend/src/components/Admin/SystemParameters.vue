@@ -153,7 +153,7 @@ export default {
           this.parameterId = this.parameter.id
           this.parameters[0].value = this.parameter.overtimePercentage + '%'
           this.parameters[1].value = this.parameter.nightOvertimePercentage + '%'
-          this.parameters[2].value = this.parameter.weekEndOvertimePercentage + '%'
+          this.parameters[2].value = this.parameter.weekendOvertimePercentage + '%'
           this.parameters[3].value = this.parameter.retroactiveAppointmentLimitTime.substring(0, 5) + ' hora(s)'
           this.parameters[4].value = this.parameter.relocationRequestLimitTime + ' hora(s)'
           this.parameters[5].value = this.parameter.bankCompensationLimitTime + ' meses'

@@ -158,6 +158,11 @@ export default {
   },
   watch: {
     appointments () {
+      if (this.appointments.length === 0) {
+        this.$emit('haveValues', false)
+      } else {
+        this.$emit('haveValues', true)
+      }
       this.createDialogs()
       this.formatDatesAndTimes()
     }

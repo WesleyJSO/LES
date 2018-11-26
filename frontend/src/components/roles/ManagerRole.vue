@@ -7,7 +7,10 @@
             <v-icon>home</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <router-link to="dashboard">
+            <router-link to="LinhaDoTempo" v-if="this.hasRole(getRole.employee)">
+              <v-list-tile-title>Home</v-list-tile-title>
+            </router-link>
+            <router-link to="dashboard" v-else>
               <v-list-tile-title>Home</v-list-tile-title>
             </router-link>
           </v-list-tile-content>
@@ -15,11 +18,11 @@
 
         <v-list-tile v-if="this.hasRole(getRole.employee)">
           <v-list-tile-action>
-            <v-icon>timeline</v-icon>
+            <v-icon>date_range</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <router-link to="LinhaDoTempo">
-              <v-list-tile-title>Linha do Tempo</v-list-tile-title>
+            <router-link to="dashboard">
+              <v-list-tile-title>Dashboard</v-list-tile-title>
             </router-link>
           </v-list-tile-content>
         </v-list-tile>
