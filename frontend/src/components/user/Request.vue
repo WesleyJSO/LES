@@ -11,7 +11,7 @@
     <v-form ref="form" v-model="valid">
       <v-layout row wrap>
       <!-- Row 1 -->
-      <v-flex xs6>
+      <v-flex xs6 v-if="!isAppointment">
         <v-combobox
           v-model="type"
           :items="getItems"
@@ -29,6 +29,7 @@
                 :nudge-right="40"
                 lazy offset-y full-width
                 transition="scale-transition"
+                readOnly
                 min-width="290px">
                 <v-text-field
                   :label="getLabels.startDate"
@@ -81,6 +82,7 @@
                         prepend-icon="attachment"
                         clearable
                         label="Anexar Arquivo"
+                        :readonly="!isAppointment"
                         required>
           </v-text-field>
         </v-flex>
@@ -106,7 +108,7 @@
 
 <script>
 import RequestService from '@/service/RequestService'
-import DateHelper from '@/helpers/DateHelper'
+// import DateHelper from '@/helpers/DateHelper'
 export default {
   props: {
     item: Object,
@@ -164,6 +166,9 @@ export default {
     },
     getRequestValue () {
       return RequestService.REQUEST_VALUE
+    },
+    isAppointment () {
+      return this.type.id === 3
     }
   },
   watch: {
@@ -171,25 +176,37 @@ export default {
       this.request = Object.assign({}, value)
       this.type = this.getRequestValue[value.type]
       this.edit = true
+    },
+    'request.startDate' (val) {
+      if (!val) {
+        this.request.startDate = null
+      }
+      if (val.indexOf('-') !== -1) {
+        const [year, month, day] = this.request.startDate.split('-')
+        this.request.startDate = `${day}/${month}/${year}`
+      }
+    },
+    'request.endDate' (val) {
+      if (!val) {
+        this.request.ebdDate = null
+      }
+      if (val.indexOf('-') !== -1) {
+        const [year, month, day] = this.request.endDate.split('-')
+        this.request.endDate = `${day}/${month}/${year}`
+      }
     }
   },
   methods: {
     saveRequest () {
-      let startDate = this.request.startDate
-      let endDate = this.request.endDate
       if (!this.edit) {
         this.request = Object.assign(
           {
             'status': null,
-            'type': this.type.id,
-            'startDate': startDate ? DateHelper.formatShortDate(startDate) : null,
-            'endDate': endDate ? DateHelper.formatShortDate(endDate) : null
+            'type': this.type.id
           },
           this.request)
-        console.log(JSON.stringify(this.request, null, ' '))
         this.$_axios.post(`${this.$_url}request`, this.request).then((response) => {
           let result = response.data
-          console.log(JSON.stringify(result.resultList), null, ' ')
           if (result.message) {
             // alert('Messages everything OK')
             this.messages = [...result.message]
@@ -218,7 +235,6 @@ export default {
         i.type = this.type.id
         let updateRequest = Object.assign({'employee': {}}, i)
         updateRequest.employee.id = this.request.employee.id
-        alert(JSON.stringify(updateRequest, null, ' '))
         this.$_axios.put(`${this.$_url}request`, updateRequest).then((response) => {
           let result = response.data
           if (result.message) {

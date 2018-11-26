@@ -54,7 +54,7 @@ public class CostCentre extends DomainEntity {
 		this.setId( id );
 	}
 	
-	public CostCentre(String name, String code, String nickName, List<Employee> employeeList) {
+	public CostCentre(String name, String code, List<Employee> employeeList) {
 		super();
 		this.name = name;
 		this.code = code;

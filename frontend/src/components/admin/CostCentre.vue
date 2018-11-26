@@ -47,27 +47,16 @@
                   </v-text-field>
                 </v-flex>
                 <v-flex>
-                  <v-combobox v-model="costCentre.employees"
-                              prepend-icon="check_circle"
-                              :items="members"
-                              item-text="email"
-                              label="Membros"
-                              multiple
-                              chips>
-                    <template slot="selection"
-                              slot-scope="data">
-                      <v-chip :selected="data.selected"
-                              :disabled="data.disabled"
-                              :key="JSON.stringify(data.item)"
-                              class="v-chip--select-multi"
-                              @input="data.parent.selectItem(data.item)">
-                        <v-avatar class="accent white--text"
-                                  v-text="data.item.email.slice(0, 1).toUpperCase()">
-                        </v-avatar>
-                          {{ data.item.email}}
-                      </v-chip>
-                    </template>
-                  </v-combobox>
+                  <v-select
+                    label="Membros"
+                    prepend-icon="supervisor_account"
+                    :items="members"
+                    multiple small-chips
+                    type="Object"
+                    item-text="lastName"
+                    item-value="user"
+                    v-model="costCentre.employeeList">
+                  </v-select>
                 </v-flex>
               </v-layout>
             </v-form>
@@ -85,15 +74,15 @@
                   :items="this.itemsToShow"
                   item-key="id"
                   hide-actions
+                  no-data-text="Nenhum registro foi econtrados"
                   :search="searchFilter"
                   class="elevation-2" >
       <template slot="items" slot-scope="props">
         <tr @click="props.expanded = !props.expanded">
           <td>{{ props.item.code }}</td>
           <td class="text-xs-center">{{ props.item.name }}</td>
-          <td class="text-xs-center">{{ props.item.nickname }}</td>
           <td class="text-xs-center">{{ props.item.employees.length }}</td>
-          <td class="text-xs-center">{{ props.item.creationDate }}</td>
+          <td class="text-xs-center">{{ props.item.creationDate.substring(0, 10) }}</td>
           <td class="justify-center layout px-0">
             <!-- <v-icon class="mr-2"
                     @click.stop="editItem(props.item)">person_add</v-icon> -->
@@ -181,9 +170,12 @@ export default {
       // this.clearForm()
     },
     saveCostCentre () {
-      // User either to save or edit cost centres
-      // alert(JSON.stringify(this.costCentre, null, ' '))
-      this.employessToSave = this.costCentre.employee
+      // Used either to save or edit cost centres
+      this.costCentre.employees = this.costCentre.employees.map(e => {
+        let emp = Object.assign({'user': {}}, {})
+        emp.user = e
+        return emp
+      })
       this.$_axios.post(`${this.$_url}costcentre`, this.costCentre).then((response) => {
         let result = response.data
         console.log(JSON.stringify(result.resultList), null, ' ')
@@ -192,7 +184,6 @@ export default {
           this.getCostCentresList()
         }
         if (result.message) {
-          // alert('Messages everything OK')
           this.messages = [...result.message]
           this.haveMessage = true
           if (result.success) {
@@ -225,7 +216,6 @@ export default {
       confirm('Tem certeza que deseja excluir este Centro de Custo?') && this.costCentres.splice(index, 1)
       this.$_axios.delete(`${this.$_url}costcentre/${item.id}`).then((response) => {
         let result = response.data
-        // this.costCentres = this.costCentres.splice(index, 1)
         if (result.mensagem) {
           this.messages = [...result.mensagem]
           this.haveMessage = true
@@ -240,7 +230,6 @@ export default {
       },
       (response) => {
         // erro na requisição do serviço
-        alert(JSON.stringify(response, null, ' '))
         this.messages = ['Erro durante execução do serviço!']
         this.haveMessage = true
         this.messageColor = 'error'
@@ -255,7 +244,7 @@ export default {
       }, 300)
     },
     getMembersList () {
-      this.$_axios.get(`${this.$_url}employee`).then((response) => {
+      this.$_axios.patch(`${this.$_url}employee`, {}).then((response) => {
         let resultado = response.data
         // alert(JSON.stringify(resultado, null, ' '))
         if (resultado.resultList.length >= 0) {
@@ -283,7 +272,7 @@ export default {
       })
     },
     getCostCentresList () {
-      this.$_axios.get(`${this.$_url}costcentre`).then((response) => {
+      this.$_axios.patch(`${this.$_url}costcentre`, {}).then((response) => {
         let resultado = response.data
         // alert(JSON.stringify(resultado, null, ' '))
         if (resultado.resultList.length >= 0) {
@@ -311,13 +300,10 @@ export default {
       })
     },
     saveUser (user) {
-      alert(JSON.stringify(user))
       this.$_axios.post(`${this.$_url}employee`, user).then((response) => {
         let result = response.data
-        alert(JSON.stringify(result))
         if (result.resultList.length !== 0) {
           // retorno ok
-          alert(JSON.stringify(result))
           user = result.resultList[0]
         }
         if (result.message) {
@@ -335,7 +321,7 @@ export default {
       },
       (response) => {
         // erro na requisição do serviço
-        alert(JSON.stringify(response))
+        console.log(JSON.stringify(response))
         this.messages = ['Erro durante execução do serviço!']
         this.haveMessage = true
         this.messageColor = 'error'

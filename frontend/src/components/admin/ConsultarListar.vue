@@ -52,12 +52,10 @@
           <td class="text-xs-center">{{ props.item.telephoneList.length !== 0 ? props.item.telephoneList[0].number : '-'}}</td>
           <td class="text-xs-center">{{ props.item.user.email }}</td>
           <td class="justify-center layout px-0">
-            <v-icon small
-                    class="mr-2"
+            <v-icon class="mr-2"
                     @click.stop="editItem(props.item)">remove_red_eye
             </v-icon>
-            <v-icon small
-                    class="mr-2"
+            <v-icon class="mr-2"
                     @click.stop="deleteEmployee(props.item)">delete
             </v-icon>
           </td>

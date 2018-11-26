@@ -6,7 +6,8 @@
 								v-text="message"
 								transition="scale-transition" />
 			</li>
-      <confirm-dialog :dialog="confirmDialog" :item="appointmentRequest" 
+      <confirm-dialog id="requestDialog"
+          :dialog="confirmDialog" :item="appointmentRequest" 
           @deleteRequest="handleDeleteRequest($event)" 
           @confirmRequest="handleConfirmRequest($event)"
           @requestError="handleRequestError($event)">
@@ -21,12 +22,14 @@
 			</v-toolbar>
       <v-layout>
         <v-flex center >
-          <AppointTable :editable="true" :appointments="appointments" @register="takeAppointment($event)" @replacement="assignReplacement($event)">
+          <AppointTable id="appointTable"
+            :editable="true" :appointments="appointments" @register="takeAppointment($event)" @replacement="assignReplacement($event)">
           </AppointTable>
           <v-flex class="text-xs-center">
             <v-card class="elevation-10">       
 							<v-flex>
-								<AppointButton v-for="button in buttons" :key="button.name" 
+								<AppointButton
+                  v-for="button in buttons" :key="button.name" 
                   :disable="button.disable" 
                   :buttonName="button.name"
                   @emitAppoint="appoint($event)">
@@ -174,7 +177,6 @@ export default {
       if (!this.appointment.id) {
         try {
           response = await this.$_axios.post(`${this.$_url}appointment`, this.appointment)
-          console.log('post')
           result = response.data
           if (result.resultList.length !== 0) {
             this.appointments = result.resultList
@@ -200,7 +202,6 @@ export default {
       } else {
         try {
           response = await this.$_axios.put(`${this.$_url}appointment`, this.appointment)
-          console.log('put')
           result = response.data
           if (result.resultList.length !== 0) {
             this.appointments = result.resultList
@@ -246,7 +247,6 @@ export default {
           this.appointments = result.resultList
           this.appointment = this.appointments[0]
           // this.verifyButtons()
-          // console.log(JSON.stringify(this.appointments))
         } else {
           this.appointment = appointment
           this.registerAppointments()
@@ -305,9 +305,6 @@ export default {
       }
     },
     async findAppointmentRequest () {
-      console.log('valor de replacement pra buscar as possiveis solicitações -> ', this.replacement)
-      console.log('valor appointment.date -> ', this.appointment.date)
-      console.log('startDate -> ', this.appointment.date)
       if (this.appointment.id) {
         let appointmentRequest = {
           employee: { user: { id: Authenticator.GET_AUTHENTICATED().id } },
@@ -319,9 +316,7 @@ export default {
         }
         let request = this.$_axios.patch(`${this.$_url}appointmentRequest`, appointmentRequest)
         let [result] = await Promise.all([request])
-        console.log('resultList.size() -> ', result.data.resultList.length)
         if (result.data.success && result.data.resultList.length > 0) {
-          alert('result.data.resultList.length > 0 - ', result.data.success && result.data.resultList.length > 0)
           this.appointmentRequest = result.data.resultList[0]
           this.confirmDialog = true
         } else {
@@ -331,7 +326,6 @@ export default {
     },
     verifyAppointment () {
       if (this.appointment.appointmentRequestList && this.appointment.appointmentRequestList.length > 0) {
-        console.log(JSON.stringify(this.appointment.appointmentRequestList))
         this.appointment.appointmentRequestList = this.appointment.appointmentRequestList.map(m => {
           let newM = m
           if (m.employee.hasOwnProperty('id')) {
@@ -339,11 +333,9 @@ export default {
             return newM
           }
         })
-        console.log(JSON.stringify(this.appointment.appointmentRequestList))
       }
     },
     assignReplacement (time) {
-      console.log('replacement =  ', time)
       this.replacement = time
     },
     handleDeleteRequest (result) {

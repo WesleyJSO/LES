@@ -1,5 +1,5 @@
 <template>
-  <v-btn small
+  <v-btn small id="btnButton"
     :disabled="disable"
     outline
     flat

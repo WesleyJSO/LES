@@ -177,6 +177,11 @@
                 </v-card>
                 </v-dialog>
             </td>
+            <td class="text-xs-center">
+              <v-icon class="mr-2"
+                  @click.stop="deleteRequest(props.item)">delete
+              </v-icon>
+            </td>
           </tr>
         </template>
         </v-data-table>
@@ -450,6 +455,48 @@ export default {
       } catch (err) {
         console.log(JSON.stringify(err, null, ''))
         this.messages = [this.getMessages.consultError]
+        this.haveMessage = true
+        this.messageColor = 'error'
+      }
+    },
+    async findRequestById (id) {
+      try {
+        let request = await this.$_axios.patch(`${this.$_url}request`, {'id': id})
+        let message = !request.data.message ? [] : request.data.message
+        let messageList = [...message]
+        if (messageList) {
+          // this.messages = [...messageList]
+          this.haveMessage = true
+          if (request.data.success) {
+            this.messageColor = 'info'
+            return request.data.resultList[0]
+          } else {
+            this.messageColor = 'warning'
+          }
+        }
+      } catch (err) {
+        console.log(JSON.stringify(err, null, ''))
+        this.messages = [this.getMessages.consultError]
+        this.haveMessage = true
+        this.messageColor = 'error'
+      }
+    },
+    async deleteRequest (item) {
+      try {
+        let result = await this.$_axios.delete(`${this.$_url}request/${item.id}`)
+        if (result.data.messages) {
+          this.messages = [...result.message]
+          this.haveMessage = true
+          if (result.data.success) {
+            this.messageColor = 'info'
+          } else {
+            this.messageColor = 'warning'
+          }
+        }
+        this.findRequests()
+      } catch (error) {
+        console.log(error)
+        this.messages = ['Erro durante execução do serviço!']
         this.haveMessage = true
         this.messageColor = 'error'
       }

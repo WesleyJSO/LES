@@ -16,7 +16,8 @@
                 <td class="text-xs-center" v-if="editable">
                   <v-dialog v-model="dialogs[props.index * 8 + 0].value" max-width="300px" max-height="300px">
                     <a slot="activator">{{ props.item.morningEntrance || empty }}</a>
-                    <AppointDialog :value="props.item.morningEntrance || empty"
+                    <AppointDialog id="fieldMorningEntrance"
+                      :value="props.item.morningEntrance || empty"
                       :appointment="props.item"
                       @replacementValue="emitTime($event)"
                       type="Entrada Manhã" @editAppoint="editAppointment($event, props.index * 8 + 0)"></AppointDialog>
@@ -26,7 +27,8 @@
                 <td class="text-xs-center" v-if="editable">
                   <v-dialog v-model="dialogs[props.index * 8 + 1].value" max-width="300px" max-height="300px">
                     <a slot="activator">{{ props.item.morningOut || empty }}</a>
-                    <AppointDialog :value="props.item.morningOut || empty"
+                    <AppointDialog d="fieldMorningOut"
+                      :value="props.item.morningOut || empty"
                       :appointment="props.item"
                       @replacementValue="emitTime($event)"
                       type="Saída Manhã" @editAppoint="editAppointment($event, props.index * 8 + 1)"></AppointDialog>
@@ -36,7 +38,8 @@
                 <td class="text-xs-center" v-if="editable">
                   <v-dialog v-model="dialogs[props.index * 8 + 2].value" max-width="300px" max-height="300px">
                     <a slot="activator">{{ props.item.afternoonEntrance || empty }}</a>
-                    <AppointDialog :value="props.item.afternoonEntrance || empty"
+                    <AppointDialog d="fieldAfternoonEntrance"
+                      :value="props.item.afternoonEntrance || empty"
                       :appointment="props.item"
                       @replacementValue="emitTime($event)"
                       type="Entrada Tarde" @editAppoint="editAppointment($event, props.index * 8 + 2)"></AppointDialog>

@@ -2,8 +2,9 @@ export const HEADERS = [
   { text: 'Solicitante', align: 'left', sortable: false, value: 'employee.name' },
   { text: 'Tipo', align: 'left', value: 'type' },
   { text: 'Status', align: 'left', value: 'status' },
-  { text: 'Editar', align: 'righ', value: 'acao' },
-  { text: 'Vizualizar', align: 'righ', value: 'acao' }
+  { text: 'Editar', align: 'righ', value: 'editar' },
+  { text: 'Vizualizar', align: 'righ', value: 'Vizualizar' },
+  { text: 'Excluir', align: 'righ', value: 'excluir' }
 ]
 export const HEADERS_ADMIN = [
   { text: 'Solicitante', align: 'left', sortable: false, value: 'employee.name' },
@@ -87,6 +88,11 @@ export const MESSAGE = {
   approveError: 'Houve um erro ao aprovar a solicitação!'
 }
 export const REQUEST = [
+  {id: 1, description: 'Hora Extra'},
+  {id: 2, description: 'Banco de Horas'},
+  {id: 4, description: 'Remanejamento de Horas/Dias'}
+]
+export const REQUEST_EDIT = [
   {id: 1, description: 'Hora Extra'},
   {id: 2, description: 'Banco de Horas'},
   {id: 3, description: 'Alteração de Apontamento'},

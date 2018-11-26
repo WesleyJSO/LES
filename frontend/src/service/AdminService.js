@@ -20,9 +20,9 @@ export const DATE_FORMATS = [ {year: 'numeric', month: 'numeric', day: 'numeric'
 export const COST_CENTRE_HEADERS = [
   { text: 'Código', align: 'left', sortable: false, value: 'code' },
   { text: 'Nome', align: 'center', sortable: false, value: 'name' },
-  { text: 'Apelido', align: 'center', sortable: false, value: 'nickName' },
   { text: 'Membros', value: 'employees' },
-  { text: 'Data Criação', align: 'center', value: 'criationDate' }
+  { text: 'Data Criação', align: 'center', value: 'criationDate' },
+  { text: 'Ação', align: 'center', value: 'action' }
 ]
 export const MANAGE_HOURS_TABLE_HEADERS = [
   { text: 'Total Horas Banco', align: 'center', sortable: false, value: 'total_banco' },

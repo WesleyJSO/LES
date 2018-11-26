@@ -11,7 +11,7 @@
       <v-layout>
       <!-- Row 0 -->
         <v-flex xs12 sm4 md4 v-if="edit">
-          <v-switch
+          <v-switch id="toggleEdit"
             v-model="isEditing"
             label="Editar"
             color="success"
@@ -20,7 +20,7 @@
           </v-switch>
         </v-flex>
         <v-flex xs4 sm3 md2 lg2 v-for="v in roleList" :key="v.id">
-          <v-checkbox :id="`checkBox${v.id}`"
+          <v-checkbox id="checkBox"
             v-model="v.active"
             :readonly="isEditing ? false : true"
             :label="v.roleName"
@@ -114,7 +114,7 @@
         <v-flex xs12 sm9 md6 lg6 xl4>
           <v-text-field id="salary"
                         v-model="employee.baseHourCalculation.salary"
-                        type="number" :clearable="isEditing" required
+                        type="text" :clearable="isEditing" required
                         prepend-icon="monetization_on"
                         :rules="$v_user.salaryRules(employee.baseHourCalculation.salary)"
                         label="Salário"
@@ -125,7 +125,7 @@
           <v-text-field id="pis"
                         max="11"
                         v-model="employee.pis"
-                        type="number" :clearable="isEditing" required
+                        type="text" :clearable="isEditing" required
                         prepend-icon="credit_card"
                         :rules="$v_user.pisRules(employee.pis)"
                         label="PIS/PASESP"
@@ -135,7 +135,7 @@
         <v-flex xs12 sm9 md6 lg6 xl4>
           <v-text-field id="workload"
                         v-model="employee.baseHourCalculation.workload"
-                        type="number" :clearable="isEditing" required
+                        type="text" :clearable="isEditing" required
                         prepend-icon="timer"
                         :rules="$v_user.workloadRules(employee.baseHourCalculation.workload)"
                         label="Carga Horária diaria"
@@ -355,7 +355,6 @@ export default {
       }
       let parameter = await this.$_axios.patch(`${this.$_url}parameter`, {})
       parameter = parameter.data.resultList[0]
-      // console.log(JSON.stringify(parameter))
       this.employee.baseHourCalculation.overtimePercentage = parameter.overtimePercentage
       this.employee.baseHourCalculation.nightOvertimePercentage = parameter.nightOvertimePercentage
       this.employee.baseHourCalculation.weekendOvertimePercentage = parameter.weekendOvertimePercentage
@@ -435,8 +434,6 @@ export default {
           index = ind
         }
       })
-      // alert(index)
-      // alert(JSON.stringify(this.employee.user.authorities[index], null, ' '))
       if (item.active === false && index !== -1) {
         this.employee.user.authorities.splice(index, 1)
       } else if (item.active === true && index === -1) {
@@ -453,7 +450,6 @@ export default {
       } else if (item.active === false && item.roleName === 'Colaborador') {
         this.isEmployee = false
       }
-      // alert(JSON.stringify(this.employee.user.authorities, null, ' '))
     },
     async submit () {
       try {
@@ -472,7 +468,7 @@ export default {
         if (!this.edit) {
           response = await this.$_axios.post(`${this.$_url}employee`, this.employee)
         } else {
-          response = await this.$_axios.put(`${this.$_url}employee`, this.employee)
+          response = await this.$_axios.post(`${this.$_url}employee`, this.employee)
         }
         let result = response.data
         if (!this.edit) {

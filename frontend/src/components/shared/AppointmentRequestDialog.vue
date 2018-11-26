@@ -20,7 +20,8 @@
 
         <v-card-text>
           <b>{{ getLabels.requestDescription }}</b>
-          <v-textarea v-model="description"
+          <v-textarea id="txtDescRequest"
+              v-model="description"
               box
               outline
               name="input-7-4">
@@ -31,13 +32,13 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
+          <v-btn 
             color="green"
             flat
             @click="confirmRequest">
             {{ getButtons.confirm }}
           </v-btn>
-          <v-btn
+          <v-btn id="btnCancelRequest"
             color="red"
             flat
             @click="deleteRequest">

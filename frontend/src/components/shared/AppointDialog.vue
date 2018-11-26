@@ -7,9 +7,11 @@
       {{ type }}
       </v-card-title>
 
-      <v-flex xs12 sm9 md6 lg6 xl4>
-        <v-form v-model="valid">
-          <v-text-field type="time"
+      <v-flex xs12 sm9 md6 lg6 xl4 id="vFlex">
+        <v-form
+          v-model="valid">
+          <v-text-field id="txtTime"
+            type="time"
             v-model="newValue"
             prepend-icon="timer"
             label="Hora">
