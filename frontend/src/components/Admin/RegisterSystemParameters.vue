@@ -61,7 +61,7 @@
           <!-- Row 3 -->
             <v-flex xs12 sm9 md6 lg6 xl4>
               <v-text-field
-                    v-model="parameters.weekEndOvertimePercentage"
+                    v-model="parameters.weekendOvertimePercentage"
                     type="number"
                     prepend-icon="looks_3"
                     clearable
@@ -467,7 +467,7 @@ export default {
       if (error) {
         this.messages = [...this.messages, ...error]
       }
-      error = this.$v_parameters.weekEndOvertimeRules(this.parameters.weekEndOvertimePercentage)
+      error = this.$v_parameters.weekEndOvertimeRules(this.parameters.weekendOvertimePercentage)
       if (error) {
         this.messages = [...this.messages, ...error]
       }

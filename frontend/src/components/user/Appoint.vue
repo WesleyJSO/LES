@@ -321,7 +321,6 @@ export default {
         let [result] = await Promise.all([request])
         console.log('resultList.size() -> ', result.data.resultList.length)
         if (result.data.success && result.data.resultList.length > 0) {
-          alert('result.data.resultList.length > 0 - ', result.data.success && result.data.resultList.length > 0)
           this.appointmentRequest = result.data.resultList[0]
           this.confirmDialog = true
         } else {
