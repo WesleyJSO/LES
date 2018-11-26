@@ -130,6 +130,7 @@ export default {
   },
   methods: {
     beforeCallApi (monthYear) {
+      this.$emit('setMonthYear', monthYear + '-01')
       this.monthYear = monthYear
       if (this.employee) {
         this.appointWithMonth = {employee: this.employee, monthAndYear: new Date(`${monthYear}-01`)}

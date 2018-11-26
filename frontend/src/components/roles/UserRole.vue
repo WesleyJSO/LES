@@ -57,7 +57,6 @@
         </v-list-tile>
 
       </v-list>
-    </v-navigation-drawer>
   </div>
 </template>
 
