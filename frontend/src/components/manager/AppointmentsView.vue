@@ -28,6 +28,14 @@
           
           <v-flex class="text-xs-right">
             <v-btn
+              @click="downloadDemonstrativo()"
+              color="primary">
+              Download Demonstrativo
+            </v-btn>
+          </v-flex>
+          
+          <v-flex class="text-xs-left">
+            <v-btn
               @click="downloadPDF()"
               color="primary">
               Download Espelho
@@ -88,6 +96,46 @@ export default {
           this.employee = {id: element.id}
         }
       })
+    },
+    async downloadDemonstrativo () {
+      this.haveMessage = false
+      if (this.employee && this.date !== '') {
+        var response = null
+        var result = null
+        try {
+          response = await this.$_axios.get(`${this.$_url}bankstatement/` + this.employee.id + `/` + this.date, {responseType: 'blob'})
+          result = response.data
+          console.log(JSON.stringify(result))
+          const url = window.URL.createObjectURL(new Blob([response.data]))
+          const link = document.createElement('a')
+          link.href = url
+          link.setAttribute('download', 'Demontrativo de Banco - ' + this.employeeName + '.pdf')
+          document.body.appendChild(link)
+          // link.click()
+          link.dispatchEvent(new MouseEvent(`click`, {bubbles: true, cancelable: true, view: window}))
+          if (result.mensagem) {
+            // this.messages = [...result.message]
+            // this.haveMessage = true
+            if (result.success) {
+            // retorno mensagem de sucesso /
+              this.messageColor = 'info'
+            } else {
+              // retorno mensagem de erro /
+              this.messageColor = 'warning'
+            }
+          }
+        } catch (error) {
+          // erro na requisição do serviço /
+          console.log(error)
+          // this.messages = ['Erro durante execução do serviço!']
+          // this.haveMessage = true
+          // this.messageColor = 'error'
+        }
+      } else {
+        this.messages = ['Selecione um funcionário e uma data!']
+        this.haveMessage = true
+        this.messageColor = 'warning'
+      }
     },
     async downloadPDF () {
       this.haveMessage = false
