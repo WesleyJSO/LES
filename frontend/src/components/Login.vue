@@ -6,7 +6,13 @@
         <v-toolbar dark>
           <v-toolbar-title>Login</v-toolbar-title>
         </v-toolbar>
-
+          <v-card-title v-if="dialog" class="pa-0 ma-0">
+            <v-progress-linear
+              background-color="black"
+              color="grey" height="5"
+              :indeterminate="dialog"
+            ></v-progress-linear>
+          </v-card-title>
           <li v-for="(msg, index) in messages" :key="index">
             <v-alert
                 :value="haveMessage"
@@ -47,25 +53,6 @@
         </v-form>
       </v-card>
     </v-flex>
-    <div class="text-xs-center">
-      <v-dialog
-        max-width="300px"
-        v-model="dialog"
-        hide-overlay
-        transition="dialog-bottom-transition"
-      >
-        <v-card dark>
-          <v-card-text>
-            Aguarde...
-            <v-progress-linear
-              indeterminate
-              color="white"
-              class="mb-0"
-            ></v-progress-linear>
-          </v-card-text>
-        </v-card>
-      </v-dialog>
-    </div>
   </div>
 </template>
 
