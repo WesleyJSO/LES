@@ -33,7 +33,7 @@ public class User extends DomainEntity implements UserDetails {
 	private boolean credentialsNonExpired;
 	private boolean enabled;
 	
-	@ManyToMany(fetch=FetchType.EAGER, cascade={ CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE })
+	@ManyToMany(fetch=FetchType.EAGER, cascade={CascadeType.REFRESH, CascadeType.REMOVE, CascadeType.DETACH})
 	@JoinTable(name = "user_role", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "role_id") })
 	private List<Role> authorities;

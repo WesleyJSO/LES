@@ -1,7 +1,7 @@
  <template>
   <div>
       <Appoint id="apontamentoRapido"></Appoint>
-    <h1>Últimos Apontamentos</h1>
+    <!-- <h1>Últimos Apontamentos</h1>
     <br/>
     <v-spacer></v-spacer>
     <h2>Hoje</h2>
@@ -102,7 +102,7 @@
           <span class="cd-date"><b>Wesley Silva</b> - 08/09/2018 10:25</span>
         </div>
       </div>
-    </section>
+    </section> -->
 </div>
  </template>
  <script>

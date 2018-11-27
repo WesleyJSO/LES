@@ -172,7 +172,11 @@ export default {
       this.editedItem = JSON.parse(JSON.stringify(item))
       this.editedItem.joiningDate = parseDate
       this.editedItem.user.password = ''
-      this.editedItem.baseHourCalculation.hourType = {id: this.editedItem.baseHourCalculation.hourType.id}
+      this.editedItem.manager = {id: this.editedItem.manager.id, name: this.editedItem.manager.name}
+      this.editedItem.baseHourCalculation.hourType = {
+        id: this.editedItem.baseHourCalculation.hourType.id,
+        description: this.editedItem.baseHourCalculation.hourType.description
+      }
       this.editTitle = 'Colaborador'
       this.dialog = true
       this.isEditing = true

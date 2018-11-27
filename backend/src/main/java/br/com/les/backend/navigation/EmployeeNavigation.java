@@ -9,6 +9,8 @@ import br.com.les.backend.navigator.Navigation;
 import br.com.les.backend.navigator.NavigationBuilder;
 import br.com.les.backend.strategy.employee.EmailExistence;
 import br.com.les.backend.strategy.employee.EmailFormat;
+import br.com.les.backend.strategy.employee.FetchHourType;
+import br.com.les.backend.strategy.employee.FetchManager;
 import br.com.les.backend.strategy.employee.IdActivate;
 import br.com.les.backend.strategy.employee.IdExistence;
 import br.com.les.backend.strategy.employee.IdInactivate;
@@ -38,6 +40,8 @@ public class EmployeeNavigation {
 	@Autowired private IdActivate idActivate;
 	@Autowired private IdInactivate idInactivate;
 	@Autowired private NewUserConfig newUserConfig;
+	@Autowired private FetchManager fetchManager;
+	@Autowired private FetchHourType fetchHourType;
 	
 	@Bean("ACTIVATE_EMPLOYEE")
 	public Navigation<Employee> activateEmployeeValidator() {
@@ -95,6 +99,8 @@ public class EmployeeNavigation {
 				.next(nameValidator)
 				.next(pisLength)
 				.next(salaryValidator)
+				.next(fetchManager)
+				.next(fetchHourType)
 				.build();
 	}
 }

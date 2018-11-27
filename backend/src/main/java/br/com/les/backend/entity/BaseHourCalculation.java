@@ -2,7 +2,6 @@ package br.com.les.backend.entity;
 
 import java.time.LocalDate;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -25,7 +24,7 @@ public class BaseHourCalculation extends DomainEntity {
 	private Double nightOvertimePercentage;
 	private Double weekendOvertimePercentage;
 
-	@OneToOne(cascade={ CascadeType.MERGE, CascadeType.DETACH, CascadeType.REMOVE })
+	@OneToOne
 	@JoinColumn(name="hour_type_id")
 	private HourType hourType;
 

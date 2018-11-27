@@ -20,7 +20,7 @@
           </v-switch>
         </v-flex>
         <v-flex xs4 sm3 md2 lg2 v-for="v in roleList" :key="v.id">
-          <v-checkbox id="checkBox"
+          <v-checkbox
             v-model="v.active"
             :readonly="isEditing ? false : true"
             :label="v.roleName"
@@ -148,7 +148,7 @@
       <v-layout v-if="isEmployee">
 
         <v-flex xs12 sm9 md6 lg6 xl4>
-          <v-select v-if="managerList" id="supervisor"
+          <v-select v-if="managerList"
             v-model="employee.manager.id"
             :items="managerList"
             item-text="name"
@@ -403,14 +403,19 @@ export default {
         this.roleList.forEach(rl => {
           if (r.roleName === rl.roleName) rl.active = true
         })
-        this.isEmployee = r.roleName === 'Colaborador'
-        this.isManager = r.roleName === 'Gestor'
+        if (!this.isEmployee) {
+          this.isEmployee = r.roleName === 'Colaborador'
+        }
+        if (!this.isManager) {
+          this.isManager = r.roleName === 'Gestor'
+        }
       })
       for (let i = this.employee.telephoneList.length; i < 3; i++) {
         this.employee.telephoneList = [...this.employee.telephoneList, {type: '', number: ''}]
       }
       this.title = `${this.employee.name} ${this.employee.lastName}`
       this.isEditing = false
+      console.log(this.isEmployee)
     }
   },
   methods: {
@@ -466,9 +471,11 @@ export default {
         this.employee.user.username = this.employee.user.email
         let response = ''
         if (!this.edit) {
+          console.log('salvar', JSON.stringify(this.employee), null, ' ')
           response = await this.$_axios.post(`${this.$_url}employee`, this.employee)
         } else {
-          response = await this.$_axios.post(`${this.$_url}employee`, this.employee)
+          console.log(JSON.stringify(this.employee, null, ' '))
+          response = await this.$_axios.put(`${this.$_url}employee`, this.employee)
         }
         let result = response.data
         if (!this.edit) {

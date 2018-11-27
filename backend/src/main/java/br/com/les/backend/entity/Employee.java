@@ -34,14 +34,14 @@ public class Employee extends DomainEntity {
 	private String name;
 	private String lastName;
 	
-	@OneToOne(optional=true, fetch=FetchType.LAZY, cascade=CascadeType.PERSIST)
+	@OneToOne(optional=true, fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumn(name="user_id")
 	private User user;
 	
 	@OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Telephone> telephoneList;
 	
-	@ManyToOne(cascade= {CascadeType.MERGE, CascadeType.REMOVE})
+	@ManyToOne
 	@JoinColumn(name="manager_id")
 	private Employee manager;
 
@@ -54,7 +54,7 @@ public class Employee extends DomainEntity {
 	@OneToMany( cascade=CascadeType.ALL)
 	private List< Appointment > appointmentList;
 
-	@OneToOne(mappedBy="employee", fetch=FetchType.LAZY, cascade=CascadeType.PERSIST)
+	@OneToOne(mappedBy="employee", fetch=FetchType.LAZY, cascade={CascadeType.PERSIST, CascadeType.MERGE})
 	private BaseHourCalculation baseHourCalculation;
 	
 	@OneToOne(mappedBy="employee", fetch=FetchType.LAZY, cascade=CascadeType.PERSIST)
