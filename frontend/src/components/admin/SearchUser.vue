@@ -68,10 +68,9 @@ export default {
         this.msgErro = ['Para realizar a consulta ao menos um dos campos deve ser preenchido!']
       } else {
         this.$_axios.post(`${this.$_url}usuarioFiltro`, this.usuario).then(response => {
-          alert(JSON.stringify(response))
         },
         reposnse => {
-          alert(reposnse)
+          console.log(response)
         })
       }
     }

@@ -1,8 +1,7 @@
 <template>
   <div>
-
     <v-flex xs12 sm8 offset-sm2 pa-5>
-      <v-card class="elevation-10">
+      <v-card class="elevation-5">
 
         <v-toolbar dark>
           <v-toolbar-title>Login</v-toolbar-title>
@@ -44,10 +43,29 @@
               :disabled="!valid"
               @click="login">Login</v-btn>
           </v-card-actions>
-
+          <Loader :load="dialog" />
         </v-form>
       </v-card>
     </v-flex>
+    <div class="text-xs-center">
+      <v-dialog
+        max-width="300px"
+        v-model="dialog"
+        hide-overlay
+        transition="dialog-bottom-transition"
+      >
+        <v-card dark>
+          <v-card-text>
+            Aguarde...
+            <v-progress-linear
+              indeterminate
+              color="white"
+              class="mb-0"
+            ></v-progress-linear>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+    </div>
   </div>
 </template>
 
@@ -55,6 +73,7 @@
 import Authenticator from '@/service/Authenticator'
 export default {
   data: () => ({
+    dialog: false,
     user: {},
     valid: false,
     haveMessage: false,
@@ -102,6 +121,8 @@ export default {
       }
     },
     async login () {
+      this.valid = false
+      this.dialog = true
       this.messages = []
       this.haveMessage = false
       try {
@@ -123,8 +144,9 @@ export default {
           this.$router.push('/dashboard')
         }
       } catch (err) {
+        this.valid = true
+        this.dialog = false
         console.log(JSON.stringify(err, null, ''))
-        // this.messages = [this.getMessages.approveError]
         localStorage.removeItem('user-token')
         this.$router.push('/Login')
         this.messageColor = 'error'
@@ -132,45 +154,6 @@ export default {
         this.haveMessage = true
       }
     },
-    /* submit () {
-      this.messages = []
-      this.haveMessage = false
-      this.$_axios.patch(`${this.$_url}user`, {params: {password: this.user.password, email: this.user.email}})
-        .then((response) => {
-          let result = response.data
-          if (result.resultList.length === 0) {
-            this.$_axios.patch(`${this.$_url}employee/`, {params: {password: this.user.password, email: this.user.email}})
-              .then(response => {
-                result = response.data
-              })
-          }
-          if (result.resultList.length !== 0) {
-            this.clearForm()
-            this.user = result.resultList[0]
-            this.haveMessage = true
-            this.msgColor = 'info'
-            this.messages = [`Bem vindo ${this.user.email}.`]
-            this.$emit('login', this.user)
-          } else if (result.mensagem) {
-            this.haveMessage = true
-            this.msgColor = 'warning'
-            this.messages = [...result.mensagem]
-          } else {
-            this.haveMessage = true
-            this.msgColor = 'warning'
-            this.messages = [`Usuário ${this.user.email} não encontrado!`]
-            this.msgColor = 'info'
-            this.messages = [`Bem vindo ${this.user.email}.`]
-            this.$emit('emittedUser', this.user)
-          }
-          this.$router.push('/LinhaDoTempo')
-        })
-        .catch(error => {
-          this.messages = ['Erro durante execução do serviço!']
-          this.haveMessage = true
-          this.messageColor = 'error'
-        })
-    }, */
     clearForm () {
       this.$refs.form.reset()
     }
