@@ -43,11 +43,11 @@ public class TimeTrackingController extends AbstractController<TimeTracking> {
 			
 			if ( !bCase.isSuspendExecution() ) {
 				// get PDF generated in reports folder
-				File file = new File("reports/timeTracking.pdf");
+				File file = new File("reports/TimeTracking.pdf");
 				// set PDF bytes array in response
 				return ResponseEntity.ok()
 	            .contentType(MediaType.parseMediaType("application/pdf"))
-	            .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + "timeTracking.pdf" + "\"")
+	            .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + "TimeTracking.pdf" + "\"")
 	            .body(Files.readAllBytes(file.toPath()));
 			}
 		} catch ( Exception e ) {

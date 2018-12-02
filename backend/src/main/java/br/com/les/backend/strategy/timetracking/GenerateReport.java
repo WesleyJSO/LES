@@ -93,7 +93,7 @@ public class GenerateReport implements IStrategy<TimeTracking> {
 	            // fill the report with data
 	            JasperFillManager.fillReportToFile("reports/timeTracking.jasper", parametro, new JRBeanCollectionDataSource( appHelperList ));
 				// Save PDF in reports folder
-				JasperExportManager.exportReportToPdfFile("reports/timeTracking.jrprint");
+				JasperExportManager.exportReportToPdfFile("reports/TimeTracking.jrprint");
 	        } catch ( Exception ex ) {
 	            ex.printStackTrace();
 	        }
