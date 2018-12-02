@@ -40,7 +40,7 @@ public class CalcBankTask extends TimerTask {
  	// used to indicate init date
  	private final static int ONE_DAY = 0;
  	// schedule hour
- 	private final static int HOUR = 0;
+ 	private final static int HOUR = 4;
  	// schedule minutes
  	private final static int MINUTE = 0;
  	

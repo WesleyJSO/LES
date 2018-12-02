@@ -86,7 +86,11 @@ export default {
     employees () {
       this.employeesNames = []
       this.employees.forEach(element => {
-        this.employeesNames.push(element.name + ' ' + element.lastName)
+        element.user.authorities.forEach(i => {
+          if (i.authority === 'ROLE_EMPLOYEE') {
+            this.employeesNames.push(element.name + ' ' + element.lastName)
+          }
+        })
       })
     }
   },

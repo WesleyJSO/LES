@@ -27,7 +27,7 @@ public class AppointmentHelper {
 	public AppointmentHelper generateHelper(Appointment a, BaseHourCalculation bhc) {
 		
 		this.day = a.getDate().toLocalDate().format(dateFormatter);
-		this.hour = bhc.getWorkload().toString();
+		this.hour = null != bhc ? bhc.getWorkload().toString() : "";
 		this.morningEntrance = null != a.getMorningEntrance() ? a.getMorningEntrance().format(timeFormatter) : "";
 		this.morningOut = null != a.getMorningOut() ? a.getMorningOut().format(timeFormatter) : "";
 		this.afternoonEntrance = null != a.getAfternoonEntrance() ? a.getAfternoonEntrance().format(timeFormatter) : "";
@@ -36,9 +36,9 @@ public class AppointmentHelper {
 		this.nightOut = null != a.getNightOut() ? a.getNightOut().format(timeFormatter) : "";
 		this.particularExit = null != a.getParticularExit() ? a.getParticularExit().format(timeFormatter) : "";
 		this.particularExitReturn = null != a.getParticularExitReturn() ? a.getParticularExitReturn().format(timeFormatter) : "";
-		this.balance = a.getBalance().format(timeFormatter);
-		this.absence = a.getHoursLeft().format(timeFormatter);
-		this.overtime = a.getDayOvertime().format(timeFormatter);
+		this.balance = null != a.getBalance() ? a.getBalance().format(timeFormatter) : "";
+		this.absence = null != a.getHoursLeft() ? a.getHoursLeft().format(timeFormatter) : "";
+		this.overtime = null != a.getDayOvertime() ? a.getDayOvertime().format(timeFormatter) : "";
 		return this;
 	}
 	

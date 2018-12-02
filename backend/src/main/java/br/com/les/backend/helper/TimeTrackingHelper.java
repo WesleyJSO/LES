@@ -4,6 +4,8 @@ import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
 import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,9 +58,23 @@ public class TimeTrackingHelper {
 		
 		appointmentList = new ArrayList<AppointmentHelper>();
 		AppointmentHelper aHelper = null;
-		for (Appointment appointment : aList) {
+		Appointment appointment = null;
+		LocalDate daysCount = null;
+		for ( daysCount = dt.with(firstDayOfMonth()); 
+				daysCount.isBefore(dt.with(firstDayOfMonth()).plusMonths(1)); 
+				daysCount = daysCount.plusDays(1)) {
 			aHelper = new AppointmentHelper();
-			aHelper = aHelper.generateHelper(appointment, bhc);
+			LocalDateTime dateTime = LocalDateTime.of(daysCount, LocalTime.MIDNIGHT);
+			appointment = aList.stream()
+					.filter(a -> a.getDate().equals(dateTime))
+					.findAny().orElse(null);
+			if ( null == appointment) {
+				appointment = new Appointment();
+				appointment.setDate(daysCount.atStartOfDay());
+				aHelper = aHelper.generateHelper(appointment, null);
+			} else {
+				aHelper = aHelper.generateHelper(appointment, bhc);
+			}
 			appointmentList.add(aHelper);
 		}
 		
