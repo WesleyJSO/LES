@@ -18,10 +18,14 @@ import br.com.les.backend.dao.GenericDAO;
 import br.com.les.backend.entity.Appointment;
 import br.com.les.backend.entity.BankedHours;
 import br.com.les.backend.entity.Employee;
+import br.com.les.backend.entity.HourType;
 import br.com.les.backend.entity.MonthlyBalance;
+import br.com.les.backend.entity.OvertimeBalance;
 import br.com.les.backend.repository.AppointmentRepository;
 import br.com.les.backend.repository.EmployeeRepository;
 import br.com.les.backend.repository.MonthlyBalanceRepository;
+import br.com.les.backend.repository.OvertimeBalanceRepository;
+import br.com.les.backend.utils.HourTypes;
 
 @Component
 public class CalcBankTask extends TimerTask {
@@ -30,10 +34,12 @@ public class CalcBankTask extends TimerTask {
 	@Autowired AutoAppointmentTask autoAppointmentTask;
 
 	@Autowired GenericDAO<MonthlyBalance> monthlyBalanceDAO;
+	@Autowired GenericDAO<OvertimeBalance> overtimeBalanceDAO;
 	@Autowired GenericDAO<BankedHours> bankedHoursDAO;
 	@Autowired EmployeeRepository employeeRepository;
 	@Autowired AppointmentRepository appointmentRepository;
 	@Autowired MonthlyBalanceRepository monthlyBalanceRepository;
+	@Autowired OvertimeBalanceRepository overtimeBalanceRepository;
 
 	// Period in milliseconds
  	private final static long PERIOD = 1000 * 60 * 60 * 24;
@@ -72,9 +78,9 @@ public class CalcBankTask extends TimerTask {
 		
 		MonthlyBalance monthlyBalance = null;
 		
-		List< MonthlyBalance > monthlyBalanceListHelper = null;
-		
     	BankedHours bank = null;
+    	
+    	OvertimeBalance overtimeBalance = null;
 		
 		List< Employee > employeeList = employeeRepository.findAll();
 		
@@ -90,23 +96,60 @@ public class CalcBankTask extends TimerTask {
 			int employeeWorkload = employee.getBaseHourCalculation().getWorkload();
 			LocalTime workload = LocalTime.of(employeeWorkload, 0);
 			
+			HourType hourType = employee.getBaseHourCalculation().getHourType();
+			
+			// get employee bank. If it doesn't exists, we'll set a new one
 			bank = new BankedHours();
 			Employee emp = new Employee();
 			emp.setId(employee.getId());
 			bank.setEmployee(emp);
-			bank = bankedHoursDAO.find(bank).get(0);
+			if ( bankedHoursDAO.find(bank).isEmpty()) {
+				bank.setBalance(0d);
+				// if the employee hour type is overtime, he doesn't need a banked hour reference
+				if (hourType.getDescription().equals(HourTypes.OVERTIME.getValue())) {
+					bank = null;
+				}
+			} else {
+				bank = bankedHoursDAO.find(bank).get(0);
+			}
 			
 			// get new or edited appointments
 			List< Appointment > appointmentList = appointmentRepository.findPending(employee);
 
 			List< MonthlyBalance > monthlyBalanceList = new ArrayList<>();
 			
+			List< OvertimeBalance > overtimeBalanceList = new ArrayList<>();
+			
 			Integer lastMonthHour = 0;
 			Integer lastMonthMinute = 0;
 			
 			for (Appointment appointment: appointmentList) {
 				
+				// if null, it's the first. If monthAndYear is different, we'll instantiate a 
+				// new overtime balance reference to the new month
+				if ( null == overtimeBalance || !overtimeBalance.getMonthAndYear().isEqual(appointment.getMonthAndYear())) {
+					
+					overtimeBalance = new OvertimeBalance();
+					overtimeBalance.setMonthAndYear(appointment.getMonthAndYear());
+					overtimeBalance.setEmployee(emp);
+					if ( overtimeBalanceDAO.find(overtimeBalance).isEmpty() ) {
+						overtimeBalance.setBalance(0d);
+						// if the employee hour type is banked hours, he doesn't need a overtime balance reference
+						if (hourType.getDescription().equals(HourTypes.BANKED_HOURS.getValue())) {
+							overtimeBalance = null;
+						}
+					} else {
+						overtimeBalance = overtimeBalanceDAO.find(overtimeBalance).get(0);
+					}
+					if ( null != overtimeBalance ) {
+						overtimeBalanceList.add(overtimeBalance);
+					}
+				}
+				
+				// if null, it's the first. If monthAndYear is different, we'll instantiate a 
+				// new monthly balance reference to the new month
 				if ( null == monthlyBalance || !monthlyBalance.getMonthAndYear().isEqual(appointment.getMonthAndYear())) {
+					// if is not the first, we need to save the last month balance to add to the new one
 					if ( null != monthlyBalance ) {
 						lastMonthHour = monthlyBalance.getBankBalanceHour();
 						lastMonthMinute = monthlyBalance.getBankBalanceMinute();
@@ -114,16 +157,8 @@ public class CalcBankTask extends TimerTask {
 					monthlyBalance = new MonthlyBalance();
 					monthlyBalance.setMonthAndYear(appointment.getMonthAndYear());
 					monthlyBalance.setEmployee(emp);
-					monthlyBalanceListHelper = monthlyBalanceDAO.find(monthlyBalance);
-					if ( monthlyBalanceListHelper.isEmpty() ) {
-						monthlyBalance = null;
-					} else {
-						monthlyBalance = monthlyBalanceListHelper.get(0);
-					}
-					if ( null == monthlyBalance ) {
-						monthlyBalance = new MonthlyBalance();
-						monthlyBalance.setMonthAndYear(appointment.getMonthAndYear());
-						monthlyBalance.setEmployee(employee);
+					if ( !monthlyBalanceDAO.find(monthlyBalance).isEmpty() ) {
+						monthlyBalance = monthlyBalanceDAO.find(monthlyBalance).get(0);
 					}
 					monthlyBalance.setBankBalanceHour(lastMonthHour);
 					monthlyBalance.setBankBalanceMinute(lastMonthMinute);
@@ -138,10 +173,13 @@ public class CalcBankTask extends TimerTask {
 				
 				// subtract previous balance calculated, if exists
 				if ( appointment.getPreviousBalanceInserted() != null ) {
-					bank.setBalance( bank.getBalance() - appointment.getPreviousBalanceInserted() );
+					subtractBankAndOvertime(hourType, bank, overtimeBalance, appointment.getPreviousBalanceInserted());
+					//bank.setBalance( bank.getBalance() - appointment.getPreviousBalanceInserted() );
 				}
 				
-				bank.setBalance(bank.getBalance() + balanceToInsert);
+				addBankAndOvertime(hourType, bank, overtimeBalance, balanceToInsert);
+				
+				//bank.setBalance(bank.getBalance() + balanceToInsert);
 				appointment.setPreviousBalanceInserted(balanceToInsert);
 				appointment.setCalculated(true);
 				
@@ -163,7 +201,12 @@ public class CalcBankTask extends TimerTask {
 			
 			try {
 				monthlyBalanceRepository.saveAll(monthlyBalanceList);
-				bankedHoursDAO.save(bank);
+				if ( null != bank ) {
+					bankedHoursDAO.save(bank);
+				}
+				if ( !overtimeBalanceList.isEmpty() ) {
+					overtimeBalanceRepository.saveAll(overtimeBalanceList);
+				}
 				appointmentRepository.saveAll(appointmentList);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -171,6 +214,45 @@ public class CalcBankTask extends TimerTask {
 			
 		}
     }
+
+	private void addBankAndOvertime(HourType hourType, BankedHours bank,
+			OvertimeBalance overtimeBalance, Double balanceToInsert) {
+		if (hourType.getDescription().equals(HourTypes.BOTH.getValue())) {
+			Double firstTypeValue = balanceToInsert > hourType.getQuantityFirst() ?
+					hourType.getQuantityFirst() : balanceToInsert;
+			if (hourType.getFirst().equals(HourTypes.OVERTIME.getValue())) {
+				overtimeBalance.setBalance( overtimeBalance.getBalance() + firstTypeValue );
+				bank.setBalance( bank.getBalance() + balanceToInsert - firstTypeValue );
+			} else {
+				bank.setBalance( bank.getBalance() + firstTypeValue );
+				overtimeBalance.setBalance( overtimeBalance.getBalance() + balanceToInsert - firstTypeValue );
+			}
+		} else if (hourType.getDescription().equals(HourTypes.OVERTIME.getValue())) {
+			overtimeBalance.setBalance( overtimeBalance.getBalance() + balanceToInsert );
+		} else {
+			bank.setBalance( bank.getBalance() + balanceToInsert );
+		}
+	}
+
+	private void subtractBankAndOvertime(HourType hourType, BankedHours bank,
+			OvertimeBalance overtimeBalance, Double previousBalanceInserted) {
+
+		if (hourType.getDescription().equals(HourTypes.BOTH.getValue())) {
+			Double firstTypeValue = previousBalanceInserted > hourType.getQuantityFirst() ?
+					hourType.getQuantityFirst() : previousBalanceInserted;
+			if (hourType.getFirst().equals(HourTypes.OVERTIME.getValue())) {
+				overtimeBalance.setBalance( overtimeBalance.getBalance() - firstTypeValue );
+				bank.setBalance( bank.getBalance() - previousBalanceInserted + firstTypeValue );
+			} else {
+				bank.setBalance( bank.getBalance() - firstTypeValue );
+				overtimeBalance.setBalance( overtimeBalance.getBalance() - previousBalanceInserted + firstTypeValue );
+			}
+		} else if (hourType.getDescription().equals(HourTypes.OVERTIME.getValue())) {
+			overtimeBalance.setBalance( overtimeBalance.getBalance() - previousBalanceInserted );
+		} else {
+			bank.setBalance( bank.getBalance() - previousBalanceInserted );
+		}
+	}
 
 	public Double getDoubleTime(LocalTime time) {
 
