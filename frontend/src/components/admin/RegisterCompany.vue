@@ -152,7 +152,6 @@ export default {
   },
   methods: {
     submit () {
-      console.log(JSON.stringify(this.company))
       if (this.company.id === 0) {
         this.$_axios.post(`${this.$_url}company`, this.company).then(response => {
           console.log('post')
@@ -170,6 +169,7 @@ export default {
                 id: 0,
                 address: {}
               }
+              this.clear()
               this.$refs.companyList.initialize()
             } else {
               this.messageColor = 'warning'
@@ -193,11 +193,11 @@ export default {
             this.haveMessage = true
             if (result.success) {
               this.messageColor = 'info'
-              this.clear()
               this.company = {
                 id: 0,
                 address: {}
               }
+              this.clear()
               this.$refs.companyList.initialize()
             } else {
               this.messageColor = 'warning'
@@ -219,7 +219,7 @@ export default {
       this.company = companyToEdit
     },
     getAddress (zipCode) {
-      if (zipCode.length === 8) {
+      if (zipCode && zipCode.length === 8) {
         this.$_axios.get(`${this.$_viaCep}${zipCode}/json`).then(reponse => {
           let address = reponse.data
           this.company.address.street = address.logradouro
