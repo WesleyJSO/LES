@@ -25,7 +25,7 @@ public class Request extends DomainEntity {
 	 * approve or reprove requests
 	 */
 	private String observation;
-	
+	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate updatedDate;
 	
 	private String managerName;
