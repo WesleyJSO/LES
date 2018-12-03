@@ -14,12 +14,12 @@
       :clipped-left="$vuetify.breakpoint.mdAndUp">
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title v-text="title" />
-      <v-toolbar-title>{{ login.nomeLogin }}</v-toolbar-title>
       <v-icon slot="badge" dark small >{{ notifications }}</v-icon>
-      <v-icon large color="blue lighten-2" >{{ account_circle }}</v-icon>
       <v-spacer></v-spacer> <!-- separete left and right -->
+      <v-icon large color="blue lighten-2" >{{ account_circle }}</v-icon>
+      <v-toolbar-title>{{ user }}</v-toolbar-title>
       <div class="hidden-sm-and-down">
-        <v-btn @click.stop="logOut()" flat>LOGOUT</v-btn>
+        <v-btn @click.stop="logOut()" flat>{{this.lblLogin}}</v-btn>
       </div>
     </v-toolbar>
 
@@ -27,7 +27,7 @@
       <v-container fluid fixed>
         <v-slide-y-transition mode="out-in">
             <v-flex md12>
-              <router-view @emittedUser="setUsuarioLogado" />
+              <router-view @login="setUsuarioLogado" />
             </v-flex>
         </v-slide-y-transition>
       </v-container>
@@ -54,12 +54,13 @@ export default {
       lblLogin: 'LOGIN',
       isAdminAtivo: false,
       isUsuarioAtivo: false,
-      title: 'Apontamento de Horas',
+      title: 'SAH - Sistema de Apontamento de Horas',
       login: [],
       notifications: '',
       account_circle: '',
       avatar: '',
-      roles: []
+      roles: [],
+      username: ''
     }
   },
   components: {
@@ -67,11 +68,20 @@ export default {
     UserRole,
     ManagerRole
   },
+  computed: {
+    user () {
+      let user = this.username.split('@')[0]
+      return user.replace(user.substring(0, 1), user.substring(0, 1).toUpperCase())
+    }
+  },
   methods: {
     logOut () {
       sessionStorage.removeItem('token')
       sessionStorage.removeItem('principal')
       this.drawer = false
+      this.lblLogin = 'Login'
+      this.account_circle = ''
+      this.username = ''
       router.push('/')
     },
     hasRole (role) {
@@ -80,24 +90,11 @@ export default {
     setUsuarioLogado (user) {
       this.lblLogin = 'LOGOUT'
       this.drawer = true
-      this.login = user.login
-      this.roles = user.roles
       this.account_circle = 'account_circle'
-      this.roles.forEach(role => {
-        if (role.name.toUpperCase() === 'ADMIN') {
-          this.isAdminAtivo = true
-          this.isUsuarioAtivo = false
-        } else if (role.nome.toUpperCase() === 'USUARIO') {
-          this.isAdminAtivo = false
-          this.isUsuarioAtivo = true
-        }
-      })
+      this.username = user
     },
     logout () {
       this.lblLogin = 'LOGIN'
-      this.isAdminAtivo = false
-      this.isUsuarioAtivo = false
-      this.title = 'LES'
       this.fixed = false
       this.login = []
       this.notifications = ''

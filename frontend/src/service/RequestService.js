@@ -56,7 +56,7 @@ export const DATE_FORMATS = [ {year: 'numeric', month: 'numeric', day: 'numeric'
 // Using key value as number cause type attribute from backend object cames like this
 export const TYPE_NAME = {
   1: 'Hora Extra',
-  2: 'Banco de Hora',
+  2: 'Banco de Horas',
   3: 'Alteração de Apontamento',
   4: 'Remanejamento de Dia'
 }

@@ -101,9 +101,6 @@
                         <b>{{ getPrefixes.end }}</b>
                         {{ props.item.endDate}}
                         <br>
-                        <br>
-                        <b>{{ getTitles.file }}</b>
-                        <a href="">{{ getTitles.fileName }}</a>
                     </v-card-text>
 
                     <!-- There is no 'endDate' -->
@@ -111,9 +108,6 @@
                         <b>{{ getTitles.entryDate }}</b>
                         {{ props.item.startDate}}
                         <br>
-                        <br>
-                        <b>{{ getTitles.file }}</b>
-                        <a href="">{{ getTitles.fileName }}</a>
                     </v-card-text>
 
                     <!-- Request type equals 3' -->
@@ -147,9 +141,6 @@
                         <b>{{ getTitles.workDay }}</b>
                         {{ props.item.endDate}}
                         <br>
-                        <br>
-                        <b>{{ getTitles.file }}</b>
-                        <a href="">{{ getTitles.fileName }}</a>
                     </v-card-text>
 
                     <!-- There is no  File -->
@@ -414,7 +405,7 @@ export default {
       return Authenticator.HAS_ROLE(role)
     },
     editItem (item) {
-      this.request = Object.assign({}, item)
+      this.request = JSON.parse(JSON.stringify(item))
       this.edit = true
       this.dialogEdit = true
     },
@@ -500,14 +491,11 @@ export default {
       }
     },
     async parseRequest (list) {
-      let employeeRequest = list.filter(r => r.employee)
-      let employee = employeeRequest[0].employee
       return Promise.all(list.map(async n => {
-        if (!n.hasOwnProperty('id')) {
-          n = await this.$_axios.patch(`${this.$_url}appointmentRequest`, {id: n})
+        let hasUser = n.employee.user
+        if (!hasUser) {
+          n = await this.$_axios.patch(`${this.$_url}request`, {id: n.id})
           n = n.data.resultList[0]
-        } else {
-          n.employee = Object.assign(employee, {})
         }
         return n
       }))

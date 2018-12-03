@@ -47,10 +47,10 @@
           <td class="text-xs-right">{{ props.item.cnpj }}</td>
           <td class="text-xs-right">{{ props.item.stateRegistration }}</td>
           <td class="justify-center layout px-0">
-            <v-icon small class="mr-2" @click="editItem(props.item)" >
+            <v-icon class="justify-center" @click="editItem(props.item)" >
               edit
             </v-icon>
-            <v-icon small @click="deleteDialog(props.item)" >
+            <v-icon @click="deleteDialog(props.item)" >
               delete
             </v-icon>
           </td>
@@ -97,7 +97,7 @@
           { text: 'Razão Social', value: 'socialName', align: 'right' },
           { text: 'CNPJ', value: 'cnpj', align: 'right' },
           { text: 'Inscrição Estadual', value: 'stateRegistration', align: 'right' },
-          { text: 'Opções', align: 'right' }
+          { text: 'Opções', align: 'center' }
         ],
         subHeaders: [
           { text: 'CEP', value: 'zipCode', align: 'right' },
@@ -141,6 +141,7 @@
         this.close()
         this.$_axios.delete(`${this.$_url}company/${this.selectedItem.id}`).then(reponse => {
           let result = reponse.data
+          this.fillDataTable()
           if (result.message) {
             this.messages = result.message
             this.haveMessage = true

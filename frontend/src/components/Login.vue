@@ -130,14 +130,19 @@ export default {
         } else {
           this.$router.push('/dashboard')
         }
+        this.$emit('login', this.user.email)
       } catch (err) {
+        if (err.response.status === 403 || err.response.status === 401) {
+          this.messages = ['Usuário ou Senha Inválidos!!']
+        } else {
+          this.messages = ['Erro durante execução do serviço!']
+        }
         this.valid = true
         this.dialog = false
         console.log(JSON.stringify(err, null, ''))
         localStorage.removeItem('user-token')
         this.$router.push('/Login')
         this.messageColor = 'error'
-        this.messages = ['Erro durante execução do serviço!']
         this.haveMessage = true
       }
     },
