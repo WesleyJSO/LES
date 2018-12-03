@@ -491,14 +491,11 @@ export default {
       }
     },
     async parseRequest (list) {
-      let employeeRequest = list.filter(r => r.employee)
-      let employee = employeeRequest[0].employee
       return Promise.all(list.map(async n => {
-        if (!n.hasOwnProperty('id')) {
-          n = await this.$_axios.patch(`${this.$_url}appointmentRequest`, {id: n})
+        let hasUser = n.employee.user
+        if (!hasUser) {
+          n = await this.$_axios.patch(`${this.$_url}request`, {id: n.id})
           n = n.data.resultList[0]
-        } else {
-          n.employee = Object.assign(employee, {})
         }
         return n
       }))
