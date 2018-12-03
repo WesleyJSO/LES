@@ -52,10 +52,10 @@
                     prepend-icon="supervisor_account"
                     :items="members"
                     multiple small-chips
-                    type="Object"
                     item-text="lastName"
-                    item-value="user"
-                    v-model="costCentre.employeeList">
+                    item-value="id"
+                    no-data-text="Não existem colaboradores cadastrados"
+                    v-model="costCentre.employees">
                   </v-select>
                 </v-flex>
               </v-layout>
@@ -172,8 +172,7 @@ export default {
     saveCostCentre () {
       // Used either to save or edit cost centres
       this.costCentre.employees = this.costCentre.employees.map(e => {
-        let emp = Object.assign({'user': {}}, {})
-        emp.user = e
+        let emp = Object.assign({'id': e}, {})
         return emp
       })
       this.$_axios.post(`${this.$_url}costcentre`, this.costCentre).then((response) => {
