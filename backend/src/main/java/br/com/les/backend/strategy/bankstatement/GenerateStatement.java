@@ -6,18 +6,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.text.MaskFormatter;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
 import br.com.les.backend.dao.GenericDAO;
 import br.com.les.backend.entity.Appointment;
 import br.com.les.backend.entity.BankStatement;
+import br.com.les.backend.entity.Company;
 import br.com.les.backend.entity.Employee;
 import br.com.les.backend.entity.MonthlyBalance;
 import br.com.les.backend.helper.BalanceHelper;
 import br.com.les.backend.helper.BankStatementHelper;
 import br.com.les.backend.navigator.INavigationCase;
 import br.com.les.backend.navigator.IStrategy;
+import br.com.les.backend.repository.CompanyRepository;
 import br.com.les.backend.repository.EmployeeRepository;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -29,6 +33,7 @@ import net.sf.jasperreports.engine.util.JRSaver;
 @Configuration
 public class GenerateStatement implements IStrategy<BankStatement> {
 
+	@Autowired CompanyRepository companyRepository;
 	@Autowired EmployeeRepository employeeRepository;
 	@Autowired GenericDAO<MonthlyBalance> monthlyBalanceDAO;
 	@Autowired GenericDAO<Appointment> appointmentDAO;
@@ -68,6 +73,13 @@ public class GenerateStatement implements IStrategy<BankStatement> {
 				appointment.setEmployee(emp);
 				List<Appointment> appointmentList = appointmentDAO.find(appointment);
 				
+				List<Company> companyList = companyRepository.findAll();
+				Company company = new Company();
+				if ( !companyList.isEmpty() ) {
+					company = companyList.get(0);
+					list.clear();
+				}
+				
 				BankStatementHelper helper = new BankStatementHelper();
 				helper = helper.generateHelper(employee, lastMonthBalance, currentMonthBalance, 
 						aEntity.getMonth(), appointmentList);
@@ -77,8 +89,22 @@ public class GenerateStatement implements IStrategy<BankStatement> {
 	            // Setting parameters
 	            Map<String, Object> parametro = new HashMap<>();
 	            
-	            parametro.put( "prmCompanyName" , helper.getCompanyName());
-	            parametro.put( "prmCNPJ" , helper.getCNPJ());
+	            if ( null != company.getTradingName() ) {
+	            	parametro.put( "prmCompanyName" , company.getTradingName() );
+	            } else {
+	            	parametro.put( "prmCompanyName" , helper.getCompanyName() );
+	            }
+	            if ( null != company.getCnpj() ) {
+	            	try {
+		            	MaskFormatter mask = new MaskFormatter("###.###.###/####-##");
+		            	mask.setValueContainsLiteralCharacters(false);
+		            	parametro.put( "prmCNPJ" , mask.valueToString(company.getCnpj()) );
+	            	} catch (Exception ex) {
+	            		parametro.put( "prmCNPJ" , helper.getCNPJ());
+	                }
+	            } else {
+	            	parametro.put( "prmCNPJ" , helper.getCNPJ());
+	            }
 	            parametro.put( "prmEmployeeName" , helper.getEmployeeName());
 	            parametro.put( "prmAdmissionDate" , helper.getAdmissionDate());
 	            parametro.put( "prmLastMonthBalance" , helper.getLastMonthBalance());

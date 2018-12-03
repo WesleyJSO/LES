@@ -77,4 +77,14 @@ INSERT INTO TELEPHONE (ID, ACTIVE, CREATION_DATE, NUMBER, TYPE, EMPLOYEE_ID) VAL
 INSERT INTO TELEPHONE (ID, ACTIVE, CREATION_DATE, NUMBER, TYPE, EMPLOYEE_ID) VALUES (HIBERNATE_SEQUENCE.nextval, 1, getDate(), 998221122, 'Móvel', (select id from employee where last_name='Holanda'))
 INSERT INTO TELEPHONE (ID, ACTIVE, CREATION_DATE, NUMBER, TYPE, EMPLOYEE_ID) VALUES (HIBERNATE_SEQUENCE.nextval, 1, getDate(), 46776543, 'Casa', (select id from employee where last_name='Zeller'))
 INSERT INTO TELEPHONE (ID, ACTIVE, CREATION_DATE, NUMBER, TYPE, EMPLOYEE_ID) VALUES (HIBERNATE_SEQUENCE.nextval, 1, getDate(), 998229123, 'Móvel', (select id from employee where last_name='Zeller'))
+INSERT INTO TELEPHONE (ID, ACTIVE, CREATION_DATE, NUMBER, TYPE, EMPLOYEE_ID) VALUES (HIBERNATE_SEQUENCE.nextval, 1, getDate(), 49700555, 'Fixo', (select id from employee where last_name='Silva'))
+INSERT INTO TELEPHONE (ID, ACTIVE, CREATION_DATE, NUMBER, TYPE, EMPLOYEE_ID) VALUES (HIBERNATE_SEQUENCE.nextval, 1, getDate(), 46528846, 'Fixo', (select id from employee where last_name='Freitas'))
+INSERT INTO TELEPHONE (ID, ACTIVE, CREATION_DATE, NUMBER, TYPE, EMPLOYEE_ID) VALUES (HIBERNATE_SEQUENCE.nextval, 1, getDate(), 46558749, 'Fixo', (select id from employee where last_name='Wesley'))
+INSERT INTO TELEPHONE (ID, ACTIVE, CREATION_DATE, NUMBER, TYPE, EMPLOYEE_ID) VALUES (HIBERNATE_SEQUENCE.nextval, 1, getDate(), 47889125, 'Fixo', (select id from employee where last_name='Trivadi'))
+INSERT INTO TELEPHONE (ID, ACTIVE, CREATION_DATE, NUMBER, TYPE, EMPLOYEE_ID) VALUES (HIBERNATE_SEQUENCE.nextval, 1, getDate(), 46778899, 'Fixo', (select id from employee where last_name='Oliveira'))
+INSERT INTO TELEPHONE (ID, ACTIVE, CREATION_DATE, NUMBER, TYPE, EMPLOYEE_ID) VALUES (HIBERNATE_SEQUENCE.nextval, 1, getDate(), 47123558, 'Fixo', (select id from employee where last_name='Rafael'))
+INSERT INTO TELEPHONE (ID, ACTIVE, CREATION_DATE, NUMBER, TYPE, EMPLOYEE_ID) VALUES (HIBERNATE_SEQUENCE.nextval, 1, getDate(), 47353484, 'Fixo', (select id from employee where last_name='Rodrigues'))
+INSERT INTO TELEPHONE (ID, ACTIVE, CREATION_DATE, NUMBER, TYPE, EMPLOYEE_ID) VALUES (HIBERNATE_SEQUENCE.nextval, 1, getDate(), 47582236, 'Fixo', (select id from employee where last_name='Souza'))
+
+INSERT INTO COMPANY VALUES (HIBERNATE_SEQUENCE.nextval, 1, getDate(), 'Mogi das Cruzes', 54, 'SP', 'Rua Pedro Paulo dos Santos', '08750710', '61442737000230', 'Empresa Fictícia LTDA', '454504330118', 'Empresa Fictícia' )
 
