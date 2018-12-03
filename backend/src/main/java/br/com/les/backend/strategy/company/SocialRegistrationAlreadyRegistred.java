@@ -9,6 +9,7 @@ import br.com.les.backend.entity.Company;
 import br.com.les.backend.navigator.INavigationCase;
 import br.com.les.backend.navigator.IStrategy;
 import br.com.les.backend.repository.CompanyRepository;
+import br.com.les.backend.utils.Util;
 
 @Configuration
 public class SocialRegistrationAlreadyRegistred implements IStrategy<Company> {
@@ -40,6 +41,7 @@ public class SocialRegistrationAlreadyRegistred implements IStrategy<Company> {
 					aCase.getResult().setError("Inscrição estadual já cadastrada!");
 				}
 			}
+			aCase.getResult().setSuccess(Util.SAVE_SUCESSFUL_COMPANY);
 			return;
 		}
 		aCase.suspendExecution();
