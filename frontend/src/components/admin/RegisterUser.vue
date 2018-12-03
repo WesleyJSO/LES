@@ -201,7 +201,7 @@
               header-color="black"
               @input="joiningDateHelper = false"
               locale="pt-br"
-              :readonly="isEditing ? false : true">
+              :readonly="isEditing ? readonly : ''">
               </v-date-picker>
           </v-menu>
         </v-flex>
@@ -362,13 +362,19 @@ export default {
       response = await this.$_axios.patch(`${this.$_url}hourtype`, {})
       this.hourTypeList = response.data.resultList
       response = await this.$_axios.patch(`${this.$_url}employee`, {})
+      let loggedUser = await this.$_axios.patch(`${this.$_url}employee`, {user: {id: Authenticator.GET_AUTHENTICATED().id}})
+      let user = loggedUser.data.resultList[0]
       response.data.resultList.map(employee => {
-        employee.user.authorities.map(role => {
-          if (role.authority === 'ROLE_MANAGER') {
-            // delete role.authority
-            this.managerList.push(employee)
-          }
-        })
+        if (employee.hasOwnProperty('user')) {
+          employee.user.authorities.map(role => {
+            if (role.authority === 'ROLE_MANAGER') {
+              // delete role.authority
+              this.managerList.push(employee)
+            }
+          })
+        } else {
+          this.managerList.push(user)
+        }
       })
     } catch (err) {
       console.log({err})
@@ -415,7 +421,6 @@ export default {
       }
       this.title = `${this.employee.name} ${this.employee.lastName}`
       this.isEditing = false
-      console.log(this.isEmployee)
     }
   },
   methods: {
@@ -471,10 +476,8 @@ export default {
         this.employee.user.username = this.employee.user.email
         let response = ''
         if (!this.edit) {
-          console.log('salvar', JSON.stringify(this.employee), null, ' ')
           response = await this.$_axios.post(`${this.$_url}employee`, this.employee)
         } else {
-          console.log(JSON.stringify(this.employee, null, ' '))
           response = await this.$_axios.put(`${this.$_url}employee`, this.employee)
         }
         let result = response.data
