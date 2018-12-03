@@ -17,10 +17,11 @@ export default class Authenticator {
 
   static GET_AUTHENTICATED () {
     let token = sessionStorage.getItem('token')
+    let user = null
     if (token) {
-      let user = JSON.parse(sessionStorage.getItem('principal'))
-      return user
+      user = JSON.parse(sessionStorage.getItem('principal'))
     }
+    return user
   }
 
   static get ROLE () {
