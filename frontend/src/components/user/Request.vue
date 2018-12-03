@@ -36,6 +36,7 @@
                   v-model="computedStartDate"
                   :rules="$v_request.startDate(request.startDate, edit)"
                   slot="activator"
+                  readonly
                   prepend-icon="event">
                 </v-text-field>
 
@@ -43,8 +44,8 @@
                   :locale="locale"
                   :header-color="getColors.black"
                   :reactive="reactive"
-                  :min="maxEndDate"
                   scrollable
+                  :readonly="type.id === 3 ? 'readonly' : false"
                   v-model="request.startDate"
                   @input="requestEntryDate = false">
                 </v-date-picker>
@@ -64,6 +65,7 @@
                   v-model="computedEndDate"
                   :rules="$v_request.endDate(request.startDate, request.endDate)"
                   slot="activator"
+                  readonly
                   prepend-icon="event">
                 </v-text-field>
 
@@ -71,9 +73,9 @@
                   :locale="locale"
                   :header-color="getColors.black"
                   :reactive="reactive"
-                  :min="minEndDate"
                   v-model="request.endDate"
                   scrollable
+                  :readonly="type.id === 3 ? 'readonly' : false"
                   @input="requestChangeDate = false">
                 </v-date-picker>
               </v-menu>
@@ -110,7 +112,6 @@
 
 <script>
 import RequestService from '@/service/RequestService'
-// import DateHelper from '@/helpers/DateHelper'
 export default {
   props: {
     item: Object,
@@ -129,7 +130,8 @@ export default {
     message: '',
     request: {},
     type: '',
-    isEditing: false
+    isEditing: false,
+    blockDate: true
   }),
   computed: {
     getItems () {
@@ -196,15 +198,17 @@ export default {
   },
   watch: {
     item (value) {
-      if (value.startDate) {
-        value.startDate = this.$_moment(value.startDate.toString().replace(/\//g, '-').split('-').reverse())
-      }
-      if (value.endDate) {
-        value.endDate = this.$_moment(value.endDate.toString().replace(/\//g, '-').split('-').reverse())
-      }
       this.request = Object.assign({}, value)
       this.type = this.getRequestValue[value.type]
       this.edit = true
+      if (this.request.startDate) {
+        let [year, month, day] = this.request.startDate.toString().replace(/\//g, '-').split('-').reverse()
+        this.request.startDate = `${year}-${month}-${day}`
+      }
+      if (this.request.endDate) {
+        let [year, month, day] = this.request.endDate.toString().replace(/\//g, '-').split('-').reverse()
+        this.request.endDate = `${year}-${month}-${day}`
+      }
     }
   },
   methods: {
@@ -252,7 +256,8 @@ export default {
         i.type = this.type.id
         let updateRequest = Object.assign({'employee': {}}, i)
         updateRequest.employee.id = this.request.employee.id
-        this.$_axios.put(`${this.$_url}request`, updateRequest).then((response) => {
+        let controller = this.type.id === 3 ? 'appointmentRequest' : 'request'
+        this.$_axios.put(`${this.$_url + controller}`, updateRequest).then((response) => {
           let result = response.data
           if (result.message) {
             this.messages = [...result.message]
@@ -279,8 +284,11 @@ export default {
       }
     },
     clearForm () {
-      this.$refs.form.reset()
-      this.$emit('onClose', this.messages)
+      if (!this.edit) {
+        this.$refs.form.reset()
+      } else {
+        this.$emit('onClose', this.messages)
+      }
     }
   }
 }
