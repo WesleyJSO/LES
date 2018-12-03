@@ -492,8 +492,8 @@ export default {
         let [sent, approve, deny] = await Promise.all([pending, approved, denied])
         let processeds = [...approve.data.resultList, ...deny.data.resultList]
         let approveds = [...sent.data.resultList]
-        this.processedRequests = processeds.length > 0 ? this.parseRequest(processeds) : []
-        this.requests = approveds.length > 0 ? this.parseRequest(approveds) : []
+        this.processedRequests = processeds.length > 0 ? await this.parseRequest(processeds) : []
+        this.requests = approveds.length > 0 ? await this.parseRequest(approveds) : []
         let message1 = !sent.data.message ? [] : sent.data.message
         let message2 = !approve.data.message ? [] : approve.data.message
         let message3 = !deny.data.message ? [] : deny.data.message
@@ -514,20 +514,18 @@ export default {
         this.messageColor = 'error'
       }
     },
-    parseRequest (list) {
-      return list.map(m => {
-        let nM = m
-        if (m.employee.hasOwnProperty('user')) {
-          nM.employee = m.employee
+    async parseRequest (list) {
+      let employeeRequest = list.filter(r => r.employee)
+      let employee = employeeRequest[0].employee
+      return Promise.all(list.map(async n => {
+        if (!n.hasOwnProperty('id')) {
+          n = await this.$_axios.patch(`${this.$_url}appointmentRequest`, {id: n})
+          n = n.data.resultList[0]
         } else {
-          list.filter(f => {
-            if (f.employee.hasOwnProperty('user') && f.employee.id === m.employee) {
-              nM.employee = f.employee
-            }
-          })
+          n.employee = Object.assign(employee, {})
         }
-        return nM
-      })
+        return n
+      }))
     }
   },
   components: {
