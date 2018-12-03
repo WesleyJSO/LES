@@ -36,7 +36,7 @@ public class SecurityService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Logger logger = LoggerFactory.getLogger( getClass() );
-		logger.debug("Trying to authenticate ", username);
+		logger.info("Trying to authenticate " +  username);
 		User user = userRepository.findByEmail( username );
 		if ( null == user ) {
 			throw new UsernameNotFoundException(Util.INVALID_USER_IDENTIFICATION);
