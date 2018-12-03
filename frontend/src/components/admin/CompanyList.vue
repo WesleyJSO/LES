@@ -37,6 +37,7 @@
       :headers="headers"
       :items="companyList"
       hide-actions
+      no-data-text="Nenhum registro foi econtrado"
       class="elevation-10"
     >
       <template slot="items" slot-scope="props">
@@ -60,6 +61,7 @@
         <v-data-table :headers="subHeaders"
                       :items="companyList"
                       hide-actions dark
+                      no-data-text="Nenhum registro foi econtrados"
                       class="elevation-10" >
           <template slot="items" slot-scope="props">
             <td class="text-xs-right">{{ props.item.address.zipCode }}</td>
@@ -71,10 +73,7 @@
         </v-data-table>
       </template>
 
-      <template slot="no-data">
-        <v-alert :value="true" :color="errorColor" icon="warning">
-          {{ errorMessage }}
-        </v-alert>
+      <template slot="footer">
         <v-btn color="primary" @click="initialize">Refazer consulta</v-btn>
       </template>
 
@@ -171,7 +170,7 @@
         this.close()
       },
       fillDataTable () {
-        this.$_axios.get(`${this.$_url}company`).then(response => {
+        this.$_axios.patch(`${this.$_url}company`, {}).then(response => {
           let result = response.data
           if (result.resultList.length !== 0) {
             this.companyList = result.resultList
