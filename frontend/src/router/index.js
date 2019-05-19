@@ -129,7 +129,7 @@ export default new Router({
       path: '/MinhasSolicitacoes',
       name: 'RequestManagerView',
       component: RequestManagerView,
-      meta: { requiresAuth: true, managerAuth: true }
+      meta: { requiresAuth: true, employeeAuth: true }
     },
     {
       path: '/Feriados',

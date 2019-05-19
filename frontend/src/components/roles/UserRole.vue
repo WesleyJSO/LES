@@ -39,7 +39,7 @@
             <v-icon>assignment_turned_in</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <router-link to="Solicitacoes">
+            <router-link to="MinhasSolicitacoes">
               <v-list-tile-title>Minhas Solicitações</v-list-tile-title>
             </router-link>
           </v-list-tile-content>
