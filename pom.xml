@@ -3,9 +3,6 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<!-- VUE WITH SPRING BOOT TUTORIALS https://randyyaj.github.io/post/20161129_vue_spring/ 
-		https://github.com/jonashackt/spring-boot-vuejs/ -->
-
 	<groupId>br.com</groupId>
 	<artifactId>les</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
