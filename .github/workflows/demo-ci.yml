@@ -20,6 +20,9 @@ jobs:
   deploy-dev:
     needs: build
     runs-on: ubuntu-latest
+    environment: 
+      name: development
+#      url:
     steps:
       - name: run deploy-dev script
         run: echo deploy-dev
@@ -27,6 +30,9 @@ jobs:
   deploy-hom:
     needs: deploy-dev
     runs-on: ubuntu-latest
+    environment: 
+      name: homolog
+#      url:
     steps:
       - name: run deploy-hom script
         run: echo deploy-hom
@@ -34,6 +40,9 @@ jobs:
   deploy-prod:
     needs: deploy-dev
     runs-on: ubuntu-latest
+    environment: 
+      name: production
+#      url:
     steps:
       - name: run deploy-prod script
         run: echo deploy-prod
