@@ -1,0 +1,39 @@
+name: demo-ci
+
+on: 
+  workflow_dispatch:
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: run compile script
+        run: echo compiled
+  
+  build:
+    needs: compile
+    runs-on: ubuntu-latest
+    steps:
+      - name: run build script
+        run: echo build
+  
+  deploy-dev:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: run deploy-dev script
+        run: echo deploy-dev
+        
+  deploy-hom:
+    needs: deploy-dev
+    runs-on: ubuntu-latest
+    steps:
+      - name: run deploy-hom script
+        run: echo deploy-hom
+        
+  deploy-prod:
+    needs: deploy-dev
+    runs-on: ubuntu-latest
+    steps:
+      - name: run deploy-prod script
+        run: echo deploy-prod
