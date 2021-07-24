@@ -31,7 +31,7 @@ jobs:
     needs: deploy-dev
     runs-on: ubuntu-latest
     environment: 
-      name: homolog
+      name: hom
 #      url:
     steps:
       - name: run deploy-hom script
@@ -41,7 +41,7 @@ jobs:
     needs: deploy-dev
     runs-on: ubuntu-latest
     environment: 
-      name: production
+      name: prod
 #      url:
     steps:
       - name: run deploy-prod script
